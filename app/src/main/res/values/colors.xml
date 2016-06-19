@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#078c55</color>
+    <color name="colorPrimaryDark">#055735</color>
+    <color name="colorAccent">#ab8157</color>
+
+    <color name="gold">#ab8157</color>
+    <color name="green">#078c55</color>
+    <color name="green_selected">#045b37</color>
+    <color name="background_white">#ffffff</color>
+    <color name="background_cream">#f3f3f3</color>
+    <color name="gray">#dddcdc</color>
+    <color name="divider">#8c8c8c</color>
+    <color name="black_transparent">#88000000</color>
+    <color name="white_transparent">#55ffffff</color>
+</resources>
