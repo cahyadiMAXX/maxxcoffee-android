@@ -26,7 +26,7 @@ import butterknife.OnClick;
 /**
  * Created by Rio Swarawan on 3/13/2016.
  */
-public abstract class LostCardDialog extends DialogFragment {
+public class LostCardDialog extends DialogFragment {
 
     public static Integer CARD_1 = 0;
     public static Integer CARD_2 = 1;
@@ -148,7 +148,7 @@ public abstract class LostCardDialog extends DialogFragment {
         onCancel();
     }
 
-    protected abstract void onOk(Integer index);
+    protected  void onOk(Integer index){}
 
-    protected abstract void onCancel();
+    protected  void onCancel(){}
 }

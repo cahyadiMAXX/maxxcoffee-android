@@ -60,7 +60,6 @@ public class PromoFragment extends Fragment {
         };
     }
 
-    @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_promo, container, false);

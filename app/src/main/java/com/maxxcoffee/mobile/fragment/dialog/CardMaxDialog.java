@@ -17,7 +17,7 @@ import butterknife.OnClick;
 /**
  * Created by Rio Swarawan on 3/13/2016.
  */
-public abstract class CardMaxDialog extends DialogFragment {
+public class CardMaxDialog extends DialogFragment {
 
     @Bind(R.id.ok)
     TextView ok;
@@ -42,5 +42,5 @@ public abstract class CardMaxDialog extends DialogFragment {
         onDeleteCard();
     }
 
-    protected abstract void onDeleteCard();
+    protected void onDeleteCard(){}
 }

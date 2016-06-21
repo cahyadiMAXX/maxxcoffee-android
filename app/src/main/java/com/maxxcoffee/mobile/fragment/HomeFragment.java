@@ -52,7 +52,7 @@ public class HomeFragment extends Fragment {
         int mGreeting = Utils.getDayPart();
 
         greeting.setText(getDayPartString(mGreeting));
-        name.setText("Rio Swarawan");
+        name.setText("Guntur Satrya Saputro");
         balance.setText("IDR 70.000");
         point.setText("250 Points");
 

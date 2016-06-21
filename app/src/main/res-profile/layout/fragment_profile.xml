@@ -3,10 +3,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@color/divider" />
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -57,7 +59,7 @@
                         android:layout_toLeftOf="@id/arrow_name"
                         android:layout_toRightOf="@id/label_name"
                         android:gravity="right"
-                        android:text="Rio Swarawan Putra"
+                        android:text="Guntur Satrya Saputro"
                         android:textColor="@android:color/black"
                         android:textSize="14sp" />
                 </RelativeLayout>
@@ -104,7 +106,7 @@
                         android:layout_toLeftOf="@id/arrow_email"
                         android:layout_toRightOf="@id/label_email"
                         android:gravity="right"
-                        android:text="swarawan.rio@gmail.com"
+                        android:text="guntur@technopartner.id"
                         android:textColor="@android:color/black"
                         android:textSize="14sp" />
                 </RelativeLayout>
@@ -156,7 +158,7 @@
                         android:layout_toLeftOf="@id/arrow_phone"
                         android:layout_toRightOf="@id/label_phone"
                         android:gravity="right"
-                        android:text="085729891040"
+                        android:text="0811255501"
                         android:textColor="@android:color/black"
                         android:textSize="14sp" />
                 </RelativeLayout>
@@ -242,7 +244,7 @@
                         android:layout_toLeftOf="@id/arrow_balance"
                         android:layout_toRightOf="@id/label_balance"
                         android:gravity="right"
-                        android:text="IDR 134.000"
+                        android:text="IDR 70.000"
                         android:textColor="@android:color/black"
                         android:textSize="14sp" />
                 </RelativeLayout>
@@ -259,7 +261,8 @@
                 android:layout_height="wrap_content"
                 android:background="@color/gray"
                 android:orientation="vertical"
-                android:padding="16dp">
+                android:padding="16dp"
+                android:visibility="gone">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -303,7 +306,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@color/divider" />
+                android:background="@color/divider"
+                android:visibility="gone" />
 
             <LinearLayout
                 android:id="@+id/layout_beans"
@@ -346,7 +350,7 @@
                         android:layout_toLeftOf="@id/arrow_beans"
                         android:layout_toRightOf="@id/label_beans"
                         android:gravity="right"
-                        android:text="60"
+                        android:text="250"
                         android:textColor="@android:color/black"
                         android:textSize="14sp" />
                 </RelativeLayout>

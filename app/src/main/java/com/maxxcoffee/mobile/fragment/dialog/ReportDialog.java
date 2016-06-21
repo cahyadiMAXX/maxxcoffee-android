@@ -18,7 +18,7 @@ import butterknife.OnClick;
 /**
  * Created by Rio Swarawan on 3/13/2016.
  */
-public abstract class ReportDialog extends DialogFragment {
+public class ReportDialog extends DialogFragment {
 
     public static Integer COMPLAINT = 1;
     public static Integer LOST_CARD = 2;
@@ -101,7 +101,9 @@ public abstract class ReportDialog extends DialogFragment {
         onCancel();
     }
 
-    protected abstract void onOk(Integer selectedReport);
+    protected void onOk(Integer selectedReport) {
+    }
 
-    protected abstract void onCancel();
+    protected void onCancel() {
+    }
 }

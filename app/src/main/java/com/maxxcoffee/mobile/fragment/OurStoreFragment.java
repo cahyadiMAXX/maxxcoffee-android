@@ -49,7 +49,6 @@ public class OurStoreFragment extends Fragment {
         adapter = new StoreAdapter(activity, data);
     }
 
-    @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_store_list, container, false);

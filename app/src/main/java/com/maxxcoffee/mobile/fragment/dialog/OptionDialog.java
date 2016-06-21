@@ -17,7 +17,7 @@ import butterknife.OnClick;
 /**
  * Created by Rio Swarawan on 3/13/2016.
  */
-public abstract class OptionDialog extends DialogFragment {
+public class OptionDialog extends DialogFragment {
 
     public static String CANCEL = "cancel";
     public static String OK = "ok";
@@ -65,7 +65,9 @@ public abstract class OptionDialog extends DialogFragment {
         onCancel();
     }
 
-    protected abstract void onOk();
+    protected void onOk() {
+    }
 
-    protected abstract void onCancel();
+    protected void onCancel() {
+    }
 }

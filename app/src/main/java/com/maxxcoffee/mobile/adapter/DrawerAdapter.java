@@ -1,6 +1,7 @@
 package com.maxxcoffee.mobile.adapter;
 
 import android.content.Context;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +20,7 @@ import java.util.List;
 /**
  * Created by Rio Swarawan on 5/20/2016.
  */
-public  class DrawerAdapter extends BaseExpandableListAdapter {
+public class DrawerAdapter extends BaseExpandableListAdapter {
 
     private Context context;
     private LayoutInflater inflater;
@@ -107,6 +108,14 @@ public  class DrawerAdapter extends BaseExpandableListAdapter {
 
         item.setText(parentModel.getName());
         arrow.setVisibility(parentModel.isExpandable() ? View.VISIBLE : View.GONE);
+
+        if (parentModel.getIcon() != null) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                icon.setImageDrawable(context.getResources().getDrawable(parentModel.getIcon(), null));
+            } else {
+                icon.setImageDrawable(context.getResources().getDrawable(parentModel.getIcon()));
+            }
+        }
 
 //        if (!parentModel.isExpandable()) {
 //            layout.setOnClickListener(new View.OnClickListener() {

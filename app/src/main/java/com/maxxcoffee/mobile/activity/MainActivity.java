@@ -347,16 +347,18 @@ public class MainActivity extends FragmentActivity {
         home.setId(HOME);
         home.setName("Home");
         home.setExpandable(false);
+        home.setIcon(R.drawable.ic_home);
 
         ParentDrawerModel browse = new ParentDrawerModel();
         browse.setId(2);
         browse.setName("Browse");
         browse.setExpandable(true);
+        browse.setIcon(R.drawable.ic_coffee);
 
-        ParentDrawerModel transaction = new ParentDrawerModel();
-        transaction.setId(3);
-        transaction.setName("Transaction");
-        transaction.setExpandable(true);
+//        ParentDrawerModel transaction = new ParentDrawerModel();
+//        transaction.setId(3);
+//        transaction.setName("Transaction");
+//        transaction.setExpandable(true);
 
 //        ParentDrawerModel topUp = new ParentDrawerModel();
 //        topUp.setId(4);
@@ -367,25 +369,29 @@ public class MainActivity extends FragmentActivity {
         card.setId(5);
         card.setName("Card");
         card.setExpandable(true);
+        card.setIcon(R.drawable.ic_creditcard);
 
         ParentDrawerModel about = new ParentDrawerModel();
         about.setId(6);
         about.setName("About");
         about.setExpandable(true);
+        about.setIcon(R.drawable.ic_maxx_small);
 
         ParentDrawerModel profile = new ParentDrawerModel();
         profile.setId(PROFILE);
         profile.setName("Profile");
         profile.setExpandable(false);
+        profile.setIcon(R.drawable.ic_user);
 
         ParentDrawerModel logout = new ParentDrawerModel();
         logout.setId(isLoggedIn ? LOGOUT : CREDENTIAL);
         logout.setName(isLoggedIn ? "Logout" : "Login");
         logout.setExpandable(false);
+        logout.setIcon(R.drawable.ic_signout);
 
         listDataHeader.add(home);
         listDataHeader.add(browse);
-        listDataHeader.add(transaction);
+//        listDataHeader.add(transaction);
 //        listDataHeader.add(topUp);
         listDataHeader.add(card);
         listDataHeader.add(about);
@@ -459,8 +465,8 @@ public class MainActivity extends FragmentActivity {
         listBrowse.add(childBrowse2);
         listBrowse.add(childBrowse3);
 
-        List<ChildDrawerModel> listTransaction = new ArrayList<>();
-        listTransaction.add(childTransaction1);
+//        List<ChildDrawerModel> listTransaction = new ArrayList<>();
+//        listTransaction.add(childTransaction1);
 
 //        List<ChildDrawerModel> listTopUp = new ArrayList<>();
 //        listTopUp.add(childTopUp1);
@@ -480,7 +486,7 @@ public class MainActivity extends FragmentActivity {
         listAbout.add(childAbout4);
 
         listDataChild.put(browse, listBrowse);
-        listDataChild.put(transaction, listTransaction);
+//        listDataChild.put(transaction, listTransaction);
 //        listDataChild.put(topUp, listTopUp);
         listDataChild.put(card, listCard);
         listDataChild.put(about, listAbout);

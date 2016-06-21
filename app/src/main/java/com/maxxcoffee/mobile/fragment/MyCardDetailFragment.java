@@ -46,7 +46,6 @@ public class MyCardDetailFragment extends Fragment {
         cardController = new CardController(activity);
     }
 
-    @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_detail_card, container, false);
