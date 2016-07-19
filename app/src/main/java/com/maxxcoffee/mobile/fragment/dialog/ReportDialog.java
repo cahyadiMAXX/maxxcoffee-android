@@ -20,13 +20,16 @@ import butterknife.OnClick;
  */
 public class ReportDialog extends DialogFragment {
 
-    public static Integer COMPLAINT = 1;
-    public static Integer LOST_CARD = 2;
+    private final int COMPLAINT = 999;
+    private final int QUESTION = 888;
+    private final int PARTNERSHIP = 777;
 
     @Bind(R.id.complaint)
     TextView complaint;
-    @Bind(R.id.lost_card)
-    TextView lostCard;
+    @Bind(R.id.question)
+    TextView question;
+    @Bind(R.id.partnership)
+    TextView partnership;
     @Bind(R.id.ok)
     TextView ok;
     @Bind(R.id.cancel)
@@ -48,17 +51,11 @@ public class ReportDialog extends DialogFragment {
         selectedReport = getArguments().getInt("selected-report", -999);
 
         if (selectedReport == COMPLAINT) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                complaint.setTextColor(getResources().getColor(R.color.green_selected, null));
-            } else {
-                complaint.setTextColor(getResources().getColor(R.color.green_selected));
-            }
-        } else if (selectedReport == LOST_CARD) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                lostCard.setTextColor(getResources().getColor(R.color.green_selected, null));
-            } else {
-                lostCard.setTextColor(getResources().getColor(R.color.green_selected));
-            }
+            complaint.setTextColor(getResources().getColor(R.color.green_selected));
+        } else if (selectedReport == QUESTION) {
+            question.setTextColor(getResources().getColor(R.color.green_selected));
+        } else if (selectedReport == PARTNERSHIP) {
+            partnership.setTextColor(getResources().getColor(R.color.green_selected));
         }
 
         ok.setTextColor(Color.RED);
@@ -70,25 +67,25 @@ public class ReportDialog extends DialogFragment {
     @OnClick(R.id.complaint)
     public void onComplaintClick() {
         selectedReport = COMPLAINT;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            complaint.setTextColor(getResources().getColor(R.color.green_selected, null));
-            lostCard.setTextColor(getResources().getColor(android.R.color.darker_gray, null));
-        } else {
-            complaint.setTextColor(getResources().getColor(R.color.green_selected));
-            lostCard.setTextColor(getResources().getColor(android.R.color.darker_gray));
-        }
+        complaint.setTextColor(getResources().getColor(R.color.green_selected));
+        question.setTextColor(getResources().getColor(android.R.color.darker_gray));
+        partnership.setTextColor(getResources().getColor(android.R.color.darker_gray));
     }
 
-    @OnClick(R.id.lost_card)
-    public void onLostCardClick() {
-        selectedReport = LOST_CARD;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            complaint.setTextColor(getResources().getColor(android.R.color.darker_gray, null));
-            lostCard.setTextColor(getResources().getColor(R.color.green_selected, null));
-        } else {
-            complaint.setTextColor(getResources().getColor(android.R.color.darker_gray));
-            lostCard.setTextColor(getResources().getColor(R.color.green_selected));
-        }
+    @OnClick(R.id.question)
+    public void onQuestionClick() {
+        selectedReport = QUESTION;
+        complaint.setTextColor(getResources().getColor(android.R.color.darker_gray));
+        question.setTextColor(getResources().getColor(R.color.green_selected));
+        partnership.setTextColor(getResources().getColor(android.R.color.darker_gray));
+    }
+
+    @OnClick(R.id.partnership)
+    public void onPartnershipClick() {
+        selectedReport = PARTNERSHIP;
+        complaint.setTextColor(getResources().getColor(android.R.color.darker_gray));
+        question.setTextColor(getResources().getColor(android.R.color.darker_gray));
+        partnership.setTextColor(getResources().getColor(R.color.green_selected));
     }
 
     @OnClick(R.id.ok)

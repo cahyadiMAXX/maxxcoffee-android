@@ -28,7 +28,7 @@ public class CardMaxDialog extends DialogFragment {
         Dialog dialog = new Dialog(getActivity());
         dialog.setCanceledOnTouchOutside(true);
         dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.dialog_card);
+        dialog.setContentView(R.layout.dialog_max_card);
         dialog.show();
 
         ButterKnife.bind(this, dialog);

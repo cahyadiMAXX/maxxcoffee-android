@@ -11,8 +11,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.maxxcoffee.mobile.R;
-import com.maxxcoffee.mobile.model.MenuCategoryModel;
-import com.maxxcoffee.mobile.model.MenuItemModel;
+import com.maxxcoffee.mobile.database.entity.MenuCategoryEntity;
+import com.maxxcoffee.mobile.database.entity.MenuEntity;
 
 import java.util.HashMap;
 import java.util.List;
@@ -24,10 +24,10 @@ public abstract class MenuAdapter extends BaseExpandableListAdapter {
 
     private Context context;
     private LayoutInflater inflater;
-    private List<MenuCategoryModel> parentData;
-    private HashMap<MenuCategoryModel, List<List<MenuItemModel>>> childData;
+    private List<MenuCategoryEntity> parentData;
+    private HashMap<MenuCategoryEntity, List<List<MenuEntity>>> childData;
 
-    public MenuAdapter(Context context, List<MenuCategoryModel> listDataHeader, HashMap<MenuCategoryModel, List<List<MenuItemModel>>> listChildData) {
+    public MenuAdapter(Context context, List<MenuCategoryEntity> listDataHeader, HashMap<MenuCategoryEntity, List<List<MenuEntity>>> listChildData) {
         this.context = context;
         this.inflater = LayoutInflater.from(context);
         this.parentData = listDataHeader;
@@ -46,8 +46,8 @@ public abstract class MenuAdapter extends BaseExpandableListAdapter {
 
     @Override
     public View getChildView(final int groupPosition, final int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-        final List<MenuItemModel> childModel = (List<MenuItemModel>) getChild(groupPosition, childPosition);
-        final MenuCategoryModel parentModel = parentData.get(groupPosition);
+        final List<MenuEntity> childModel = (List<MenuEntity>) getChild(groupPosition, childPosition);
+        final MenuCategoryEntity parentModel = parentData.get(groupPosition);
 
         if (convertView == null) {
             LayoutInflater infalInflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -67,11 +67,11 @@ public abstract class MenuAdapter extends BaseExpandableListAdapter {
         layoutRight.setVisibility(childModel.size() == 2 ? View.VISIBLE : View.GONE);
 
         for (int i = 0; i < childModel.size(); i++) {
-            final MenuItemModel model = childModel.get(i);
+            final MenuEntity model = childModel.get(i);
             if (i % 2 == 0) {
                 titleLeft.setText(model.getName());
-                pointLeft.setText(String.valueOf(model.getPoint()));
-                Glide.with(context).load("").placeholder(model.getImage()).crossFade().into(imageLeft);
+//                pointLeft.setText(String.valueOf(model.getPoint()));
+                Glide.with(context).load(model.getImage()).placeholder(context.getResources().getDrawable(R.drawable.ic_no_image)).centerCrop().crossFade().into(imageLeft);
 
                 layoutLeft.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -81,8 +81,8 @@ public abstract class MenuAdapter extends BaseExpandableListAdapter {
                 });
             } else {
                 titleRight.setText(model.getName());
-                pointRight.setText(String.valueOf(model.getPoint()));
-                Glide.with(context).load("").placeholder(model.getImage()).crossFade().into(imageRight);
+//                pointRight.setText(String.valueOf(model.getPoint()));
+                Glide.with(context).load(model.getImage()).placeholder(context.getResources().getDrawable(R.drawable.ic_no_image)).centerCrop().crossFade().into(imageRight);
 
                 layoutRight.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -117,7 +117,7 @@ public abstract class MenuAdapter extends BaseExpandableListAdapter {
 
     @Override
     public View getGroupView(final int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
-        final MenuCategoryModel parentModel = (MenuCategoryModel) getGroup(groupPosition);
+        final MenuCategoryEntity parentModel = (MenuCategoryEntity) getGroup(groupPosition);
 
         if (convertView == null) {
             LayoutInflater infalInflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -125,7 +125,7 @@ public abstract class MenuAdapter extends BaseExpandableListAdapter {
         }
 
         TextView category = (TextView) convertView.findViewById(R.id.category);
-        category.setText(parentModel.getName());
+        category.setText(parentModel.getCategory());
 
         return convertView;
     }
@@ -140,7 +140,7 @@ public abstract class MenuAdapter extends BaseExpandableListAdapter {
         return true;
     }
 
-    protected abstract void onRightMenuClick(MenuItemModel parent);
+    protected abstract void onRightMenuClick(MenuEntity parent);
 
-    protected abstract void onLeftMenuClick(MenuItemModel parent);
+    protected abstract void onLeftMenuClick(MenuEntity parent);
 }

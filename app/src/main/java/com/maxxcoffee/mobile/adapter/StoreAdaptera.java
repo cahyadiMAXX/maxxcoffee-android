@@ -5,11 +5,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.maxxcoffee.mobile.R;
-import com.maxxcoffee.mobile.model.StoreModel;
+import com.maxxcoffee.mobile.database.entity.StoreEntity;
 
 import java.util.List;
 
@@ -19,10 +18,10 @@ import java.util.List;
 public class StoreAdaptera extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Context context;
-    private List<StoreModel> data;
+    private List<StoreEntity> data;
     private LayoutInflater inflater;
 
-    public StoreAdaptera(Context context, List<StoreModel> data) {
+    public StoreAdaptera(Context context, List<StoreEntity> data) {
         this.context = context;
         this.data = data;
         this.inflater = LayoutInflater.from(context);
@@ -36,7 +35,7 @@ public class StoreAdaptera extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        StoreModel model = data.get(position);
+        StoreEntity model = data.get(position);
         BodyViewHolder body = (BodyViewHolder) holder;
         body.populate(model);
     }
@@ -66,10 +65,10 @@ public class StoreAdaptera extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             open = (TextView) view.findViewById(R.id.open);
         }
 
-        public void populate(StoreModel model) {
+        public void populate(StoreEntity model) {
             name.setText(model.getName());
             address.setText(model.getAddress());
-            contact.setText(model.getContact());
+            contact.setText(model.getPhone());
             open.setText(model.getOpen());
         }
     }

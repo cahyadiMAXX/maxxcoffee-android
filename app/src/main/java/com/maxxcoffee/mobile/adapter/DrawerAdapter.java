@@ -110,11 +110,7 @@ public class DrawerAdapter extends BaseExpandableListAdapter {
         arrow.setVisibility(parentModel.isExpandable() ? View.VISIBLE : View.GONE);
 
         if (parentModel.getIcon() != null) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                icon.setImageDrawable(context.getResources().getDrawable(parentModel.getIcon(), null));
-            } else {
-                icon.setImageDrawable(context.getResources().getDrawable(parentModel.getIcon()));
-            }
+            icon.setImageDrawable(context.getResources().getDrawable(parentModel.getIcon()));
         }
 
 //        if (!parentModel.isExpandable()) {

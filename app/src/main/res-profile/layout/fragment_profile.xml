@@ -59,7 +59,6 @@
                         android:layout_toLeftOf="@id/arrow_name"
                         android:layout_toRightOf="@id/label_name"
                         android:gravity="right"
-                        android:text="Guntur Satrya Saputro"
                         android:textColor="@android:color/black"
                         android:textSize="14sp" />
                 </RelativeLayout>
@@ -106,7 +105,6 @@
                         android:layout_toLeftOf="@id/arrow_email"
                         android:layout_toRightOf="@id/label_email"
                         android:gravity="right"
-                        android:text="guntur@technopartner.id"
                         android:textColor="@android:color/black"
                         android:textSize="14sp" />
                 </RelativeLayout>
@@ -158,7 +156,6 @@
                         android:layout_toLeftOf="@id/arrow_phone"
                         android:layout_toRightOf="@id/label_phone"
                         android:gravity="right"
-                        android:text="0811255501"
                         android:textColor="@android:color/black"
                         android:textSize="14sp" />
                 </RelativeLayout>
@@ -244,7 +241,6 @@
                         android:layout_toLeftOf="@id/arrow_balance"
                         android:layout_toRightOf="@id/label_balance"
                         android:gravity="right"
-                        android:text="IDR 70.000"
                         android:textColor="@android:color/black"
                         android:textSize="14sp" />
                 </RelativeLayout>
@@ -297,7 +293,6 @@
                         android:layout_toLeftOf="@id/arrow_point"
                         android:layout_toRightOf="@id/label_point"
                         android:gravity="right"
-                        android:text="200"
                         android:textColor="@android:color/black"
                         android:textSize="14sp" />
                 </RelativeLayout>
@@ -350,7 +345,6 @@
                         android:layout_toLeftOf="@id/arrow_beans"
                         android:layout_toRightOf="@id/label_beans"
                         android:gravity="right"
-                        android:text="250"
                         android:textColor="@android:color/black"
                         android:textSize="14sp" />
                 </RelativeLayout>
@@ -402,7 +396,6 @@
                         android:layout_toLeftOf="@id/arrow_card"
                         android:layout_toRightOf="@id/label_card"
                         android:gravity="right"
-                        android:text="3"
                         android:textColor="@android:color/black"
                         android:textSize="14sp" />
                 </RelativeLayout>

@@ -5,16 +5,10 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
 import com.maxxcoffee.mobile.R;
 import com.maxxcoffee.mobile.activity.MainActivity;
-import com.maxxcoffee.mobile.database.controller.CardController;
-import com.maxxcoffee.mobile.database.entity.CardEntity;
-import com.maxxcoffee.mobile.fragment.dialog.LostCardDialog;
-import com.maxxcoffee.mobile.fragment.dialog.OptionDialog;
 import com.maxxcoffee.mobile.fragment.dialog.ReportDialog;
 import com.maxxcoffee.mobile.model.CardModel;
 import com.maxxcoffee.mobile.model.ReportModel;
@@ -31,24 +25,21 @@ import butterknife.OnClick;
  */
 public class ReportFragment extends Fragment {
 
-    public static Integer COMPLAINT = 1;
-    public static Integer LOST_CARD = 2;
+    private final int COMPLAINT = 999;
+    private final int QUESTION = 888;
+    private final int PARTNERSHIP = 777;
 
     @Bind(R.id.subject)
     TextView subject;
-    @Bind(R.id.card)
-    TextView card;
     @Bind(R.id.detail)
     TextView detail;
-    @Bind(R.id.layout_card)
-    LinearLayout layoutCard;
 
     private MainActivity activity;
     private Integer selectedReport;
     private Integer selectedCard;
     private List<ReportModel> data;
     private List<CardModel> cards;
-    private CardController cardController;
+//    private CardController cardController;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -58,7 +49,7 @@ public class ReportFragment extends Fragment {
 
         data = new ArrayList<>();
         cards = new ArrayList<>();
-        cardController = new CardController(activity);
+//        cardController = new CardController(activity);
         fetchingData();
     }
 
@@ -69,14 +60,8 @@ public class ReportFragment extends Fragment {
         ButterKnife.bind(this, view);
         activity.setTitle("Contact Us");
 
-        selectedReport = getArguments().getInt("selected-report", -999);
-        if (selectedReport == COMPLAINT) {
-            setReport(data.get(0));
-            layoutCard.setVisibility(View.GONE);
-        } else if (selectedReport == LOST_CARD) {
-            setReport(data.get(1));
-            layoutCard.setVisibility(View.VISIBLE);
-        }
+        selectedReport = COMPLAINT;
+
         return view;
     }
 
@@ -87,10 +72,10 @@ public class ReportFragment extends Fragment {
             protected void onOk(Integer selectedReport) {
                 if (selectedReport == COMPLAINT) {
                     setReport(data.get(0));
-                    layoutCard.setVisibility(View.GONE);
-                } else if (selectedReport == LOST_CARD) {
+                } else if (selectedReport == QUESTION) {
                     setReport(data.get(1));
-                    layoutCard.setVisibility(View.VISIBLE);
+                } else if (selectedReport == PARTNERSHIP) {
+                    setReport(data.get(2));
                 }
                 dismiss();
             }
@@ -108,70 +93,14 @@ public class ReportFragment extends Fragment {
         reportDialog.show(getFragmentManager(), null);
     }
 
-    @OnClick(R.id.card)
-    public void onCardClick() {
-        LostCardDialog lostCardDialog = new LostCardDialog() {
-            @Override
-            protected void onOk(Integer index) {
-                if (index == CARD_1) {
-                    setCard(cards.get(0));
-                } else if (index == CARD_2) {
-                    setCard(cards.get(1));
-                } else if (index == CARD_3) {
-                    setCard(cards.get(2));
-                }
-                dismiss();
-            }
-
-            @Override
-            protected void onCancel() {
-                dismiss();
-            }
-        };
-
-        String cardString = new Gson().toJson(cards);
-
-        Bundle bundle = new Bundle();
-        bundle.putInt("selected-report", LostCardDialog.CARD_1);
-        bundle.putString("cards", cardString);
-
-        lostCardDialog.setArguments(bundle);
-        lostCardDialog.show(getFragmentManager(), null);
-    }
-
     @OnClick(R.id.arrow_subject)
     public void onSubjectArrowClick() {
         onSubjectClick();
     }
 
-    @OnClick(R.id.arrow_card)
-    public void onCardArrowClick() {
-        onCardClick();
-    }
-
     @OnClick(R.id.report)
     public void onReportClick() {
-        if (selectedReport == LOST_CARD) {
-            Bundle bundle = new Bundle();
-            bundle.putString("content", "Your card will be automatically deactived. Are you sure?");
-            bundle.putString("default", OptionDialog.CANCEL);
-
-            OptionDialog optionDialog = new OptionDialog() {
-                @Override
-                protected void onOk() {
-                    reportLostCardNow();
-                }
-
-                @Override
-                protected void onCancel() {
-                    dismiss();
-                }
-            };
-            optionDialog.setArguments(bundle);
-            optionDialog.show(getFragmentManager(), null);
-        } else {
-            reportComplaintNow();
-        }
+        reportComplaintNow();
     }
 
     private void reportComplaintNow() {
@@ -187,32 +116,32 @@ public class ReportFragment extends Fragment {
         subject.setText(model.getName());
     }
 
-    private void setCard(CardModel model) {
-        selectedCard = model.getId();
-        card.setText(model.getName());
-    }
-
     private void fetchingData() {
         ReportModel modelComplaint = new ReportModel();
         modelComplaint.setId(COMPLAINT);
         modelComplaint.setName("Complaint");
         data.add(modelComplaint);
 
-        ReportModel modelLostCard = new ReportModel();
-        modelLostCard.setId(LOST_CARD);
-        modelLostCard.setName("Lost Card");
-        data.add(modelLostCard);
+        ReportModel modelQuestion = new ReportModel();
+        modelQuestion.setId(QUESTION);
+        modelQuestion.setName("Question");
+        data.add(modelQuestion);
 
-        List<CardEntity> cardEntities = cardController.getCards();
-        for (CardEntity entity : cardEntities) {
-            CardModel model = new CardModel();
-            model.setId(entity.getId());
-            model.setName(entity.getName());
-            model.setBalance(entity.getBalance());
-            model.setBeans(entity.getBeans());
-            model.setExpDate(entity.getExpDate());
-            model.setPoint(entity.getPoint());
-            cards.add(model);
-        }
+        ReportModel modelPartnership = new ReportModel();
+        modelPartnership.setId(PARTNERSHIP);
+        modelPartnership.setName("Partnership");
+        data.add(modelPartnership);
+
+//        List<CardEntity> cardEntities = cardController.getCards();
+//        for (CardEntity entity : cardEntities) {
+//            CardModel model = new CardModel();
+//            model.setId(entity.getId());
+//            model.setName(entity.getName());
+//            model.setBalance(entity.getBalance());
+//            model.setBeans(entity.getBeans());
+//            model.setExpDate(entity.getExpDate());
+//            model.setPoint(entity.getPoint());
+//            cards.add(model);
+//        }
     }
 }

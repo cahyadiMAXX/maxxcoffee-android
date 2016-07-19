@@ -5,17 +5,29 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import com.maxxcoffee.mobile.R;
 import com.maxxcoffee.mobile.activity.FormActivity;
-import com.maxxcoffee.mobile.activity.MainActivity;
+import com.maxxcoffee.mobile.widget.TBaseProgress;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
+import com.maxxcoffee.mobile.task.ChangePasswordTask;
 
 /**
  * Created by Rio Swarawan on 5/3/2016.
  */
 public class ChangePasswordFragment extends Fragment {
+
+    @Bind(R.id.old_password)
+    EditText oldPassword;
+    @Bind(R.id.new_password)
+    EditText newPassword;
+    @Bind(R.id.new_password_confirm)
+    EditText newPasswordConfirm;
 
     private FormActivity activity;
 
@@ -35,4 +47,57 @@ public class ChangePasswordFragment extends Fragment {
         return view;
     }
 
+
+    @OnClick(R.id.save)
+    public void onSaveChangePasswordClick() {
+        if (!isFormValid())
+            return;
+
+        final TBaseProgress progress = new TBaseProgress(activity);
+        progress.show();
+
+        String mOldPassword = oldPassword.getText().toString();
+        String mNewPassword = newPassword.getText().toString();
+        ChangePasswordTask task = new ChangePasswordTask(activity) {
+            @Override
+            public void onSuccess() {
+                if (progress.isShowing())
+                    progress.dismiss();
+                activity.onBackClick();
+            }
+
+            @Override
+            public void onFailed() {
+                if (progress.isShowing())
+                    progress.dismiss();
+                Toast.makeText(activity, "Failed to change password", Toast.LENGTH_SHORT).show();
+            }
+        };
+        task.execute(mOldPassword, mNewPassword);
+    }
+
+    public boolean isFormValid() {
+        String mOldPassword = oldPassword.getText().toString();
+        String mNewPassword = newPassword.getText().toString();
+        String mNewPasswordConfirm = newPasswordConfirm.getText().toString();
+        boolean status = true;
+
+        if (mOldPassword.equalsIgnoreCase("")) {
+            Toast.makeText(activity, "Please verify your old password.", Toast.LENGTH_SHORT).show();
+            status = false;
+        }
+        if (mNewPassword.equalsIgnoreCase("")) {
+            Toast.makeText(activity, "Please verify your new password.", Toast.LENGTH_SHORT).show();
+            status = false;
+        }
+        if (mNewPasswordConfirm.equalsIgnoreCase("")) {
+            Toast.makeText(activity, "Please verify your new password confirmation.", Toast.LENGTH_SHORT).show();
+            status = false;
+        }
+        if (!mNewPassword.equalsIgnoreCase(mNewPasswordConfirm)) {
+            Toast.makeText(activity, "Your new password confirmation does not match.", Toast.LENGTH_SHORT).show();
+            status = false;
+        }
+        return status;
+    }
 }

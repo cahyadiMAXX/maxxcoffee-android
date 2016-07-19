@@ -7,7 +7,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="220dp"
+        android:layout_height="250dp"
         android:background="@android:color/white"
         android:orientation="vertical">
 
@@ -68,14 +68,31 @@
                 android:background="@android:color/black" />
 
             <com.maxxcoffee.mobile.widget.textview.TextViewLatoRegular
-                android:id="@+id/lost_card"
+                android:id="@+id/question"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@android:color/white"
                 android:gravity="center"
                 android:paddingBottom="16dp"
                 android:paddingTop="16dp"
-                android:text="Lost Card"
+                android:text="Question"
+                android:textColor="@android:color/darker_gray"
+                android:textSize="16sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/black" />
+
+            <com.maxxcoffee.mobile.widget.textview.TextViewLatoRegular
+                android:id="@+id/partnership"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/white"
+                android:gravity="center"
+                android:paddingBottom="16dp"
+                android:paddingTop="16dp"
+                android:text="Partnership"
                 android:textColor="@android:color/darker_gray"
                 android:textSize="16sp" />
         </LinearLayout>

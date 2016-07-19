@@ -50,11 +50,14 @@ public class HomeFragment extends Fragment {
         activity.setTitle("");
 
         int mGreeting = Utils.getDayPart();
+        String mName = PreferenceManager.getString(activity, Constant.PREFERENCE_USER_NAME, "");
+        String mBalance = PreferenceManager.getString(activity, Constant.PREFERENCE_BALANCE, "");
+        String mBeans = PreferenceManager.getString(activity, Constant.PREFERENCE_BEAN, "");
 
         greeting.setText(getDayPartString(mGreeting));
-        name.setText("Guntur Satrya Saputro");
-        balance.setText("IDR 70.000");
-        point.setText("250 Points");
+        name.setText(mName);
+        balance.setText(mBalance.equals("") ? "" : "IDR " + mBalance);
+        point.setText(mBeans.equals("") ? "" : mBeans + " Points");
 
         return view;
     }

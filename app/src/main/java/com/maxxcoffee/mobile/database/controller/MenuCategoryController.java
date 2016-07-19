@@ -6,16 +6,17 @@ import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.stmt.QueryBuilder;
 import com.maxxcoffee.mobile.database.DatabaseConfig;
 import com.maxxcoffee.mobile.database.entity.MenuCategoryEntity;
-import com.maxxcoffee.mobile.model.MenuCategoryModel;
+import com.maxxcoffee.mobile.database.entity.MenuEntity;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Rio Swarawan on 5/24/2016.
+ * Created by rioswarawan on 7/15/16.
  */
 public class MenuCategoryController {
+
     private DatabaseConfig database;
 
     public MenuCategoryController(Context context) {
@@ -25,19 +26,7 @@ public class MenuCategoryController {
         }
     }
 
-    public void insert(MenuCategoryModel model) {
-        MenuCategoryEntity entity = null;
-        if (model.getId() == null) {
-            entity = new MenuCategoryEntity();
-        } else {
-            entity = getMenuCategory(model.getId());
-            if (entity == null) {
-                entity = new MenuCategoryEntity();
-                entity.setId(model.getId());
-            }
-        }
-        entity.setName(model.getName());
-
+    public void insert(MenuCategoryEntity entity) {
         insertOrUpdate(entity);
     }
 
@@ -49,28 +38,12 @@ public class MenuCategoryController {
         }
     }
 
-    public MenuCategoryEntity getMenuCategory(Integer id) {
+    public List<MenuCategoryEntity> getMenuCategoryDrinks() {
         List<MenuCategoryEntity> data = new ArrayList<>();
         try {
             Dao<MenuCategoryEntity, Integer> dao = database.getMenuCategoryDao();
             QueryBuilder<MenuCategoryEntity, Integer> query = dao.queryBuilder();
-            query.where().eq("id", id);
-
-            data = query.query();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        if (data.size() > 0) {
-            return data.get(0);
-        }
-        return null;
-    }
-
-    public List<MenuCategoryEntity> getMenuCategories() {
-        List<MenuCategoryEntity> data = new ArrayList<>();
-        try {
-            Dao<MenuCategoryEntity, Integer> dao = database.getMenuCategoryDao();
-            QueryBuilder<MenuCategoryEntity, Integer> query = dao.queryBuilder();
+            query.where().eq("group", "Drinks");
 
             data = query.query();
         } catch (SQLException e) {
@@ -78,4 +51,33 @@ public class MenuCategoryController {
         }
         return data;
     }
+
+    public List<MenuCategoryEntity> getMenuCategoryFood() {
+        List<MenuCategoryEntity> data = new ArrayList<>();
+        try {
+            Dao<MenuCategoryEntity, Integer> dao = database.getMenuCategoryDao();
+            QueryBuilder<MenuCategoryEntity, Integer> query = dao.queryBuilder();
+            query.where().eq("group", "Food");
+
+            data = query.query();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return data;
+    }
+
+    public List<MenuCategoryEntity> getMenuCategoryMerchandise() {
+        List<MenuCategoryEntity> data = new ArrayList<>();
+        try {
+            Dao<MenuCategoryEntity, Integer> dao = database.getMenuCategoryDao();
+            QueryBuilder<MenuCategoryEntity, Integer> query = dao.queryBuilder();
+            query.where().eq("group", "Merchandise");
+
+            data = query.query();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return data;
+    }
+
 }

@@ -10,17 +10,23 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
+import com.google.zxing.integration.android.IntentIntegrator;
 import com.maxxcoffee.mobile.R;
+import com.maxxcoffee.mobile.activity.AddCardBarcodeActivity;
+import com.maxxcoffee.mobile.activity.FormActivity;
 import com.maxxcoffee.mobile.activity.MainActivity;
 import com.maxxcoffee.mobile.adapter.CardAdapter;
 import com.maxxcoffee.mobile.database.controller.CardController;
 import com.maxxcoffee.mobile.database.entity.CardEntity;
 import com.maxxcoffee.mobile.fragment.dialog.CardMaxDialog;
 import com.maxxcoffee.mobile.model.CardModel;
+import com.maxxcoffee.mobile.model.response.CardItemResponseModel;
+import com.maxxcoffee.mobile.task.CardTask;
 import com.maxxcoffee.mobile.widget.CustomLinearLayoutManager;
+import com.maxxcoffee.mobile.widget.TBaseProgress;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +50,7 @@ public class MyCardFragment extends Fragment {
     FrameLayout disableLayer;
 
     private MainActivity activity;
-    private List<CardModel> data;
+    private List<CardEntity> data;
     private CardAdapter adapter;
     private CardController cardController;
     private CustomLinearLayoutManager layoutManager;
@@ -59,11 +65,15 @@ public class MyCardFragment extends Fragment {
         data = new ArrayList<>();
         adapter = new CardAdapter(activity, data) {
             @Override
-            public void onCardSelected(CardModel model) {
+            public void onCardSelected(CardEntity model) {
                 Bundle bundle = new Bundle();
-                bundle.putInt("card-id", model.getId());
-
-                activity.switchFragment(MainActivity.DETAIL_CARD, bundle);
+                bundle.putString("card-id", String.valueOf(model.getId()));
+//
+//                activity.switchFragment(MainActivity.DETAIL_CARD, bundle);
+                Intent intent = new Intent(activity, FormActivity.class);
+                intent.putExtra("content", FormActivity.DETAIL_CARD);
+                intent.putExtras(bundle);
+                startActivity(intent);
             }
         };
     }
@@ -81,6 +91,7 @@ public class MyCardFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(adapter);
 
+        getLocalCard();
         fetchingData();
 
         fabMenu.setOnMenuButtonClickListener(new View.OnClickListener() {
@@ -107,21 +118,50 @@ public class MyCardFragment extends Fragment {
     }
 
     private void fetchingData() {
+        final TBaseProgress progress = new TBaseProgress(activity);
+        progress.show();
+
+        CardTask task = new CardTask(activity) {
+            @Override
+            public void onSuccess(List<CardItemResponseModel> responseModel) {
+                for (CardItemResponseModel card : responseModel) {
+                    CardEntity entity = new CardEntity();
+                    entity.setId(card.getId_card());
+                    entity.setName(card.getCard_name());
+                    entity.setNumber(card.getCard_number());
+                    entity.setImage(card.getCard_image());
+                    entity.setDistribution_id(card.getDistribution_id());
+                    entity.setCard_pin(card.getCard_pin());
+                    entity.setBalance(card.getBalance());
+                    entity.setPoint(card.getPoint());
+                    entity.setExpired_date(card.getExpired_date());
+
+                    cardController.insert(entity);
+                }
+                getLocalCard();
+
+                if (progress.isShowing())
+                    progress.dismiss();
+            }
+
+            @Override
+            public void onFailed() {
+                if (progress.isShowing())
+                    progress.dismiss();
+                Toast.makeText(activity, "Failed to fetching data.", Toast.LENGTH_SHORT).show();
+            }
+        };
+        task.execute();
+    }
+
+    private void getLocalCard() {
         List<CardEntity> cards = cardController.getCards();
         emptyCard.setVisibility(cards.size() > 0 ? View.GONE : View.VISIBLE);
 
-        data.clear();
-        for (CardEntity card : cards) {
-            CardModel model = new CardModel();
-            model.setId(card.getId());
-            model.setName(card.getName());
-            model.setBalance(card.getBalance());
-            model.setPoint(card.getPoint());
-            model.setBeans(card.getBeans());
-            model.setImage(card.getImage());
+        if (cards.size() > 0)
+            data.clear();
 
-            data.add(model);
-        }
+        data.addAll(cards);
         adapter.notifyDataSetChanged();
     }
 
@@ -137,6 +177,9 @@ public class MyCardFragment extends Fragment {
                 }
             };
             dialog.show(getFragmentManager(), null);
+        } else {
+            activity.openBarcode();
+            fabMenu.close(true);
         }
     }
 }

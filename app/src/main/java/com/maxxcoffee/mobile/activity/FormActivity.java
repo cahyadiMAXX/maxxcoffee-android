@@ -6,7 +6,6 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.maxxcoffee.mobile.R;
@@ -14,6 +13,8 @@ import com.maxxcoffee.mobile.fragment.ChangeEmailFragment;
 import com.maxxcoffee.mobile.fragment.ChangeNameFragment;
 import com.maxxcoffee.mobile.fragment.ChangePasswordFragment;
 import com.maxxcoffee.mobile.fragment.FaqDetailFragment;
+import com.maxxcoffee.mobile.fragment.MyCardDetailFragment;
+import com.maxxcoffee.mobile.fragment.RenameCardFragment;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -28,6 +29,8 @@ public class FormActivity extends FragmentActivity {
     public static final int CHANGE_EMAIL = 1002;
     public static final int CHANGE_PASSWORD = 1003;
     public static final int FAQ_DETAIL = 1004;
+    public static final int DETAIL_CARD = 1005;
+    public static final int RENAME_CARD = 1006;
 
     @Bind(R.id.title)
     TextView title;
@@ -46,7 +49,6 @@ public class FormActivity extends FragmentActivity {
         Bundle bundle = getIntent().getExtras();
 
         switchFragment(content, bundle);
-
     }
 
     public void switchFragment(int contentId) {
@@ -78,6 +80,12 @@ public class FormActivity extends FragmentActivity {
                 break;
             case FAQ_DETAIL:
                 fragment = new FaqDetailFragment();
+                break;
+            case DETAIL_CARD:
+                fragment = new MyCardDetailFragment();
+                break;
+            case RENAME_CARD:
+                fragment = new RenameCardFragment();
                 break;
         }
 

@@ -9,7 +9,6 @@ import android.widget.TextView;
 
 import com.maxxcoffee.mobile.R;
 import com.maxxcoffee.mobile.model.HistoryModel;
-import com.maxxcoffee.mobile.model.StoreModel;
 
 import java.util.List;
 

@@ -9,6 +9,7 @@ import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.maxxcoffee.mobile.R;
 
 import butterknife.Bind;
@@ -39,15 +40,11 @@ public class PromoDialog extends DialogFragment {
 
         String mTitle = getArguments().getString("title", "");
         String mDescription = getArguments().getString("desc", "");
-        Integer mImage = getArguments().getInt("image", -99);
+        String mImage = getArguments().getString("image", "");
 
         title.setText(mTitle);
         description.setText(mDescription);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            imageView.setImageDrawable(getContext().getResources().getDrawable(mImage, null));
-        } else {
-            imageView.setImageDrawable(getContext().getResources().getDrawable(mImage));
-        }
+        Glide.with(getActivity()).load(mImage).centerCrop().crossFade().into(imageView);
 
         return dialog;
     }

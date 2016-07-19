@@ -83,13 +83,7 @@ public class LostCardDialog extends DialogFragment {
             }
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            card1.setTextColor(getResources().getColor(R.color.green_selected, null));
-        } else {
-            card1.setTextColor(getResources().getColor(R.color.green_selected));
-        }
-
-
+        card1.setTextColor(getResources().getColor(R.color.green_selected));
         ok.setTextColor(Color.RED);
         cancel.setTextColor(Color.BLACK);
 
@@ -99,43 +93,25 @@ public class LostCardDialog extends DialogFragment {
     @OnClick(R.id.card_1)
     public void onCard1Click() {
         selectedReport = CARD_1;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            card1.setTextColor(getResources().getColor(R.color.green_selected, null));
-            card2.setTextColor(getResources().getColor(android.R.color.darker_gray, null));
-            card3.setTextColor(getResources().getColor(android.R.color.darker_gray, null));
-        } else {
-            card1.setTextColor(getResources().getColor(R.color.green_selected));
-            card2.setTextColor(getResources().getColor(android.R.color.darker_gray));
-            card3.setTextColor(getResources().getColor(android.R.color.darker_gray));
-        }
+        card1.setTextColor(getResources().getColor(R.color.green_selected));
+        card2.setTextColor(getResources().getColor(android.R.color.darker_gray));
+        card3.setTextColor(getResources().getColor(android.R.color.darker_gray));
     }
 
     @OnClick(R.id.card_2)
     public void onCard2Click() {
         selectedReport = CARD_2;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            card1.setTextColor(getResources().getColor(android.R.color.darker_gray, null));
-            card2.setTextColor(getResources().getColor(R.color.green_selected, null));
-            card3.setTextColor(getResources().getColor(android.R.color.darker_gray, null));
-        } else {
-            card1.setTextColor(getResources().getColor(android.R.color.darker_gray));
-            card2.setTextColor(getResources().getColor(R.color.green_selected));
-            card3.setTextColor(getResources().getColor(android.R.color.darker_gray));
-        }
+        card1.setTextColor(getResources().getColor(android.R.color.darker_gray));
+        card2.setTextColor(getResources().getColor(R.color.green_selected));
+        card3.setTextColor(getResources().getColor(android.R.color.darker_gray));
     }
 
     @OnClick(R.id.card_3)
     public void onCard3Click() {
         selectedReport = CARD_3;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            card1.setTextColor(getResources().getColor(android.R.color.darker_gray, null));
-            card2.setTextColor(getResources().getColor(android.R.color.darker_gray, null));
-            card3.setTextColor(getResources().getColor(R.color.green_selected, null));
-        } else {
-            card1.setTextColor(getResources().getColor(android.R.color.darker_gray));
-            card2.setTextColor(getResources().getColor(android.R.color.darker_gray));
-            card3.setTextColor(getResources().getColor(R.color.green_selected));
-        }
+        card1.setTextColor(getResources().getColor(android.R.color.darker_gray));
+        card2.setTextColor(getResources().getColor(android.R.color.darker_gray));
+        card3.setTextColor(getResources().getColor(R.color.green_selected));
     }
 
     @OnClick(R.id.ok)
@@ -148,7 +124,9 @@ public class LostCardDialog extends DialogFragment {
         onCancel();
     }
 
-    protected  void onOk(Integer index){}
+    protected void onOk(Integer index) {
+    }
 
-    protected  void onCancel(){}
+    protected void onCancel() {
+    }
 }

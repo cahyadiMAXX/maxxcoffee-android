@@ -24,6 +24,7 @@
                 android:id="@+id/card_image"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
+                android:scaleType="centerCrop"
                 android:src="@drawable/sample_card_3" />
 
             <LinearLayout
@@ -81,7 +82,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="16dp"
                     android:padding="16dp"
-                    android:text="IDR 70300"
+                    android:text="IDR 0"
                     android:textColor="@android:color/black"
                     android:textSize="14sp" />
             </LinearLayout>
@@ -105,6 +106,7 @@
                     android:layout_width="2dp"
                     android:layout_height="match_parent"
                     android:background="@color/green_selected" />
+                ¬
 
                 <com.maxxcoffee.mobile.widget.textview.TextViewLatoRegular
                     android:id="@+id/point"
@@ -112,7 +114,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="16dp"
                     android:padding="16dp"
-                    android:text="908 points"
+                    android:text="0 points"
                     android:textColor="@android:color/black"
                     android:textSize="14sp" />
             </LinearLayout>
@@ -122,7 +124,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:background="@color/gray"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="gone">
 
                 <com.maxxcoffee.mobile.widget.textview.TextViewLatoRegular
                     android:layout_width="100dp"
@@ -248,8 +251,8 @@
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="40dp"
                             android:layout_marginRight="16dp"
+                            android:layout_marginTop="40dp"
                             android:layout_weight="1"
                             android:gravity="center"
                             android:orientation="vertical">

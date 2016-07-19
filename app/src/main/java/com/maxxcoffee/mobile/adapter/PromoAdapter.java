@@ -9,7 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
 import com.maxxcoffee.mobile.R;
+import com.maxxcoffee.mobile.database.entity.PromoEntity;
 import com.maxxcoffee.mobile.model.PromoModel;
 
 import java.util.List;
@@ -20,10 +22,10 @@ import java.util.List;
 public abstract class PromoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Context context;
-    private List<PromoModel> data;
+    private List<PromoEntity> data;
     private LayoutInflater inflater;
 
-    public PromoAdapter(Context context, List<PromoModel> data) {
+    public PromoAdapter(Context context, List<PromoEntity> data) {
         this.context = context;
         this.data = data;
         this.inflater = LayoutInflater.from(context);
@@ -37,7 +39,7 @@ public abstract class PromoAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        PromoModel model = data.get(position);
+        PromoEntity model = data.get(position);
         BodyViewHolder body = (BodyViewHolder) holder;
         body.populate(model);
     }
@@ -63,13 +65,8 @@ public abstract class PromoAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             layout = (CardView) itemView.findViewById(R.id.card_view);
         }
 
-        public void populate(final PromoModel model) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                image.setImageDrawable(context.getResources().getDrawable(model.getImage(), null));
-            } else {
-                image.setImageDrawable(context.getResources().getDrawable(model.getImage()));
-            }
-
+        public void populate(final PromoEntity model) {
+            Glide.with(context).load(model.getImage()).placeholder(context.getResources().getDrawable(R.drawable.ic_no_image)).centerCrop().crossFade().into(image);
             layout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -79,5 +76,5 @@ public abstract class PromoAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         }
     }
 
-    public abstract void onCardClick(PromoModel model);
+    public abstract void onCardClick(PromoEntity model);
 }

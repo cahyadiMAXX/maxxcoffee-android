@@ -17,19 +17,25 @@ public class CardEntity {
     private String name;
 
     @DatabaseField
+    private String number;
+
+    @DatabaseField
+    private String image;
+
+    @DatabaseField
+    private String distribution_id;
+
+    @DatabaseField
+    private String card_pin;
+
+    @DatabaseField
     private Integer balance;
 
     @DatabaseField
     private Integer point;
 
     @DatabaseField
-    private Integer beans;
-
-    @DatabaseField
-    private String expDate;
-
-    @DatabaseField
-    private Integer image;
+    private String expired_date;
 
     public Integer getId() {
         return id;
@@ -45,6 +51,38 @@ public class CardEntity {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getNumber() {
+        return number;
+    }
+
+    public void setNumber(String number) {
+        this.number = number;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public String getDistribution_id() {
+        return distribution_id;
+    }
+
+    public void setDistribution_id(String distribution_id) {
+        this.distribution_id = distribution_id;
+    }
+
+    public String getCard_pin() {
+        return card_pin;
+    }
+
+    public void setCard_pin(String card_pin) {
+        this.card_pin = card_pin;
     }
 
     public Integer getBalance() {
@@ -63,27 +101,11 @@ public class CardEntity {
         this.point = point;
     }
 
-    public Integer getBeans() {
-        return beans;
+    public String getExpired_date() {
+        return expired_date;
     }
 
-    public void setBeans(Integer beans) {
-        this.beans = beans;
-    }
-
-    public String getExpDate() {
-        return expDate;
-    }
-
-    public void setExpDate(String expDate) {
-        this.expDate = expDate;
-    }
-
-    public Integer getImage() {
-        return image;
-    }
-
-    public void setImage(Integer image) {
-        this.image = image;
+    public void setExpired_date(String expired_date) {
+        this.expired_date = expired_date;
     }
 }

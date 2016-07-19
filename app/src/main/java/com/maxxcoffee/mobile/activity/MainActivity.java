@@ -1,6 +1,6 @@
 package com.maxxcoffee.mobile.activity;
 
-import android.os.Build;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -8,7 +8,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -17,14 +16,19 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 import com.maxxcoffee.mobile.R;
 import com.maxxcoffee.mobile.adapter.DrawerAdapter;
+import com.maxxcoffee.mobile.database.DatabaseConfig;
 import com.maxxcoffee.mobile.fragment.CredentialFragment;
-import com.maxxcoffee.mobile.fragment.FaqDetailFragment;
+import com.maxxcoffee.mobile.fragment.EventFragment;
 import com.maxxcoffee.mobile.fragment.FaqFragment;
+import com.maxxcoffee.mobile.fragment.HistoryFragment;
 import com.maxxcoffee.mobile.fragment.LoginFragment;
-import com.maxxcoffee.mobile.fragment.MyCardDetailFragment;
+import com.maxxcoffee.mobile.fragment.LostCardFragment;
 import com.maxxcoffee.mobile.fragment.MyCardFragment;
 import com.maxxcoffee.mobile.fragment.HomeFragment;
 import com.maxxcoffee.mobile.fragment.MenuFragment;
@@ -36,6 +40,7 @@ import com.maxxcoffee.mobile.fragment.SignUpFragment;
 import com.maxxcoffee.mobile.fragment.SignUpInfoFragment;
 import com.maxxcoffee.mobile.fragment.StoreFragment;
 import com.maxxcoffee.mobile.fragment.TosFragment;
+import com.maxxcoffee.mobile.fragment.dialog.CardRenameDialog;
 import com.maxxcoffee.mobile.fragment.dialog.OptionDialog;
 import com.maxxcoffee.mobile.model.ChildDrawerModel;
 import com.maxxcoffee.mobile.model.ParentDrawerModel;
@@ -77,6 +82,7 @@ public class MainActivity extends FragmentActivity {
     public static final int LOGIN = 1021;
     public static final int SIGNUP = 1022;
     public static final int SIGNUP_INFO = 1023;
+    public static final int EVENT = 1024;
 
     @Bind(R.id.drawer_layout)
     DrawerLayout drawer;
@@ -95,7 +101,6 @@ public class MainActivity extends FragmentActivity {
     private HashMap<ParentDrawerModel, List<ChildDrawerModel>> listDataChild;
     private DrawerAdapter adapter;
     private Integer selectedPage;
-    private boolean isLoggedIn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,10 +118,7 @@ public class MainActivity extends FragmentActivity {
 
         listDataHeader = new ArrayList<>();
         listDataChild = new HashMap<>();
-        isLoggedIn = PreferenceManager.getBool(this, Constant.PREFERENCE_LOGGED_IN, false);
-        Log.d("IS-LOGGED-IN", isLoggedIn + "");
 
-        prepareDrawerList();
         adapter = new DrawerAdapter(this, listDataHeader, listDataChild);
         navigationList.setAdapter(adapter);
         navigationList.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
@@ -132,6 +134,7 @@ public class MainActivity extends FragmentActivity {
                 return false;
             }
         });
+
         navigationList.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
@@ -148,6 +151,7 @@ public class MainActivity extends FragmentActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        prepareDrawerList();
 
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.content);
         int mDayPart = Utils.getDayPart();
@@ -231,9 +235,6 @@ public class MainActivity extends FragmentActivity {
 
     public void switchFragment(int contentId, Bundle bundle) {
         try {
-//            int mDayPart = Utils.getDayPart();
-//            setBackgroundHome(contentId, mDayPart);
-
             selectedPage = contentId;
 
             FragmentTransaction ft = this.getSupportFragmentManager().beginTransaction();
@@ -246,6 +247,7 @@ public class MainActivity extends FragmentActivity {
     }
 
     private Fragment getContent(int contentId, Bundle bundle) {
+        boolean isLoggedIn = PreferenceManager.getBool(this, Constant.PREFERENCE_LOGGED_IN, false);
         Fragment fragment = null;
         switch (contentId) {
             case HOME:
@@ -257,15 +259,19 @@ public class MainActivity extends FragmentActivity {
             case PROMO:
                 fragment = new PromoFragment();
                 break;
+            case EVENT:
+                fragment = new EventFragment();
+                break;
             case MENU:
                 fragment = new MenuFragment();
                 break;
             case MY_CARD:
-                fragment = new MyCardFragment();
+//                fragment = new MyCardFragment();
+                fragment = isLoggedIn ? new MyCardFragment() : new CredentialFragment();
                 break;
-            case DETAIL_CARD:
-                fragment = new MyCardDetailFragment();
-                break;
+//            case DETAIL_CARD:
+//                fragment = new MyCardDetailFragment();
+//                break;
             case FAQ:
                 fragment = new FaqFragment();
                 break;
@@ -274,16 +280,14 @@ public class MainActivity extends FragmentActivity {
                 break;
             case CONTACT_US:
                 bundle = new Bundle();
-                bundle.putInt("selected-report", ReportFragment.COMPLAINT);
-
                 fragment = new ReportFragment();
                 break;
             case REPORT_LOST_CARD:
-                bundle = new Bundle();
-                bundle.putInt("selected-report", ReportFragment.LOST_CARD);
-
-                fragment = new ReportFragment();
+                fragment = new LostCardFragment();
                 break;
+//            case CARD_HISTORY:
+//                fragment = new HistoryFragment();
+//                break;
             case REWARD:
                 fragment = new RewardFragment();
                 break;
@@ -300,7 +304,16 @@ public class MainActivity extends FragmentActivity {
                 fragment = new SignUpInfoFragment();
                 break;
             case PROFILE:
-                fragment = new ProfileFragment();
+                fragment = isLoggedIn ? new ProfileFragment() : new CredentialFragment();
+                break;
+            case LOGOUT:
+                logoutNow();
+                break;
+            case ADD_NEW_CARD:
+                Toast.makeText(MainActivity.this, "Feature not available yet", Toast.LENGTH_SHORT).show();
+                break;
+            case BALANCE_TRANSFER:
+                Toast.makeText(MainActivity.this, "Feature not available yet", Toast.LENGTH_SHORT).show();
                 break;
         }
 
@@ -311,27 +324,26 @@ public class MainActivity extends FragmentActivity {
         return fragment;
     }
 
+    private void logoutNow() {
+        PreferenceManager.clearPreference(this);
+//        Database.deleteRealm();
+        DatabaseConfig db = new DatabaseConfig(this);
+        db.clearAllTable();
+        prepareDrawerList();
+        switchFragment(HOME);
+    }
+
     public void setTitle(String mTitle) {
         title.setText(mTitle == null ? "" : mTitle);
     }
 
     public void setHeaderColor(boolean transparent) {
         if (transparent) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                rootLayout.setBackgroundColor(getResources().getColor(android.R.color.transparent, null));
-                hamburger.setImageDrawable(getResources().getDrawable(R.drawable.ic_menu_white, null));
-            } else {
-                rootLayout.setBackgroundColor(getResources().getColor(android.R.color.transparent));
-                hamburger.setImageDrawable(getResources().getDrawable(R.drawable.ic_menu_white));
-            }
+            rootLayout.setBackgroundColor(getResources().getColor(android.R.color.transparent));
+            hamburger.setImageDrawable(getResources().getDrawable(R.drawable.ic_menu_white));
         } else {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                rootLayout.setBackgroundColor(getResources().getColor(R.color.background_cream, null));
-                hamburger.setImageDrawable(getResources().getDrawable(R.drawable.ic_menu_black, null));
-            } else {
-                rootLayout.setBackgroundColor(getResources().getColor(R.color.background_cream));
-                hamburger.setImageDrawable(getResources().getDrawable(R.drawable.ic_menu_black));
-            }
+            rootLayout.setBackgroundColor(getResources().getColor(R.color.background_cream));
+            hamburger.setImageDrawable(getResources().getDrawable(R.drawable.ic_menu_black));
         }
     }
 
@@ -341,7 +353,11 @@ public class MainActivity extends FragmentActivity {
         }
     }
 
-    private void prepareDrawerList() {
+    public void prepareDrawerList() {
+        listDataHeader.clear();
+        listDataChild.clear();
+        boolean isLoggedIn = PreferenceManager.getBool(this, Constant.PREFERENCE_LOGGED_IN, false);
+
         //      PARENT
         ParentDrawerModel home = new ParentDrawerModel();
         home.setId(HOME);
@@ -353,7 +369,7 @@ public class MainActivity extends FragmentActivity {
         browse.setId(2);
         browse.setName("Browse");
         browse.setExpandable(true);
-        browse.setIcon(R.drawable.ic_coffee);
+        browse.setIcon(R.drawable.ic_coffee_white);
 
 //        ParentDrawerModel transaction = new ParentDrawerModel();
 //        transaction.setId(3);
@@ -411,6 +427,10 @@ public class MainActivity extends FragmentActivity {
         childBrowse3.setId(PROMO);
         childBrowse3.setName("Promo");
 
+        ChildDrawerModel childBrowse4 = new ChildDrawerModel();
+        childBrowse4.setId(EVENT);
+        childBrowse4.setName("Event");
+
         ChildDrawerModel childTransaction1 = new ChildDrawerModel();
         childTransaction1.setId(REWARD);
         childTransaction1.setName("Reward");
@@ -427,9 +447,9 @@ public class MainActivity extends FragmentActivity {
         childCard1.setId(MY_CARD);
         childCard1.setName("My Card");
 
-        ChildDrawerModel childCard2 = new ChildDrawerModel();
-        childCard2.setId(ADD_NEW_CARD);
-        childCard2.setName("Add New Card");
+//        ChildDrawerModel childCard2 = new ChildDrawerModel();
+//        childCard2.setId(ADD_NEW_CARD);
+//        childCard2.setName("Add New Card");
 
         ChildDrawerModel childCard3 = new ChildDrawerModel();
         childCard3.setId(BALANCE_TRANSFER);
@@ -464,6 +484,7 @@ public class MainActivity extends FragmentActivity {
         listBrowse.add(childBrowse1);
         listBrowse.add(childBrowse2);
         listBrowse.add(childBrowse3);
+        listBrowse.add(childBrowse4);
 
 //        List<ChildDrawerModel> listTransaction = new ArrayList<>();
 //        listTransaction.add(childTransaction1);
@@ -474,7 +495,7 @@ public class MainActivity extends FragmentActivity {
 
         List<ChildDrawerModel> listCard = new ArrayList<>();
         listCard.add(childCard1);
-        listCard.add(childCard2);
+//        listCard.add(childCard2);
         listCard.add(childCard3);
         listCard.add(childCard4);
         listCard.add(childCard5);
@@ -490,5 +511,45 @@ public class MainActivity extends FragmentActivity {
 //        listDataChild.put(topUp, listTopUp);
         listDataChild.put(card, listCard);
         listDataChild.put(about, listAbout);
+
+        adapter.notifyDataSetChanged();
+    }
+
+    public void openBarcode() {
+        IntentIntegrator integrator = new IntentIntegrator(this);
+        integrator.setCaptureActivity(AddCardBarcodeActivity.class);
+        integrator.initiateScan();
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        if (result != null) {
+            if (result.getContents() == null) {
+                Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
+                openRenameCardDialog();
+            }
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
+    private void openRenameCardDialog() {
+        Intent intent = new Intent(this, FormActivity.class);
+        intent.putExtra("content", FormActivity.RENAME_CARD);
+        startActivity(intent);
+
+//        CardRenameDialog dialog = new CardRenameDialog() {
+//            @Override
+//            protected void onDone() {
+//                dismiss();
+//            }
+//        };
+//
+//        dialog.show(getSupportFragmentManager(), null);
     }
 }

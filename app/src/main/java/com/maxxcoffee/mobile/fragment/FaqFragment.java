@@ -12,10 +12,7 @@ import com.maxxcoffee.mobile.R;
 import com.maxxcoffee.mobile.activity.FormActivity;
 import com.maxxcoffee.mobile.activity.MainActivity;
 import com.maxxcoffee.mobile.adapter.FaqAdapter;
-import com.maxxcoffee.mobile.database.controller.FaqController;
-import com.maxxcoffee.mobile.database.entity.FaqEntity;
 import com.maxxcoffee.mobile.model.FaqModel;
-import com.maxxcoffee.mobile.model.PromoModel;
 import com.maxxcoffee.mobile.util.Constant;
 import com.maxxcoffee.mobile.util.PreferenceManager;
 import com.maxxcoffee.mobile.widget.CustomLinearLayoutManager;
@@ -38,7 +35,7 @@ public class FaqFragment extends Fragment {
     private String token;
     private FaqAdapter adapter;
     private List<FaqModel> data;
-    private FaqController faqController;
+//    private FaqController faqController;
     private CustomLinearLayoutManager layoutManager;
 
     @Override
@@ -48,7 +45,7 @@ public class FaqFragment extends Fragment {
         activity.setHeaderColor(false);
         token = PreferenceManager.getString(activity, Constant.PREFERENCE_TOKEN, "");
 
-        faqController = new FaqController(activity);
+//        faqController = new FaqController(activity);
         data = new ArrayList<>();
         adapter = new FaqAdapter(activity, data) {
             @Override
@@ -82,16 +79,16 @@ public class FaqFragment extends Fragment {
     }
 
     private void fetchingData() {
-        data.clear();
-        List<FaqEntity> faqs = faqController.getFaqs();
-        for (FaqEntity faq : faqs) {
-            FaqModel faqModel = new FaqModel();
-            faqModel.setId(faq.getId());
-            faqModel.setTitle(faq.getTitle());
-            faqModel.setDescription(faq.getDescription());
-
-            data.add(faqModel);
-        }
-        adapter.notifyDataSetChanged();
+//        data.clear();
+//        List<FaqEntity> faqs = faqController.getFaqs();
+//        for (FaqEntity faq : faqs) {
+//            FaqModel faqModel = new FaqModel();
+//            faqModel.setId(faq.getId());
+//            faqModel.setTitle(faq.getTitle());
+//            faqModel.setDescription(faq.getDescription());
+//
+//            data.add(faqModel);
+//        }
+//        adapter.notifyDataSetChanged();
     }
 }

@@ -4,7 +4,7 @@ import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
 /**
- * Created by Rio Swarawan on 5/25/2016.
+ * Created by rioswarawan on 7/15/16.
  */
 
 @DatabaseTable(tableName = "menu_category")
@@ -14,7 +14,10 @@ public class MenuCategoryEntity {
     private Integer id;
 
     @DatabaseField
-    private String name;
+    private String category;
+
+    @DatabaseField
+    private String group;
 
     public Integer getId() {
         return id;
@@ -24,11 +27,19 @@ public class MenuCategoryEntity {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getCategory() {
+        return category;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public String getGroup() {
+        return group;
+    }
+
+    public void setGroup(String group) {
+        this.group = group;
     }
 }

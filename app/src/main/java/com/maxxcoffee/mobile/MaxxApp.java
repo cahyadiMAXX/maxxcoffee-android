@@ -13,6 +13,6 @@ public class MaxxApp extends Application {
     public void onCreate() {
         super.onCreate();
 
-        new Dummy(this);
+//        new Dummy(this);
     }
 }

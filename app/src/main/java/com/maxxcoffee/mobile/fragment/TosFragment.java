@@ -2,7 +2,6 @@ package com.maxxcoffee.mobile.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,16 +9,6 @@ import android.widget.TextView;
 
 import com.maxxcoffee.mobile.R;
 import com.maxxcoffee.mobile.activity.MainActivity;
-import com.maxxcoffee.mobile.adapter.FaqAdapter;
-import com.maxxcoffee.mobile.database.controller.FaqController;
-import com.maxxcoffee.mobile.database.entity.FaqEntity;
-import com.maxxcoffee.mobile.model.FaqModel;
-import com.maxxcoffee.mobile.util.Constant;
-import com.maxxcoffee.mobile.util.PreferenceManager;
-import com.maxxcoffee.mobile.widget.CustomLinearLayoutManager;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;

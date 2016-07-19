@@ -41,14 +41,15 @@
                 android:textSize="16sp" />
 
             <RelativeLayout
+                android:id="@+id/gender_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:background="@color/white_transparent">
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="8dp"
@@ -62,7 +63,7 @@
                     android:background="@android:color/transparent"
                     android:padding="16dp"
                     android:singleLine="true"
-                    android:textColor="@android:color/black"
+                    android:textColor="@android:color/white"
                     android:textSize="16sp" />
             </RelativeLayout>
 
@@ -75,14 +76,15 @@
                 android:textSize="16sp" />
 
             <RelativeLayout
+                android:id="@+id/birthday_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:background="@color/white_transparent">
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="8dp"
@@ -96,7 +98,7 @@
                     android:background="@android:color/transparent"
                     android:padding="16dp"
                     android:singleLine="true"
-                    android:textColor="@android:color/black"
+                    android:textColor="@android:color/white"
                     android:textSize="16sp" />
             </RelativeLayout>
 
@@ -109,6 +111,7 @@
                 android:textSize="16sp" />
 
             <com.maxxcoffee.mobile.widget.edittext.EditTextLatoRegular
+                android:id="@+id/occupation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
@@ -116,7 +119,7 @@
                 android:inputType="textCapWords"
                 android:padding="16dp"
                 android:singleLine="true"
-                android:textColor="@android:color/black"
+                android:textColor="@android:color/white"
                 android:textSize="16sp" />
 
             <com.maxxcoffee.mobile.widget.textview.TextViewLatoRegular
@@ -128,20 +131,22 @@
                 android:textSize="16sp" />
 
             <RelativeLayout
+                android:id="@+id/city_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:background="@color/white_transparent">
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="8dp"
-                    android:src="@drawable/ic_arrow_down_white" />
+                    android:src="@drawable/ic_arrow_down_white"
+                    android:visibility="invisible" />
 
-                <com.maxxcoffee.mobile.widget.textview.TextViewLatoRegular
+                <com.maxxcoffee.mobile.widget.edittext.EditTextLatoRegular
                     android:id="@+id/city"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -149,15 +154,16 @@
                     android:background="@android:color/transparent"
                     android:padding="16dp"
                     android:singleLine="true"
-                    android:textColor="@android:color/black"
+                    android:textColor="@android:color/white"
                     android:textSize="16sp" />
             </RelativeLayout>
 
             <com.maxxcoffee.mobile.widget.button.ButtonLatoRegular
+                android:id="@+id/signup"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
                 android:layout_marginBottom="16dp"
+                android:layout_marginTop="24dp"
                 android:background="@drawable/button_selector"
                 android:text="Sign Up"
                 android:textColor="@android:color/white"

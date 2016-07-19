@@ -45,8 +45,13 @@ public class StoreFragment extends Fragment {
         ButterKnife.bind(this, view);
         activity.setTitle("Store");
 
-        setupViewPager(viewPager);
-        tabs.setupWithViewPager(viewPager);
+        tabs.post(new Runnable() {
+            @Override
+            public void run() {
+                setupViewPager(viewPager);
+                tabs.setupWithViewPager(viewPager);
+            }
+        });
         return view;
     }
 

@@ -15,15 +15,31 @@
             android:layout_height="1dp"
             android:background="@color/divider" />
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recycleview"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/background_white"
-            android:paddingBottom="8dp"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp"
-            android:paddingTop="16dp" />
+            android:layout_height="match_parent">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycleview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/background_white"
+                android:paddingBottom="8dp"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:paddingTop="16dp" />
+
+            <com.maxxcoffee.mobile.widget.textview.TextViewLatoRegular
+                android:id="@+id/empty_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:gravity="center"
+                android:text="You do not have any promo"
+                android:textColor="@color/divider"
+                android:textSize="16sp"
+                android:visibility="gone" />
+        </FrameLayout>
     </LinearLayout>
 
 </android.support.design.widget.CoordinatorLayout>

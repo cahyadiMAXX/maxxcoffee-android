@@ -10,10 +10,17 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.maxxcoffee.mobile.R;
-import com.maxxcoffee.mobile.activity.MainActivity;
+import com.maxxcoffee.mobile.activity.FormActivity;
 import com.maxxcoffee.mobile.database.controller.CardController;
 import com.maxxcoffee.mobile.database.entity.CardEntity;
+import com.maxxcoffee.mobile.util.Constant;
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -28,21 +35,22 @@ public class MyCardDetailFragment extends Fragment {
     TextView balance;
     @Bind(R.id.point)
     TextView point;
-    @Bind(R.id.beans)
-    TextView beans;
     @Bind(R.id.exp_date)
     TextView expDate;
     @Bind(R.id.card_image)
     ImageView cardImage;
+    @Bind(R.id.beans_bubble)
+    TextView beansBubble;
+    @Bind(R.id.reward_achieved)
+    TextView rewardAchieved;
 
-    private MainActivity activity;
+    private FormActivity activity;
     private CardController cardController;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        activity = (MainActivity) getActivity();
-        activity.setHeaderColor(false);
+        activity = (FormActivity) getActivity();
         cardController = new CardController(activity);
     }
 
@@ -52,27 +60,36 @@ public class MyCardDetailFragment extends Fragment {
 
         ButterKnife.bind(this, view);
 
-        Integer cardId = getArguments().getInt("card-id");
+        fetchingCard();
 
-        CardEntity cardModel = cardController.getCard(cardId);
-        String mTitle = cardModel.getName();
-        Integer mBalance = cardModel.getBalance();
-        Integer mPoint = cardModel.getPoint();
-        Integer mBean = cardModel.getBeans();
-        Integer mImage = cardModel.getImage();
-        String mExpDate = cardModel.getExpDate();
-
-        activity.setTitle(mTitle);
-        balance.setText("IDR " + mBalance);
-        point.setText(mPoint + " points");
-        beans.setText(mBean + " beans");
-        expDate.setText(mExpDate);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            cardImage.setImageDrawable(activity.getResources().getDrawable(mImage, null));
-        } else {
-            cardImage.setImageDrawable(activity.getResources().getDrawable(mImage));
-        }
         return view;
+    }
+
+    private void fetchingCard() {
+        String cardId = getArguments().getString("card-id", "-1");
+
+        CardEntity card = cardController.getCard(cardId);
+        if (card != null) {
+            try {
+                DateFormat mDateFormat = new SimpleDateFormat(Constant.DATEFORMAT_STRING);
+                Date mExpDate = new SimpleDateFormat(Constant.DATEFORMAT_META).parse(card.getExpired_date());
+
+                int mBalance = card.getBalance();
+                int mPoint = card.getPoint();
+                int mRewardAchieve = mPoint / 10;
+                int mRewardToGo = 10 - (mPoint % 10);
+
+                activity.setTitle(card.getName());
+                balance.setText("IDR " + mBalance);
+                point.setText(mPoint + " points");
+                expDate.setText(mDateFormat.format(mExpDate));
+                beansBubble.setText(String.valueOf(mRewardToGo));
+                rewardAchieved.setText(String.valueOf(mRewardAchieve));
+                Glide.with(activity).load(card.getImage()).placeholder(activity.getResources().getDrawable(R.drawable.ic_no_image)).crossFade().into(cardImage);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @OnClick(R.id.topup)

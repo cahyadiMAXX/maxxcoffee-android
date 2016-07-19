@@ -25,20 +25,20 @@ public class PromoController {
         }
     }
 
-    public void insert(PromoModel model) {
-        PromoEntity entity = null;
-        if (model.getId() == null) {
-            entity = new PromoEntity();
-        } else {
-            entity = getPromo(model.getId());
-            if (entity == null) {
-                entity = new PromoEntity();
-                entity.setId(model.getId());
-            }
-        }
-        entity.setImage(model.getImage());
-        entity.setTitle(model.getTitle());
-        entity.setDescription(model.getDescription());
+    public void insert(PromoEntity entity) {
+//        PromoEntity entity = null;
+//        if (model.getId() == null) {
+//            entity = new PromoEntity();
+//        } else {
+//            entity = getPromo(model.getId());
+//            if (entity == null) {
+//                entity = new PromoEntity();
+//                entity.setId(model.getId());
+//            }
+//        }
+//        entity.setImage(model.getImage());
+//        entity.setTitle(model.getTitle());
+//        entity.setDescription(model.getDescription());
 
         insertOrUpdate(entity);
     }

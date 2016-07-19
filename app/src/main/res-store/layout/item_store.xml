@@ -41,7 +41,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:ellipsize="end"
-                android:maxLines="2"
+                android:maxLines="5"
                 android:text="Jalan Entah No.12, Tangerang Selatan "
                 android:textColor="@android:color/black"
                 android:textSize="14sp" />
@@ -88,28 +88,33 @@
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:layout_marginRight="8dp"
-                    android:src="@drawable/ic_restroom" />
+                    android:src="@drawable/ic_restroom"
+                    android:visibility="invisible" />
 
                 <ImageView
                     android:id="@+id/seats"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:layout_marginRight="8dp"
-                    android:src="@drawable/ic_seats" />
+                    android:src="@drawable/ic_seats"
+                    android:visibility="invisible" />
 
                 <ImageView
                     android:id="@+id/wifi"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:layout_marginRight="8dp"
-                    android:src="@drawable/ic_wifi" />
+                    android:src="@drawable/ic_wifi"
+
+                    android:visibility="invisible" />
 
                 <ImageView
                     android:id="@+id/mall"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:layout_marginRight="8dp"
-                    android:src="@drawable/ic_mall" />
+                    android:src="@drawable/ic_mall"
+                    android:visibility="invisible" />
             </LinearLayout>
 
             <LinearLayout

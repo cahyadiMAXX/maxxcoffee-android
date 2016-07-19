@@ -10,7 +10,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.maxxcoffee.mobile.R;
+import com.maxxcoffee.mobile.database.entity.CardEntity;
 import com.maxxcoffee.mobile.model.CardModel;
 
 import java.util.List;
@@ -21,10 +23,10 @@ import java.util.List;
 public abstract class CardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Context context;
-    private List<CardModel> data;
+    private List<CardEntity> data;
     private LayoutInflater inflater;
 
-    public CardAdapter(Context context, List<CardModel> data) {
+    public CardAdapter(Context context, List<CardEntity> data) {
         this.context = context;
         this.data = data;
         this.inflater = LayoutInflater.from(context);
@@ -38,7 +40,7 @@ public abstract class CardAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        CardModel model = data.get(position);
+        CardEntity model = data.get(position);
         BodyViewHolder body = (BodyViewHolder) holder;
         body.populate(model);
     }
@@ -72,16 +74,13 @@ public abstract class CardAdapter extends RecyclerView.Adapter<RecyclerView.View
             card = (CardView) itemView.findViewById(R.id.card_view);
         }
 
-        public void populate(final CardModel model) {
+        public void populate(final CardEntity model) {
             name.setText(model.getName());
             balance.setText("IDR " + model.getBalance());
-            point.setText(String.valueOf(model.getPoint()));
-            bean.setText(String.valueOf(model.getBeans()));
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                image.setImageDrawable(context.getResources().getDrawable(model.getImage(), null));
-            } else {
-                image.setImageDrawable(context.getResources().getDrawable(model.getImage()));
-            }
+            bean.setText(String.valueOf(model.getPoint()));
+            Glide.with(context).load(model.getImage()).centerCrop().crossFade().into(image);
+//            point.setText(String.valueOf(model.getPoint()));
+//            image.setImageDrawable(context.getResources().getDrawable(model.getImage()));
 
             card.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -92,6 +91,6 @@ public abstract class CardAdapter extends RecyclerView.Adapter<RecyclerView.View
         }
     }
 
-    public abstract void onCardSelected(CardModel model);
+    public abstract void onCardSelected(CardEntity model);
 
 }

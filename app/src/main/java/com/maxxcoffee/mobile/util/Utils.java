@@ -7,10 +7,12 @@ import android.net.NetworkInfo;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Properties;
 
 /**
  * Created by Rio Swarawan on 3/14/2016.
@@ -124,6 +126,18 @@ public class Utils {
             durationText = "baru saja";
         }
         return durationText;
+    }
+
+    public static Properties getProperties(Context context) {
+        Properties properties = new Properties();
+        try {
+            AssetManager assetManager = context.getAssets();
+            InputStream inputStream = assetManager.open("app.properties");
+            properties.load(inputStream);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return properties;
     }
 
 }
