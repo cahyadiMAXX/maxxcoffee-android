@@ -97,6 +97,8 @@ public class LoginFragment extends Fragment {
                     progress.dismiss();
 
                 PreferenceManager.putBool(activity, Constant.PREFERENCE_LOGGED_IN, true);
+                PreferenceManager.putString(activity, Constant.PREFERENCE_EMAIL, email.getText().toString());
+
                 activity.prepareDrawerList();
                 activity.switchFragment(MainActivity.HOME);
             }

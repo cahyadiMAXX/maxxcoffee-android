@@ -280,7 +280,8 @@ public class MainActivity extends FragmentActivity {
                 break;
             case CONTACT_US:
                 bundle = new Bundle();
-                fragment = new ReportFragment();
+//                fragment = new ReportFragment();
+                fragment = isLoggedIn ? new ReportFragment() : new CredentialFragment();
                 break;
             case REPORT_LOST_CARD:
                 fragment = new LostCardFragment();

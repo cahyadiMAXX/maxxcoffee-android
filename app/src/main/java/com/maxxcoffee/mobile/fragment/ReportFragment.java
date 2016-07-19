@@ -6,12 +6,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.maxxcoffee.mobile.R;
 import com.maxxcoffee.mobile.activity.MainActivity;
 import com.maxxcoffee.mobile.fragment.dialog.ReportDialog;
 import com.maxxcoffee.mobile.model.CardModel;
 import com.maxxcoffee.mobile.model.ReportModel;
+import com.maxxcoffee.mobile.model.request.ContactUsRequestModel;
+import com.maxxcoffee.mobile.task.ContactUsTask;
+import com.maxxcoffee.mobile.util.Constant;
+import com.maxxcoffee.mobile.util.PreferenceManager;
+import com.maxxcoffee.mobile.widget.TBaseProgress;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -104,11 +110,54 @@ public class ReportFragment extends Fragment {
     }
 
     private void reportComplaintNow() {
+        if (!isFormValid())
+            return;
 
+        final TBaseProgress progress = new TBaseProgress(activity);
+        progress.show();
+
+        ContactUsRequestModel body = new ContactUsRequestModel();
+        body.setEmail(PreferenceManager.getString(activity, Constant.PREFERENCE_EMAIL, ""));
+        body.setNama(PreferenceManager.getString(activity, Constant.PREFERENCE_USER_NAME, ""));
+        body.setNohp("08123456789");
+        body.setPerihal(subject.getText().toString());
+        body.setPesan(detail.getText().toString());
+
+        ContactUsTask task = new ContactUsTask(activity) {
+            @Override
+            public void onSuccess() {
+                if (progress.isShowing())
+                    progress.dismiss();
+                Toast.makeText(activity, "Report sent.", Toast.LENGTH_SHORT).show();
+
+                selectedReport = -1;
+                subject.setText("");
+                detail.setText("");
+            }
+
+            @Override
+            public void onFailed() {
+                if (progress.isShowing())
+                    progress.dismiss();
+                Toast.makeText(activity, "Failed to fetching data.", Toast.LENGTH_SHORT).show();
+            }
+        };
+        task.execute(body);
     }
 
-    private void reportLostCardNow() {
+    private boolean isFormValid() {
+        String mDetail = detail.getText().toString();
+        String mPerihal = subject.getText().toString();
 
+        if (mPerihal.equalsIgnoreCase("")) {
+            Toast.makeText(activity, "Subject cannot empty", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (mDetail.equalsIgnoreCase("")) {
+            Toast.makeText(activity, "Detail cannot empty", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        return true;
     }
 
     private void setReport(ReportModel model) {

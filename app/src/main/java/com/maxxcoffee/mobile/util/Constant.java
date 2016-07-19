@@ -15,6 +15,7 @@ public class Constant {
     public final static String PREFERENCE_ACCESS_TOKEN = "maxx-access_token";
     public final static String PREFERENCE_BALANCE = "maxx-balance";
     public final static String PREFERENCE_BEAN = "maxx-bean";
+    public final static String PREFERENCE_EMAIL = "maxx-email";
     public final static String PREFERENCE_WELCOME_SKIP = "maxx-welcome-skip";
     public final static String PREFERENCE_LOGGED_IN = "maxx-logged-in";
 
