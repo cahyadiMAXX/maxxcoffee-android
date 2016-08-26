@@ -1,0 +1,498 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:openDrawer="start">
+
+    <include
+        layout="@layout/content_main_tutorial"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <!--android:layout_gravity="start"-->
+
+    <LinearLayout
+        android:id="@+id/navbar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:fitsSystemWindows="false"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:background="@color/black_transparent"
+            android:paddingBottom="8dp" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:id="@+id/layout_finish"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clickable="true"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/black_transparent"
+                    android:orientation="vertical">
+
+                    <RelativeLayout
+                        android:id="@+id/layout_home"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:padding="16dp">
+
+                        <ImageView
+                            android:id="@+id/icon_home"
+                            android:layout_width="28dp"
+                            android:layout_height="28dp"
+                            android:layout_alignParentLeft="true"
+                            android:layout_marginRight="16dp"
+                            android:src="@drawable/ic_home" />
+
+                        <ImageView
+                            android:id="@+id/arrow_home"
+                            android:layout_width="28dp"
+                            android:layout_height="28dp"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginRight="16dp"
+                            android:src="@drawable/ic_arrow_down_white"
+                            android:visibility="invisible" />
+
+                        <com.maxxcoffee.mobile.widget.textview.TextViewLatoBold
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_toLeftOf="@id/arrow_home"
+                            android:layout_toRightOf="@id/icon_home"
+                            android:text="Home"
+                            android:textColor="@android:color/white"
+                            android:textSize="16sp" />
+                    </RelativeLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/white_transparent" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/black_transparent"
+                    android:orientation="vertical">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:padding="16dp">
+
+                        <ImageView
+                            android:id="@+id/icon_browse"
+                            android:layout_width="28dp"
+                            android:layout_height="28dp"
+                            android:layout_alignParentLeft="true"
+                            android:layout_marginRight="16dp"
+                            android:src="@drawable/ic_coffee_white" />
+
+                        <ImageView
+                            android:id="@+id/arrow_browse"
+                            android:layout_width="28dp"
+                            android:layout_height="28dp"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginRight="16dp"
+                            android:src="@drawable/ic_arrow_down_white" />
+
+                        <com.maxxcoffee.mobile.widget.textview.TextViewLatoBold
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_toLeftOf="@id/arrow_browse"
+                            android:layout_toRightOf="@id/icon_browse"
+                            android:text="Browse"
+                            android:textColor="@android:color/white"
+                            android:textSize="16sp" />
+                    </RelativeLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/white_transparent" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/black_transparent"
+                    android:orientation="vertical">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:padding="16dp">
+
+                        <ImageView
+                            android:id="@+id/icon_card"
+                            android:layout_width="28dp"
+                            android:layout_height="28dp"
+                            android:layout_alignParentLeft="true"
+                            android:layout_marginRight="16dp"
+                            android:src="@drawable/ic_creditcard" />
+
+                        <ImageView
+                            android:id="@+id/arrow_card"
+                            android:layout_width="28dp"
+                            android:layout_height="28dp"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginRight="16dp"
+                            android:src="@drawable/ic_arrow_down_white" />
+
+                        <com.maxxcoffee.mobile.widget.textview.TextViewLatoBold
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_toLeftOf="@id/arrow_card"
+                            android:layout_toRightOf="@id/icon_card"
+                            android:text="Card"
+                            android:textColor="@android:color/white"
+                            android:textSize="16sp" />
+                    </RelativeLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/white_transparent" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/black_transparent"
+                    android:orientation="vertical">
+
+                    <RelativeLayout
+                        android:id="@+id/layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:padding="16dp">
+
+                        <ImageView
+                            android:id="@+id/icon"
+                            android:layout_width="28dp"
+                            android:layout_height="28dp"
+                            android:layout_alignParentLeft="true"
+                            android:layout_marginRight="16dp"
+                            android:src="@drawable/ic_maxx_small" />
+
+                        <ImageView
+                            android:id="@+id/arrow"
+                            android:layout_width="28dp"
+                            android:layout_height="28dp"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginRight="16dp"
+                            android:src="@drawable/ic_arrow_down_white" />
+
+                        <com.maxxcoffee.mobile.widget.textview.TextViewLatoBold
+                            android:id="@+id/item"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_toLeftOf="@id/arrow"
+                            android:layout_toRightOf="@id/icon"
+                            android:text="About"
+                            android:textColor="@android:color/white"
+                            android:textSize="16sp" />
+                    </RelativeLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/white_transparent" />
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:id="@+id/signup_layout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@color/black_transparent"
+                            android:orientation="vertical">
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
+                                android:padding="16dp">
+
+                                <ImageView
+                                    android:id="@+id/icon_profile"
+                                    android:layout_width="28dp"
+                                    android:layout_height="28dp"
+                                    android:layout_alignParentLeft="true"
+                                    android:layout_marginRight="16dp"
+                                    android:src="@drawable/ic_user" />
+
+                                <ImageView
+                                    android:id="@+id/arrow_profile"
+                                    android:layout_width="28dp"
+                                    android:layout_height="28dp"
+                                    android:layout_alignParentRight="true"
+                                    android:layout_marginRight="16dp"
+                                    android:src="@drawable/ic_arrow_down_white"
+                                    android:visibility="gone" />
+
+                                <com.maxxcoffee.mobile.widget.textview.TextViewLatoBold
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerVertical="true"
+                                    android:layout_toLeftOf="@id/arrow_profile"
+                                    android:layout_toRightOf="@id/icon_profile"
+                                    android:text="Sign Up"
+                                    android:textColor="@android:color/white"
+                                    android:textSize="16sp" />
+                            </RelativeLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:background="@color/white_transparent" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@color/black_transparent"
+                            android:orientation="vertical">
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
+                                android:padding="16dp">
+
+                                <RelativeLayout
+                                    android:id="@+id/login_text"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentLeft="true">
+
+                                    <ImageView
+                                        android:id="@+id/icon_login"
+                                        android:layout_width="28dp"
+                                        android:layout_height="28dp"
+                                        android:layout_alignParentLeft="true"
+                                        android:layout_marginRight="16dp"
+                                        android:src="@drawable/ic_signout" />
+
+                                    <com.maxxcoffee.mobile.widget.textview.TextViewLatoBold
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_centerVertical="true"
+                                        android:layout_toRightOf="@id/icon_login"
+                                        android:text="Login"
+                                        android:textColor="@android:color/white"
+                                        android:textSize="16sp" />
+                                </RelativeLayout>
+                            </RelativeLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:background="@color/white_transparent" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/tutorial_4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="20dp"
+                        android:layout_marginTop="16dp"
+                        android:orientation="vertical"
+                        android:visibility="visible">
+
+                        <ImageView
+                            android:layout_width="80dp"
+                            android:layout_height="80dp"
+                            android:scaleType="fitCenter"
+                            android:src="@drawable/arrow_white" />
+
+                        <com.maxxcoffee.mobile.widget.textview.TextViewLatoBold
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Click this menu"
+                            android:textColor="@android:color/white"
+                            android:textSize="16sp" />
+                    </LinearLayout>
+                </RelativeLayout>
+
+                <!--<RelativeLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:gravity="center_vertical">-->
+
+                <!--<RelativeLayout-->
+                <!--android:id="@+id/login_layout"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:background="@color/black_transparent"-->
+                <!--android:gravity="center_vertical"-->
+                <!--android:padding="16dp">-->
+
+                <!--<RelativeLayout-->
+                <!--android:id="@+id/login_text"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_alignParentLeft="true">-->
+
+                <!--<ImageView-->
+                <!--android:id="@+id/icon_login"-->
+                <!--android:layout_width="28dp"-->
+                <!--android:layout_height="28dp"-->
+                <!--android:layout_alignParentLeft="true"-->
+                <!--android:layout_marginRight="16dp"-->
+                <!--android:src="@drawable/ic_signout" />-->
+
+                <!--<com.maxxcoffee.mobile.widget.textview.TextViewLatoBold-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_centerVertical="true"-->
+                <!--android:layout_toRightOf="@id/icon_login"-->
+                <!--android:text="Login"-->
+                <!--android:textColor="@android:color/white"-->
+                <!--android:textSize="16sp" />-->
+                <!--</RelativeLayout>-->
+                <!--</RelativeLayout>-->
+
+                <!--<LinearLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:layout_below="@id/login_layout"-->
+                <!--android:background="@color/black_transparent" />-->
+
+                <!--<LinearLayout-->
+                <!--android:id="@+id/tutorial_4"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_alignParentRight="true"-->
+                <!--android:layout_marginRight="80dp"-->
+                <!--android:layout_marginTop="28dp"-->
+                <!--android:orientation="vertical"-->
+                <!--android:visibility="gone">-->
+
+                <!--<ImageView-->
+                <!--android:layout_width="80dp"-->
+                <!--android:layout_height="100dp"-->
+                <!--android:scaleType="fitCenter"-->
+                <!--android:src="@drawable/arrow_white" />-->
+
+                <!--<com.maxxcoffee.mobile.widget.textview.TextViewLatoBold-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginTop="8dp"-->
+                <!--android:text="Click this menu"-->
+                <!--android:textColor="@android:color/white"-->
+                <!--android:textSize="16sp" />-->
+                <!--</LinearLayout>-->
+                <!--</RelativeLayout>-->
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/black_transparent" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/white_transparent" />
+
+            <FrameLayout
+                android:id="@+id/tutorial_3"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clickable="true"
+                android:visibility="gone">
+
+                <ImageView
+                    android:id="@+id/owl"
+                    android:layout_width="100dp"
+                    android:layout_height="150dp"
+                    android:layout_gravity="left|bottom"
+                    android:padding="8dp"
+                    android:src="@drawable/ic_owl" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left|bottom"
+                    android:layout_marginBottom="70dp"
+                    android:layout_marginLeft="100dp"
+                    android:background="@drawable/circle_abu"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <com.maxxcoffee.mobile.widget.textview.TextViewLatoBold
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="You can also top up your"
+                        android:textColor="@android:color/white"
+                        android:textSize="10sp" />
+
+                    <com.maxxcoffee.mobile.widget.textview.TextViewLatoBold
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="MAXX COFFEE World card balance"
+                        android:textColor="@android:color/white"
+                        android:textSize="10sp" />
+
+                    <com.maxxcoffee.mobile.widget.textview.TextViewLatoBold
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="or transfer between cards."
+                        android:textColor="@android:color/white"
+                        android:textSize="10sp" />
+
+                    <com.maxxcoffee.mobile.widget.textview.TextViewLatoBold
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="But first you need"
+                        android:textColor="@android:color/white"
+                        android:textSize="10sp" />
+
+                    <com.maxxcoffee.mobile.widget.textview.TextViewLatoBold
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="to sign up"
+                        android:textColor="@android:color/white"
+                        android:textSize="10sp" />
+                </LinearLayout>
+            </FrameLayout>
+
+        </FrameLayout>
+    </LinearLayout>
+
+</android.support.v4.widget.DrawerLayout>

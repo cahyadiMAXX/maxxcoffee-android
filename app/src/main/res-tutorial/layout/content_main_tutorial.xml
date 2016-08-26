@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/layer_tutorial"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/black_transparent"
+            android:orientation="vertical" />
+
+        <LinearLayout
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:id="@+id/toolbar_layout"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:background="@android:color/transparent"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/hamburger"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentLeft="true"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="24dp"
+                    android:src="@drawable/ic_menu_white" />
+
+                <com.maxxcoffee.mobile.widget.textview.TextViewLatoRegular
+                    android:id="@+id/title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:textColor="@android:color/black"
+                    android:textSize="16sp" />
+            </RelativeLayout>
+        </LinearLayout>
+
+        <FrameLayout
+            android:id="@+id/content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <RelativeLayout
+                android:id="@+id/tutorial_2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clickable="true"
+                android:visibility="gone">
+
+                <ImageView
+                    android:layout_width="80dp"
+                    android:layout_height="100dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginLeft="70dp"
+                    android:layout_marginTop="28dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/arrow_white" />
+
+                <com.maxxcoffee.mobile.widget.textview.TextViewLatoBold
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginLeft="70dp"
+                    android:layout_marginTop="130dp"
+                    android:text="Click this menu"
+                    android:textColor="@android:color/white"
+                    android:textSize="18sp" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/tutorial_1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:visibility="visible">
+
+                <ImageView
+                    android:id="@+id/owl"
+                    android:layout_width="130dp"
+                    android:layout_height="200dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginBottom="80dp"
+                    android:layout_marginRight="32dp"
+                    android:padding="8dp"
+                    android:src="@drawable/ic_owl" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@id/owl"
+                    android:layout_marginLeft="20dp"
+                    android:background="@drawable/circle_abu"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <com.maxxcoffee.mobile.widget.textview.TextViewLatoBold
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Now you can connect your"
+                        android:textColor="@android:color/white"
+                        android:textSize="14sp" />
+
+                    <com.maxxcoffee.mobile.widget.textview.TextViewLatoBold
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="MAXX COFFEE World Card(s)"
+                        android:textColor="@android:color/white"
+                        android:textSize="14sp" />
+
+                    <com.maxxcoffee.mobile.widget.textview.TextViewLatoBold
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="to your account"
+                        android:textColor="@android:color/white"
+                        android:textSize="14sp" />
+
+                    <com.maxxcoffee.mobile.widget.textview.TextViewLatoBold
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Try now !"
+                        android:textColor="@android:color/white"
+                        android:textSize="14sp" />
+                </LinearLayout>
+            </RelativeLayout>
+
+
+        </FrameLayout>
+    </FrameLayout>
+
+</LinearLayout>

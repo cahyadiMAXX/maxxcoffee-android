@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/sync"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:padding="16dp"
+                    android:src="@drawable/ic_sync" />
+
+                <com.maxxcoffee.mobile.widget.textview.TextViewLatoRegular
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:padding="16dp"
+                    android:text="Verify your account"
+                    android:textColor="@android:color/white"
+                    android:textSize="20sp" />
+
+            </RelativeLayout>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp">
+
+                <LinearLayout
+                    android:id="@+id/layout_email_verified"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <com.maxxcoffee.mobile.widget.textview.TextViewLatoBold
+                        android:id="@+id/email_verified"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="example@email.com"
+                        android:textColor="@android:color/white"
+                        android:textSize="14sp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/ic_check_green" />
+
+                        <com.maxxcoffee.mobile.widget.textview.TextViewLatoRegular
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="8dp"
+                            android:text="Email verified"
+                            android:textColor="@android:color/white"
+                            android:textSize="14sp" />
+
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/layout_email_not_verified"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="visible">
+
+                    <com.maxxcoffee.mobile.widget.textview.TextViewLatoRegular
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Thank you for signing up to MAXX-COFFEE"
+                        android:textColor="@android:color/white"
+                        android:textSize="14sp" />
+
+                    <com.maxxcoffee.mobile.widget.textview.TextViewLatoRegular
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Please confirm your email address"
+                        android:textColor="@android:color/white"
+                        android:textSize="14sp" />
+
+                    <com.maxxcoffee.mobile.widget.textview.TextViewLatoBold
+                        android:id="@+id/email_not_verified"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="example@email.com"
+                        android:textColor="@android:color/white"
+                        android:textSize="15sp" />
+
+                    <com.maxxcoffee.mobile.widget.button.ButtonLatoRegular
+                        android:id="@+id/resend_email"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:background="@drawable/button_selector"
+                        android:text="Resend Email"
+                        android:textColor="@android:color/white"
+                        android:textSize="14sp" />
+                </LinearLayout>
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp">
+
+                <LinearLayout
+                    android:id="@+id/layout_sms_verified"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp"
+                    android:visibility="gone">
+
+                    <com.maxxcoffee.mobile.widget.textview.TextViewLatoBold
+                        android:id="@+id/phone_verified"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="0812345678"
+                        android:textColor="@android:color/white"
+                        android:textSize="14sp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/ic_check_green" />
+
+                        <com.maxxcoffee.mobile.widget.textview.TextViewLatoRegular
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="8dp"
+                            android:text="Mobile phone verified"
+                            android:textColor="@android:color/white"
+                            android:textSize="14sp" />
+
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/layout_sms_not_verified"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp"
+                    android:visibility="visible">
+
+                    <com.maxxcoffee.mobile.widget.textview.TextViewLatoRegular
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Please confirm your mobile phone"
+                        android:textColor="@android:color/white"
+                        android:textSize="14sp" />
+
+                    <com.maxxcoffee.mobile.widget.textview.TextViewLatoBold
+                        android:id="@+id/phone_not_verified"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=" 0812345678"
+                        android:textColor="@android:color/white"
+                        android:textSize="15sp" />
+
+                    <com.maxxcoffee.mobile.widget.edittext.EditTextLatoRegular
+                        android:id="@+id/verification_code"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:background="@android:color/transparent"
+                        android:gravity="center"
+                        android:hint="Type the verification code here"
+                        android:inputType="numberSigned"
+                        android:maxLength="4"
+                        android:padding="16dp"
+                        android:textColor="@android:color/white"
+                        android:textColorHint="@android:color/darker_gray"
+                        android:textSize="14sp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@android:color/white" />
+
+                    <com.maxxcoffee.mobile.widget.button.ButtonLatoRegular
+                        android:id="@+id/check_code"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:background="@drawable/button_selector"
+                        android:text="Check Code"
+                        android:textColor="@android:color/white"
+                        android:textSize="14sp" />
+
+                    <LinearLayout
+                        android:id="@+id/layout_change_phone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="48dp"
+                        android:background="@color/white_transparent"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <com.maxxcoffee.mobile.widget.textview.TextViewLatoRegular
+                                android:id="@+id/label_change_password"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentLeft="true"
+                                android:layout_centerVertical="true"
+                                android:text="Change Phone Number"
+                                android:textColor="@android:color/white"
+                                android:textSize="14sp" />
+
+                            <ImageView
+                                android:id="@+id/arrow_change_password"
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:layout_alignParentRight="true"
+                                android:layout_centerVertical="true"
+                                android:src="@drawable/ic_arrow_right_white" />
+                        </RelativeLayout>
+                    </LinearLayout>
+
+                    <com.maxxcoffee.mobile.widget.button.ButtonLatoRegular
+                        android:id="@+id/resend_sms"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:background="@drawable/button_selector"
+                        android:text="Resend Verification Code"
+                        android:textColor="@android:color/white"
+                        android:textSize="14sp" />
+                </LinearLayout>
+            </FrameLayout>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>
