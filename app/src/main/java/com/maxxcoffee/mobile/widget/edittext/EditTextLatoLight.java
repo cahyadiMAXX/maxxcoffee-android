@@ -15,7 +15,8 @@ public class EditTextLatoLight extends EditText {
 
     public EditTextLatoLight(Context context, AttributeSet attrs) {
         super(context, attrs);
-        Typeface type = Typeface.createFromAsset(context.getAssets(), "font/Lato-Light.ttf");
+//        Typeface type = Typeface.createFromAsset(context.getAssets(), "font/Lato-Light.ttf");
+        Typeface type = Typeface.createFromAsset(context.getAssets(), "font/HelveticaNeueLTPro-Lt.otf");
         setTypeface(type);
     }
 

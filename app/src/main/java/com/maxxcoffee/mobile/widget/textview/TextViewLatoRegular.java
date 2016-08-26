@@ -21,7 +21,8 @@ public class TextViewLatoRegular extends TextView {
     }
 
     private void setFont(Context context) {
-        Typeface type = Typeface.createFromAsset(context.getAssets(), "font/Lato-Regular.ttf");
+//        Typeface type = Typeface.createFromAsset(context.getAssets(), "font/Lato-Regular.ttf");
+        Typeface type = Typeface.createFromAsset(context.getAssets(), "font/HelveticaNeueLTPro-Lt.otf");
         setTypeface(type);
     }
 }

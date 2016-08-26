@@ -110,17 +110,30 @@
                 android:textColor="@android:color/darker_gray"
                 android:textSize="16sp" />
 
-            <com.maxxcoffee.mobile.widget.edittext.EditTextLatoRegular
-                android:id="@+id/occupation"
+            <RelativeLayout
+                android:id="@+id/occupation_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:background="@color/white_transparent"
-                android:inputType="textCapWords"
-                android:padding="16dp"
-                android:singleLine="true"
-                android:textColor="@android:color/white"
-                android:textSize="16sp" />
+                android:background="@color/white_transparent">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="8dp"
+                    android:src="@drawable/ic_arrow_down_white" />
+
+                <com.maxxcoffee.mobile.widget.textview.TextViewLatoRegular
+                    android:id="@+id/occupation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp"
+                    android:singleLine="true"
+                    android:textColor="@android:color/white"
+                    android:textSize="16sp" />
+            </RelativeLayout>
 
             <com.maxxcoffee.mobile.widget.textview.TextViewLatoRegular
                 android:layout_width="match_parent"
@@ -143,11 +156,46 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="8dp"
+                    android:src="@drawable/ic_arrow_down_white" />
+
+                <com.maxxcoffee.mobile.widget.textview.TextViewLatoRegular
+                    android:id="@+id/city"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:background="@android:color/transparent"
+                    android:padding="16dp"
+                    android:singleLine="true"
+                    android:textColor="@android:color/white"
+                    android:textSize="16sp" />
+            </RelativeLayout>
+
+            <com.maxxcoffee.mobile.widget.textview.TextViewLatoRegular
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Referal Code (Optional)"
+                android:textColor="@android:color/darker_gray"
+                android:textSize="16sp" />
+
+            <RelativeLayout
+                android:id="@+id/referal_code_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@color/white_transparent">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="8dp"
                     android:src="@drawable/ic_arrow_down_white"
                     android:visibility="invisible" />
 
                 <com.maxxcoffee.mobile.widget.edittext.EditTextLatoRegular
-                    android:id="@+id/city"
+                    android:id="@+id/referal_code"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"

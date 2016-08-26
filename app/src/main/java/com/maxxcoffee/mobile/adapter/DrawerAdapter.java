@@ -58,12 +58,6 @@ public class DrawerAdapter extends BaseExpandableListAdapter {
         RelativeLayout layout = (RelativeLayout) convertView.findViewById(R.id.layout);
 
         item.setText(childModel.getName());
-//        layout.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                onChildSelected(parentModel, childPosition);
-//            }
-//        });
         return convertView;
     }
 
@@ -112,15 +106,6 @@ public class DrawerAdapter extends BaseExpandableListAdapter {
         if (parentModel.getIcon() != null) {
             icon.setImageDrawable(context.getResources().getDrawable(parentModel.getIcon()));
         }
-
-//        if (!parentModel.isExpandable()) {
-//            layout.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    onParentSelected(parentModel);
-//                }
-//            });
-//        }
         return convertView;
     }
 
@@ -133,8 +118,4 @@ public class DrawerAdapter extends BaseExpandableListAdapter {
     public boolean isChildSelectable(int groupPosition, int childPosition) {
         return true;
     }
-//
-//    protected abstract void onParentSelected(ParentDrawerModel parent);
-//
-//    protected abstract void onChildSelected(ParentDrawerModel parent, Integer position);
 }

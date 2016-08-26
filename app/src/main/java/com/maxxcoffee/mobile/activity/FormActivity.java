@@ -9,12 +9,23 @@ import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.maxxcoffee.mobile.R;
+import com.maxxcoffee.mobile.fragment.CardDetailHistoryFragment;
+import com.maxxcoffee.mobile.fragment.ChangeCityFragment;
 import com.maxxcoffee.mobile.fragment.ChangeEmailFragment;
 import com.maxxcoffee.mobile.fragment.ChangeNameFragment;
+import com.maxxcoffee.mobile.fragment.ChangeOccupationFragment;
+import com.maxxcoffee.mobile.fragment.ChangeOldPhoneFragment;
 import com.maxxcoffee.mobile.fragment.ChangePasswordFragment;
+import com.maxxcoffee.mobile.fragment.ChangePhoneFragment;
+import com.maxxcoffee.mobile.fragment.DeleteCardFragment;
+import com.maxxcoffee.mobile.fragment.DetailEventFragment;
+import com.maxxcoffee.mobile.fragment.DetailPromoFragment;
 import com.maxxcoffee.mobile.fragment.FaqDetailFragment;
+import com.maxxcoffee.mobile.fragment.ForgotPasswordFragment;
+import com.maxxcoffee.mobile.fragment.MenuDetailFragment;
 import com.maxxcoffee.mobile.fragment.MyCardDetailFragment;
 import com.maxxcoffee.mobile.fragment.RenameCardFragment;
+import com.maxxcoffee.mobile.fragment.StoreDetailFragment;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -31,6 +42,17 @@ public class FormActivity extends FragmentActivity {
     public static final int FAQ_DETAIL = 1004;
     public static final int DETAIL_CARD = 1005;
     public static final int RENAME_CARD = 1006;
+    public static final int DELETE_CARD = 1007;
+    public static final int CHANGE_PHONE = 1008;
+    public static final int HISTORY_DETAIL = 1009;
+    public static final int EVENT_DETAIL = 1010;
+    public static final int PROMO_DETAIL = 1011;
+    public static final int STORE_DETAIL = 1012;
+    public static final int CHANGE_CITY = 1013;
+    public static final int CHANGE_OCCUPATION = 1014;
+    public static final int CHANGE_OLD_PHONE = 1015;
+    public static final int FORGOT_PASSWORD = 1016;
+    public static final int DETAIL_MENU = 1017;
 
     @Bind(R.id.title)
     TextView title;
@@ -78,6 +100,9 @@ public class FormActivity extends FragmentActivity {
             case CHANGE_PASSWORD:
                 fragment = new ChangePasswordFragment();
                 break;
+            case CHANGE_PHONE:
+                fragment = new ChangePhoneFragment();
+                break;
             case FAQ_DETAIL:
                 fragment = new FaqDetailFragment();
                 break;
@@ -86,6 +111,36 @@ public class FormActivity extends FragmentActivity {
                 break;
             case RENAME_CARD:
                 fragment = new RenameCardFragment();
+                break;
+            case DELETE_CARD:
+                fragment = new DeleteCardFragment();
+                break;
+            case HISTORY_DETAIL:
+                fragment = new CardDetailHistoryFragment();
+                break;
+            case EVENT_DETAIL:
+                fragment = new DetailEventFragment();
+                break;
+            case PROMO_DETAIL:
+                fragment = new DetailPromoFragment();
+                break;
+            case STORE_DETAIL:
+                fragment = new StoreDetailFragment();
+                break;
+            case CHANGE_CITY:
+                fragment = new ChangeCityFragment();
+                break;
+            case CHANGE_OCCUPATION:
+                fragment = new ChangeOccupationFragment();
+                break;
+            case CHANGE_OLD_PHONE:
+                fragment = new ChangeOldPhoneFragment();
+                break;
+            case FORGOT_PASSWORD:
+                fragment = new ForgotPasswordFragment();
+                break;
+            case DETAIL_MENU:
+                fragment = new MenuDetailFragment();
                 break;
         }
 

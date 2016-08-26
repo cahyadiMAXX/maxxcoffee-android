@@ -7,8 +7,9 @@ public class DefaultRequestModel {
 
     private String token;
 
-    // change-password
+    // change-name
     private String nama_user;
+    private String nama_user_last;
 
     // change-password
     private String old_password;
@@ -46,4 +47,11 @@ public class DefaultRequestModel {
         this.nama_user = nama_user;
     }
 
+    public String getNama_user_last() {
+        return nama_user_last;
+    }
+
+    public void setNama_user_last(String nama_user_last) {
+        this.nama_user_last = nama_user_last;
+    }
 }

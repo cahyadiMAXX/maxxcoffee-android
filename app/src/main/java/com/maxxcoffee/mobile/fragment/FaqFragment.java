@@ -12,7 +12,12 @@ import com.maxxcoffee.mobile.R;
 import com.maxxcoffee.mobile.activity.FormActivity;
 import com.maxxcoffee.mobile.activity.MainActivity;
 import com.maxxcoffee.mobile.adapter.FaqAdapter;
+import com.maxxcoffee.mobile.database.controller.FaqController;
+import com.maxxcoffee.mobile.database.entity.FaqEntity;
+import com.maxxcoffee.mobile.fragment.dialog.LoadingDialog;
 import com.maxxcoffee.mobile.model.FaqModel;
+import com.maxxcoffee.mobile.model.response.FaqItemResponseModel;
+import com.maxxcoffee.mobile.task.FaqTask;
 import com.maxxcoffee.mobile.util.Constant;
 import com.maxxcoffee.mobile.util.PreferenceManager;
 import com.maxxcoffee.mobile.widget.CustomLinearLayoutManager;
@@ -35,7 +40,7 @@ public class FaqFragment extends Fragment {
     private String token;
     private FaqAdapter adapter;
     private List<FaqModel> data;
-//    private FaqController faqController;
+    private FaqController faqController;
     private CustomLinearLayoutManager layoutManager;
 
     @Override
@@ -45,7 +50,7 @@ public class FaqFragment extends Fragment {
         activity.setHeaderColor(false);
         token = PreferenceManager.getString(activity, Constant.PREFERENCE_TOKEN, "");
 
-//        faqController = new FaqController(activity);
+        faqController = new FaqController(activity);
         data = new ArrayList<>();
         adapter = new FaqAdapter(activity, data) {
             @Override
@@ -57,7 +62,6 @@ public class FaqFragment extends Fragment {
                 intent.putExtra("content", FormActivity.FAQ_DETAIL);
                 intent.putExtras(bundle);
                 startActivity(intent);
-//                activity.switchFragment(MainActivity.FAQ_DETAIL, bundle);
             }
         };
     }
@@ -74,21 +78,55 @@ public class FaqFragment extends Fragment {
         faqList.setLayoutManager(layoutManager);
         faqList.setHasFixedSize(true);
         faqList.setAdapter(adapter);
+
         fetchingData();
+
         return view;
     }
 
     private void fetchingData() {
-//        data.clear();
-//        List<FaqEntity> faqs = faqController.getFaqs();
-//        for (FaqEntity faq : faqs) {
-//            FaqModel faqModel = new FaqModel();
-//            faqModel.setId(faq.getId());
-//            faqModel.setTitle(faq.getTitle());
-//            faqModel.setDescription(faq.getDescription());
-//
-//            data.add(faqModel);
-//        }
-//        adapter.notifyDataSetChanged();
+
+        final LoadingDialog progress = new LoadingDialog();
+        progress.show(getFragmentManager(), null);
+
+        FaqTask task = new FaqTask(activity) {
+            @Override
+            public void onSuccess(List<FaqItemResponseModel> response) {
+                    progress.dismissAllowingStateLoss();
+
+                if (response != null) {
+                    for (FaqItemResponseModel faq : response) {
+                        FaqEntity entity = new FaqEntity();
+                        entity.setId(faq.getId_faq());
+                        entity.setTitle(faq.getQuestion());
+                        entity.setDescription(faq.getAnswer());
+
+                        faqController.insert(entity);
+                    }
+                }
+
+                getLocalFaq();
+            }
+
+            @Override
+            public void onFailed() {
+                    progress.dismissAllowingStateLoss();
+            }
+        };
+        task.execute();
+    }
+
+    private void getLocalFaq() {
+        data.clear();
+        List<FaqEntity> faqs = faqController.getFaqs();
+        for (FaqEntity faq : faqs) {
+            FaqModel faqModel = new FaqModel();
+            faqModel.setId(faq.getId());
+            faqModel.setTitle(faq.getTitle());
+            faqModel.setDescription(faq.getDescription());
+
+            data.add(faqModel);
+        }
+        adapter.notifyDataSetChanged();
     }
 }

@@ -18,6 +18,7 @@ public class StoreItemResponseModel {
     private String jam_buka;
     private String jam_tutup;
     private String phone_store;
+    private String jarak_km;
     private List<String> foto;
     private List<String> feature;
     private List<String> icon_feature;
@@ -140,5 +141,13 @@ public class StoreItemResponseModel {
 
     public void setIcon_feature(List<String> icon_feature) {
         this.icon_feature = icon_feature;
+    }
+
+    public String getJarak_km() {
+        return jarak_km;
+    }
+
+    public void setJarak_km(String jarak_km) {
+        this.jarak_km = jarak_km;
     }
 }

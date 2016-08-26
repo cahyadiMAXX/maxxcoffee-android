@@ -1,6 +1,8 @@
 package com.maxxcoffee.mobile.fragment.dialog;
 
 import android.app.Dialog;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -9,6 +11,7 @@ import android.support.v4.util.ArrayMap;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,9 +20,11 @@ import com.daimajia.slider.library.SliderLayout;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.maxxcoffee.mobile.R;
+import com.maxxcoffee.mobile.adapter.StoreImageAdapter;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import butterknife.Bind;
@@ -43,8 +48,12 @@ public class StoreDialog extends DialogFragment {
     TextView contact;
     @Bind(R.id.open)
     TextView open;
-    @Bind(R.id.image)
-    ImageView image;
+    @Bind(R.id.jarak)
+    TextView jarak;
+    @Bind(R.id.layout_jarak)
+    LinearLayout layoutJarak;
+//    @Bind(R.id.image)
+//    ImageView image;
     //    @Bind(R.id.slider)
 //    SliderLayout slider;
     @Bind(R.id.restroom)
@@ -55,8 +64,15 @@ public class StoreDialog extends DialogFragment {
     ImageView wifi;
     @Bind(R.id.mall)
     ImageView mall;
+    @Bind(R.id.layout_location)
+    LinearLayout layoutLocation;
+    @Bind(R.id.layout_phone)
+    LinearLayout layoutPhone;
+    @Bind(R.id.slider)
+    SliderLayout slider;
 
     private Map<String, String> featureMap;
+    private StoreImageAdapter adapter;
 
     @NonNull
     @Override
@@ -69,57 +85,74 @@ public class StoreDialog extends DialogFragment {
 
         ButterKnife.bind(this, dialog);
 
-        String mTitle = getArguments().getString("title", "");
+        final String mTitle = getArguments().getString("title", "");
         String mAddress = getArguments().getString("address", "");
-        String mContact = getArguments().getString("contact", "");
+        final String mContact = getArguments().getString("contact", "");
         String mOpen = getArguments().getString("open", "");
         String mClose = getArguments().getString("close", "");
-        String mImage = getArguments().getString("image", "");
+        String mImage = getArguments().getString("images", "");
         String mFeature = getArguments().getString("feature", "");
         String mFeatureIcon = getArguments().getString("feature-icon", "");
+        String mJarak = getArguments().getString("jarak", "");
+        final String mLatitude = getArguments().getString("lat", "");
+        final String mLongitude = getArguments().getString("lng", "");
 
+        String tempOpen = "", tempClose = "";
+        if (mOpen != null) {
+            String[] arrayOpen = mOpen.split(":");
+            tempOpen = arrayOpen[0] + ":" + arrayOpen[1];
+        }
+        if (mClose != null) {
+            String[] arrayClose = mClose.split(":");
+            tempClose = arrayClose[0] + ":" + arrayClose[1];
+        }
 
         title.setText(mTitle);
         address.setText(mAddress);
         contact.setText(mContact);
-        open.setText(mOpen + " - " + mClose);
+        open.setText(tempOpen + " - " + tempClose);
+        jarak.setText(mJarak);
 
-        Glide.with(getActivity()).load(mImage).placeholder(R.drawable.ic_no_image).crossFade().into(image);
+        layoutJarak.setVisibility(mJarak.equals("-999") ? View.GONE : View.VISIBLE);
+//        Glide.with(getActivity()).load(mImage).placeholder(R.drawable.ic_no_image).crossFade().into(image);
+
+        setImages(mImage);
 
         if (!mFeature.equalsIgnoreCase("") || !mFeatureIcon.equalsIgnoreCase("")) {
             setFeatureMap(mFeature, mFeatureIcon);
         }
-//        restroom.setVisibility(mFeature.contains(restroomCode) ? View.VISIBLE : View.INVISIBLE);
-//        seat.setVisibility(mFeature.contains(seatCode) ? View.VISIBLE : View.INVISIBLE);
-//        wifi.setVisibility(mFeature.contains(wifiCode) ? View.VISIBLE : View.INVISIBLE);
-//        mall.setVisibility(mFeature.contains(mallCode) ? View.VISIBLE : View.INVISIBLE);
-//
-//        restroom.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Toast.makeText(getActivity(), "Has restroom.", Toast.LENGTH_LONG).show();
-//            }
-//        });
-//        seat.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Toast.makeText(getActivity(), "Has seats.", Toast.LENGTH_LONG).show();
-//            }
-//        });
-//        wifi.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Toast.makeText(getActivity(), "Has Wifi", Toast.LENGTH_LONG).show();
-//            }
-//        });
-//        mall.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Toast.makeText(getActivity(), "Store location is inside a Mall", Toast.LENGTH_LONG).show();
-//            }
-//        });
 
+        layoutLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                String uri = String.format(Locale.ENGLISH, "geo:%s,%s", mLatitude, mLongitude);
+                String uri = "geo:" + mLatitude + "," + mLongitude + "?q=" + mLatitude + "," + mLongitude + "(" + mTitle + ")";
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+                getActivity().startActivity(intent);
+            }
+        });
+
+        layoutPhone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!mContact.equals("") && !mContact.equals("TBA") && !mContact.equals("N/A")) {
+                    Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + mContact));
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(getActivity(), "Phone number not valid", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
         return dialog;
+    }
+
+    private void setImages(String mImage) {
+        List<String> images = new Gson().fromJson(mImage, new TypeToken<List<String>>() {
+        }.getType());
+        for (int i = 0; i < images.size(); i++) {
+            StoreImageAdapter adapter = new StoreImageAdapter(getContext(), images.get(i));
+            slider.addSlider(adapter);
+        }
     }
 
     private void getFeature() {

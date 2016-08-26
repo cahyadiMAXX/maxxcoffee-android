@@ -1,22 +1,41 @@
 package com.maxxcoffee.mobile.api;
 
+import com.maxxcoffee.mobile.model.request.ChangeCityOccupationRequestModel;
+import com.maxxcoffee.mobile.model.request.ChangeEmailRequestModel;
+import com.maxxcoffee.mobile.model.request.ChangePhoneRequestModel;
 import com.maxxcoffee.mobile.model.request.ContactUsRequestModel;
 import com.maxxcoffee.mobile.model.request.DefaultRequestModel;
+import com.maxxcoffee.mobile.model.request.DeleteCardRequestModel;
+import com.maxxcoffee.mobile.model.request.HistoryRequestModel;
 import com.maxxcoffee.mobile.model.request.LoginRequestModel;
+import com.maxxcoffee.mobile.model.request.LostCardRequestModel;
 import com.maxxcoffee.mobile.model.request.OauthRequestModel;
+import com.maxxcoffee.mobile.model.request.RegisterCardRequestModel;
 import com.maxxcoffee.mobile.model.request.RegisterRequestModel;
+import com.maxxcoffee.mobile.model.request.RenameCardRequestModel;
+import com.maxxcoffee.mobile.model.request.ResendEmailRequestModel;
 import com.maxxcoffee.mobile.model.request.StoreNearMeRequestModel;
+import com.maxxcoffee.mobile.model.request.TransferBalanceRequestModel;
+import com.maxxcoffee.mobile.model.request.VerifySmsCodeRequestModel;
+import com.maxxcoffee.mobile.model.response.AboutResponseModel;
 import com.maxxcoffee.mobile.model.response.CardResponseModel;
 import com.maxxcoffee.mobile.model.response.ChangeUserDataResponseModel;
 import com.maxxcoffee.mobile.model.response.DefaultResponseModel;
 import com.maxxcoffee.mobile.model.response.EventResponseModel;
+import com.maxxcoffee.mobile.model.response.FaqResponseModel;
+import com.maxxcoffee.mobile.model.response.HistoryResponseModel;
+import com.maxxcoffee.mobile.model.response.HomeResponseModel;
+import com.maxxcoffee.mobile.model.response.KotaResponseModel;
 import com.maxxcoffee.mobile.model.response.LoginResponseModel;
+import com.maxxcoffee.mobile.model.response.LoginTestResponseModel;
 import com.maxxcoffee.mobile.model.response.MenuResponseModel;
 import com.maxxcoffee.mobile.model.response.OauthResponseModel;
 import com.maxxcoffee.mobile.model.response.ProfileResponseModel;
 import com.maxxcoffee.mobile.model.response.PromoResponseModel;
 import com.maxxcoffee.mobile.model.response.RegisterResponseModel;
+import com.maxxcoffee.mobile.model.response.ResendEmailSmsResponseModel;
 import com.maxxcoffee.mobile.model.response.StoreResponseModel;
+import com.maxxcoffee.mobile.model.response.TosResponseModel;
 
 import retrofit.Callback;
 import retrofit.http.Body;
@@ -37,6 +56,9 @@ public interface ApiInterface {
 
     @POST("/api/login")
     void login(@Header("Authorization") String authentication, @Body LoginRequestModel body, Callback<LoginResponseModel> response);
+
+    @POST("/api/logintest")
+    void loginTest(@Body LoginRequestModel body, Callback<LoginTestResponseModel> response);
 
     @GET("/api/menu/list")
     void menu(Callback<MenuResponseModel> response);
@@ -59,6 +81,9 @@ public interface ApiInterface {
     @POST("/api/gci/cardlist")
     void cardList(@Header("Authorization") String authentication, @Body DefaultRequestModel body, Callback<CardResponseModel> response);
 
+    @POST("/api/gci/registercard")
+    void registerCard(@Header("Authorization") String authentication, @Body RegisterCardRequestModel body, Callback<CardResponseModel> response);
+
     @POST("/api/userprofile")
     void profile(@Header("Authorization") String authentication, @Body DefaultRequestModel body, Callback<ProfileResponseModel> response);
 
@@ -68,7 +93,58 @@ public interface ApiInterface {
     @POST("/api/edituserprofilephone")
     void changeName(@Header("Authorization") String authentication, @Body DefaultRequestModel body, Callback<ChangeUserDataResponseModel> response);
 
+    @POST("/api/changehpbyemail")
+    void changePhone(@Header("Authorization") String authentication, @Body ChangePhoneRequestModel body, Callback<DefaultResponseModel> response);
+
+    @POST("/api/gantinohpoccupation")
+    void changeOldPhone(@Body ChangePhoneRequestModel body, Callback<DefaultResponseModel> response);
+
     @POST("/api/contactadd")
     void contactUs(@Header("Authorization") String authentication, @Body ContactUsRequestModel body, Callback<DefaultResponseModel> response);
+
+    @POST("/api/gci/lostcard")
+    void lostCard(@Header("Authorization") String authentication, @Body LostCardRequestModel body, Callback<DefaultResponseModel> response);
+
+    @POST("/api/tos")
+    void termOfService(Callback<TosResponseModel> response);
+
+    @POST("/api/kota")
+    void kota(Callback<KotaResponseModel> response);
+
+    @POST("/api/faq")
+    void faq(Callback<FaqResponseModel> response);
+
+    @POST("/api/about")
+    void about(Callback<AboutResponseModel> response);
+
+    @POST("/api/gci/rename")
+    void renameCard(@Header("Authorization") String authentication, @Body RenameCardRequestModel body, Callback<DefaultResponseModel> response);
+
+    @POST("/api/gci/transferbalance")
+    void transferBalance(@Header("Authorization") String authentication, @Body TransferBalanceRequestModel body, Callback<DefaultResponseModel> response);
+
+    @POST("/api/resendemailsms")
+    void resendEmailSms(@Header("Authorization") String authentication, @Body ResendEmailRequestModel body, Callback<ResendEmailSmsResponseModel> response);
+
+    @POST("/api/verifysmsbyemail")
+    void verifySmsCode(@Header("Authorization") String authentication, @Body VerifySmsCodeRequestModel body, Callback<DefaultResponseModel> response);
+
+    @POST("/api/gci/transaction/all")
+    void history(@Header("Authorization") String authentication, @Body HistoryRequestModel body, Callback<HistoryResponseModel> response);
+
+    @POST("/api/deletecardbynumber")
+    void deleteCard(@Header("Authorization") String authentication, @Body DeleteCardRequestModel body, Callback<DefaultResponseModel> response);
+
+    @POST("/api/changeemail")
+    void changeEmail(@Header("Authorization") String authentication, @Body ChangeEmailRequestModel body, Callback<DefaultResponseModel> response);
+
+    @POST("/api/updatecityoccupation")
+    void changeCityOccupation(@Header("Authorization") String authentication, @Body ChangeCityOccupationRequestModel body, Callback<DefaultResponseModel> response);
+
+    @POST("/api/home")
+    void home(@Header("Authorization") String authentication, @Body DefaultRequestModel body, Callback<HomeResponseModel> response);
+
+    @POST("/api/forgotpassword")
+    void forgotPassword(@Body ChangePhoneRequestModel body, Callback<DefaultResponseModel> response);
 
 }

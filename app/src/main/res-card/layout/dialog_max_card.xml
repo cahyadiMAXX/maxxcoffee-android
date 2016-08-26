@@ -56,7 +56,7 @@
                 android:layout_height="wrap_content"
                 android:background="@android:color/white"
                 android:gravity="center"
-                android:text="the maximum number"
+                android:text="the maximum number of cards"
                 android:textColor="@android:color/black"
                 android:textSize="16sp" />
         </LinearLayout>

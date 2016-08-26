@@ -15,7 +15,8 @@ public class EditTextLatoBold extends EditText {
 
     public EditTextLatoBold(Context context, AttributeSet attrs) {
         super(context, attrs);
-        Typeface type = Typeface.createFromAsset(context.getAssets(), "font/Lato-Bold.ttf");
+//        Typeface type = Typeface.createFromAsset(context.getAssets(), "font/Lato-Bold.ttf");
+        Typeface type = Typeface.createFromAsset(context.getAssets(), "font/HelveticaNeueLTPro-Lt.otf");
         setTypeface(type);
     }
 

@@ -49,4 +49,20 @@ public class EventController {
         }
         return data;
     }
+
+    public EventEntity getEvent(String id) {
+        List<EventEntity> data = new ArrayList<>();
+        try {
+            Dao<EventEntity, Integer> dao = database.getEventDao();
+            QueryBuilder<EventEntity, Integer> query = dao.queryBuilder();
+            query.where().eq("id_event", id);
+
+            data = query.query();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        if (data.size() > 0)
+            return data.get(0);
+        return null;
+    }
 }

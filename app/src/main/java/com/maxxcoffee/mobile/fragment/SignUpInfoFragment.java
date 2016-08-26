@@ -5,23 +5,36 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.maxxcoffee.mobile.R;
 import com.maxxcoffee.mobile.activity.MainActivity;
+import com.maxxcoffee.mobile.database.controller.CardController;
+import com.maxxcoffee.mobile.database.controller.ProfileController;
+import com.maxxcoffee.mobile.database.entity.CardEntity;
+import com.maxxcoffee.mobile.database.entity.ProfileEntity;
 import com.maxxcoffee.mobile.fragment.dialog.BirthdateDialog;
 import com.maxxcoffee.mobile.fragment.dialog.GenderDialog;
+import com.maxxcoffee.mobile.fragment.dialog.List2Dialog;
+import com.maxxcoffee.mobile.fragment.dialog.LoadingDialog;
 import com.maxxcoffee.mobile.model.request.LoginRequestModel;
 import com.maxxcoffee.mobile.model.request.OauthRequestModel;
 import com.maxxcoffee.mobile.model.request.RegisterRequestModel;
+import com.maxxcoffee.mobile.model.response.CardItemResponseModel;
+import com.maxxcoffee.mobile.model.response.ProfileItemResponseModel;
+import com.maxxcoffee.mobile.model.response.ProfileResponseModel;
+import com.maxxcoffee.mobile.task.ProfileTask;
 import com.maxxcoffee.mobile.util.Constant;
 import com.maxxcoffee.mobile.util.PreferenceManager;
 import com.maxxcoffee.mobile.util.Utils;
-import com.maxxcoffee.mobile.widget.TBaseProgress;
 
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.Properties;
 
 import butterknife.Bind;
@@ -48,23 +61,32 @@ public class SignUpInfoFragment extends Fragment {
     TextView textCity;
     @Bind(R.id.occupation)
     TextView textOccupation;
+    @Bind(R.id.referal_code)
+    EditText fieldReferalCode;
 
     private MainActivity activity;
     private SimpleDateFormat dateFormat;
+    private ProfileController profileController;
+    private CardController cardController;
     private int selectedGender;
     private String selectedDate;
-    private String selectedName;
+    private String selectedFirstName;
+    private String selectedLastName;
     private String selectedEmail;
     private String selectedPhoneNumber;
     private String selectedPassword;
+    private int mDayPart = Utils.getDayPart();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         activity = (MainActivity) getActivity();
         activity.setHeaderColor(true);
-        activity.setRootBackground(R.drawable.bg_navbar);
+
         dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+
+        profileController = new ProfileController(activity);
+        cardController = new CardController(activity);
     }
 
     @Override
@@ -74,7 +96,8 @@ public class SignUpInfoFragment extends Fragment {
         ButterKnife.bind(this, view);
         activity.setTitle("");
 
-        selectedName = getArguments().getString("name");
+        selectedFirstName = getArguments().getString("first-name");
+        selectedLastName = getArguments().getString("last-name");
         selectedEmail = getArguments().getString("email");
         selectedPhoneNumber = getArguments().getString("phone");
         selectedPassword = getArguments().getString("password");
@@ -85,6 +108,7 @@ public class SignUpInfoFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        setBackground(mDayPart);
 
         String mGender = PreferenceManager.getString(activity, Constant.PREFERENCE_REGISTER_GENDER, "");
         String mBirthday = PreferenceManager.getString(activity, Constant.PREFERENCE_REGISTER_BIRTHDAY, "");
@@ -114,6 +138,7 @@ public class SignUpInfoFragment extends Fragment {
                 } else if (selectedGender == FEMALE) {
                     textGender.setText("Male");
                 }
+                PreferenceManager.putString(activity, Constant.PREFERENCE_REGISTER_GENDER, textGender.getText().toString());
                 dismiss();
             }
 
@@ -130,6 +155,49 @@ public class SignUpInfoFragment extends Fragment {
         reportDialog.show(getFragmentManager(), null);
     }
 
+    @OnClick(R.id.occupation_layout)
+    public void onOccupationClick() {
+        List<String> occupations = Arrays.asList(Constant.OCCUPATION_LIST);
+        String jsonOccupations = new Gson().toJson(occupations);
+
+        List2Dialog reportDialog = new List2Dialog() {
+            @Override
+            public void onSelectedItem(String item) {
+                PreferenceManager.putString(activity, Constant.PREFERENCE_REGISTER_OCCUPATION, item);
+                textOccupation.setText(item);
+                dismiss();
+            }
+        };
+
+        Bundle bundle = new Bundle();
+        bundle.putString("title", "Occupation");
+        bundle.putString("data", jsonOccupations);
+
+        reportDialog.setArguments(bundle);
+        reportDialog.show(getFragmentManager(), null);
+    }
+
+    @OnClick(R.id.city_layout)
+    public void onCityClick() {
+        String jsonCity = PreferenceManager.getString(activity, Constant.DATA_KOTA, "");
+
+        List2Dialog reportDialog = new List2Dialog() {
+            @Override
+            public void onSelectedItem(String item) {
+                PreferenceManager.putString(activity, Constant.PREFERENCE_REGISTER_CITY, item);
+                textCity.setText(item);
+                dismiss();
+            }
+        };
+
+        Bundle bundle = new Bundle();
+        bundle.putString("title", "City");
+        bundle.putString("data", jsonCity);
+
+        reportDialog.setArguments(bundle);
+        reportDialog.show(getFragmentManager(), null);
+    }
+
     @OnClick(R.id.birthday_layout)
     public void onBirthdayClick() {
         BirthdateDialog datePicker = new BirthdateDialog(activity, BirthdateDialog.DATE_VALIDARION_OFF) {
@@ -138,12 +206,16 @@ public class SignUpInfoFragment extends Fragment {
                 if (date != null) {
                     selectedDate = dateFormat.format(date);
                     textBirthday.setText(selectedDate);
+                    PreferenceManager.putString(activity, Constant.PREFERENCE_REGISTER_BIRTHDAY, selectedDate);
                 }
                 dismiss();
             }
 
             @Override
             protected void onError(String message) {
+                if (!message.equalsIgnoreCase("")) {
+                    Toast.makeText(activity, message, Toast.LENGTH_LONG).show();
+                }
             }
         };
         datePicker.show(getFragmentManager(), null);
@@ -154,40 +226,40 @@ public class SignUpInfoFragment extends Fragment {
         if (!isFormValid())
             return;
 
-        final TBaseProgress progress = new TBaseProgress(activity);
-        progress.show();
+        final LoadingDialog progress = new LoadingDialog();
+        progress.show(getFragmentManager(), null);
 
         RegisterRequestModel body = new RegisterRequestModel();
-        body.setNama_user(selectedName);
+        body.setFirst_name(selectedFirstName);
+        body.setLast_name(selectedLastName);
         body.setEmail(selectedEmail);
         body.setPassword(selectedPassword);
         body.setKota_user(textCity.getText().toString());
         body.setMobile_phone_user(selectedPhoneNumber);
         body.setGender(textGender.getText().toString());
         body.setOccupation(textOccupation.getText().toString());
-        body.setTanggal_lahir(selectedDate);
+        body.setTanggal_lahir(textBirthday.getText().toString());
+        body.setReferral_code(fieldReferalCode.getText().toString());
 
         RegisterTask task = new RegisterTask(activity) {
             @Override
             public void onSuccess() {
-                if (progress.isShowing())
-                    progress.dismiss();
+                progress.dismissAllowingStateLoss();
                 loginNow();
             }
 
             @Override
             public void onFailed(String message) {
-                if (progress.isShowing())
-                    progress.dismiss();
-                Toast.makeText(activity, "Register failed. " + message, Toast.LENGTH_SHORT).show();
+                progress.dismissAllowingStateLoss();
+                Toast.makeText(activity, message, Toast.LENGTH_SHORT).show();
             }
         };
         task.execute(body);
     }
 
     private void loginNow() {
-        final TBaseProgress progress = new TBaseProgress(activity);
-        progress.show();
+        final LoadingDialog progress = new LoadingDialog();
+        progress.show(getFragmentManager(), null);
 
         Properties properties = Utils.getProperties(activity);
 
@@ -205,20 +277,14 @@ public class SignUpInfoFragment extends Fragment {
         final LoginTask task = new LoginTask(activity) {
             @Override
             public void onSuccess() {
-                if (progress.isShowing())
-                    progress.dismiss();
-
+                progress.dismissAllowingStateLoss();
                 PreferenceManager.putBool(activity, Constant.PREFERENCE_LOGGED_IN, true);
-                activity.prepareDrawerList();
-                activity.switchFragment(MainActivity.HOME);
-                clearTemporaryData();
+                fetchingProfileData();
             }
 
             @Override
             public void onFailed() {
-                if (progress.isShowing())
-                    progress.dismiss();
-
+                progress.dismissAllowingStateLoss();
                 Toast.makeText(activity, "Login failed. Token not found", Toast.LENGTH_SHORT).show();
             }
         };
@@ -231,9 +297,7 @@ public class SignUpInfoFragment extends Fragment {
 
             @Override
             public void onFailed() {
-                if (progress.isShowing())
-                    progress.dismiss();
-
+                progress.dismissAllowingStateLoss();
                 Toast.makeText(activity, "Login failed. Access token not found", Toast.LENGTH_SHORT).show();
             }
         };
@@ -265,8 +329,78 @@ public class SignUpInfoFragment extends Fragment {
         return true;
     }
 
+    private void fetchingProfileData() {
+        final LoadingDialog progress = new LoadingDialog();
+        progress.show(getFragmentManager(), null);
+
+        ProfileTask task = new ProfileTask(activity) {
+            @Override
+            public void onSuccess(ProfileResponseModel profile) {
+                ProfileItemResponseModel profileItem = profile.getUser_profile().get(0);
+
+                if (profileItem != null) {
+                    ProfileEntity profileEntity = new ProfileEntity();
+                    profileEntity.setId(profileItem.getId_user());
+                    profileEntity.setName(profileItem.getNama_user());
+                    profileEntity.setEmail(profileItem.getEmail());
+                    profileEntity.setCity(profileItem.getKota_user());
+                    profileEntity.setPhone(profileItem.getMobile_phone_user());
+                    profileEntity.setBirthday(profileItem.getTanggal_lahir());
+                    profileEntity.setGender(profileItem.getGender());
+                    profileEntity.setOccupation(profileItem.getOccupation());
+                    profileEntity.setImage(profileItem.getGambar());
+                    profileEntity.setPoint(Integer.parseInt(profile.getTotal_point()));
+                    profileEntity.setBalance(Integer.parseInt(profile.getTotal_balance()));
+                    profileEntity.setSms_verified(profileItem.getVerifikasi_sms().equalsIgnoreCase("yes"));
+                    profileEntity.setEmail_verified(profileItem.getVerifikasi_email().equalsIgnoreCase("yes"));
+
+                    PreferenceManager.putBool(activity, Constant.PREFERENCE_SMS_VERIFICATION, profileItem.getVerifikasi_sms().equalsIgnoreCase("yes"));
+                    PreferenceManager.putBool(activity, Constant.PREFERENCE_EMAIL_VERIFICATION, profileItem.getVerifikasi_email().equalsIgnoreCase("yes"));
+
+                    profileController.insert(profileEntity);
+
+                    List<CardItemResponseModel> cards = profile.getCards();
+                    if (cards.size() > 0) {
+
+                        for (CardItemResponseModel card : cards) {
+                            CardEntity cardEntity = new CardEntity();
+                            cardEntity.setId(card.getId_card());
+                            cardEntity.setName(card.getCard_name());
+                            cardEntity.setNumber(card.getCard_number());
+                            cardEntity.setImage(card.getCard_image());
+                            cardEntity.setDistribution_id(card.getDistribution_id());
+                            cardEntity.setCard_pin(card.getCard_pin());
+                            cardEntity.setBalance(card.getBalance());
+                            cardEntity.setPoint(card.getBeans());
+                            cardEntity.setExpired_date(card.getExpired_date());
+
+                            cardController.insert(cardEntity);
+                        }
+                    }
+                }
+                PreferenceManager.putBool(activity, Constant.PREFERENCE_WELCOME_SKIP, true);
+                PreferenceManager.putBool(activity, Constant.PREFERENCE_TUTORIAL_SKIP, true);
+                PreferenceManager.putString(activity, Constant.PREFERENCE_BALANCE, String.valueOf(profile.getTotal_balance()));
+                PreferenceManager.putString(activity, Constant.PREFERENCE_BEAN, String.valueOf(profile.getTotal_point()));
+                progress.dismissAllowingStateLoss();
+
+                activity.prepareDrawerList();
+                activity.switchFragment(MainActivity.HOME);
+                clearTemporaryData();
+            }
+
+            @Override
+            public void onFailed() {
+                progress.dismissAllowingStateLoss();
+                Toast.makeText(activity, "Failed to fetch data.", Toast.LENGTH_SHORT).show();
+            }
+        };
+        task.execute();
+    }
+
     private void clearTemporaryData() {
-        PreferenceManager.remove(activity, Constant.PREFERENCE_REGISTER_NAME);
+        PreferenceManager.remove(activity, Constant.PREFERENCE_REGISTER_FIRST_NAME);
+        PreferenceManager.remove(activity, Constant.PREFERENCE_REGISTER_LAST_NAME);
         PreferenceManager.remove(activity, Constant.PREFERENCE_REGISTER_GENDER);
         PreferenceManager.remove(activity, Constant.PREFERENCE_REGISTER_BIRTHDAY);
         PreferenceManager.remove(activity, Constant.PREFERENCE_REGISTER_OCCUPATION);
@@ -274,5 +408,19 @@ public class SignUpInfoFragment extends Fragment {
         PreferenceManager.remove(activity, Constant.PREFERENCE_REGISTER_EMAIL);
         PreferenceManager.remove(activity, Constant.PREFERENCE_REGISTER_PASSWORD);
         PreferenceManager.remove(activity, Constant.PREFERENCE_REGISTER_PHONE);
+    }
+
+    private void setBackground(int dayPart) {
+        int navbar = R.drawable.bg_morning_navbar;
+
+        if (dayPart == Utils.MORNING) {
+            navbar = R.drawable.bg_morning_navbar;
+        } else if (dayPart == Utils.AFTERNOON) {
+            navbar = R.drawable.bg_afternoon_navbar;
+        } else if (dayPart == Utils.EVENING) {
+            navbar = R.drawable.bg_evening_navbar;
+        }
+        activity.setRootBackground(navbar);
+        activity.setNavbarBackground(navbar);
     }
 }

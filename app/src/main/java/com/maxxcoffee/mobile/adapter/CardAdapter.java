@@ -1,6 +1,9 @@
 package com.maxxcoffee.mobile.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -14,6 +17,8 @@ import com.bumptech.glide.Glide;
 import com.maxxcoffee.mobile.R;
 import com.maxxcoffee.mobile.database.entity.CardEntity;
 import com.maxxcoffee.mobile.model.CardModel;
+import com.maxxcoffee.mobile.task.DownloadImageTask;
+import com.maxxcoffee.mobile.util.Utils;
 
 import java.util.List;
 
@@ -61,7 +66,6 @@ public abstract class CardAdapter extends RecyclerView.Adapter<RecyclerView.View
         TextView name;
         TextView balance;
         TextView point;
-        TextView bean;
         CardView card;
 
         public BodyViewHolder(View itemView) {
@@ -70,15 +74,29 @@ public abstract class CardAdapter extends RecyclerView.Adapter<RecyclerView.View
             name = (TextView) itemView.findViewById(R.id.name);
             balance = (TextView) itemView.findViewById(R.id.balance);
             point = (TextView) itemView.findViewById(R.id.point);
-            bean = (TextView) itemView.findViewById(R.id.beans);
             card = (CardView) itemView.findViewById(R.id.card_view);
         }
 
         public void populate(final CardEntity model) {
             name.setText(model.getName());
             balance.setText("IDR " + model.getBalance());
-            bean.setText(String.valueOf(model.getPoint()));
-            Glide.with(context).load(model.getImage()).centerCrop().crossFade().into(image);
+            point.setText(String.valueOf(model.getPoint()));
+
+            DownloadImageTask task = new DownloadImageTask(context) {
+                @Override
+                protected void onDownloadError() {
+                    Glide.with(context).load("").placeholder(R.drawable.ic_no_image).into(image);
+                }
+
+                @Override
+                protected void onImageDownloaded(Bitmap bitmap) {
+                    Bitmap resizeImage = Utils.getResizedBitmap(bitmap, 0.95f);
+                    Drawable drawable = new BitmapDrawable(context.getResources(), resizeImage);
+                    image.setImageDrawable(drawable);
+                }
+            };
+            task.execute(model.getImage());
+//            Glide.with(context).load(model.getImage()).centerCrop().crossFade().into(image);
 //            point.setText(String.valueOf(model.getPoint()));
 //            image.setImageDrawable(context.getResources().getDrawable(model.getImage()));
 

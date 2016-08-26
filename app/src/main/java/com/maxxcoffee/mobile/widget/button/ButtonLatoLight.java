@@ -15,7 +15,8 @@ public class ButtonLatoLight extends Button {
 
     public ButtonLatoLight(Context context, AttributeSet attrs) {
         super(context, attrs);
-        Typeface type = Typeface.createFromAsset(context.getAssets(), "font/Lato-Light.ttf");
+        Typeface type = Typeface.createFromAsset(context.getAssets(), "font/HelveticaNeueLTPro-Lt.otf");
+//        Typeface type = Typeface.createFromAsset(context.getAssets(), "font/Lato-Light.ttf");
         setTypeface(type);
     }
 

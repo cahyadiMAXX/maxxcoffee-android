@@ -40,7 +40,7 @@ public class WelcomeActivity extends FragmentActivity {
             "Let us show you our customer's favorite",
             "Cool card design and full colour tumbler",
             "We are around you. We are near you",
-            "Time to explore MAXX-COFFEE. \nSee you"
+            "Time to explore MAXX COFFEE. \nSee you"
     };
     private final boolean[] NEXT = {
             false,
@@ -61,10 +61,6 @@ public class WelcomeActivity extends FragmentActivity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        boolean welcome = PreferenceManager.getBool(this, Constant.PREFERENCE_WELCOME_SKIP, false);
-        if (welcome)
-            goToApps();
-
         setContentView(R.layout.activity_welcome);
 
         ButterKnife.bind(this);
@@ -84,10 +80,9 @@ public class WelcomeActivity extends FragmentActivity {
 
     private void goToApps() {
         PreferenceManager.putBool(WelcomeActivity.this, Constant.PREFERENCE_WELCOME_SKIP, true);
-        Intent intent = new Intent(WelcomeActivity.this, MainActivity.class);
+        Intent intent = new Intent(WelcomeActivity.this, TutorialLauncherActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
         finish();
     }
-
 }

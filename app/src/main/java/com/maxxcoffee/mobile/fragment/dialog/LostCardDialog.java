@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -48,6 +49,7 @@ public class LostCardDialog extends DialogFragment {
     LinearLayout layoutCard3;
 
     Integer selectedReport;
+    Integer selectedAnotherReport;
     List<CardModel> data;
 
     @NonNull
@@ -64,6 +66,7 @@ public class LostCardDialog extends DialogFragment {
         data = new ArrayList<>();
         selectedReport = getArguments().getInt("selected-card", -999);
         String stringData = getArguments().getString("cards", "");
+        selectedAnotherReport = getArguments().getInt("selected-another-card", -999);
 
         if (stringData != null) {
             data = new Gson().fromJson(stringData, new TypeToken<List<CardModel>>() {
@@ -83,7 +86,15 @@ public class LostCardDialog extends DialogFragment {
             }
         }
 
-        card1.setTextColor(getResources().getColor(R.color.green_selected));
+        if (selectedReport == CARD_1) {
+            card1.setTextColor(getResources().getColor(R.color.green_selected));
+        } else if (selectedReport == CARD_2) {
+            card2.setTextColor(getResources().getColor(R.color.green_selected));
+        } else if (selectedReport == CARD_1) {
+            card3.setTextColor(getResources().getColor(R.color.green_selected));
+        }
+
+//        card1.setTextColor(getResources().getColor(R.color.green_selected));
         ok.setTextColor(Color.RED);
         cancel.setTextColor(Color.BLACK);
 
@@ -116,6 +127,10 @@ public class LostCardDialog extends DialogFragment {
 
     @OnClick(R.id.ok)
     public void onOkClick() {
+        if (selectedAnotherReport == selectedReport) {
+            Toast.makeText(getContext(), "Cannot transfer to the same card.", Toast.LENGTH_SHORT).show();
+            return;
+        }
         onOk(selectedReport);
     }
 

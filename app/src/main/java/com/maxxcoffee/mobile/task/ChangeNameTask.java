@@ -2,6 +2,7 @@ package com.maxxcoffee.mobile.task;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.widget.Toast;
 
 import com.maxxcoffee.mobile.api.ApiManager;
 import com.maxxcoffee.mobile.model.request.DefaultRequestModel;
@@ -28,11 +29,13 @@ public abstract class ChangeNameTask extends AsyncTask<String, Boolean, ChangeUs
     protected ChangeUserDataResponseModel doInBackground(String... strings) {
         String token = PreferenceManager.getString(context, Constant.PREFERENCE_TOKEN, "");
         String accessToken = PreferenceManager.getString(context, Constant.PREFERENCE_ACCESS_TOKEN, "");
-        String name = strings[0];
+        String firstName = strings[0];
+        String lastName = strings[1];
 
         DefaultRequestModel body = new DefaultRequestModel();
         body.setToken(token);
-        body.setNama_user(name);
+        body.setNama_user(firstName);
+        body.setNama_user_last(lastName);
 
         ApiManager.getApiInterface(context).changeName(accessToken, body, new Callback<ChangeUserDataResponseModel>() {
             @Override

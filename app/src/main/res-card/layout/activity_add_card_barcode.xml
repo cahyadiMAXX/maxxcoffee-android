@@ -99,16 +99,39 @@
                     android:layout_marginRight="8dp"
                     android:layout_weight="1"
                     android:scaleType="fitCenter"
-                    android:src="@drawable/sample_card_3" />
+                    android:src="@drawable/card_back" />
             </LinearLayout>
 
-            <com.journeyapps.barcodescanner.DecoratedBarcodeView
-                android:id="@+id/zxing_barcode_scanner"
+            <com.maxxcoffee.mobile.widget.button.ButtonLatoRegular
+                android:id="@+id/start_scan"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
-                app:zxing_framing_rect_height="100dp"
-                app:zxing_framing_rect_width="250dp"
-                app:zxing_scanner_layout="@layout/custom_barcode_scanner" />
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:background="@drawable/button_selector"
+                android:text="Start Scan"
+                android:textColor="@android:color/white"
+                android:textSize="14sp" />
+
+            <com.maxxcoffee.mobile.widget.button.ButtonLatoRegular
+                android:id="@+id/manual"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/button_selector"
+                android:text="Input Card Number Manually"
+                android:textColor="@android:color/white"
+                android:textSize="14sp" />
+
+            <!--<com.journeyapps.barcodescanner.DecoratedBarcodeView-->
+            <!--android:id="@+id/zxing_barcode_scanner"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="200dp"-->
+            <!--app:zxing_framing_rect_height="100dp"-->
+            <!--app:zxing_framing_rect_width="250dp"-->
+            <!--app:zxing_scanner_layout="@layout/custom_barcode_scanner" />-->
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

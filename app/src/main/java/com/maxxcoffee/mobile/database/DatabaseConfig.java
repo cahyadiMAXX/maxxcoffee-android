@@ -8,8 +8,11 @@ import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 import com.maxxcoffee.mobile.database.entity.CardEntity;
+import com.maxxcoffee.mobile.database.entity.CityEntity;
+import com.maxxcoffee.mobile.database.entity.ProvinceEntity;
 import com.maxxcoffee.mobile.database.entity.EventEntity;
 import com.maxxcoffee.mobile.database.entity.FaqEntity;
+import com.maxxcoffee.mobile.database.entity.HistoryEntity;
 import com.maxxcoffee.mobile.database.entity.MenuCategoryEntity;
 import com.maxxcoffee.mobile.database.entity.MenuEntity;
 import com.maxxcoffee.mobile.database.entity.ProfileEntity;
@@ -23,7 +26,7 @@ import java.sql.SQLException;
  */
 public class DatabaseConfig extends OrmLiteSqliteOpenHelper {
 
-    private static final int DATABASE_VERSION = 6;
+    private static final int DATABASE_VERSION = 14;
     private static final String DATABASE_NAME = "db_maxx";
     private static final String TAG = "MAXX-DATABASE";
 
@@ -35,6 +38,9 @@ public class DatabaseConfig extends OrmLiteSqliteOpenHelper {
     private Dao<FaqEntity, Integer> faqDao = null;
     private Dao<ProfileEntity, Integer> profileDao = null;
     private Dao<EventEntity, Integer> eventDao = null;
+    private Dao<HistoryEntity, Integer> historyDao = null;
+    private Dao<ProvinceEntity, Integer> provinceDao = null;
+    private Dao<CityEntity, Integer> cityDao = null;
 
     public DatabaseConfig(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -61,6 +67,9 @@ public class DatabaseConfig extends OrmLiteSqliteOpenHelper {
             TableUtils.createTableIfNotExists(connectionSource, FaqEntity.class);
             TableUtils.createTableIfNotExists(connectionSource, ProfileEntity.class);
             TableUtils.createTableIfNotExists(connectionSource, EventEntity.class);
+            TableUtils.createTableIfNotExists(connectionSource, HistoryEntity.class);
+            TableUtils.createTableIfNotExists(connectionSource, ProvinceEntity.class);
+            TableUtils.createTableIfNotExists(connectionSource, CityEntity.class);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -76,6 +85,9 @@ public class DatabaseConfig extends OrmLiteSqliteOpenHelper {
             TableUtils.dropTable(connectionSource, FaqEntity.class, false);
             TableUtils.dropTable(connectionSource, ProfileEntity.class, false);
             TableUtils.dropTable(connectionSource, EventEntity.class, false);
+            TableUtils.dropTable(connectionSource, HistoryEntity.class, false);
+            TableUtils.dropTable(connectionSource, ProvinceEntity.class, false);
+            TableUtils.dropTable(connectionSource, CityEntity.class, false);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -91,6 +103,9 @@ public class DatabaseConfig extends OrmLiteSqliteOpenHelper {
             TableUtils.clearTable(connectionSource, FaqEntity.class);
             TableUtils.clearTable(connectionSource, ProfileEntity.class);
             TableUtils.clearTable(connectionSource, EventEntity.class);
+            TableUtils.clearTable(connectionSource, HistoryEntity.class);
+            TableUtils.clearTable(connectionSource, ProvinceEntity.class);
+            TableUtils.clearTable(connectionSource, CityEntity.class);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -158,5 +173,26 @@ public class DatabaseConfig extends OrmLiteSqliteOpenHelper {
             eventDao = getDao(EventEntity.class);
         }
         return eventDao;
+    }
+
+    public Dao<HistoryEntity, Integer> getHistoryDao() throws SQLException {
+        if (historyDao == null) {
+            historyDao = getDao(HistoryEntity.class);
+        }
+        return historyDao;
+    }
+
+    public Dao<ProvinceEntity, Integer> getProvinceDao() throws SQLException {
+        if (provinceDao == null) {
+            provinceDao = getDao(ProvinceEntity.class);
+        }
+        return provinceDao;
+    }
+
+    public Dao<CityEntity, Integer> getCityDao() throws SQLException {
+        if (cityDao == null) {
+            cityDao = getDao(CityEntity.class);
+        }
+        return cityDao;
     }
 }

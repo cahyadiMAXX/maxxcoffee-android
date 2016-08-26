@@ -1,19 +1,20 @@
 package com.maxxcoffee.mobile.activity;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
 
-import com.google.zxing.integration.android.IntentIntegrator;
-import com.google.zxing.integration.android.IntentResult;
-import com.journeyapps.barcodescanner.CaptureManager;
-import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 import com.maxxcoffee.mobile.R;
+import com.maxxcoffee.mobile.fragment.StoreFragment;
+import com.maxxcoffee.mobile.util.PermissionUtil;
 
-import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -22,10 +23,7 @@ import butterknife.OnClick;
  */
 public class AddCardBarcodeActivity extends Activity {
 
-    @Bind(R.id.zxing_barcode_scanner)
-    DecoratedBarcodeView barcodeView;
-
-    private CaptureManager captureManager;
+    private static String[] PERMISSIONS_LOCATION = {Manifest.permission.CAMERA};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,33 +35,37 @@ public class AddCardBarcodeActivity extends Activity {
 
         ButterKnife.bind(this);
 
-        captureManager = new CaptureManager(this, barcodeView);
-        captureManager.initializeFromIntent(getIntent(), savedInstanceState);
-        captureManager.decode();
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        captureManager.onResume();
+    private void openRenameCardDialog(String cardNumber) {
+        Bundle bundle = new Bundle();
+        bundle.putString("card-no", cardNumber);
+
+        Intent intent = new Intent(this, FormActivity.class);
+        intent.putExtra("content", FormActivity.RENAME_CARD);
+        intent.putExtras(bundle);
+
+        finish();
+        startActivity(intent);
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        captureManager.onPause();
+    @OnClick(R.id.start_scan)
+    public void onStartScanClick() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, android.Manifest.permission.CAMERA)) {
+                ActivityCompat.requestPermissions(this, PERMISSIONS_LOCATION, 2);
+            } else {
+                ActivityCompat.requestPermissions(this, PERMISSIONS_LOCATION, 2);
+            }
+        } else {
+            startActivity(new Intent(this, SimpleScannerActivity.class));
+        }
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        captureManager.onDestroy();
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        captureManager.onSaveInstanceState(outState);
+    @OnClick(R.id.manual)
+    public void onAddCardManualClick() {
+        openRenameCardDialog("-999");
     }
 
     @Override
@@ -74,5 +76,19 @@ public class AddCardBarcodeActivity extends Activity {
     @OnClick(R.id.back)
     public void onBackClick() {
         onBackPressed();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+
+        if (requestCode == 2) {
+            if (PermissionUtil.verifyPermissions(grantResults)) {
+                startActivity(new Intent(this, SimpleScannerActivity.class));
+            } else {
+                Toast.makeText(this, "Camera permission is NOT granted", Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
     }
 }

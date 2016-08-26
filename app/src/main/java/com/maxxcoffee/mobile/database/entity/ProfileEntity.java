@@ -42,6 +42,12 @@ public class ProfileEntity {
     @DatabaseField
     Integer balance;
 
+    @DatabaseField
+    Boolean sms_verified;
+
+    @DatabaseField
+    Boolean email_verified;
+
     public Integer getId() {
         return id;
     }
@@ -128,5 +134,21 @@ public class ProfileEntity {
 
     public void setCity(String city) {
         this.city = city;
+    }
+
+    public Boolean getSms_verified() {
+        return sms_verified;
+    }
+
+    public void setSms_verified(Boolean sms_verified) {
+        this.sms_verified = sms_verified;
+    }
+
+    public Boolean getEmail_verified() {
+        return email_verified;
+    }
+
+    public void setEmail_verified(Boolean email_verified) {
+        this.email_verified = email_verified;
     }
 }

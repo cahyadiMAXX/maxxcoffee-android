@@ -101,7 +101,7 @@ public class StoreController {
             Dao<StoreEntity, Integer> dao = database.getStoreDao();
             QueryBuilder<StoreEntity, Integer> query = dao.queryBuilder();
             query.where().eq("province", province);
-            query.orderBy("id", true);
+            query.orderBy("province", true);
 
             data = query.query();
         } catch (SQLException e) {
@@ -116,6 +116,7 @@ public class StoreController {
             Dao<StoreEntity, Integer> dao = database.getStoreDao();
             QueryBuilder<StoreEntity, Integer> query = dao.queryBuilder();
             query.distinct().selectColumns("province");
+            query.where().not().eq("province", "");
 
             data = query.query();
         } catch (SQLException e) {

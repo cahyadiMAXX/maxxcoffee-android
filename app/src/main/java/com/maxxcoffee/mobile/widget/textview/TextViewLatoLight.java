@@ -21,7 +21,8 @@ public class TextViewLatoLight extends TextView {
     }
 
     private void setFont(Context context) {
-        Typeface type = Typeface.createFromAsset(context.getAssets(), "font/Lato-Light.ttf");
+//        Typeface type = Typeface.createFromAsset(context.getAssets(), "font/Lato-Light.ttf");
+        Typeface type = Typeface.createFromAsset(context.getAssets(), "font/HelveticaNeueLTPro-Lt.otf");
         setTypeface(type);
     }
 }

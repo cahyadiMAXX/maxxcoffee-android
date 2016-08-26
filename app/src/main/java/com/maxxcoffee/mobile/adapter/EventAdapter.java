@@ -65,7 +65,7 @@ public abstract class EventAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         }
 
         public void populate(final EventEntity model) {
-            Glide.with(context).load(model.getImage()).placeholder(context.getResources().getDrawable(R.drawable.ic_no_image)).centerCrop().crossFade().into(image);
+            Glide.with(context).load(model.getGambar()).placeholder(context.getResources().getDrawable(R.drawable.ic_no_image)).centerCrop().crossFade().into(image);
             layout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

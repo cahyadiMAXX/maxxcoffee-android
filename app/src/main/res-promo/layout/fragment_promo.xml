@@ -35,7 +35,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
                 android:gravity="center"
-                android:text="You do not have any promo"
+                android:text="We don't have any promo"
                 android:textColor="@color/divider"
                 android:textSize="16sp"
                 android:visibility="gone" />

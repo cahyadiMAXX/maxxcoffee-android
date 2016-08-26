@@ -11,10 +11,11 @@ public class CardItemResponseModel {
     private String card_number;
     private String card_name;
     private String card_image;
+    private String barcode;
     private String distribution_id;
     private String card_pin;
     private String status;
-    private int point;
+    private int beans; // updated from point
     private int balance;
     private int customer_id;
     private String customer_name;
@@ -90,12 +91,12 @@ public class CardItemResponseModel {
         this.status = status;
     }
 
-    public int getPoint() {
-        return point;
+    public int getBeans() {
+        return beans;
     }
 
-    public void setPoint(int point) {
-        this.point = point;
+    public void setBeans(int beans) {
+        this.beans = beans;
     }
 
     public int getBalance() {
@@ -184,5 +185,13 @@ public class CardItemResponseModel {
 
     public void setCard_image(String card_image) {
         this.card_image = card_image;
+    }
+
+    public String getBarcode() {
+        return barcode;
+    }
+
+    public void setBarcode(String barcode) {
+        this.barcode = barcode;
     }
 }

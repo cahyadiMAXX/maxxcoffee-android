@@ -22,11 +22,12 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
-            android:text="Email"
+            android:text="New Email"
             android:textColor="@android:color/black"
             android:textSize="14sp" />
 
         <com.maxxcoffee.mobile.widget.edittext.EditTextLatoRegular
+            android:id="@+id/email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
@@ -39,7 +40,32 @@
             android:textColor="@android:color/black"
             android:textSize="14sp" />
 
+        <com.maxxcoffee.mobile.widget.textview.TextViewLatoRegular
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="8dp"
+            android:text="Password Confirmation"
+            android:textColor="@android:color/black"
+            android:textSize="14sp" />
+
+        <com.maxxcoffee.mobile.widget.edittext.EditTextLatoRegular
+            android:id="@+id/password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="8dp"
+            android:background="@color/gray"
+            android:inputType="textPassword"
+            android:padding="16dp"
+            android:singleLine="true"
+            android:textColor="@android:color/black"
+            android:textSize="14sp" />
+
         <com.maxxcoffee.mobile.widget.button.ButtonLatoRegular
+            android:id="@+id/save"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"

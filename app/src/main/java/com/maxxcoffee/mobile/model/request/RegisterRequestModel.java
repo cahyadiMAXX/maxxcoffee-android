@@ -4,7 +4,8 @@ package com.maxxcoffee.mobile.model.request;
  * Created by rioswarawan on 7/7/16.
  */
 public class RegisterRequestModel {
-    private String nama_user;
+    private String first_name;
+    private String last_name;
     private String email;
     private String password;
     private String kota_user;
@@ -12,13 +13,22 @@ public class RegisterRequestModel {
     private String gender;
     private String occupation;
     private String tanggal_lahir;
+    private String referral_code;
 
-    public String getNama_user() {
-        return nama_user;
+    public String getFirst_name() {
+        return first_name;
     }
 
-    public void setNama_user(String nama_user) {
-        this.nama_user = nama_user;
+    public void setFirst_name(String first_name) {
+        this.first_name = first_name;
+    }
+
+    public String getLast_name() {
+        return last_name;
+    }
+
+    public void setLast_name(String last_name) {
+        this.last_name = last_name;
     }
 
     public String getEmail() {
@@ -75,5 +85,13 @@ public class RegisterRequestModel {
 
     public void setTanggal_lahir(String tanggal_lahir) {
         this.tanggal_lahir = tanggal_lahir;
+    }
+
+    public String getReferral_code() {
+        return referral_code;
+    }
+
+    public void setReferral_code(String referral_code) {
+        this.referral_code = referral_code;
     }
 }

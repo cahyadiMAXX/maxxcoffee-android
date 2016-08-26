@@ -24,6 +24,7 @@ public abstract class BirthdateDialog extends DialogFragment implements OnDateSe
 
     Context context;
     Calendar calendar;
+    Integer thisYear;
     Integer year;
     Integer month;
     Integer day;
@@ -38,6 +39,7 @@ public abstract class BirthdateDialog extends DialogFragment implements OnDateSe
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         calendar = Calendar.getInstance();
+        thisYear = calendar.get(Calendar.YEAR);
         year = calendar.get(Calendar.YEAR) - 20;
         month = calendar.get(Calendar.MONTH);
         day = calendar.get(Calendar.DAY_OF_MONTH);
@@ -52,16 +54,24 @@ public abstract class BirthdateDialog extends DialogFragment implements OnDateSe
             if (this.validation == DATE_VALIDARION_ON) {
                 Calendar selectedCalendar = Calendar.getInstance();
                 selectedCalendar.set(year, month, day);
-                
+
                 if (selectedCalendar.compareTo(calendar) == -1) {
                     Toast.makeText(context, "Tidak bisa memilih hari kemarin", Toast.LENGTH_SHORT).show();
                 } else {
-                    String dateString = day + "/" + (month + 1) + "/" + year;
-                    onDateSelected(dateFormat.parse(dateString));
+                    if (thisYear - year > 13) {
+                        String dateString = day + "/" + (month + 1) + "/" + year;
+                        onDateSelected(dateFormat.parse(dateString));
+                    } else {
+                        onError("Minimum age required : 13 years old");
+                    }
                 }
             } else {
-                String dateString = day + "/" + (month + 1) + "/" + year;
-                onDateSelected(dateFormat.parse(dateString));
+                if (thisYear - year > 13) {
+                    String dateString = day + "/" + (month + 1) + "/" + year;
+                    onDateSelected(dateFormat.parse(dateString));
+                } else {
+                    onError("Minimum age required : 13 years old");
+                }
             }
         } catch (ParseException e) {
             e.printStackTrace();

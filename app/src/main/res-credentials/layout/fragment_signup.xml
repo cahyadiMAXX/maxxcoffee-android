@@ -29,12 +29,32 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="Name"
+                android:text="First Name"
                 android:textColor="@android:color/darker_gray"
                 android:textSize="16sp" />
 
             <com.maxxcoffee.mobile.widget.edittext.EditTextLatoRegular
-                android:id="@+id/name"
+                android:id="@+id/first_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@color/white_transparent"
+                android:inputType="textCapWords"
+                android:padding="16dp"
+                android:singleLine="true"
+                android:textColor="@android:color/white"
+                android:textSize="16sp" />
+
+            <com.maxxcoffee.mobile.widget.textview.TextViewLatoRegular
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Last Name"
+                android:textColor="@android:color/darker_gray"
+                android:textSize="16sp" />
+
+            <com.maxxcoffee.mobile.widget.edittext.EditTextLatoRegular
+                android:id="@+id/last_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
@@ -129,9 +149,9 @@
                 android:id="@+id/next"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
                 android:layout_marginTop="24dp"
                 android:background="@drawable/button_selector"
-                android:layout_marginBottom="16dp"
                 android:text="Next"
                 android:textColor="@android:color/white"
                 android:textSize="14sp" />

@@ -2,6 +2,8 @@ package com.maxxcoffee.mobile.util;
 
 import android.content.Context;
 import android.content.res.AssetManager;
+import android.graphics.Bitmap;
+import android.graphics.Matrix;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
@@ -22,7 +24,6 @@ public class Utils {
     public static final int MORNING = 1001;
     public static final int AFTERNOON = 1002;
     public static final int EVENING = 1003;
-    public static final int NIGHT = 1004;
 
     private static NetworkInfo networkInfo;
 
@@ -89,14 +90,12 @@ public class Utils {
         Calendar c = Calendar.getInstance();
         int timeOfDay = c.get(Calendar.HOUR_OF_DAY);
 
-        if (timeOfDay >= 5 && timeOfDay < 12) {
+        if (timeOfDay >= 0 && timeOfDay < 12) {
             return MORNING;
         } else if (timeOfDay >= 12 && timeOfDay < 17) {
             return AFTERNOON;
-        } else if (timeOfDay >= 17 && timeOfDay < 22) {
+        } else if (timeOfDay >= 17 && timeOfDay <= 23) {
             return EVENING;
-        } else if (timeOfDay >= 22 || (timeOfDay >= 0 && timeOfDay < 5)) {
-            return NIGHT;
         }
         return -999;
     }
@@ -138,6 +137,24 @@ public class Utils {
             e.printStackTrace();
         }
         return properties;
+    }
+
+    public static Bitmap getResizedBitmap(Bitmap bm, float scale) {
+        int width = bm.getWidth();
+        int height = bm.getHeight();
+//        float scaleWidth = ((float) newWidth) / width;
+//        float scaleHeight = ((float) newHeight) / height;
+
+        // create a matrix for the manipulation
+        Matrix matrix = new Matrix();
+
+        // resize the bit map
+        matrix.postScale(scale, scale);
+
+        // recreate the new Bitmap
+        Bitmap resizedBitmap = Bitmap.createBitmap(bm, 0, 0, width, height, matrix, false);
+
+        return resizedBitmap;
     }
 
 }

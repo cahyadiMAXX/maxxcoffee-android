@@ -10,14 +10,14 @@ import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 
 import com.maxxcoffee.mobile.R;
+import com.maxxcoffee.mobile.activity.FormActivity;
 import com.maxxcoffee.mobile.activity.MainActivity;
-import com.maxxcoffee.mobile.activity.MenuDetailActivity;
 import com.maxxcoffee.mobile.adapter.MenuAdapter;
 import com.maxxcoffee.mobile.database.controller.MenuCategoryController;
 import com.maxxcoffee.mobile.database.controller.MenuController;
 import com.maxxcoffee.mobile.database.entity.MenuCategoryEntity;
 import com.maxxcoffee.mobile.database.entity.MenuEntity;
-import com.maxxcoffee.mobile.widget.TBaseProgress;
+import com.maxxcoffee.mobile.fragment.dialog.LoadingDialog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -40,6 +40,7 @@ public class MenuFoodFragment extends Fragment {
     private MenuAdapter adapter;
     private MenuController controller;
     private MenuCategoryController categoryController;
+    private int lastExpandedPosition = -1;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -56,8 +57,10 @@ public class MenuFoodFragment extends Fragment {
             protected void onRightMenuClick(MenuEntity menu) {
                 Bundle bundle = new Bundle();
                 bundle.putInt("menu-id", menu.getId());
+                bundle.putString("title", menu.getCategory());
 
-                Intent intent = new Intent(activity, MenuDetailActivity.class);
+                Intent intent = new Intent(activity, FormActivity.class);
+                intent.putExtra("content", FormActivity.DETAIL_MENU);
                 intent.putExtras(bundle);
                 startActivity(intent);
             }
@@ -66,8 +69,10 @@ public class MenuFoodFragment extends Fragment {
             protected void onLeftMenuClick(MenuEntity menu) {
                 Bundle bundle = new Bundle();
                 bundle.putInt("menu-id", menu.getId());
+                bundle.putString("title", menu.getCategory());
 
-                Intent intent = new Intent(activity, MenuDetailActivity.class);
+                Intent intent = new Intent(activity, FormActivity.class);
+                intent.putExtra("content", FormActivity.DETAIL_MENU);
                 intent.putExtras(bundle);
                 startActivity(intent);
             }
@@ -81,6 +86,16 @@ public class MenuFoodFragment extends Fragment {
         ButterKnife.bind(this, view);
 
         menuList.setAdapter(adapter);
+        menuList.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
+            @Override
+            public void onGroupExpand(int groupPosition) {
+                if (lastExpandedPosition != -1
+                        && groupPosition != lastExpandedPosition) {
+                    menuList.collapseGroup(lastExpandedPosition);
+                }
+                lastExpandedPosition = groupPosition;
+            }
+        });
 
         fetchingData();
 
@@ -91,8 +106,8 @@ public class MenuFoodFragment extends Fragment {
         listDataHeader.clear();
         listDataChild.clear();
 
-        TBaseProgress progress = new TBaseProgress(activity);
-        progress.show();
+        LoadingDialog progress = new LoadingDialog();
+        progress.show(getFragmentManager(), null);
 
         List<MenuCategoryEntity> groups = categoryController.getMenuCategoryFood();
         for (MenuCategoryEntity group : groups) {
@@ -121,10 +136,7 @@ public class MenuFoodFragment extends Fragment {
             }
             adapter.notifyDataSetChanged();
         }
-
-        if (progress.isShowing()) {
-            progress.dismiss();
-        }
+        progress.dismissAllowingStateLoss();
 
 //        List<MenuCategoryEntity> categories = menuCategoryController.getMenuCategories();
 //        for (MenuCategoryEntity category : categories) {

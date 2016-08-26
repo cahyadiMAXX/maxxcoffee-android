@@ -1,13 +1,24 @@
 package com.maxxcoffee.mobile.activity;
 
+import android.app.Activity;
+import android.content.ComponentName;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentSender;
+import android.content.pm.PackageManager;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Process;
+import android.provider.Settings;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -18,15 +29,24 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.zxing.integration.android.IntentIntegrator;
-import com.google.zxing.integration.android.IntentResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.LocationSettingsResult;
+import com.google.android.gms.location.LocationSettingsStates;
+import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.maxxcoffee.mobile.R;
 import com.maxxcoffee.mobile.adapter.DrawerAdapter;
 import com.maxxcoffee.mobile.database.DatabaseConfig;
+import com.maxxcoffee.mobile.fragment.AboutFragment;
+import com.maxxcoffee.mobile.fragment.CardHistoryFragment;
 import com.maxxcoffee.mobile.fragment.CredentialFragment;
 import com.maxxcoffee.mobile.fragment.EventFragment;
 import com.maxxcoffee.mobile.fragment.FaqFragment;
-import com.maxxcoffee.mobile.fragment.HistoryFragment;
 import com.maxxcoffee.mobile.fragment.LoginFragment;
 import com.maxxcoffee.mobile.fragment.LostCardFragment;
 import com.maxxcoffee.mobile.fragment.MyCardFragment;
@@ -34,17 +54,18 @@ import com.maxxcoffee.mobile.fragment.HomeFragment;
 import com.maxxcoffee.mobile.fragment.MenuFragment;
 import com.maxxcoffee.mobile.fragment.ProfileFragment;
 import com.maxxcoffee.mobile.fragment.PromoFragment;
-import com.maxxcoffee.mobile.fragment.ReportFragment;
+import com.maxxcoffee.mobile.fragment.ContactUsFragment;
 import com.maxxcoffee.mobile.fragment.RewardFragment;
 import com.maxxcoffee.mobile.fragment.SignUpFragment;
 import com.maxxcoffee.mobile.fragment.SignUpInfoFragment;
 import com.maxxcoffee.mobile.fragment.StoreFragment;
 import com.maxxcoffee.mobile.fragment.TosFragment;
-import com.maxxcoffee.mobile.fragment.dialog.CardRenameDialog;
+import com.maxxcoffee.mobile.fragment.TransferBalanceFragment;
 import com.maxxcoffee.mobile.fragment.dialog.OptionDialog;
 import com.maxxcoffee.mobile.model.ChildDrawerModel;
 import com.maxxcoffee.mobile.model.ParentDrawerModel;
 import com.maxxcoffee.mobile.util.Constant;
+import com.maxxcoffee.mobile.util.PermissionUtil;
 import com.maxxcoffee.mobile.util.PreferenceManager;
 import com.maxxcoffee.mobile.util.Utils;
 
@@ -57,6 +78,9 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class MainActivity extends FragmentActivity {
+
+    private static String[] PERMISSIONS_LOCATION = {android.Manifest.permission.ACCESS_FINE_LOCATION,
+            android.Manifest.permission.ACCESS_COARSE_LOCATION};
 
     public static final int HOME = 1000;
     public static final int MENU = 1001;
@@ -83,6 +107,7 @@ public class MainActivity extends FragmentActivity {
     public static final int SIGNUP = 1022;
     public static final int SIGNUP_INFO = 1023;
     public static final int EVENT = 1024;
+    public static final int ABOUT = 1025;
 
     @Bind(R.id.drawer_layout)
     DrawerLayout drawer;
@@ -92,6 +117,8 @@ public class MainActivity extends FragmentActivity {
     RelativeLayout toolbarLayout;
     @Bind(R.id.root_layout)
     LinearLayout rootLayout;
+    @Bind(R.id.navbar_background)
+    LinearLayout navbarBg;
     @Bind(R.id.title)
     TextView title;
     @Bind(R.id.hamburger)
@@ -101,6 +128,9 @@ public class MainActivity extends FragmentActivity {
     private HashMap<ParentDrawerModel, List<ChildDrawerModel>> listDataChild;
     private DrawerAdapter adapter;
     private Integer selectedPage;
+    private int lastExpandedPosition = -1;
+    private GoogleApiClient googleApiClient;
+    private boolean settingRequested;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,6 +138,13 @@ public class MainActivity extends FragmentActivity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+        boolean showTutorial = PreferenceManager.getBool(this, Constant.PREFERENCE_TUTORIAL_SKIP, false);
+        if (!showTutorial) {
+            Intent intentTutorial = new Intent(this, TutorialActivity.class);
+            startActivity(intentTutorial);
+        }
+
         setContentView(R.layout.activity_main);
 
         ButterKnife.bind(this);
@@ -121,6 +158,16 @@ public class MainActivity extends FragmentActivity {
 
         adapter = new DrawerAdapter(this, listDataHeader, listDataChild);
         navigationList.setAdapter(adapter);
+        navigationList.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
+            @Override
+            public void onGroupExpand(int groupPosition) {
+                if (lastExpandedPosition != -1
+                        && groupPosition != lastExpandedPosition) {
+                    navigationList.collapseGroup(lastExpandedPosition);
+                }
+                lastExpandedPosition = groupPosition;
+            }
+        });
         navigationList.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
             @Override
             public boolean onGroupClick(ExpandableListView expandableListView, View view, int groupPosition, long id) {
@@ -156,21 +203,22 @@ public class MainActivity extends FragmentActivity {
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.content);
         int mDayPart = Utils.getDayPart();
         if (fragment instanceof HomeFragment) {
-//            if (mDayPart == Utils.MORNING) {
-//                rootLayout.setBackgroundResource(R.drawable.bg_landing);
-//            } else if (mDayPart == Utils.AFTERNOON) {
-//                rootLayout.setBackgroundResource(R.drawable.bg_landing);
-//            } else if (mDayPart == Utils.EVENING) {
-//                rootLayout.setBackgroundResource(R.drawable.bg_landing);
-//            } else if (mDayPart == Utils.NIGHT) {
-//                rootLayout.setBackgroundResource(R.drawable.bg_landing);
-//            }
-            rootLayout.setBackgroundResource(R.drawable.bg_landing);
-        } else if (fragment instanceof LoginFragment
-                || fragment instanceof SignUpInfoFragment
-                || fragment instanceof SignUpFragment) {
-            rootLayout.setBackgroundResource(R.drawable.bg_navbar);
+            if (mDayPart == Utils.MORNING) {
+                setRootBackground(R.drawable.bg_morning);
+                setNavbarBackground(R.drawable.bg_morning_navbar);
+            } else if (mDayPart == Utils.AFTERNOON) {
+                setRootBackground(R.drawable.bg_afternoon);
+                setNavbarBackground(R.drawable.bg_afternoon_navbar);
+            } else if (mDayPart == Utils.EVENING) {
+                setRootBackground(R.drawable.bg_evening);
+                setNavbarBackground(R.drawable.bg_evening_navbar);
+            }
         }
+//        else if (fragment instanceof LoginFragment
+//                || fragment instanceof SignUpInfoFragment
+//                || fragment instanceof SignUpFragment) {
+//            rootLayout.setBackgroundResource(R.drawable.bg_navbar);
+//        }
     }
 
     @OnClick(R.id.hamburger)
@@ -186,27 +234,38 @@ public class MainActivity extends FragmentActivity {
             drawer.closeDrawer(GravityCompat.START);
         } else if (fragment instanceof HomeFragment) {
             exitDialog();
-        } else if (fragment instanceof StoreFragment
-                || fragment instanceof MenuFragment
+        } else if (fragment instanceof MenuFragment
+                || fragment instanceof StoreFragment
                 || fragment instanceof PromoFragment
+                || fragment instanceof EventFragment
+
                 || fragment instanceof MyCardFragment
+                || fragment instanceof TransferBalanceFragment
+                || fragment instanceof CardHistoryFragment
+                || fragment instanceof LostCardFragment
+
+                || fragment instanceof AboutFragment
                 || fragment instanceof FaqFragment
-                || fragment instanceof ProfileFragment
                 || fragment instanceof TosFragment
+                || fragment instanceof ContactUsFragment
+                || fragment instanceof ProfileFragment
+
                 || fragment instanceof RewardFragment
                 || fragment instanceof CredentialFragment
-                || fragment instanceof ReportFragment) {
-            switchFragment(HOME);
-        } else if (fragment instanceof SignUpFragment
+                || fragment instanceof SignUpFragment
                 || fragment instanceof LoginFragment) {
-            boolean fromLogin = PreferenceManager.getBool(this, Constant.PREFERENCE_ROUTE_FROM_LOGIN, false);
-            switchFragment(fromLogin ? LOGIN : CREDENTIAL);
-            if (fromLogin)
-                PreferenceManager.remove(this, Constant.PREFERENCE_ROUTE_FROM_LOGIN);
-        } else {
+            switchFragment(HOME);
+        }
+//        else if (fragment instanceof SignUpFragment
+//                || fragment instanceof LoginFragment) {
+//            boolean fromLogin = PreferenceManager.getBool(this, Constant.PREFERENCE_ROUTE_FROM_LOGIN, false);
+//            switchFragment(fromLogin ? LOGIN : CREDENTIAL);
+//            if (fromLogin)
+//                PreferenceManager.remove(this, Constant.PREFERENCE_ROUTE_FROM_LOGIN);
+//        }
+        else {
             super.onBackPressed();
         }
-
     }
 
     private void exitDialog() {
@@ -217,7 +276,9 @@ public class MainActivity extends FragmentActivity {
         OptionDialog optionDialog = new OptionDialog() {
             @Override
             protected void onOk() {
-                System.exit(0);
+                moveTaskToBack(true);
+                Process.killProcess(Process.myPid());
+                System.exit(1);
             }
 
             @Override
@@ -248,13 +309,32 @@ public class MainActivity extends FragmentActivity {
 
     private Fragment getContent(int contentId, Bundle bundle) {
         boolean isLoggedIn = PreferenceManager.getBool(this, Constant.PREFERENCE_LOGGED_IN, false);
+        boolean isSmsVerified = PreferenceManager.getBool(this, Constant.PREFERENCE_SMS_VERIFICATION, false);
+        boolean isEmailVerified = PreferenceManager.getBool(this, Constant.PREFERENCE_EMAIL_VERIFICATION, false);
+
         Fragment fragment = null;
         switch (contentId) {
             case HOME:
                 fragment = new HomeFragment();
                 break;
             case STORE:
-                fragment = new StoreFragment();
+                if (!settingRequested) {
+                    checkSettingApi();
+                } else {
+                    if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                            && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+                        if (ActivityCompat.shouldShowRequestPermissionRationale(this, android.Manifest.permission.ACCESS_FINE_LOCATION) ||
+                                ActivityCompat.shouldShowRequestPermissionRationale(this, android.Manifest.permission.ACCESS_COARSE_LOCATION)) {
+
+                            ActivityCompat.requestPermissions(this, PERMISSIONS_LOCATION, 2);
+                        } else {
+                            ActivityCompat.requestPermissions(this, PERMISSIONS_LOCATION, 2);
+                        }
+                    } else {
+                        fragment = new StoreFragment();
+                    }
+                }
                 break;
             case PROMO:
                 fragment = new PromoFragment();
@@ -265,9 +345,23 @@ public class MainActivity extends FragmentActivity {
             case MENU:
                 fragment = new MenuFragment();
                 break;
+            case ABOUT:
+                fragment = new AboutFragment();
+                break;
             case MY_CARD:
-//                fragment = new MyCardFragment();
-                fragment = isLoggedIn ? new MyCardFragment() : new CredentialFragment();
+                if (isLoggedIn) {
+                    if (isSmsVerified && isEmailVerified) {
+                        fragment = new MyCardFragment();
+                    } else {
+                        Intent intent = new Intent(this, VerificationActivity.class);
+                        intent.putExtra("redirect-fragment", MY_CARD);
+
+                        startActivity(intent);
+                    }
+                } else {
+                    fragment = new CredentialFragment();
+                }
+//                fragment = isLoggedIn ? new MyCardFragment() : new CredentialFragment();
                 break;
 //            case DETAIL_CARD:
 //                fragment = new MyCardDetailFragment();
@@ -279,18 +373,66 @@ public class MainActivity extends FragmentActivity {
                 fragment = new TosFragment();
                 break;
             case CONTACT_US:
-                bundle = new Bundle();
+                if (isLoggedIn) {
+                    if (isSmsVerified && isEmailVerified) {
+                        fragment = new ContactUsFragment();
+                    } else {
+                        Intent intent = new Intent(this, VerificationActivity.class);
+                        intent.putExtra("redirect-fragment", MY_CARD);
+
+                        startActivity(intent);
+                    }
+                } else {
+                    fragment = new CredentialFragment();
+                }
+//                bundle = new Bundle();
 //                fragment = new ReportFragment();
-                fragment = isLoggedIn ? new ReportFragment() : new CredentialFragment();
+//                fragment = isLoggedIn ? new ReportFragment() : new CredentialFragment();
                 break;
             case REPORT_LOST_CARD:
-                fragment = new LostCardFragment();
+//                fragment = new LostCardFragment();
+                if (isLoggedIn) {
+                    if (isSmsVerified && isEmailVerified) {
+                        fragment = new LostCardFragment();
+                    } else {
+                        Intent intent = new Intent(this, VerificationActivity.class);
+                        intent.putExtra("redirect-fragment", MY_CARD);
+
+                        startActivity(intent);
+                    }
+                } else {
+                    fragment = new CredentialFragment();
+                }
                 break;
-//            case CARD_HISTORY:
-//                fragment = new HistoryFragment();
-//                break;
+            case CARD_HISTORY:
+//                fragment = new CardHistoryFragment();
+                if (isLoggedIn) {
+                    if (isSmsVerified && isEmailVerified) {
+                        fragment = new CardHistoryFragment();
+                    } else {
+                        Intent intent = new Intent(this, VerificationActivity.class);
+                        intent.putExtra("redirect-fragment", MY_CARD);
+
+                        startActivity(intent);
+                    }
+                } else {
+                    fragment = new CredentialFragment();
+                }
+                break;
             case REWARD:
-                fragment = new RewardFragment();
+//                fragment = new RewardFragment();
+                if (isLoggedIn) {
+                    if (isSmsVerified && isEmailVerified) {
+                        fragment = new RewardFragment();
+                    } else {
+                        Intent intent = new Intent(this, VerificationActivity.class);
+                        intent.putExtra("redirect-fragment", MY_CARD);
+
+                        startActivity(intent);
+                    }
+                } else {
+                    fragment = new CredentialFragment();
+                }
                 break;
             case CREDENTIAL:
                 fragment = new CredentialFragment();
@@ -307,6 +449,10 @@ public class MainActivity extends FragmentActivity {
             case PROFILE:
                 fragment = isLoggedIn ? new ProfileFragment() : new CredentialFragment();
                 break;
+            case TUTORIAL:
+                Intent intentTutorial = new Intent(this, TutorialActivity.class);
+                startActivity(intentTutorial);
+                break;
             case LOGOUT:
                 logoutNow();
                 break;
@@ -314,7 +460,19 @@ public class MainActivity extends FragmentActivity {
                 Toast.makeText(MainActivity.this, "Feature not available yet", Toast.LENGTH_SHORT).show();
                 break;
             case BALANCE_TRANSFER:
-                Toast.makeText(MainActivity.this, "Feature not available yet", Toast.LENGTH_SHORT).show();
+//                fragment = isLoggedIn ? new TransferBalanceFragment() : new CredentialFragment();
+                if (isLoggedIn) {
+                    if (isSmsVerified && isEmailVerified) {
+                        fragment = new TransferBalanceFragment();
+                    } else {
+                        Intent intent = new Intent(this, VerificationActivity.class);
+                        intent.putExtra("redirect-fragment", MY_CARD);
+
+                        startActivity(intent);
+                    }
+                } else {
+                    fragment = new CredentialFragment();
+                }
                 break;
         }
 
@@ -325,7 +483,49 @@ public class MainActivity extends FragmentActivity {
         return fragment;
     }
 
-    private void logoutNow() {
+    private boolean checkSettingApi() {
+        if (googleApiClient == null) {
+            googleApiClient = new GoogleApiClient.Builder(this)
+                    .addApi(LocationServices.API)
+                    .build();
+            googleApiClient.connect();
+        }
+
+        LocationRequest locationRequest = LocationRequest.create();
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        locationRequest.setInterval(30 * 1000);
+        locationRequest.setFastestInterval(5 * 1000);
+        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
+                .addLocationRequest(locationRequest);
+
+        builder.setAlwaysShow(true);
+
+        PendingResult<LocationSettingsResult> result = LocationServices.SettingsApi.checkLocationSettings(googleApiClient, builder.build());
+        result.setResultCallback(new ResultCallback<LocationSettingsResult>() {
+            @Override
+            public void onResult(@NonNull LocationSettingsResult result) {
+                final Status status = result.getStatus();
+                final LocationSettingsStates state = result.getLocationSettingsStates();
+                switch (status.getStatusCode()) {
+                    case LocationSettingsStatusCodes.SUCCESS:
+                        settingRequested = true;
+                        switchFragment(STORE);
+                        break;
+                    case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
+                        try {
+                            status.startResolutionForResult(MainActivity.this, 1000);
+                        } catch (IntentSender.SendIntentException e) {
+                        }
+                        break;
+                    case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
+                        break;
+                }
+            }
+        });
+        return false;
+    }
+
+    public void logoutNow() {
         PreferenceManager.clearPreference(this);
 //        Database.deleteRealm();
         DatabaseConfig db = new DatabaseConfig(this);
@@ -339,18 +539,30 @@ public class MainActivity extends FragmentActivity {
     }
 
     public void setHeaderColor(boolean transparent) {
-        if (transparent) {
-            rootLayout.setBackgroundColor(getResources().getColor(android.R.color.transparent));
-            hamburger.setImageDrawable(getResources().getDrawable(R.drawable.ic_menu_white));
-        } else {
-            rootLayout.setBackgroundColor(getResources().getColor(R.color.background_cream));
-            hamburger.setImageDrawable(getResources().getDrawable(R.drawable.ic_menu_black));
+        if (rootLayout != null) {
+            if (transparent) {
+                rootLayout.setBackgroundColor(getResources().getColor(android.R.color.transparent));
+                hamburger.setImageDrawable(getResources().getDrawable(R.drawable.ic_menu_white));
+            } else {
+                rootLayout.setBackgroundColor(getResources().getColor(R.color.background_cream));
+                hamburger.setImageDrawable(getResources().getDrawable(R.drawable.ic_menu_black));
+            }
         }
     }
 
     public void setRootBackground(int rootBackground) {
-        if (rootBackground != -999) {
-            rootLayout.setBackgroundResource(rootBackground);
+        if (rootLayout != null) {
+            if (rootBackground != -999) {
+                rootLayout.setBackgroundResource(rootBackground);
+            }
+        }
+    }
+
+    public void setNavbarBackground(int background) {
+        if (navbarBg != null) {
+            if (background != -999) {
+                navbarBg.setBackgroundResource(background);
+            }
         }
     }
 
@@ -395,13 +607,13 @@ public class MainActivity extends FragmentActivity {
         about.setIcon(R.drawable.ic_maxx_small);
 
         ParentDrawerModel profile = new ParentDrawerModel();
-        profile.setId(PROFILE);
-        profile.setName("Profile");
+        profile.setId(isLoggedIn ? PROFILE : SIGNUP);
+        profile.setName(isLoggedIn ? "Profile" : "Sign Up");
         profile.setExpandable(false);
         profile.setIcon(R.drawable.ic_user);
 
         ParentDrawerModel logout = new ParentDrawerModel();
-        logout.setId(isLoggedIn ? LOGOUT : CREDENTIAL);
+        logout.setId(isLoggedIn ? LOGOUT : LOGIN);
         logout.setName(isLoggedIn ? "Logout" : "Login");
         logout.setExpandable(false);
         logout.setIcon(R.drawable.ic_signout);
@@ -480,6 +692,11 @@ public class MainActivity extends FragmentActivity {
         childAbout4.setId(TUTORIAL);
         childAbout4.setName("Tutorial");
 
+
+        ChildDrawerModel childAbout5 = new ChildDrawerModel();
+        childAbout5.setId(ABOUT);
+        childAbout5.setName("About");
+
         //      LIST
         List<ChildDrawerModel> listBrowse = new ArrayList<>();
         listBrowse.add(childBrowse1);
@@ -502,6 +719,7 @@ public class MainActivity extends FragmentActivity {
         listCard.add(childCard5);
 
         List<ChildDrawerModel> listAbout = new ArrayList<>();
+        listAbout.add(childAbout5);
         listAbout.add(childAbout1);
         listAbout.add(childAbout2);
         listAbout.add(childAbout3);
@@ -516,41 +734,33 @@ public class MainActivity extends FragmentActivity {
         adapter.notifyDataSetChanged();
     }
 
-    public void openBarcode() {
-        IntentIntegrator integrator = new IntentIntegrator(this);
-        integrator.setCaptureActivity(AddCardBarcodeActivity.class);
-        integrator.initiateScan();
-    }
-
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
-        if (result != null) {
-            if (result.getContents() == null) {
-                Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
-            } else {
-                Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
-                openRenameCardDialog();
-            }
-        } else {
-            super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case 1000:
+                switch (resultCode) {
+                    case Activity.RESULT_OK:
+//                        startLocationUpdates();
+                        switchFragment(STORE);
+                        break;
+                    case Activity.RESULT_CANCELED:
+                        break;
+                }
+                break;
         }
     }
 
-    private void openRenameCardDialog() {
-        Intent intent = new Intent(this, FormActivity.class);
-        intent.putExtra("content", FormActivity.RENAME_CARD);
-        startActivity(intent);
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 
-//        CardRenameDialog dialog = new CardRenameDialog() {
-//            @Override
-//            protected void onDone() {
-//                dismiss();
-//            }
-//        };
-//
-//        dialog.show(getSupportFragmentManager(), null);
+        if (requestCode == 2) {
+            if (PermissionUtil.verifyPermissions(grantResults)) {
+                switchFragment(STORE);
+            } else {
+                Toast.makeText(this, "Location permission is NOT granted", Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
     }
 }

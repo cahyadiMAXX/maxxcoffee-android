@@ -1,8 +1,14 @@
 package com.maxxcoffee.mobile.fragment;
 
+import android.Manifest;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,17 +18,20 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.maxxcoffee.mobile.R;
+import com.maxxcoffee.mobile.activity.FormActivity;
 import com.maxxcoffee.mobile.activity.MainActivity;
 import com.maxxcoffee.mobile.adapter.StoreAdapter;
+import com.maxxcoffee.mobile.database.controller.ProvinceController;
 import com.maxxcoffee.mobile.database.controller.StoreController;
 import com.maxxcoffee.mobile.database.entity.StoreEntity;
-import com.maxxcoffee.mobile.fragment.dialog.ListDialog;
-import com.maxxcoffee.mobile.fragment.dialog.StoreDialog;
+import com.maxxcoffee.mobile.fragment.dialog.LoadingDialog;
+import com.maxxcoffee.mobile.fragment.dialog.ProvinceListDialog;
 import com.maxxcoffee.mobile.model.response.StoreItemResponseModel;
 import com.maxxcoffee.mobile.task.StoreTask;
-import com.maxxcoffee.mobile.widget.TBaseProgress;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 
 import butterknife.Bind;
@@ -35,16 +44,23 @@ import butterknife.OnItemClick;
  */
 public class OurStoreFragment extends Fragment {
 
+    private static String[] PERMISSIONS_CALL_PHONE = {Manifest.permission.CALL_PHONE};
+
+    @Bind(R.id.swipe)
+    SwipeRefreshLayout swipe;
     @Bind(R.id.recycleview)
     ListView recyclerView;
     @Bind(R.id.search)
     TextView search;
+    @Bind(R.id.empty)
+    TextView empty;
 
     private MainActivity activity;
     private List<StoreEntity> data;
     private List<String> dataProvince;
     private StoreAdapter adapter;
     private StoreController controller;
+    private ProvinceController provinceController;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -52,9 +68,43 @@ public class OurStoreFragment extends Fragment {
         activity = (MainActivity) getActivity();
 
         controller = new StoreController(activity);
+        provinceController = new ProvinceController(activity);
         data = new ArrayList<>();
         dataProvince = new ArrayList<>();
-        adapter = new StoreAdapter(activity, data);
+        adapter = new StoreAdapter(activity, data) {
+            @Override
+            protected void onCall(String phone) {
+                if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+
+                    if (ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.CALL_PHONE)) {
+
+                        ActivityCompat.requestPermissions(activity, PERMISSIONS_CALL_PHONE, 2);
+                    } else {
+                        ActivityCompat.requestPermissions(activity, PERMISSIONS_CALL_PHONE, 2);
+                    }
+                } else {
+                    call(phone);
+                }
+
+            }
+
+            @Override
+            protected void onOpenMap(String lat, String lng, String place) {
+//                String uri = String.format(Locale.ENGLISH, "geo:%s,%s?q=%s,%s($s)", lat, lng, lat, lng);
+                String uri = "geo:" + lat + "," + lng + "?q=" + lat + "," + lng + "(" + place + ")";
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+                getActivity().startActivity(intent);
+            }
+        };
+    }
+
+    private void call(String phone) {
+        if (!phone.equals("") && !phone.equals("TBA") && !phone.equals("N/A")) {
+            Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + phone));
+            startActivity(intent);
+        } else {
+            Toast.makeText(getActivity(), "Phone number not valid", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
@@ -65,6 +115,7 @@ public class OurStoreFragment extends Fragment {
 
         recyclerView.setAdapter(adapter);
 
+        swipe.setEnabled(false);
         getLocalProvince();
         fetchingData();
 
@@ -81,23 +132,33 @@ public class OurStoreFragment extends Fragment {
         bundle.putString("contact", model.getPhone());
         bundle.putString("open", model.getOpen());
         bundle.putString("close", model.getClose());
-        bundle.putString("image", model.getImage());
+        bundle.putString("images", model.getImage());
         bundle.putString("feature-icon", model.getFeature_icon());
         bundle.putString("feature", model.getFeature());
+        bundle.putString("jarak", "-999");
+        bundle.putString("lat", model.getLatitude());
+        bundle.putString("lng", model.getLongitude());
 
-        StoreDialog dialog = new StoreDialog();
-        dialog.setArguments(bundle);
-        dialog.show(getFragmentManager(), null);
+        Intent intent = new Intent(activity, FormActivity.class);
+        intent.putExtra("content", FormActivity.STORE_DETAIL);
+        intent.putExtras(bundle);
+        startActivity(intent);
+
+//        StoreDialog dialog = new StoreDialog();
+//        dialog.setArguments(bundle);
+//        dialog.show(getFragmentManager(), null);
     }
 
     @OnClick(R.id.city_layout)
     public void onCityClick() {
+        Collections.sort(dataProvince);
+        dataProvince.set(0, "ALL");
         String jsonProvince = new Gson().toJson(dataProvince);
 
         Bundle bundle = new Bundle();
         bundle.putString("provinces", jsonProvince);
 
-        ListDialog provinceDialog = new ListDialog() {
+        ProvinceListDialog provinceDialog = new ProvinceListDialog() {
             @Override
             public void onSelectedItem(String item) {
                 search.setText(item);
@@ -110,13 +171,14 @@ public class OurStoreFragment extends Fragment {
     }
 
     private void fetchingData() {
-        final TBaseProgress progress = new TBaseProgress(activity);
-        progress.show();
+        final LoadingDialog progress = new LoadingDialog();
+        progress.show(getFragmentManager(), null);
 
         StoreTask task = new StoreTask(activity) {
             @Override
             public void onSuccess(List<StoreItemResponseModel> responseModel) {
 
+                empty.setVisibility(responseModel.size() == 0 ? View.VISIBLE : View.GONE);
                 for (StoreItemResponseModel storeItem : responseModel) {
                     String jsonFeature = new Gson().toJson(storeItem.getFeature());
                     String jsonFeatureIcon = new Gson().toJson(storeItem.getIcon_feature());
@@ -124,10 +186,10 @@ public class OurStoreFragment extends Fragment {
 
                     StoreEntity store = new StoreEntity();
                     store.setId(storeItem.getId_store());
-                    store.setName(storeItem.getNama_store());
+                    store.setName(storeItem.getNama_store().trim());
                     store.setAddress(storeItem.getAlamat_store());
-                    store.setCity(storeItem.getKota_store());
-                    store.setProvince(storeItem.getProvinsi_store());
+                    store.setCity(storeItem.getKota_store().trim());
+                    store.setProvince(storeItem.getProvinsi_store().trim());
                     store.setIsland(storeItem.getPulau());
                     store.setZipcode(storeItem.getKodepos_store());
                     store.setLatitude(storeItem.getLatitude());
@@ -142,50 +204,107 @@ public class OurStoreFragment extends Fragment {
                     controller.insert(store);
                 }
                 getLocalProvince();
-
-                if (progress.isShowing())
-                    progress.dismiss();
+                progress.dismissAllowingStateLoss();
 
             }
 
             @Override
             public void onFailed() {
-                if (progress.isShowing())
-                    progress.dismiss();
-                Toast.makeText(activity, "Failed to fetching data.", Toast.LENGTH_SHORT).show();
+                progress.dismissAllowingStateLoss();
+                Toast.makeText(activity, "Failed to fetch data.", Toast.LENGTH_SHORT).show();
             }
         };
         task.execute();
     }
 
-    public void getLocalStore(String province) {
-        TBaseProgress progress = new TBaseProgress(activity);
-        progress.show();
+//    private void fetchingProvince() {
+//        final TBaseProgress progress = new TBaseProgress(activity);
+//        progress.show();
+//
+//        ProvinceTask task = new ProvinceTask(activity) {
+//            @Override
+//            public void onSuccess(String json) {
+//                getLocalProvince();
+//
+//                    progress.dismiss();
+//            }
+//
+//            @Override
+//            public void onFailed() {
+//
+//                    progress.dismiss();
+//                Toast.makeText(activity, "Failed to fetching province data.", Toast.LENGTH_SHORT).show();
+//            }
+//        };
+//        task.execute();
+//    }
 
-        List<StoreEntity> stores = controller.getStores(province);
+    public void getLocalStore(String province) {
+        List<StoreEntity> stores = new ArrayList<>();
+        LoadingDialog progress = new LoadingDialog();
+        progress.show(getFragmentManager(), null);
+
+        if (province.equalsIgnoreCase("all")) {
+            stores = controller.getStores();
+        } else {
+            stores = controller.getStores(province);
+        }
+
         if (stores.size() > 0)
             data.clear();
 
         data.addAll(stores);
         adapter.notifyDataSetInvalidated();
-
-        if (progress.isShowing())
-            progress.dismiss();
+        progress.dismissAllowingStateLoss();
     }
 
+//    public void getLocalProvince() {
+//        List<ProvinceEntity> cities = provinceController.getCities();
+//
+//        String firstProvince = "";
+//        for (ProvinceEntity city : cities) {
+//            if (firstProvince.equals(""))
+//                firstProvince = city.getName();
+//            dataProvince.add(city.getName());
+//        }
+//        search.setText(firstProvince);
+//        getLocalStore(firstProvince);
+//    }
+
     public void getLocalProvince() {
-        String firstProvince = "";
+        String firstProvince = "DKI Jakarta";
+        List<String> tempProvince = new ArrayList<>();
         List<StoreEntity> data = controller.getStoreProvices();
         if (data.size() > 0)
             dataProvince.clear();
 
         for (StoreEntity store : data) {
-            if (firstProvince.equalsIgnoreCase(""))
-                firstProvince = store.getProvince();
-            dataProvince.add(store.getProvince());
+            tempProvince.add(store.getProvince().trim());
         }
+
+        dataProvince = removeDuplicates(tempProvince);
 
         search.setText(firstProvince);
         getLocalStore(firstProvince);
+    }
+
+    private ArrayList<String> removeDuplicates(List<String> list) {
+
+        // Store unique items in result.
+        ArrayList<String> result = new ArrayList<>();
+
+        // Record encountered Strings in HashSet.
+        HashSet<String> set = new HashSet<>();
+
+        // Loop over argument list.
+        for (String item : list) {
+
+            // If String is not in set, add it to the list and the set.
+            if (!set.contains(item)) {
+                result.add(item);
+                set.add(item);
+            }
+        }
+        return result;
     }
 }

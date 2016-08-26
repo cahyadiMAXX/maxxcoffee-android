@@ -47,6 +47,7 @@
             </LinearLayout>
 
             <RelativeLayout
+                android:id="@+id/start_period_layout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
@@ -61,6 +62,7 @@
                     android:src="@drawable/ic_date_black" />
 
                 <com.maxxcoffee.mobile.widget.textview.TextViewLatoRegular
+                    android:id="@+id/periode_start"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
@@ -102,6 +104,7 @@
             </LinearLayout>
 
             <RelativeLayout
+                android:id="@+id/end_periode_layout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
@@ -116,6 +119,7 @@
                     android:src="@drawable/ic_date_black" />
 
                 <com.maxxcoffee.mobile.widget.textview.TextViewLatoRegular
+                    android:id="@+id/periode_end"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
@@ -157,6 +161,7 @@
             </LinearLayout>
 
             <RelativeLayout
+                android:id="@+id/card_layout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
@@ -171,6 +176,7 @@
                     android:src="@drawable/ic_arrow_down_black" />
 
                 <com.maxxcoffee.mobile.widget.textview.TextViewLatoRegular
+                    android:id="@+id/card"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
@@ -182,10 +188,24 @@
         </RelativeLayout>
     </LinearLayout>
 
+    <com.maxxcoffee.mobile.widget.button.ButtonLatoRegular
+        android:id="@+id/search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:background="@drawable/button_selector"
+        android:text="Search History"
+        android:textColor="@android:color/white"
+        android:textSize="14sp" />
+
     <LinearLayout
+        android:id="@+id/history_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="gone">
 
         <android.support.design.widget.AppBarLayout
             android:layout_width="match_parent"
@@ -197,7 +217,7 @@
                 style="@style/ViewPagerStyle"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                app:tabGravity="fill"
+                app:tabGravity="center"
                 app:tabMode="fixed" />
         </android.support.design.widget.AppBarLayout>
 

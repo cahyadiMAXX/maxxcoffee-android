@@ -13,19 +13,16 @@ import com.google.gson.Gson;
 import com.maxxcoffee.mobile.R;
 import com.maxxcoffee.mobile.activity.MainActivity;
 import com.maxxcoffee.mobile.adapter.MenuPagerAdapter;
-import com.maxxcoffee.mobile.adapter.StorePagerAdapter;
-import com.maxxcoffee.mobile.api.ApiManager;
 import com.maxxcoffee.mobile.database.controller.MenuCategoryController;
 import com.maxxcoffee.mobile.database.controller.MenuController;
 import com.maxxcoffee.mobile.database.entity.MenuCategoryEntity;
 import com.maxxcoffee.mobile.database.entity.MenuEntity;
+import com.maxxcoffee.mobile.fragment.dialog.LoadingDialog;
 import com.maxxcoffee.mobile.model.response.MenuItemResponseModel;
 import com.maxxcoffee.mobile.task.MenuTask;
 import com.maxxcoffee.mobile.util.Constant;
 import com.maxxcoffee.mobile.util.PreferenceManager;
-import com.maxxcoffee.mobile.widget.TBaseProgress;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -75,8 +72,8 @@ public class MenuFragment extends Fragment {
     }
 
     private void fetchingData() {
-        final TBaseProgress progress = new TBaseProgress(activity);
-        progress.show();
+        final LoadingDialog progress = new LoadingDialog();
+        progress.show(getFragmentManager(), null);
 
         MenuTask task = new MenuTask(activity) {
             @Override
@@ -132,16 +129,14 @@ public class MenuFragment extends Fragment {
                         }
                     });
                 }
-
-                if (progress.isShowing())
-                    progress.dismiss();
+                progress.dismissAllowingStateLoss();
             }
 
             @Override
             public void onFailed() {
-                if (progress.isShowing())
-                    progress.dismiss();
-                Toast.makeText(activity, "Failed to fetching data.", Toast.LENGTH_SHORT).show();
+
+                progress.dismissAllowingStateLoss();
+                Toast.makeText(activity, "Failed to fetch data.", Toast.LENGTH_SHORT).show();
             }
         };
         task.execute();

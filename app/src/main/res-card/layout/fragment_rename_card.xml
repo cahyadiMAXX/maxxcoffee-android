@@ -7,12 +7,48 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <com.maxxcoffee.mobile.widget.textview.TextViewLatoRegular
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:text="You Card Number"
+            android:textColor="@android:color/black"
+            android:textSize="14sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:background="@android:color/white">
+
+            <com.maxxcoffee.mobile.widget.edittext.EditTextLatoRegular
+                android:id="@+id/cardNo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:gravity="center"
+                android:hint="Input Card Number"
+                android:inputType="numberSigned"
+                android:padding="14dp"
+                android:textColor="@android:color/black"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:orientation="vertical">
 
         <com.maxxcoffee.mobile.widget.textview.TextViewLatoRegular
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:gravity="center"
             android:text="Please rename your new card or"
             android:textColor="@android:color/black"
@@ -21,7 +57,6 @@
         <com.maxxcoffee.mobile.widget.textview.TextViewLatoRegular
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:gravity="center"
             android:text="use default name below"
             android:textColor="@android:color/black"
@@ -41,8 +76,9 @@
             android:background="@android:color/transparent"
             android:gravity="center"
             android:hint="MY CARD #1"
+            android:inputType="textCapWords"
             android:padding="14dp"
-            android:textColor="@android:color/darker_gray"
+            android:textColor="@android:color/black"
             android:textSize="14sp" />
     </LinearLayout>
 
@@ -53,7 +89,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:background="@drawable/button_selector"
-        android:text="Done"
+        android:text="Submit"
         android:textColor="@android:color/white"
         android:textSize="14sp" />
 </LinearLayout>

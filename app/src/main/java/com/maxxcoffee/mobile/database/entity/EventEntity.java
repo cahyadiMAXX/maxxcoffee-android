@@ -11,135 +11,156 @@ import com.j256.ormlite.table.DatabaseTable;
 public class EventEntity {
 
     @DatabaseField(id = true)
-    Integer id;
+    private int id_event;
 
     @DatabaseField
-    Integer store_id;
+    private String nama_event;
 
     @DatabaseField
-    String event_name;
+    private String nama_lokasi;
 
     @DatabaseField
-    String store_name;
+    private String alamat_lokasi;
 
     @DatabaseField
-    String location;
+    private String no_telp;
 
     @DatabaseField
-    String date_start;
+    private String latitude;
 
     @DatabaseField
-    String date_end;
+    private String longitude;
 
     @DatabaseField
-    String time_start;
+    private String tanggal_start;
 
     @DatabaseField
-    String time_end;
+    private String tanggal_end;
 
     @DatabaseField
-    String description;
+    private String waktu_start;
 
     @DatabaseField
-    String image;
+    private String waktu_end;
 
     @DatabaseField
-    String ls_image;
+    private String deskripsi;
 
+    @DatabaseField
+    private String gambar;
 
-    public Integer getId() {
-        return id;
+    @DatabaseField
+    private String ls_gambar;
+
+    public int getId_event() {
+        return id_event;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setId_event(int id_event) {
+        this.id_event = id_event;
     }
 
-    public Integer getStore_id() {
-        return store_id;
+    public String getNama_event() {
+        return nama_event;
     }
 
-    public void setStore_id(Integer store_id) {
-        this.store_id = store_id;
+    public void setNama_event(String nama_event) {
+        this.nama_event = nama_event;
     }
 
-    public String getEvent_name() {
-        return event_name;
+    public String getNama_lokasi() {
+        return nama_lokasi;
     }
 
-    public void setEvent_name(String event_name) {
-        this.event_name = event_name;
+    public void setNama_lokasi(String nama_lokasi) {
+        this.nama_lokasi = nama_lokasi;
     }
 
-    public String getStore_name() {
-        return store_name;
+    public String getAlamat_lokasi() {
+        return alamat_lokasi;
     }
 
-    public void setStore_name(String store_name) {
-        this.store_name = store_name;
+    public void setAlamat_lokasi(String alamat_lokasi) {
+        this.alamat_lokasi = alamat_lokasi;
     }
 
-    public String getLocation() {
-        return location;
+    public String getNo_telp() {
+        return no_telp;
     }
 
-    public void setLocation(String location) {
-        this.location = location;
+    public void setNo_telp(String no_telp) {
+        this.no_telp = no_telp;
     }
 
-    public String getDate_start() {
-        return date_start;
+    public String getLatitude() {
+        return latitude;
     }
 
-    public void setDate_start(String date_start) {
-        this.date_start = date_start;
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
     }
 
-    public String getDate_end() {
-        return date_end;
+    public String getLongitude() {
+        return longitude;
     }
 
-    public void setDate_end(String date_end) {
-        this.date_end = date_end;
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
     }
 
-    public String getTime_start() {
-        return time_start;
+    public String getTanggal_start() {
+        return tanggal_start;
     }
 
-    public void setTime_start(String time_start) {
-        this.time_start = time_start;
+    public void setTanggal_start(String tanggal_start) {
+        this.tanggal_start = tanggal_start;
     }
 
-    public String getTime_end() {
-        return time_end;
+    public String getTanggal_end() {
+        return tanggal_end;
     }
 
-    public void setTime_end(String time_end) {
-        this.time_end = time_end;
+    public void setTanggal_end(String tanggal_end) {
+        this.tanggal_end = tanggal_end;
     }
 
-    public String getDescription() {
-        return description;
+    public String getWaktu_start() {
+        return waktu_start;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setWaktu_start(String waktu_start) {
+        this.waktu_start = waktu_start;
     }
 
-    public String getImage() {
-        return image;
+    public String getWaktu_end() {
+        return waktu_end;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setWaktu_end(String waktu_end) {
+        this.waktu_end = waktu_end;
     }
 
-    public String getLs_image() {
-        return ls_image;
+    public String getDeskripsi() {
+        return deskripsi;
     }
 
-    public void setLs_image(String ls_image) {
-        this.ls_image = ls_image;
+    public void setDeskripsi(String deskripsi) {
+        this.deskripsi = deskripsi;
+    }
+
+    public String getGambar() {
+        return gambar;
+    }
+
+    public void setGambar(String gambar) {
+        this.gambar = gambar;
+    }
+
+    public String getLs_gambar() {
+        return ls_gambar;
+    }
+
+    public void setLs_gambar(String ls_gambar) {
+        this.ls_gambar = ls_gambar;
     }
 }

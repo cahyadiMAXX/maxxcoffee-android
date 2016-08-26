@@ -15,7 +15,8 @@ public class ButtonLatoRegular extends Button {
 
     public ButtonLatoRegular(Context context, AttributeSet attrs) {
         super(context, attrs);
-        Typeface type = Typeface.createFromAsset(context.getAssets(), "font/Lato-Regular.ttf");
+        Typeface type = Typeface.createFromAsset(context.getAssets(), "font/HelveticaNeueLTPro-Lt.otf");
+//        Typeface type = Typeface.createFromAsset(context.getAssets(), "font/Lato-Regular.ttf");
         setTypeface(type);
     }
 

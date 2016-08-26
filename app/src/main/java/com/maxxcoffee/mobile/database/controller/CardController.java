@@ -25,29 +25,6 @@ public class CardController {
         }
     }
 
-//    public void insert(CardModel model) {
-//        CardEntity entity = null;
-//        if (model.getId() == null) {
-//            entity = new CardEntity();
-//        } else {
-//            entity = getCard(model.getId());
-//            if (entity == null) {
-//                entity = new CardEntity();
-//                entity.setId(model.getId());
-//            }
-//        }
-//        entity.setName(model.getName());
-//        entity.setNumber(model.getNumber());
-//        entity.setImage(model.getImage());
-//        entity.setDistribution_id(model.getDistribution_id());
-//        entity.setCard_pin(model.getCard_pin());
-//        entity.setBalance(model.getBalance());
-//        entity.setPoint(model.getPoint());
-//        entity.setExpired_date(model.getExpired_date());
-//
-//        insertOrUpdate(entity);
-//    }
-
     public void insert(CardEntity entity) {
         insertOrUpdate(entity);
     }
@@ -60,7 +37,23 @@ public class CardController {
         }
     }
 
-    public CardEntity getCard(String id) {
+    public CardEntity getCardByDist(String id) {
+        List<CardEntity> data = new ArrayList<>();
+        try {
+            Dao<CardEntity, Integer> dao = database.getCardDao();
+            QueryBuilder<CardEntity, Integer> query = dao.queryBuilder();
+            query.where().eq("distribution_id", id);
+
+            data = query.query();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        if (data.size() > 0) {
+            return data.get(0);
+        }
+        return null;
+    }
+    public CardEntity getCardById(String id) {
         List<CardEntity> data = new ArrayList<>();
         try {
             Dao<CardEntity, Integer> dao = database.getCardDao();
@@ -88,5 +81,9 @@ public class CardController {
             e.printStackTrace();
         }
         return data;
+    }
+
+    public void clear() {
+        database.clearTable(CardEntity.class);
     }
 }

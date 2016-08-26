@@ -13,16 +13,16 @@
         android:layout_height="match_parent" />
 
     <LinearLayout
+        android:id="@+id/navbar_background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:background="@drawable/bg_navbar"
         android:fitsSystemWindows="false"
         android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="1dp"
+            android:layout_height="80dp"
             android:layout_marginBottom="8dp"
             android:background="@android:color/transparent" />
 
@@ -31,9 +31,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@android:color/transparent"
-            android:groupIndicator="@null"
             android:choiceMode="singleChoice"
             android:divider="@android:color/transparent"
+            android:groupIndicator="@null"
             android:listSelector="@android:color/transparent" />
     </LinearLayout>
 </android.support.v4.widget.DrawerLayout>

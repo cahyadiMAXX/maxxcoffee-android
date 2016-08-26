@@ -41,7 +41,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/button_selector"
-                android:text="Report"
+                android:text="Submit"
                 android:textColor="@android:color/white"
                 android:textSize="14sp" />
         </LinearLayout>
@@ -131,7 +131,8 @@
             <ScrollView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/background_outline_gray">
+                android:background="@drawable/background_outline_gray"
+                android:fillViewport="true">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -145,6 +146,7 @@
                         android:background="@android:color/transparent"
                         android:gravity="start"
                         android:inputType="textCapSentences|textMultiLine"
+                        android:lineSpacingExtra="5dp"
                         android:padding="16dp"
                         android:textColor="@android:color/black"
                         android:textSize="14sp" />

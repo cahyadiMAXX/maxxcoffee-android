@@ -58,7 +58,6 @@
                 android:gravity="center"
                 android:paddingBottom="16dp"
                 android:paddingTop="16dp"
-                android:text="Card A"
                 android:textColor="@android:color/darker_gray"
                 android:textSize="16sp" />
 
@@ -66,7 +65,8 @@
                 android:id="@+id/layout_card_2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:visibility="gone">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -81,7 +81,6 @@
                     android:gravity="center"
                     android:paddingBottom="16dp"
                     android:paddingTop="16dp"
-                    android:text="Card B"
                     android:textColor="@android:color/darker_gray"
                     android:textSize="16sp" />
             </LinearLayout>
@@ -90,7 +89,8 @@
                 android:id="@+id/layout_card_3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:visibility="gone">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -105,7 +105,6 @@
                     android:gravity="center"
                     android:paddingBottom="16dp"
                     android:paddingTop="16dp"
-                    android:text="Card C"
                     android:textColor="@android:color/darker_gray"
                     android:textSize="16sp" />
             </LinearLayout>

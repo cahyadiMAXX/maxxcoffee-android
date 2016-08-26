@@ -1,5 +1,6 @@
 package com.maxxcoffee.mobile.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -11,21 +12,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.maxxcoffee.mobile.R;
+import com.maxxcoffee.mobile.activity.FormActivity;
 import com.maxxcoffee.mobile.activity.MainActivity;
 import com.maxxcoffee.mobile.adapter.EventAdapter;
-import com.maxxcoffee.mobile.adapter.PromoAdapter;
 import com.maxxcoffee.mobile.database.controller.EventController;
-import com.maxxcoffee.mobile.database.controller.PromoController;
 import com.maxxcoffee.mobile.database.entity.EventEntity;
-import com.maxxcoffee.mobile.database.entity.PromoEntity;
-import com.maxxcoffee.mobile.fragment.dialog.EventDialog;
-import com.maxxcoffee.mobile.fragment.dialog.PromoDialog;
+import com.maxxcoffee.mobile.fragment.dialog.LoadingDialog;
 import com.maxxcoffee.mobile.model.response.EventItemResponseModel;
-import com.maxxcoffee.mobile.model.response.PromoItemResponseModel;
 import com.maxxcoffee.mobile.task.EventTask;
-import com.maxxcoffee.mobile.task.PromoTask;
 import com.maxxcoffee.mobile.widget.CustomLinearLayoutManager;
-import com.maxxcoffee.mobile.widget.TBaseProgress;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,16 +55,24 @@ public class EventFragment extends Fragment {
         adapter = new EventAdapter(activity, data) {
             @Override
             public void onCardClick(EventEntity model) {
-                Bundle bundle = new Bundle();
-                bundle.putString("title", model.getEvent_name());
-                bundle.putString("date", model.getDescription());
-                bundle.putString("store", model.getStore_name());
-                bundle.putString("location", model.getDescription());
-                bundle.putString("image", model.getImage());
+//                Bundle bundle = new Bundle();
+//                bundle.putString("title", model.getNama_event());
+//                bundle.putString("date", model.get());
+//                bundle.putString("store", model.getStore_name());
+//                bundle.putString("location", model.getDescription());
+//                bundle.putString("image", model.getImage());
+//
+//                EventDialog dialog = new EventDialog();
+//                dialog.setArguments(bundle);
+//                dialog.show(getFragmentManager(), null);
 
-                EventDialog dialog = new EventDialog();
-                dialog.setArguments(bundle);
-                dialog.show(getFragmentManager(), null);
+                Bundle bundle = new Bundle();
+                bundle.putInt("event-id", model.getId_event());
+
+                Intent intent = new Intent(activity, FormActivity.class);
+                intent.putExtra("content", FormActivity.EVENT_DETAIL);
+                intent.putExtras(bundle);
+                startActivity(intent);
             }
         };
     }
@@ -94,47 +97,45 @@ public class EventFragment extends Fragment {
     }
 
     private void fetchingData() {
-        final TBaseProgress progress = new TBaseProgress(activity);
-        progress.show();
+        final LoadingDialog progress = new LoadingDialog();
+        progress.show(getFragmentManager(), null);
 
         EventTask task = new EventTask(activity) {
             @Override
             public void onSuccess(List<EventItemResponseModel> responseModel) {
                 for (EventItemResponseModel event : responseModel) {
                     EventEntity entity = new EventEntity();
-                    entity.setId(event.getId_event());
-                    entity.setStore_id(event.getId_store());
-                    entity.setEvent_name(event.getNama_event());
-                    entity.setStore_name(event.getNama_store());
-                    entity.setLocation(event.getLocation());
-                    entity.setDate_start(event.getTanggal_start());
-                    entity.setDate_end(event.getTanggal_end());
-                    entity.setTime_start(event.getWaktu_start());
-                    entity.setTime_end(event.getWaktu_end());
-                    entity.setDescription(event.getDeskripsi());
-                    entity.setImage(event.getGambar());
-                    entity.setLs_image(event.getLs_gambar());
+                    entity.setId_event(event.getId_event());
+                    entity.setNama_event(event.getNama_event());
+                    entity.setNama_lokasi(event.getNama_lokasi());
+                    entity.setAlamat_lokasi(event.getAlamat_lokasi());
+                    entity.setNo_telp(event.getNo_telp());
+                    entity.setLatitude(event.getLatitude());
+                    entity.setLongitude(event.getLongitude());
+                    entity.setTanggal_start(event.getTanggal_start());
+                    entity.setTanggal_end(event.getTanggal_end());
+                    entity.setWaktu_start(event.getWaktu_start());
+                    entity.setWaktu_end(event.getWaktu_end());
+                    entity.setDeskripsi(event.getDeskripsi());
+                    entity.setGambar(event.getGambar());
+                    entity.setLs_gambar(event.getLs_gambar());
                     eventController.insert(entity);
                 }
 
                 getLocalPromo();
-
-                if (progress.isShowing())
-                    progress.dismiss();
+                progress.dismissAllowingStateLoss();
             }
 
             @Override
             public void onEmpty() {
                 emptyCard.setVisibility(View.VISIBLE);
-                if (progress.isShowing())
-                    progress.dismiss();
+                progress.dismissAllowingStateLoss();
             }
 
             @Override
             public void onFailed() {
-                if (progress.isShowing())
-                    progress.dismiss();
-                Toast.makeText(activity, "Failed to fetching data.", Toast.LENGTH_SHORT).show();
+                progress.dismissAllowingStateLoss();
+                Toast.makeText(activity, "Failed to fetch data.", Toast.LENGTH_SHORT).show();
             }
         };
         task.execute();

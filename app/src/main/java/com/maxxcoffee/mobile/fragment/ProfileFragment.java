@@ -16,12 +16,12 @@ import com.maxxcoffee.mobile.database.controller.CardController;
 import com.maxxcoffee.mobile.database.controller.ProfileController;
 import com.maxxcoffee.mobile.database.entity.CardEntity;
 import com.maxxcoffee.mobile.database.entity.ProfileEntity;
+import com.maxxcoffee.mobile.fragment.dialog.LoadingDialog;
 import com.maxxcoffee.mobile.model.response.CardItemResponseModel;
 import com.maxxcoffee.mobile.model.response.ProfileItemResponseModel;
 import com.maxxcoffee.mobile.model.response.ProfileResponseModel;
 import com.maxxcoffee.mobile.util.Constant;
 import com.maxxcoffee.mobile.util.PreferenceManager;
-import com.maxxcoffee.mobile.widget.TBaseProgress;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -29,6 +29,10 @@ import butterknife.OnClick;
 
 import com.maxxcoffee.mobile.task.ProfileTask;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -38,6 +42,14 @@ public class ProfileFragment extends Fragment {
 
     @Bind(R.id.name)
     TextView name;
+    @Bind(R.id.city)
+    TextView city;
+    @Bind(R.id.occupation)
+    TextView occupation;
+    @Bind(R.id.birthday)
+    TextView birthday;
+    @Bind(R.id.gender)
+    TextView gender;
     @Bind(R.id.email)
     TextView email;
     @Bind(R.id.phone)
@@ -69,28 +81,52 @@ public class ProfileFragment extends Fragment {
         ButterKnife.bind(this, view);
         activity.setTitle("Profile");
 
-        getLocalProfile();
-        fetchingData();
-
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        boolean logoutNow = PreferenceManager.getBool(activity, Constant.PREFERENCE_ROUTE_TO_LOGOUT, false);
+        if (logoutNow) {
+            activity.logoutNow();
+        } else {
+            getLocalProfile();
+            fetchingData();
+        }
     }
 
     private void getLocalProfile() {
         ProfileEntity profile = profileController.getProfile();
         List<CardEntity> cards = cardController.getCards();
         if (profile != null) {
-            name.setText(profile.getName());
-            email.setText(profile.getEmail());
-            phone.setText(profile.getPhone());
-            balance.setText("IDR " + String.valueOf(profile.getBalance()));
-            beans.setText(String.valueOf(profile.getPoint()));
-            card.setText(String.valueOf(cards.size()));
+            try {
+                DateFormat mDateFormat = new SimpleDateFormat(Constant.DATEFORMAT_STRING_2);
+                Date birth = new SimpleDateFormat(Constant.DATEFORMAT_STRING_SIMPLE).parse(profile.getBirthday());
+
+                name.setText(profile.getName());
+                city.setText(profile.getCity());
+                occupation.setText(profile.getOccupation());
+                gender.setText(profile.getGender());
+                birthday.setText(mDateFormat.format(birth));
+                email.setText(profile.getEmail());
+                phone.setText(profile.getPhone());
+                balance.setText("IDR " + String.valueOf(profile.getBalance()));
+                beans.setText(String.valueOf(profile.getPoint()));
+                card.setText(String.valueOf(cards.size()));
+
+                PreferenceManager.putString(activity, Constant.PREFERENCE_BALANCE, String.valueOf(profile.getBalance()));
+                PreferenceManager.putString(activity, Constant.PREFERENCE_BEAN, String.valueOf(profile.getPoint()));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         }
     }
 
     private void fetchingData() {
-        final TBaseProgress progress = new TBaseProgress(activity);
-        progress.show();
+        final LoadingDialog progress = new LoadingDialog();
+        progress.show(getFragmentManager(), null);
 
         ProfileTask task = new ProfileTask(activity) {
             @Override
@@ -110,13 +146,16 @@ public class ProfileFragment extends Fragment {
                     profileEntity.setImage(profileItem.getGambar());
                     profileEntity.setPoint(Integer.parseInt(profile.getTotal_point()));
                     profileEntity.setBalance(Integer.parseInt(profile.getTotal_balance()));
+                    profileEntity.setSms_verified(profileItem.getVerifikasi_sms().equalsIgnoreCase("yes"));
+                    profileEntity.setEmail_verified(profileItem.getVerifikasi_email().equalsIgnoreCase("yes"));
+
+                    PreferenceManager.putBool(activity, Constant.PREFERENCE_SMS_VERIFICATION, profileItem.getVerifikasi_sms().equalsIgnoreCase("yes"));
+                    PreferenceManager.putBool(activity, Constant.PREFERENCE_EMAIL_VERIFICATION, profileItem.getVerifikasi_email().equalsIgnoreCase("yes"));
 
                     profileController.insert(profileEntity);
 
                     List<CardItemResponseModel> cards = profile.getCards();
                     if (cards.size() > 0) {
-                        int totalBalance = 0;
-                        int totalPoint = 0;
 
                         for (CardItemResponseModel card : cards) {
                             CardEntity cardEntity = new CardEntity();
@@ -127,29 +166,24 @@ public class ProfileFragment extends Fragment {
                             cardEntity.setDistribution_id(card.getDistribution_id());
                             cardEntity.setCard_pin(card.getCard_pin());
                             cardEntity.setBalance(card.getBalance());
-                            cardEntity.setPoint(card.getPoint());
+                            cardEntity.setPoint(card.getBeans());
                             cardEntity.setExpired_date(card.getExpired_date());
-
-                            totalBalance += card.getBalance();
-                            totalPoint += card.getPoint();
 
                             cardController.insert(cardEntity);
                         }
-                        PreferenceManager.putString(activity, Constant.PREFERENCE_BALANCE, String.valueOf(totalBalance));
-                        PreferenceManager.putString(activity, Constant.PREFERENCE_BEAN, String.valueOf(totalPoint));
                     }
 
                     getLocalProfile();
                 }
-                if (progress.isShowing())
-                    progress.dismiss();
+                PreferenceManager.putString(activity, Constant.PREFERENCE_BALANCE, String.valueOf(profile.getTotal_balance()));
+                PreferenceManager.putString(activity, Constant.PREFERENCE_BEAN, String.valueOf(profile.getTotal_point()));
+                progress.dismissAllowingStateLoss();
             }
 
             @Override
             public void onFailed() {
-                if (progress.isShowing())
-                    progress.dismiss();
-                Toast.makeText(activity, "Failed to fetching data.", Toast.LENGTH_SHORT).show();
+                progress.dismissAllowingStateLoss();
+                Toast.makeText(activity, "Failed to fetch data.", Toast.LENGTH_SHORT).show();
             }
         };
         task.execute();
@@ -175,4 +209,27 @@ public class ProfileFragment extends Fragment {
         intent.putExtra("content", FormActivity.CHANGE_PASSWORD);
         startActivity(intent);
     }
+
+    @OnClick(R.id.layout_occupation)
+    public void onChangeOccupationClick() {
+        Intent intent = new Intent(activity, FormActivity.class);
+        intent.putExtra("content", FormActivity.CHANGE_OCCUPATION);
+        startActivity(intent);
+    }
+
+    @OnClick(R.id.layout_city)
+    public void onCityClick() {
+        Intent intent = new Intent(activity, FormActivity.class);
+        intent.putExtra("content", FormActivity.CHANGE_CITY);
+        startActivity(intent);
+    }
+
+    /*
+    @OnClick(R.id.layout_phone)
+    public void onChangePhoneClick() {
+        Intent intent = new Intent(activity, FormActivity.class);
+        intent.putExtra("content", FormActivity.CHANGE_PHONE);
+        startActivity(intent);
+    }
+    */
 }

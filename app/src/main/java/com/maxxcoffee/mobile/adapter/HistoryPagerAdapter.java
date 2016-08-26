@@ -6,13 +6,17 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 import com.maxxcoffee.mobile.fragment.NearMeFragment;
 import com.maxxcoffee.mobile.fragment.OurStoreFragment;
+import com.maxxcoffee.mobile.fragment.PointHistoryFragment;
+import com.maxxcoffee.mobile.fragment.TopUpHistoryFragment;
+import com.maxxcoffee.mobile.fragment.TransactionHistoryFragment;
+import com.maxxcoffee.mobile.fragment.TransferHistoryFragment;
 
 /**
  * Created by Rio Swarawan on 5/22/2016.
  */
 public class HistoryPagerAdapter extends FragmentPagerAdapter {
 
-    private static final String[] HISTORY_MENU = {"Transaction", "Point", "Transfer"};
+    private static final String[] HISTORY_MENU = {"Transaction", "Beans", "Transfer", "Top Up"};
 
     public HistoryPagerAdapter(FragmentManager fm) {
         super(fm);
@@ -23,10 +27,16 @@ public class HistoryPagerAdapter extends FragmentPagerAdapter {
         Fragment fragment = null;
         switch (position) {
             case 0:
-                fragment = new OurStoreFragment();
+                fragment = new TransactionHistoryFragment();
                 break;
             case 1:
-                fragment = new NearMeFragment();
+                fragment = new PointHistoryFragment();
+                break;
+            case 2:
+                fragment = new TransferHistoryFragment();
+                break;
+            case 3:
+                fragment = new TopUpHistoryFragment();
                 break;
         }
         return fragment;

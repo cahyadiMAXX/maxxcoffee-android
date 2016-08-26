@@ -10,11 +10,12 @@ import android.widget.Toast;
 
 import com.maxxcoffee.mobile.R;
 import com.maxxcoffee.mobile.activity.FormActivity;
-import com.maxxcoffee.mobile.widget.TBaseProgress;
+import com.maxxcoffee.mobile.fragment.dialog.LoadingDialog;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
 import com.maxxcoffee.mobile.task.ChangeNameTask;
 
 /**
@@ -22,8 +23,10 @@ import com.maxxcoffee.mobile.task.ChangeNameTask;
  */
 public class ChangeNameFragment extends Fragment {
 
-    @Bind(R.id.name)
-    EditText name;
+    @Bind(R.id.first_name)
+    EditText firstName;
+    @Bind(R.id.last_name)
+    EditText lastName;
 
     private FormActivity activity;
 
@@ -48,34 +51,40 @@ public class ChangeNameFragment extends Fragment {
         if (!isFormValid())
             return;
 
-        final TBaseProgress progress = new TBaseProgress(activity);
-        progress.show();
+        final LoadingDialog progress = new LoadingDialog();
+        progress.show(getFragmentManager(), null);
 
-        String mName = name.getText().toString();
+        String mFirstName = firstName.getText().toString();
+        String mLastName = lastName.getText().toString();
+
         ChangeNameTask task = new ChangeNameTask(activity) {
             @Override
             public void onSuccess() {
-                if (progress.isShowing())
-                    progress.dismiss();
+                    progress.dismissAllowingStateLoss();
                 activity.onBackClick();
             }
 
             @Override
             public void onFailed() {
-                if (progress.isShowing())
-                    progress.dismiss();
+
+                    progress.dismissAllowingStateLoss();
                 Toast.makeText(activity, "Failed to change user name", Toast.LENGTH_SHORT).show();
             }
         };
-        task.execute(mName);
+        task.execute(mFirstName, mLastName);
     }
 
     private boolean isFormValid() {
-        String mName = name.getText().toString();
+        String mFirstName = firstName.getText().toString();
+        String mLastName = lastName.getText().toString();
         boolean status = true;
 
-        if (mName.equalsIgnoreCase("")) {
-            Toast.makeText(activity, "Please verify your name.", Toast.LENGTH_SHORT).show();
+        if (mFirstName.equalsIgnoreCase("")) {
+            Toast.makeText(activity, "Please verify your first name.", Toast.LENGTH_SHORT).show();
+            status = false;
+        }
+        if (mLastName.equalsIgnoreCase("")) {
+            Toast.makeText(activity, "Please verify your last name.", Toast.LENGTH_SHORT).show();
             status = false;
         }
         return status;

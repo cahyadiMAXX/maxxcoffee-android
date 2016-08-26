@@ -21,7 +21,8 @@ public class TextViewLatoBold extends TextView {
     }
 
     private void setFont(Context context) {
-        Typeface type = Typeface.createFromAsset(context.getAssets(), "font/Lato-Bold.ttf");
+//        Typeface type = Typeface.createFromAsset(context.getAssets(), "font/Lato-Bold.ttf");
+        Typeface type = Typeface.createFromAsset(context.getAssets(), "font/HelveticaNeueLTPro-Lt.otf");
         setTypeface(type);
     }
 }

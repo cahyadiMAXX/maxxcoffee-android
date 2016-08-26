@@ -34,10 +34,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:inputType="textEmailAddress"
-            android:singleLine="true"
             android:background="@color/white_transparent"
+            android:inputType="textEmailAddress"
             android:padding="16dp"
+            android:singleLine="true"
             android:textColor="@android:color/white"
             android:textSize="16sp" />
 
@@ -54,10 +54,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:singleLine="true"
-            android:inputType="textPassword"
             android:background="@color/white_transparent"
+            android:inputType="textPassword"
             android:padding="16dp"
+            android:singleLine="true"
             android:textColor="@android:color/white"
             android:textSize="16sp" />
 
@@ -77,7 +77,8 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:orientation="horizontal"
-            android:padding="16dp">
+            android:paddingBottom="8dp"
+            android:paddingTop="16dp">
 
             <com.maxxcoffee.mobile.widget.textview.TextViewLatoRegular
                 android:layout_width="wrap_content"
@@ -90,6 +91,23 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Sign up here"
+                android:textColor="@android:color/white"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/forgot_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingBottom="16dp"
+            android:paddingTop="8dp">
+
+            <com.maxxcoffee.mobile.widget.textview.TextViewLatoBold
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Forgot Password"
                 android:textColor="@android:color/white"
                 android:textSize="14sp" />
         </LinearLayout>

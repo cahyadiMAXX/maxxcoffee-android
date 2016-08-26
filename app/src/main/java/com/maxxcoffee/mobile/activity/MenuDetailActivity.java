@@ -60,10 +60,10 @@ public class MenuDetailActivity extends AppCompatActivity {
     LinearLayout noneLayout;
     @Bind(R.id.price)
     TextView price;
-    @Bind(R.id.toolbar)
-    Toolbar toolbar;
-    @Bind(R.id.collapsing_toolbar)
-    CollapsingToolbarLayout collapsingToolbar;
+//    @Bind(R.id.toolbar)
+//    Toolbar toolbar;
+//    @Bind(R.id.collapsing_toolbar)
+//    CollapsingToolbarLayout collapsingToolbar;
 
     private MenuController controller;
     private MenuDetailAdapter iceAdapter;
@@ -81,8 +81,8 @@ public class MenuDetailActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//        setSupportActionBar(toolbar);
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         controller = new MenuController(this);
         hotData = new ArrayList<>();
@@ -108,12 +108,8 @@ public class MenuDetailActivity extends AppCompatActivity {
             String jsonNone = menu.getPrice_none();
 
             Glide.with(this).load(menu.getImage()).placeholder(getResources().getDrawable(R.drawable.ic_no_image)).crossFade().into(image);
-//            name.setText(menu.getName());
-            collapsingToolbar.setTitle(menu.getName());
-
-//            icedList.setVisibility(jsonIced.equals("") ? View.GONE : View.VISIBLE);
-//            hotList.setVisibility(jsonHot.equals("") ? View.GONE : View.VISIBLE);
-//            noneLayout.setVisibility(jsonNone.equals("") ? View.GONE : View.VISIBLE);
+            name.setText(menu.getName());
+//            collapsingToolbar.setTitle(menu.getName());
 
             if (!jsonHot.equals("")) {
                 hotLayout.setVisibility(View.VISIBLE);

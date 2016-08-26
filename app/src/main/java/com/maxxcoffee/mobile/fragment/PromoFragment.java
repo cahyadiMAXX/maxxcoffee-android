@@ -1,5 +1,6 @@
 package com.maxxcoffee.mobile.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -11,17 +12,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.maxxcoffee.mobile.R;
+import com.maxxcoffee.mobile.activity.FormActivity;
 import com.maxxcoffee.mobile.activity.MainActivity;
 import com.maxxcoffee.mobile.adapter.PromoAdapter;
 import com.maxxcoffee.mobile.database.controller.PromoController;
 import com.maxxcoffee.mobile.database.entity.PromoEntity;
-import com.maxxcoffee.mobile.fragment.dialog.PromoDialog;
-import com.maxxcoffee.mobile.model.PromoModel;
+import com.maxxcoffee.mobile.fragment.dialog.LoadingDialog;
 import com.maxxcoffee.mobile.model.response.PromoItemResponseModel;
-import com.maxxcoffee.mobile.model.response.PromoResponseModel;
 import com.maxxcoffee.mobile.task.PromoTask;
 import com.maxxcoffee.mobile.widget.CustomLinearLayoutManager;
-import com.maxxcoffee.mobile.widget.TBaseProgress;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,11 +58,16 @@ public class PromoFragment extends Fragment {
                 Bundle bundle = new Bundle();
                 bundle.putString("title", model.getName());
                 bundle.putString("desc", model.getDescription());
+                bundle.putString("syarat", model.getSyarat());
                 bundle.putString("image", model.getImage());
 
-                PromoDialog dialog = new PromoDialog();
-                dialog.setArguments(bundle);
-                dialog.show(getFragmentManager(), null);
+                Intent intent = new Intent(activity, FormActivity.class);
+                intent.putExtra("content", FormActivity.PROMO_DETAIL);
+                intent.putExtras(bundle);
+                startActivity(intent);
+//                PromoDialog dialog = new PromoDialog();
+//                dialog.setArguments(bundle);
+//                dialog.show(getFragmentManager(), null);
             }
         };
     }
@@ -88,8 +92,8 @@ public class PromoFragment extends Fragment {
     }
 
     private void fetchingData() {
-        final TBaseProgress progress = new TBaseProgress(activity);
-        progress.show();
+        final LoadingDialog progress = new LoadingDialog();
+        progress.show(getFragmentManager(), null);
 
         PromoTask task = new PromoTask(activity) {
             @Override
@@ -110,23 +114,19 @@ public class PromoFragment extends Fragment {
                 }
 
                 getLocalPromo();
-
-                if (progress.isShowing())
-                    progress.dismiss();
+                progress.dismissAllowingStateLoss();
             }
 
             @Override
             public void onEmpty() {
                 emptyCard.setVisibility(View.VISIBLE);
-                if (progress.isShowing())
-                    progress.dismiss();
+                progress.dismissAllowingStateLoss();
             }
 
             @Override
             public void onFailed() {
-                if (progress.isShowing())
-                    progress.dismiss();
-                Toast.makeText(activity, "Failed to fetching data.", Toast.LENGTH_SHORT).show();
+                progress.dismissAllowingStateLoss();
+                Toast.makeText(activity, "Failed to fetch data.", Toast.LENGTH_SHORT).show();
             }
         };
         task.execute();

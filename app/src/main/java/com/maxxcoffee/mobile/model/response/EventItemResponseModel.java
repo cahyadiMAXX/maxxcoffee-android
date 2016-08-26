@@ -6,10 +6,12 @@ package com.maxxcoffee.mobile.model.response;
 public class EventItemResponseModel {
 
     private int id_event;
-    private int id_store;
-    private String nama_store;
     private String nama_event;
-    private String location;
+    private String nama_lokasi;
+    private String alamat_lokasi;
+    private String no_telp;
+    private String latitude;
+    private String longitude;
     private String tanggal_start;
     private String tanggal_end;
     private String waktu_start;
@@ -17,14 +19,6 @@ public class EventItemResponseModel {
     private String deskripsi;
     private String gambar;
     private String ls_gambar;
-
-    public int getId_store() {
-        return id_store;
-    }
-
-    public void setId_store(int id_store) {
-        this.id_store = id_store;
-    }
 
     public int getId_event() {
         return id_event;
@@ -34,28 +28,12 @@ public class EventItemResponseModel {
         this.id_event = id_event;
     }
 
-    public String getNama_store() {
-        return nama_store;
-    }
-
-    public void setNama_store(String nama_store) {
-        this.nama_store = nama_store;
-    }
-
     public String getNama_event() {
         return nama_event;
     }
 
     public void setNama_event(String nama_event) {
         this.nama_event = nama_event;
-    }
-
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
     }
 
     public String getTanggal_start() {
@@ -112,5 +90,45 @@ public class EventItemResponseModel {
 
     public void setLs_gambar(String ls_gambar) {
         this.ls_gambar = ls_gambar;
+    }
+
+    public String getNama_lokasi() {
+        return nama_lokasi;
+    }
+
+    public void setNama_lokasi(String nama_lokasi) {
+        this.nama_lokasi = nama_lokasi;
+    }
+
+    public String getAlamat_lokasi() {
+        return alamat_lokasi;
+    }
+
+    public void setAlamat_lokasi(String alamat_lokasi) {
+        this.alamat_lokasi = alamat_lokasi;
+    }
+
+    public String getNo_telp() {
+        return no_telp;
+    }
+
+    public void setNo_telp(String no_telp) {
+        this.no_telp = no_telp;
+    }
+
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
+    }
+
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
     }
 }

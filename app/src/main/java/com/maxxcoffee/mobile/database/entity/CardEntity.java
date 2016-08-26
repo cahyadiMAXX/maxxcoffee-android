@@ -14,6 +14,9 @@ public class CardEntity {
     private Integer id;
 
     @DatabaseField
+    private String distribution_id;
+
+    @DatabaseField
     private String name;
 
     @DatabaseField
@@ -23,7 +26,7 @@ public class CardEntity {
     private String image;
 
     @DatabaseField
-    private String distribution_id;
+    private String barcode;
 
     @DatabaseField
     private String card_pin;
@@ -107,5 +110,13 @@ public class CardEntity {
 
     public void setExpired_date(String expired_date) {
         this.expired_date = expired_date;
+    }
+
+    public String getBarcode() {
+        return barcode;
+    }
+
+    public void setBarcode(String barcode) {
+        this.barcode = barcode;
     }
 }

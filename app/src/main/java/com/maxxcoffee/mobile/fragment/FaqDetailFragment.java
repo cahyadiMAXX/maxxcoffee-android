@@ -9,6 +9,8 @@ import android.widget.TextView;
 
 import com.maxxcoffee.mobile.R;
 import com.maxxcoffee.mobile.activity.FormActivity;
+import com.maxxcoffee.mobile.database.controller.FaqController;
+import com.maxxcoffee.mobile.database.entity.FaqEntity;
 import com.maxxcoffee.mobile.util.Constant;
 import com.maxxcoffee.mobile.util.PreferenceManager;
 
@@ -27,7 +29,7 @@ public class FaqDetailFragment extends Fragment {
 
     private FormActivity activity;
     private String token;
-//    private FaqController faqController;
+    private FaqController faqController;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -35,7 +37,7 @@ public class FaqDetailFragment extends Fragment {
         activity = (FormActivity) getActivity();
         token = PreferenceManager.getString(activity, Constant.PREFERENCE_TOKEN, "");
 
-//        faqController = new FaqController(activity);
+        faqController = new FaqController(activity);
     }
 
     @Override
@@ -52,8 +54,8 @@ public class FaqDetailFragment extends Fragment {
     }
 
     private void fetchingData(Integer id) {
-//        FaqEntity faq = faqController.getFaq(id);
-//        title.setText(faq.getTitle());
-//        description.setText(faq.getDescription());
+        FaqEntity faq = faqController.getFaq(id);
+        title.setText(faq.getTitle());
+        description.setText(faq.getDescription());
     }
 }

@@ -55,6 +55,9 @@ public class StoreEntity {
     @DatabaseField
     String image;
 
+    @DatabaseField
+    String jarak;
+
     public Integer getId() {
         return id;
     }
@@ -173,5 +176,13 @@ public class StoreEntity {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public String getJarak() {
+        return jarak;
+    }
+
+    public void setJarak(String jarak) {
+        this.jarak = jarak;
     }
 }

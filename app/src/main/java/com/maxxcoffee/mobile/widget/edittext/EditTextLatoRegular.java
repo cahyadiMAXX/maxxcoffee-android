@@ -15,7 +15,8 @@ public class EditTextLatoRegular extends EditText {
 
     public EditTextLatoRegular(Context context, AttributeSet attrs) {
         super(context, attrs);
-        Typeface type = Typeface.createFromAsset(context.getAssets(), "font/Lato-Regular.ttf");
+//        Typeface type = Typeface.createFromAsset(context.getAssets(), "font/Lato-Regular.ttf");
+        Typeface type = Typeface.createFromAsset(context.getAssets(), "font/HelveticaNeueLTPro-Lt.otf");
         setTypeface(type);
     }
 

@@ -50,14 +50,34 @@
                 android:layout_height="1dp"
                 android:background="@color/divider" />
 
-            <com.maxxcoffee.mobile.widget.NonScrollableListView
-                android:id="@+id/recycleview"
+            <android.support.design.widget.CoordinatorLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/background_white"
-                android:divider="@android:color/transparent"
-                android:paddingLeft="8dp"
-                android:paddingRight="8dp" />
+                android:layout_height="match_parent">
+
+                <android.support.v4.widget.SwipeRefreshLayout
+                    android:id="@+id/swipe"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <com.maxxcoffee.mobile.widget.NonScrollableListView
+                        android:id="@+id/recycleview"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/background_white"
+                        android:divider="@android:color/transparent"
+                        android:paddingLeft="8dp"
+                        android:paddingRight="8dp" />
+                </android.support.v4.widget.SwipeRefreshLayout>
+
+                <com.maxxcoffee.mobile.widget.textview.TextViewLatoRegular
+                    android:id="@+id/empty"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="Data not found."
+                    android:textSize="14sp"
+                    android:visibility="visible" />
+            </android.support.design.widget.CoordinatorLayout>
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

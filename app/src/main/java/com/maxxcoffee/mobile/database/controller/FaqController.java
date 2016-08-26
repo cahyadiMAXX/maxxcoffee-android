@@ -25,21 +25,8 @@ public class FaqController {
         }
     }
 
-    public void insert(FaqModel model) {
-        FaqEntity entity = null;
-        if (model.getId() == null) {
-            entity = new FaqEntity();
-        } else {
-            entity = getFaq(model.getId());
-            if (entity == null) {
-                entity = new FaqEntity();
-                entity.setId(model.getId());
-            }
-        }
-        entity.setTitle(model.getTitle());
-        entity.setDescription(model.getDescription());
-
-        insertOrUpdate(entity);
+    public void insert(FaqEntity model) {
+        insertOrUpdate(model);
     }
 
     public void insertOrUpdate(FaqEntity entity) {

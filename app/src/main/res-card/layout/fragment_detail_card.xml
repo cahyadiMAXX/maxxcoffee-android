@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -9,285 +10,417 @@
         android:layout_height="1dp"
         android:background="@color/divider" />
 
-    <ScrollView
+    <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
+
+        <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:orientation="vertical">
-
-            <ImageView
-                android:id="@+id/card_image"
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/sample_card_3" />
+            android:layout_height="match_parent">
 
             <LinearLayout
+                android:id="@+id/parent"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:weightSum="2">
-
-                <com.maxxcoffee.mobile.widget.button.ButtonLatoRegular
-                    android:id="@+id/topup"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="2dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/button_selector"
-                    android:text="Top-up"
-                    android:textColor="@android:color/white"
-                    android:textSize="14sp" />
-
-                <com.maxxcoffee.mobile.widget.button.ButtonLatoRegular
-                    android:id="@+id/history"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="2dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/button_selector"
-                    android:text="History"
-                    android:textColor="@android:color/white"
-                    android:textSize="14sp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:background="@color/gray"
-                android:orientation="horizontal">
-
-                <com.maxxcoffee.mobile.widget.textview.TextViewLatoRegular
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"
-                    android:padding="16dp"
-                    android:text="BALANCE"
-                    android:textColor="@android:color/black"
-                    android:textSize="14sp" />
-
-                <LinearLayout
-                    android:layout_width="2dp"
-                    android:layout_height="match_parent"
-                    android:background="@color/green_selected" />
-
-                <com.maxxcoffee.mobile.widget.textview.TextViewLatoRegular
-                    android:id="@+id/balance"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="16dp"
-                    android:padding="16dp"
-                    android:text="IDR 0"
-                    android:textColor="@android:color/black"
-                    android:textSize="14sp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:background="@color/gray"
-                android:orientation="horizontal">
-
-                <com.maxxcoffee.mobile.widget.textview.TextViewLatoRegular
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"
-                    android:padding="16dp"
-                    android:text="POINT"
-                    android:textColor="@android:color/black"
-                    android:textSize="14sp" />
-
-                <LinearLayout
-                    android:layout_width="2dp"
-                    android:layout_height="match_parent"
-                    android:background="@color/green_selected" />
-                ¬
-
-                <com.maxxcoffee.mobile.widget.textview.TextViewLatoRegular
-                    android:id="@+id/point"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="16dp"
-                    android:padding="16dp"
-                    android:text="0 points"
-                    android:textColor="@android:color/black"
-                    android:textSize="14sp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:background="@color/gray"
-                android:orientation="horizontal"
-                android:visibility="gone">
-
-                <com.maxxcoffee.mobile.widget.textview.TextViewLatoRegular
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"
-                    android:padding="16dp"
-                    android:text="BEANS"
-                    android:textColor="@android:color/black"
-                    android:textSize="14sp" />
-
-                <LinearLayout
-                    android:layout_width="2dp"
-                    android:layout_height="match_parent"
-                    android:background="@color/green_selected" />
-
-                <com.maxxcoffee.mobile.widget.textview.TextViewLatoRegular
-                    android:id="@+id/beans"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="16dp"
-                    android:padding="16dp"
-                    android:text="25 beans"
-                    android:textColor="@android:color/black"
-                    android:textSize="14sp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:background="@color/gray"
-                android:orientation="horizontal">
-
-                <com.maxxcoffee.mobile.widget.textview.TextViewLatoRegular
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"
-                    android:padding="16dp"
-                    android:text="EXP.DATE"
-                    android:textColor="@android:color/black"
-                    android:textSize="14sp" />
-
-                <LinearLayout
-                    android:layout_width="2dp"
-                    android:layout_height="match_parent"
-                    android:background="@color/green_selected" />
-
-                <com.maxxcoffee.mobile.widget.textview.TextViewLatoRegular
-                    android:id="@+id/exp_date"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="16dp"
-                    android:padding="16dp"
-                    android:text="12 February 2017"
-                    android:textColor="@android:color/black"
-                    android:textSize="14sp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="270dp"
-                android:layout_marginBottom="16dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
                 android:orientation="vertical">
 
-                <FrameLayout
+                <ImageView
+                    android:id="@+id/card_image"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="200dp"
+                    android:layout_marginTop="8dp"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ic_no_image" />
 
-                    <ImageView
-                        android:layout_width="match_parent"
+                <ImageView
+                    android:id="@+id/barcode"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:layout_marginBottom="4dp"
+                    android:layout_marginTop="4dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ic_no_image"
+                    android:visibility="gone" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="1">
+
+                    <com.maxxcoffee.mobile.widget.button.ButtonLatoRegular
+                        android:id="@+id/topup"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/bg_reward_owl" />
+                        android:layout_marginRight="2dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/button_selector"
+                        android:text="Top-up"
+                        android:textColor="@android:color/white"
+                        android:textSize="14sp"
+                        android:visibility="gone" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginLeft="24dp"
-                        android:layout_marginRight="24dp"
-                        android:weightSum="2">
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
 
-                        <LinearLayout
+                        <com.maxxcoffee.mobile.widget.button.ButtonLatoRegular
+                            android:id="@+id/qr"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="80dp"
+                            android:layout_marginLeft="2dp"
+                            android:layout_marginTop="8dp"
                             android:layout_weight="1"
-                            android:gravity="center"
-                            android:orientation="vertical">
+                            android:background="@drawable/button_selector"
+                            android:text="QR Code"
+                            android:textColor="@android:color/white"
+                            android:textSize="14sp" />
 
-                            <com.maxxcoffee.mobile.widget.textview.TextViewLatoRegular
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="You have"
-                                android:textColor="@android:color/black"
-                                android:textSize="14sp" />
+                        <com.maxxcoffee.mobile.widget.button.ButtonLatoRegular
+                            android:id="@+id/history"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="2dp"
+                            android:layout_marginTop="8dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/button_selector"
+                            android:text="History"
+                            android:textColor="@android:color/white"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:background="@color/gray"
+                    android:orientation="horizontal">
+
+                    <com.maxxcoffee.mobile.widget.textview.TextViewLatoRegular
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:padding="16dp"
+                        android:text="NAME"
+                        android:textColor="@android:color/black"
+                        android:textSize="14sp" />
+
+                    <LinearLayout
+                        android:layout_width="2dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/green_selected" />
+
+                    <RelativeLayout
+                        android:id="@+id/layout_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <ImageView
+                            android:id="@+id/edit"
+                            android:layout_width="28dp"
+                            android:layout_height="28dp"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="16dp"
+                            android:src="@drawable/ic_edit" />
+
+                        <com.maxxcoffee.mobile.widget.textview.TextViewLatoRegular
+                            android:id="@+id/name"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="16dp"
+                            android:layout_toLeftOf="@id/edit"
+                            android:ellipsize="end"
+                            android:padding="16dp"
+                            android:singleLine="true"
+                            android:text="NAME"
+                            android:textColor="@android:color/black"
+                            android:textSize="14sp" />
+                    </RelativeLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:background="@color/gray"
+                    android:orientation="horizontal">
+
+                    <com.maxxcoffee.mobile.widget.textview.TextViewLatoRegular
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:padding="16dp"
+                        android:text="BALANCE"
+                        android:textColor="@android:color/black"
+                        android:textSize="14sp" />
+
+                    <LinearLayout
+                        android:layout_width="2dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/green_selected" />
+
+                    <com.maxxcoffee.mobile.widget.textview.TextViewLatoRegular
+                        android:id="@+id/balance"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="16dp"
+                        android:padding="16dp"
+                        android:text="IDR 0"
+                        android:textColor="@android:color/black"
+                        android:textSize="14sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:background="@color/gray"
+                    android:orientation="horizontal">
+
+                    <com.maxxcoffee.mobile.widget.textview.TextViewLatoRegular
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:padding="16dp"
+                        android:text="BEANS"
+                        android:textColor="@android:color/black"
+                        android:textSize="14sp" />
+
+                    <LinearLayout
+                        android:layout_width="2dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/green_selected" />
+                    ¬
+
+                    <com.maxxcoffee.mobile.widget.textview.TextViewLatoRegular
+                        android:id="@+id/point"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="16dp"
+                        android:padding="16dp"
+                        android:text="0 points"
+                        android:textColor="@android:color/black"
+                        android:textSize="14sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:background="@color/gray"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+
+                    <com.maxxcoffee.mobile.widget.textview.TextViewLatoRegular
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:padding="16dp"
+                        android:text="BEANS"
+                        android:textColor="@android:color/black"
+                        android:textSize="14sp" />
+
+                    <LinearLayout
+                        android:layout_width="2dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/green_selected" />
+
+                    <com.maxxcoffee.mobile.widget.textview.TextViewLatoRegular
+                        android:id="@+id/beans"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="16dp"
+                        android:padding="16dp"
+                        android:text="25 beans"
+                        android:textColor="@android:color/black"
+                        android:textSize="14sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:background="@color/gray"
+                    android:orientation="horizontal">
+
+                    <com.maxxcoffee.mobile.widget.textview.TextViewLatoRegular
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:padding="16dp"
+                        android:text="EXP.DATE"
+                        android:textColor="@android:color/black"
+                        android:textSize="14sp" />
+
+                    <LinearLayout
+                        android:layout_width="2dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/green_selected" />
+
+                    <com.maxxcoffee.mobile.widget.textview.TextViewLatoRegular
+                        android:id="@+id/exp_date"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="16dp"
+                        android:padding="16dp"
+                        android:text="12 February 2017"
+                        android:textColor="@android:color/black"
+                        android:textSize="14sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="270dp"
+                    android:layout_marginBottom="16dp"
+                    android:layout_marginTop="24dp"
+                    android:orientation="vertical">
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/bg_reward_owl" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="24dp"
+                            android:layout_marginRight="24dp"
+                            android:weightSum="2">
 
                             <LinearLayout
-                                android:layout_width="wrap_content"
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:orientation="horizontal">
-
-                                <com.maxxcoffee.mobile.widget.textview.TextViewLatoBold
-                                    android:id="@+id/reward_achieved"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="5"
-                                    android:textColor="@color/green_selected"
-                                    android:textSize="20sp" />
+                                android:layout_marginTop="80dp"
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                android:orientation="vertical">
 
                                 <com.maxxcoffee.mobile.widget.textview.TextViewLatoRegular
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text=" reward(s)"
+                                    android:text="You have"
+                                    android:textColor="@android:color/black"
+                                    android:textSize="13sp" />
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal">
+
+                                    <com.maxxcoffee.mobile.widget.textview.TextViewLatoBold
+                                        android:id="@+id/reward_achieved"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="5"
+                                        android:textColor="@color/green_selected"
+                                        android:textSize="16sp" />
+
+                                    <com.maxxcoffee.mobile.widget.textview.TextViewLatoRegular
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text=" reward(s)"
+                                        android:textColor="@android:color/black"
+                                        android:textSize="13sp" />
+                                </LinearLayout>
+
+                                <com.maxxcoffee.mobile.widget.textview.TextViewLatoRegular
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Available"
                                     android:textColor="@android:color/black"
                                     android:textSize="14sp" />
                             </LinearLayout>
 
-                            <com.maxxcoffee.mobile.widget.textview.TextViewLatoRegular
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Available"
-                                android:textColor="@android:color/black"
-                                android:textSize="14sp" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginRight="16dp"
-                            android:layout_marginTop="40dp"
-                            android:layout_weight="1"
-                            android:gravity="center"
-                            android:orientation="vertical">
-
                             <LinearLayout
-                                android:layout_width="wrap_content"
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:orientation="horizontal">
+                                android:layout_marginRight="16dp"
+                                android:layout_marginTop="40dp"
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                android:orientation="vertical">
 
-                                <com.maxxcoffee.mobile.widget.textview.TextViewLatoBold
-                                    android:id="@+id/beans_bubble"
+                                <LinearLayout
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="5"
-                                    android:textColor="@color/green_selected"
-                                    android:textSize="24sp" />
+                                    android:layout_marginTop="6dp"
+                                    android:orientation="horizontal">
+
+                                    <com.maxxcoffee.mobile.widget.textview.TextViewLatoBold
+                                        android:id="@+id/beans_bubble"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="5"
+                                        android:textColor="@color/green_selected"
+                                        android:textSize="16sp" />
+
+                                    <com.maxxcoffee.mobile.widget.textview.TextViewLatoRegular
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text=" more beans"
+                                        android:textColor="@android:color/black"
+                                        android:textSize="16sp" />
+                                </LinearLayout>
 
                                 <com.maxxcoffee.mobile.widget.textview.TextViewLatoRegular
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text=" more beans"
+                                    android:text="to next reward"
                                     android:textColor="@android:color/black"
                                     android:textSize="16sp" />
                             </LinearLayout>
-
-                            <com.maxxcoffee.mobile.widget.textview.TextViewLatoRegular
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="to next reward"
-                                android:textColor="@android:color/black"
-                                android:textSize="16sp" />
                         </LinearLayout>
-                    </LinearLayout>
-                </FrameLayout>
+                    </FrameLayout>
+                </LinearLayout>
             </LinearLayout>
-        </LinearLayout>
-    </ScrollView>
+        </android.support.v4.widget.NestedScrollView>
+
+        <FrameLayout
+            android:id="@+id/disable_layer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/black_transparent"
+            android:clickable="true"
+            android:visibility="gone" />
+
+        <com.github.clans.fab.FloatingActionMenu
+            android:id="@+id/fab_menu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_margin="24dp"
+            android:visibility="gone"
+            app:layout_anchor="@id/parent"
+            app:layout_anchorGravity="bottom|right|end"
+            app:menu_animationDelayPerItem="0"
+            app:menu_colorNormal="@color/green"
+            app:menu_colorPressed="@color/green_selected"
+            app:menu_colorRipple="@color/green_selected"
+            app:menu_labels_hideAnimation="@anim/jump_to_down"
+            app:menu_labels_showAnimation="@anim/jump_from_down"
+            app:menu_labels_style="@style/MenuLabelsStyle"
+            app:menu_shadowColor="#444">
+
+            <com.github.clans.fab.FloatingActionButton
+                android:id="@+id/fab_qrcode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:src="@drawable/ic_scan"
+                app:fab_colorNormal="@color/green"
+                app:fab_colorPressed="@color/green_selected"
+                app:fab_colorRipple="@color/green_selected"
+                app:fab_label="Show QR Code"
+                app:fab_size="normal"
+                app:menu_labels_style="@style/MenuLabelsStyle" />
+        </com.github.clans.fab.FloatingActionMenu>
+    </android.support.design.widget.CoordinatorLayout>
+
 </LinearLayout>

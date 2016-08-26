@@ -10,7 +10,7 @@ import android.widget.Toast;
 
 import com.maxxcoffee.mobile.R;
 import com.maxxcoffee.mobile.activity.FormActivity;
-import com.maxxcoffee.mobile.widget.TBaseProgress;
+import com.maxxcoffee.mobile.fragment.dialog.LoadingDialog;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -53,23 +53,23 @@ public class ChangePasswordFragment extends Fragment {
         if (!isFormValid())
             return;
 
-        final TBaseProgress progress = new TBaseProgress(activity);
-        progress.show();
+        final LoadingDialog progress = new LoadingDialog();
+        progress.show(getFragmentManager(), null);
 
         String mOldPassword = oldPassword.getText().toString();
         String mNewPassword = newPassword.getText().toString();
         ChangePasswordTask task = new ChangePasswordTask(activity) {
             @Override
             public void onSuccess() {
-                if (progress.isShowing())
-                    progress.dismiss();
+
+                    progress.dismissAllowingStateLoss();
                 activity.onBackClick();
             }
 
             @Override
             public void onFailed() {
-                if (progress.isShowing())
-                    progress.dismiss();
+
+                    progress.dismissAllowingStateLoss();
                 Toast.makeText(activity, "Failed to change password", Toast.LENGTH_SHORT).show();
             }
         };

@@ -2,47 +2,63 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/transparent"
     android:orientation="vertical">
 
-    <LinearLayout
+    <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="24dp"
-        android:background="@android:color/transparent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-        <com.maxxcoffee.mobile.widget.textview.TextViewLatoRegular
-            android:id="@+id/greeting"
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/swipe"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Good Morning,"
-            android:textColor="@android:color/white"
-            android:textSize="16sp" />
+            android:layout_height="match_parent">
 
-        <com.maxxcoffee.mobile.widget.textview.TextViewLatoBold
-            android:id="@+id/name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Rio Swarawan Putra"
-            android:textColor="@android:color/white"
-            android:textSize="20sp" />
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-        <com.maxxcoffee.mobile.widget.textview.TextViewLatoRegular
-            android:id="@+id/balance"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="IDR 70.000"
-            android:textColor="@android:color/white"
-            android:textSize="16sp" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="8dp"
+                    android:background="@android:color/transparent"
+                    android:orientation="vertical"
+                    android:paddingLeft="16dp">
 
-        <com.maxxcoffee.mobile.widget.textview.TextViewLatoRegular
-            android:id="@+id/point"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="250 Points"
-            android:textColor="@android:color/white"
-            android:textSize="16sp" />
-    </LinearLayout>
+                    <com.maxxcoffee.mobile.widget.textview.TextViewLatoRegular
+                        android:id="@+id/greeting"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Good Morning"
+                        android:textColor="@android:color/white"
+                        android:textSize="16sp" />
+
+                    <com.maxxcoffee.mobile.widget.textview.TextViewLatoBold
+                        android:id="@+id/name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Rio Swarawan Putra"
+                        android:textColor="@android:color/white"
+                        android:textSize="20sp" />
+
+                    <com.maxxcoffee.mobile.widget.textview.TextViewLatoRegular
+                        android:id="@+id/balance"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="IDR 70.000"
+                        android:textColor="@android:color/white"
+                        android:textSize="16sp" />
+
+                    <com.maxxcoffee.mobile.widget.textview.TextViewLatoRegular
+                        android:id="@+id/point"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="250 Points"
+                        android:textColor="@android:color/white"
+                        android:textSize="16sp" />
+                </LinearLayout>
+            </ScrollView>
+
+        </android.support.v4.widget.SwipeRefreshLayout>
+    </android.support.design.widget.CoordinatorLayout>
 </LinearLayout>

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +14,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.clans.fab.FloatingActionMenu;
-import com.google.zxing.integration.android.IntentIntegrator;
 import com.maxxcoffee.mobile.R;
 import com.maxxcoffee.mobile.activity.AddCardBarcodeActivity;
 import com.maxxcoffee.mobile.activity.FormActivity;
@@ -22,11 +22,12 @@ import com.maxxcoffee.mobile.adapter.CardAdapter;
 import com.maxxcoffee.mobile.database.controller.CardController;
 import com.maxxcoffee.mobile.database.entity.CardEntity;
 import com.maxxcoffee.mobile.fragment.dialog.CardMaxDialog;
-import com.maxxcoffee.mobile.model.CardModel;
+import com.maxxcoffee.mobile.fragment.dialog.LoadingDialog;
 import com.maxxcoffee.mobile.model.response.CardItemResponseModel;
 import com.maxxcoffee.mobile.task.CardTask;
+import com.maxxcoffee.mobile.util.Constant;
+import com.maxxcoffee.mobile.util.PreferenceManager;
 import com.maxxcoffee.mobile.widget.CustomLinearLayoutManager;
-import com.maxxcoffee.mobile.widget.TBaseProgress;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +41,8 @@ import butterknife.OnClick;
  */
 public class MyCardFragment extends Fragment {
 
+    @Bind(R.id.swipe)
+    SwipeRefreshLayout swipe;
     @Bind(R.id.card_list)
     RecyclerView recyclerView;
     @Bind(R.id.empty_card)
@@ -79,6 +82,19 @@ public class MyCardFragment extends Fragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+
+        boolean routeToTransfer = PreferenceManager.getBool(activity, Constant.PREFERENCE_ROUTE_TO_TRANSFER_BALANCE, false);
+        if (routeToTransfer) {
+            activity.switchFragment(MainActivity.BALANCE_TRANSFER);
+            PreferenceManager.putBool(activity, Constant.PREFERENCE_ROUTE_TO_TRANSFER_BALANCE, false);
+        } else {
+            fetchingData();
+        }
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_card, container, false);
 
@@ -91,8 +107,24 @@ public class MyCardFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(adapter);
 
-        getLocalCard();
-        fetchingData();
+//        swipe.setEnabled(false);
+        swipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                swipe.setRefreshing(false);
+                getLocalCard();
+                fetchingData();
+            }
+        });
+        swipe.post(new Runnable() {
+            @Override
+            public void run() {
+                synchronized (this) {
+                    getLocalCard();
+                    fetchingData();
+                }
+            }
+        });
 
         fabMenu.setOnMenuButtonClickListener(new View.OnClickListener() {
             @Override
@@ -118,12 +150,18 @@ public class MyCardFragment extends Fragment {
     }
 
     private void fetchingData() {
-        final TBaseProgress progress = new TBaseProgress(activity);
-        progress.show();
+        final LoadingDialog progress = new LoadingDialog();
+        progress.show(getFragmentManager(), null);
+//        final TBaseProgress progress = new TBaseProgress(activity);
+//        progress.show();
 
         CardTask task = new CardTask(activity) {
             @Override
             public void onSuccess(List<CardItemResponseModel> responseModel) {
+
+                if (responseModel.size() > 0)
+                    cardController.clear();
+
                 for (CardItemResponseModel card : responseModel) {
                     CardEntity entity = new CardEntity();
                     entity.setId(card.getId_card());
@@ -133,22 +171,19 @@ public class MyCardFragment extends Fragment {
                     entity.setDistribution_id(card.getDistribution_id());
                     entity.setCard_pin(card.getCard_pin());
                     entity.setBalance(card.getBalance());
-                    entity.setPoint(card.getPoint());
+                    entity.setPoint(card.getBeans());
+                    entity.setBarcode(card.getBarcode());
                     entity.setExpired_date(card.getExpired_date());
 
                     cardController.insert(entity);
                 }
                 getLocalCard();
-
-                if (progress.isShowing())
-                    progress.dismiss();
+                progress.dismissAllowingStateLoss();
             }
 
             @Override
             public void onFailed() {
-                if (progress.isShowing())
-                    progress.dismiss();
-                Toast.makeText(activity, "Failed to fetching data.", Toast.LENGTH_SHORT).show();
+                progress.dismissAllowingStateLoss();
             }
         };
         task.execute();
@@ -158,9 +193,7 @@ public class MyCardFragment extends Fragment {
         List<CardEntity> cards = cardController.getCards();
         emptyCard.setVisibility(cards.size() > 0 ? View.GONE : View.VISIBLE);
 
-        if (cards.size() > 0)
-            data.clear();
-
+        data.clear();
         data.addAll(cards);
         adapter.notifyDataSetChanged();
     }
@@ -173,13 +206,33 @@ public class MyCardFragment extends Fragment {
 
                 @Override
                 protected void onDeleteCard() {
+                    Intent intent = new Intent(activity, FormActivity.class);
+                    intent.putExtra("content", FormActivity.DELETE_CARD);
+                    startActivity(intent);
+
+                    disableLayer.setVisibility(View.GONE);
+                    fabMenu.close(true);
                     dismiss();
                 }
             };
             dialog.show(getFragmentManager(), null);
         } else {
-            activity.openBarcode();
+            disableLayer.setVisibility(View.GONE);
             fabMenu.close(true);
+            Intent intent = new Intent(activity, AddCardBarcodeActivity.class);
+            startActivity(intent);
+
+//            Intent intent = new Intent(activity, FormActivity.class);
+//            intent.putExtra("content", FormActivity.DELETE_CARD);
+//            startActivity(intent);
         }
+    }
+
+    @OnClick(R.id.fab_virtual)
+    public void onVirtualClick() {
+        disableLayer.setVisibility(View.GONE);
+        fabMenu.close(true);
+
+        Toast.makeText(activity, "This feature is not available yet", Toast.LENGTH_SHORT).show();
     }
 }

@@ -5,15 +5,23 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.maxxcoffee.mobile.R;
 import com.maxxcoffee.mobile.activity.MainActivity;
+import com.maxxcoffee.mobile.database.controller.CardController;
+import com.maxxcoffee.mobile.database.entity.CardEntity;
+import com.maxxcoffee.mobile.fragment.dialog.LoadingDialog;
 import com.maxxcoffee.mobile.fragment.dialog.LostCardDialog;
+import com.maxxcoffee.mobile.fragment.dialog.LostCardSubjectDialog;
 import com.maxxcoffee.mobile.fragment.dialog.OptionDialog;
 import com.maxxcoffee.mobile.model.CardModel;
+import com.maxxcoffee.mobile.model.request.LostCardRequestModel;
+import com.maxxcoffee.mobile.model.response.CardItemResponseModel;
+import com.maxxcoffee.mobile.task.CardTask;
+import com.maxxcoffee.mobile.task.LostCardTask;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,13 +41,14 @@ public class LostCardFragment extends Fragment {
     TextView card;
     @Bind(R.id.detail)
     TextView detail;
-    @Bind(R.id.layout_card)
-    LinearLayout layoutCard;
 
     private MainActivity activity;
-    private Integer selectedCard;
     private List<CardModel> data;
-//    private CardController cardController;
+    private CardController cardController;
+    private String selectedCard = "";
+    private Integer selectedSubject;
+    private Integer selectedCrd;
+//    private Integer selectedCard;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -48,7 +57,7 @@ public class LostCardFragment extends Fragment {
         activity.setHeaderColor(false);
 
         data = new ArrayList<>();
-//        cardController = new CardController(activity);
+        cardController = new CardController(activity);
     }
 
     @Override
@@ -58,33 +67,83 @@ public class LostCardFragment extends Fragment {
         ButterKnife.bind(this, view);
         activity.setTitle("Report Lost Card");
 
-//        List<CardEntity> cards = cardController.getCards();
-//        for (CardEntity card : cards) {
-//            CardModel model = new CardModel();
-//            model.setId(card.getId());
-//            model.setName(card.getName());
-//            model.setImage(card.getImage());
-//            model.setBalance(card.getBalance());
-//            model.setBeans(card.getBeans());
-//            model.setExpDate(card.getExpDate());
-//            model.setPoint(card.getPoint());
-//
-//            data.add(model);
-//        }
+        fetchingData();
+        selectedSubject = -999;
+        selectedCrd = -999;
 
         return view;
     }
 
-    @OnClick(R.id.card)
-    public void onCardClick() {
+    private void fetchingData() {
+        final LoadingDialog progress = new LoadingDialog();
+        progress.show(getFragmentManager(), null);
+
+        CardTask task = new CardTask(activity) {
+            @Override
+            public void onSuccess(List<CardItemResponseModel> responseModel) {
+                for (CardItemResponseModel card : responseModel) {
+                    CardEntity entity = new CardEntity();
+                    entity.setId(card.getId_card());
+                    entity.setName(card.getCard_name());
+                    entity.setNumber(card.getCard_number());
+                    entity.setImage(card.getCard_image());
+                    entity.setDistribution_id(card.getDistribution_id());
+                    entity.setCard_pin(card.getCard_pin());
+                    entity.setBalance(card.getBalance());
+                    entity.setPoint(card.getBeans());
+                    entity.setExpired_date(card.getExpired_date());
+
+                    cardController.insert(entity);
+                }
+                getLocalCard();
+                progress.dismissAllowingStateLoss();
+            }
+
+            @Override
+            public void onFailed() {
+                progress.dismissAllowingStateLoss();
+            }
+        };
+        task.execute();
+    }
+
+    private void getLocalCard() {
+        List<CardEntity> cards = cardController.getCards();
+        for (CardEntity card : cards) {
+            CardModel model = new CardModel();
+            model.setId(card.getId());
+            model.setName(card.getName());
+            model.setNumber(card.getNumber());
+            model.setImage(card.getImage());
+            model.setDistribution_id(card.getDistribution_id());
+            model.setCard_pin(card.getCard_pin());
+            model.setBalance(card.getBalance());
+            model.setPoint(card.getPoint());
+            model.setExpired_date(card.getExpired_date());
+
+            data.add(model);
+        }
+    }
+
+
+    @OnClick(R.id.layout_card)
+    public void onLayoutCardClick() {
+        if (data.size() == 0) {
+            Toast.makeText(activity, "You do not have card", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         LostCardDialog lostCardDialog = new LostCardDialog() {
             @Override
             protected void onOk(Integer index) {
                 if (index == CARD_1) {
+                    selectedCrd = CARD_1;
                     setCard(data.get(0));
                 } else if (index == CARD_2) {
+                    selectedCrd = CARD_2;
                     setCard(data.get(1));
                 } else if (index == CARD_3) {
+                    selectedCrd = CARD_3;
                     setCard(data.get(2));
                 }
                 dismiss();
@@ -99,27 +158,62 @@ public class LostCardFragment extends Fragment {
         String cardString = new Gson().toJson(data);
 
         Bundle bundle = new Bundle();
-        bundle.putInt("selected-report", LostCardDialog.CARD_1);
+        bundle.putInt("selected-card", selectedCrd);
         bundle.putString("cards", cardString);
 
         lostCardDialog.setArguments(bundle);
         lostCardDialog.show(getFragmentManager(), null);
     }
 
-    @OnClick(R.id.arrow_card)
-    public void onCardArrowClick() {
-        onCardClick();
+//    @OnClick(R.id.arrow_card)
+//    public void onCardArrowClick() {
+//        onCardClick();
+//    }
+
+    @OnClick(R.id.layout_subject)
+    public void onSubjectClick() {
+
+        LostCardSubjectDialog dialog = new LostCardSubjectDialog() {
+            @Override
+            protected void onOk(Integer index) {
+                String item = "";
+                if (index == LOST) {
+                    selectedSubject = LOST;
+                    item = "Lost Card";
+                } else if (index == BROKEN) {
+                    selectedSubject = BROKEN;
+                    item = "Broken Card";
+                }
+                subject.setText(item);
+                dismiss();
+            }
+
+            @Override
+            protected void onCancel() {
+                dismiss();
+            }
+        };
+
+        Bundle bundle = new Bundle();
+        bundle.putInt("selected-subject", selectedSubject);
+
+        dialog.setArguments(bundle);
+        dialog.show(getFragmentManager(), null);
     }
 
     @OnClick(R.id.report)
     public void onReportClick() {
+        if (!isFormValid())
+            return;
+
         Bundle bundle = new Bundle();
-        bundle.putString("content", "Your card will be automatically deactived. Are you sure?");
+        bundle.putString("content", "Your card will be automatically deactivated. Are you sure?");
         bundle.putString("default", OptionDialog.CANCEL);
 
         OptionDialog optionDialog = new OptionDialog() {
             @Override
             protected void onOk() {
+                dismiss();
                 reportLostCardNow();
             }
 
@@ -133,11 +227,52 @@ public class LostCardFragment extends Fragment {
     }
 
     private void reportLostCardNow() {
+        final LoadingDialog progress = new LoadingDialog();
+        progress.show(getFragmentManager(), null);
 
+        String subj = "";
+        if (subject.getText().toString().equals("Lost Card")) {
+            subj = "lost";
+        } else if (subject.getText().toString().equals("Broken Card")) {
+            subj = "broken";
+        }
+
+        LostCardRequestModel body = new LostCardRequestModel();
+        body.setId_card(selectedCard);
+        body.setDetail(detail.getText().toString());
+        body.setSubject(subj);
+
+        LostCardTask task = new LostCardTask(activity) {
+            @Override
+            public void onSuccess() {
+                progress.dismissAllowingStateLoss();
+                Toast.makeText(activity, "Your report has been submitted successfully", Toast.LENGTH_SHORT).show();
+                detail.setText("");
+                activity.switchFragment(MainActivity.MY_CARD);
+            }
+
+            @Override
+            public void onFailed() {
+                progress.dismissAllowingStateLoss();
+            }
+        };
+        task.execute(body);
+    }
+
+    private boolean isFormValid() {
+        if (selectedCard.equals("")) {
+            Toast.makeText(activity, "Please select your card", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (detail.getText().equals("")) {
+            Toast.makeText(activity, "Please fill the detail", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        return true;
     }
 
     private void setCard(CardModel model) {
-        selectedCard = model.getId();
+        selectedCard = String.valueOf(model.getId());
         card.setText(model.getName());
     }
 }
