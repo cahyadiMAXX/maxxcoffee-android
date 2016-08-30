@@ -13,4 +13,5 @@
     <color name="divider">#8c8c8c</color>
     <color name="black_transparent">#88000000</color>
     <color name="white_transparent">#22ffffff</color>
+    <color name="semi_transparent">#8FFF</color>
 </resources>
