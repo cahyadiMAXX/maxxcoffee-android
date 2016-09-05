@@ -49,7 +49,7 @@
             android:textColor="@android:color/white"
             android:textSize="16sp" />
 
-        <com.maxxcoffee.mobile.widget.edittext.EditTextLatoRegular
+        <com.maxxcoffee.mobile.widget.edittext.EditTextShowPassword
             android:id="@+id/password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

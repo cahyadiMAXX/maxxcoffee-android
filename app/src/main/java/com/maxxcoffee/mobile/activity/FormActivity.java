@@ -4,8 +4,10 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.maxxcoffee.mobile.R;
@@ -56,6 +58,9 @@ public class FormActivity extends FragmentActivity {
 
     @Bind(R.id.title)
     TextView title;
+    @Bind(R.id.refreshform)
+    ImageView refresh;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +71,8 @@ public class FormActivity extends FragmentActivity {
         setContentView(R.layout.activity_form);
 
         ButterKnife.bind(this);
+
+        refresh.setVisibility(View.GONE);
 
         Integer content = getIntent().getIntExtra("content", -999);
         Bundle bundle = getIntent().getExtras();
@@ -79,12 +86,24 @@ public class FormActivity extends FragmentActivity {
 
     public void switchFragment(int contentId, Bundle bundle) {
         try {
+            //hilangkan dia wkkwkkw
+            refresh.setOnClickListener(null);
+            refresh.setVisibility(View.GONE);
+
             FragmentTransaction ft = this.getSupportFragmentManager().beginTransaction();
             ft.addToBackStack(null);
             ft.replace(R.id.content, getContent(contentId, bundle));
             ft.commit();
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    public void showRefreshButton(boolean grant){
+        if(grant){
+            refresh.setVisibility(View.VISIBLE);
+        }else{
+            refresh.setVisibility(View.GONE);
         }
     }
 
@@ -163,5 +182,9 @@ public class FormActivity extends FragmentActivity {
     @OnClick(R.id.back)
     public void onBackClick() {
         onBackPressed();
+    }
+
+    public ImageView getRefresh() {
+        return refresh;
     }
 }

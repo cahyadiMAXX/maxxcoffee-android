@@ -77,7 +77,7 @@ public class ChangePhoneFragment extends Fragment {
                 public void onWait() {
 
                     progress.dismissAllowingStateLoss();
-                    Toast.makeText(activity, "You are just change your phone number. Please wait 5 minutes", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(activity, "You've just changed your phone number. Please wait 5 minutes before making another changes.", Toast.LENGTH_SHORT).show();
                 }
 
                 @Override

@@ -1,6 +1,9 @@
 package com.maxxcoffee.mobile.fragment;
 
+import android.animation.AnimatorInflater;
+import android.animation.AnimatorSet;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -9,6 +12,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -27,8 +31,13 @@ import com.maxxcoffee.mobile.model.request.RenameCardRequestModel;
 import com.maxxcoffee.mobile.task.DownloadImageTask;
 import com.maxxcoffee.mobile.task.RenameCardTask;
 import com.maxxcoffee.mobile.util.Constant;
+import com.maxxcoffee.mobile.util.OnSwipeTouchListener;
 import com.maxxcoffee.mobile.util.Utils;
+import com.maxxcoffee.mobile.widget.button.ButtonLatoBold;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -43,14 +52,17 @@ import butterknife.OnClick;
  */
 public class MyCardDetailFragment extends Fragment {
 
+    private static int CARD_FRONT_STATE = 1000;
+    private static int CARD_BACK_STATE = 999;
+
     @Bind(R.id.balance)
     TextView balance;
     @Bind(R.id.point)
     TextView point;
     @Bind(R.id.exp_date)
     TextView expDate;
-    @Bind(R.id.card_image)
-    ImageView cardImage;
+    //@Bind(R.id.card_image)
+    //ImageView cardImage;
     @Bind(R.id.beans_bubble)
     TextView beansBubble;
     @Bind(R.id.reward_achieved)
@@ -62,16 +74,34 @@ public class MyCardDetailFragment extends Fragment {
     @Bind(R.id.disable_layer)
     FrameLayout disableLayer;
 
+    @Bind(R.id.qr)
+    Button flipCard;
+    @Bind(R.id.imageCardFront)
+    ImageView imageCardFront;
+    @Bind(R.id.imageCardBack)
+    ImageView imageCardBack;
+
     private FormActivity activity;
     private CardController cardController;
     private String cardNumber;
     private String cardName;
     private String barcodeUrl;
 
+    private AnimatorSet mSetRightOut;
+    private AnimatorSet mSetLeftIn;
+    private boolean mIsBackVisible = false;
+    @Bind(R.id.card_front)
+    View mCardFrontLayout;
+    @Bind(R.id.card_back)
+    View mCardBackLayout;
+
+    private int cardState;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         activity = (FormActivity) getActivity();
+        activity.showRefreshButton(true);
         cardController = new CardController(activity);
     }
 
@@ -82,6 +112,14 @@ public class MyCardDetailFragment extends Fragment {
         ButterKnife.bind(this, view);
 
         fetchingCard();
+
+        activity.getRefresh().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Toast.makeText(getActivity(), "Clicke boss", Toast.LENGTH_LONG).show();
+                fetchingCard();
+            }
+        });
 
         fabMenu.setOnMenuButtonClickListener(new View.OnClickListener() {
             @Override
@@ -103,13 +141,45 @@ public class MyCardDetailFragment extends Fragment {
             }
         });
 
+        //animasi card
+        loadAnimations();
+        changeCameraDistance();
+
+        mCardBackLayout.setOnTouchListener(new OnSwipeTouchListener(getActivity()){
+            @Override
+            public void onSwipeLeft() {
+                super.onSwipeLeft();
+                flipCard(mCardBackLayout);
+            }
+
+            @Override
+            public void onSwipeRight() {
+                super.onSwipeRight();
+                flipCard(mCardBackLayout);
+            }
+        });
+
+        mCardFrontLayout.setOnTouchListener(new OnSwipeTouchListener(getActivity()){
+            @Override
+            public void onSwipeLeft() {
+                super.onSwipeLeft();
+                flipCard(mCardFrontLayout);
+            }
+
+            @Override
+            public void onSwipeRight() {
+                super.onSwipeRight();
+                flipCard(mCardFrontLayout);
+            }
+        });
+
         return view;
     }
 
     private void fetchingCard() {
-        String cardId = getArguments().getString("card-id", "-1");
+        final String cardId = getArguments().getString("card-id", "-1");
 
-        CardEntity card = cardController.getCardById(cardId);
+        final CardEntity card = cardController.getCardById(cardId);
         if (card != null) {
             try {
                 cardNumber = card.getNumber();
@@ -132,39 +202,97 @@ public class MyCardDetailFragment extends Fragment {
                 rewardAchieved.setText(String.valueOf(mRewardAchieve));
                 barcodeUrl = card.getBarcode();
 
+                //klo ada file, pake file saja
                 DownloadImageTask task = new DownloadImageTask(activity) {
                     @Override
                     protected void onDownloadError() {
-                        Glide.with(activity).load("").placeholder(R.drawable.ic_no_image).into(cardImage);
+                        //Glide.with(activity).load("").placeholder(R.drawable.ic_no_image).into(cardImage);
+                        Glide.with(activity).load("").placeholder(R.drawable.ic_no_image).into(imageCardFront);
                     }
 
                     @Override
                     protected void onImageDownloaded(Bitmap bitmap) {
                         Bitmap resizeImage = Utils.getResizedBitmap(bitmap, 0.95f);
                         Drawable drawable = new BitmapDrawable(getResources(), resizeImage);
-                        cardImage.setImageDrawable(drawable);
+                        //cardImage.setImageDrawable(drawable);
+                        imageCardFront.setImageDrawable(drawable);
                     }
                 };
                 task.execute(card.getImage());
 
-//                DownloadImageTask barcodeTask = new DownloadImageTask(activity) {
-//                    @Override
-//                    protected void onDownloadError() {
-//                        Glide.with(activity).load("").placeholder(R.drawable.ic_no_image).into(barcode);
-//                    }
-//
-//                    @Override
-//                    protected void onImageDownloaded(Bitmap bitmap) {
-//                        Bitmap resizeImage = Utils.getResizedBitmap(bitmap, 0.95f);
-//                        Drawable drawable = new BitmapDrawable(getResources(), resizeImage);
-//                        barcode.setImageDrawable(drawable);
-//                    }
-//                };
-//                barcodeTask.execute(card.getBarcode());
-//                Glide.with(activity).load(card.getBarcode()).placeholder(activity.getResources().getDrawable(R.drawable.ic_no_image)).centerCrop().crossFade().into(barcode);
+                DownloadImageTask barcodeTask = new DownloadImageTask(getContext()) {
+                    @Override
+                    protected void onDownloadError() {
+                        Glide.with(getContext()).load("").placeholder(R.drawable.ic_no_image).into(imageCardBack);
+                    }
+
+                    @Override
+                    protected void onImageDownloaded(Bitmap bitmap) {
+                        Bitmap resizeImage = Utils.getResizedBitmap(bitmap, 0.95f);
+                        Drawable drawable = new BitmapDrawable(getResources(), resizeImage);
+                        imageCardBack.setImageDrawable(drawable);
+                    }
+                };
+                barcodeTask.execute(card.getBarcode());
+
             } catch (ParseException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    public boolean fileExistance(String fname){
+        File file = getActivity().getBaseContext().getFileStreamPath(fname);
+        return file.exists();
+    }
+
+    public void saveImageBitmap(Bitmap bmp, String filename){
+        FileOutputStream out = null;
+        try {
+            out = new FileOutputStream(filename);
+            bmp.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
+            // PNG is a lossless format, the compression factor (100) is ignored
+            Toast.makeText(getActivity(), "Saved Image", Toast.LENGTH_LONG).show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (out != null) {
+                    out.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void changeCameraDistance() {
+        int distance = 8000;
+        float scale = getResources().getDisplayMetrics().density * distance;
+        mCardFrontLayout.setCameraDistance(scale);
+        mCardBackLayout.setCameraDistance(scale);
+    }
+
+    private void loadAnimations() {
+        mSetRightOut = (AnimatorSet) AnimatorInflater.loadAnimator(getActivity(), R.anim.out_animation);
+        mSetLeftIn = (AnimatorSet) AnimatorInflater.loadAnimator(getActivity(), R.anim.in_animation);
+    }
+
+    public void flipCard(View view) {
+        if (!mIsBackVisible) {
+            mSetRightOut.setTarget(mCardFrontLayout);
+            mSetLeftIn.setTarget(mCardBackLayout);
+            mSetRightOut.start();
+            mSetLeftIn.start();
+            mIsBackVisible = true;
+            flipCard.setText("Hide qr code");
+        } else {
+            mSetRightOut.setTarget(mCardBackLayout);
+            mSetLeftIn.setTarget(mCardFrontLayout);
+            mSetRightOut.start();
+            mSetLeftIn.start();
+            mIsBackVisible = false;
+            flipCard.setText("qr code");
         }
     }
 
@@ -221,9 +349,11 @@ public class MyCardDetailFragment extends Fragment {
         activity.switchFragment(FormActivity.HISTORY_DETAIL, bundle);
     }
 
+    //button click
     @OnClick(R.id.qr)
     public void onShowQrCode() {
-        disableLayer.setVisibility(View.GONE);
+        flipCard(mCardBackLayout);
+        /*disableLayer.setVisibility(View.GONE);
         fabMenu.close(true);
         // show dialog qr code
         QrCodeDialog qrDialog = new QrCodeDialog();
@@ -232,23 +362,7 @@ public class MyCardDetailFragment extends Fragment {
         bundle.putString("qr", barcodeUrl);
 
         qrDialog.setArguments(bundle);
-        qrDialog.show(getFragmentManager(), null);
+        qrDialog.show(getFragmentManager(), null);*/
 
     }
-
-//    @OnClick(R.id.fab_qrcode)
-//    public void onShowQrCode() {
-//        disableLayer.setVisibility(View.GONE);
-//        fabMenu.close(true);
-//        // show dialog qr code
-//        QrCodeDialog qrDialog = new QrCodeDialog();
-//
-//        Bundle bundle = new Bundle();
-//        bundle.putString("qr", barcodeUrl);
-//
-//        qrDialog.setArguments(bundle);
-//        qrDialog.show(getFragmentManager(), null);
-//
-//    }
-
 }

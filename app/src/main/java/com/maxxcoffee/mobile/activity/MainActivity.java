@@ -123,6 +123,8 @@ public class MainActivity extends FragmentActivity {
     TextView title;
     @Bind(R.id.hamburger)
     ImageView hamburger;
+    @Bind(R.id.refresh)
+    ImageView refresh;
 
     private List<ParentDrawerModel> listDataHeader;
     private HashMap<ParentDrawerModel, List<ChildDrawerModel>> listDataChild;
@@ -192,6 +194,8 @@ public class MainActivity extends FragmentActivity {
                 return false;
             }
         });
+
+        refresh.setVisibility(View.GONE);
         switchFragment(HOME);
     }
 
@@ -538,7 +542,23 @@ public class MainActivity extends FragmentActivity {
         title.setText(mTitle == null ? "" : mTitle);
     }
 
+    //overloading
     public void setHeaderColor(boolean transparent) {
+        if (rootLayout != null) {
+            refresh.setOnClickListener(null);
+            refresh.setVisibility(View.GONE);
+            if (transparent) {
+                rootLayout.setBackgroundColor(getResources().getColor(android.R.color.transparent));
+                hamburger.setImageDrawable(getResources().getDrawable(R.drawable.ic_menu_white));
+            } else {
+                rootLayout.setBackgroundColor(getResources().getColor(R.color.background_cream));
+                hamburger.setImageDrawable(getResources().getDrawable(R.drawable.ic_menu_black));
+            }
+        }
+    }
+
+    //overloading
+    public void setHeaderColor(boolean transparent, boolean showrefresh) {
         if (rootLayout != null) {
             if (transparent) {
                 rootLayout.setBackgroundColor(getResources().getColor(android.R.color.transparent));
@@ -546,6 +566,9 @@ public class MainActivity extends FragmentActivity {
             } else {
                 rootLayout.setBackgroundColor(getResources().getColor(R.color.background_cream));
                 hamburger.setImageDrawable(getResources().getDrawable(R.drawable.ic_menu_black));
+            }
+            if(showrefresh){
+                refresh.setVisibility(View.VISIBLE);
             }
         }
     }
@@ -762,5 +785,9 @@ public class MainActivity extends FragmentActivity {
         } else {
             super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
+    }
+
+    public ImageView getRefresh() {
+        return refresh;
     }
 }

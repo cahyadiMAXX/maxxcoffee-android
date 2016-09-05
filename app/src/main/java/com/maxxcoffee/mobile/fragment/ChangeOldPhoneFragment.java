@@ -63,22 +63,19 @@ public class ChangeOldPhoneFragment extends Fragment {
         ChangeOldPhoneTask task = new ChangeOldPhoneTask(activity) {
             @Override
             public void onSuccess() {
-
-                    progress.dismissAllowingStateLoss();
+                progress.dismissAllowingStateLoss();
                 activity.onBackClick();
             }
 
             @Override
             public void onWait() {
-
-                    progress.dismissAllowingStateLoss();
-                Toast.makeText(activity, "You are just change your phone number. Please wait 5 minutes", Toast.LENGTH_LONG).show();
+                progress.dismissAllowingStateLoss();
+                Toast.makeText(activity, "You've just changed your phone number. Please wait 5 minutes before making another changes.", Toast.LENGTH_LONG).show();
             }
 
             @Override
             public void onFailed() {
-
-                    progress.dismiss();
+                progress.dismiss();
                 Toast.makeText(activity, "Failed to change phone number", Toast.LENGTH_LONG).show();
             }
         };

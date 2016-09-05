@@ -3,6 +3,7 @@ package com.maxxcoffee.mobile.api;
 import com.maxxcoffee.mobile.model.request.ChangeCityOccupationRequestModel;
 import com.maxxcoffee.mobile.model.request.ChangeEmailRequestModel;
 import com.maxxcoffee.mobile.model.request.ChangePhoneRequestModel;
+import com.maxxcoffee.mobile.model.request.CheckValidEmailRequestModel;
 import com.maxxcoffee.mobile.model.request.ContactUsRequestModel;
 import com.maxxcoffee.mobile.model.request.DefaultRequestModel;
 import com.maxxcoffee.mobile.model.request.DeleteCardRequestModel;
@@ -20,6 +21,7 @@ import com.maxxcoffee.mobile.model.request.VerifySmsCodeRequestModel;
 import com.maxxcoffee.mobile.model.response.AboutResponseModel;
 import com.maxxcoffee.mobile.model.response.CardResponseModel;
 import com.maxxcoffee.mobile.model.response.ChangeUserDataResponseModel;
+import com.maxxcoffee.mobile.model.response.CheckValidEmailResponseModel;
 import com.maxxcoffee.mobile.model.response.DefaultResponseModel;
 import com.maxxcoffee.mobile.model.response.EventResponseModel;
 import com.maxxcoffee.mobile.model.response.FaqResponseModel;
@@ -146,5 +148,8 @@ public interface ApiInterface {
 
     @POST("/api/forgotpassword")
     void forgotPassword(@Body ChangePhoneRequestModel body, Callback<DefaultResponseModel> response);
+
+    @POST("/api/cek/email/exists")
+    void checkEmailExist(@Body CheckValidEmailRequestModel body, Callback<CheckValidEmailResponseModel> response);
 
 }

@@ -5,11 +5,13 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 
 import com.daimajia.slider.library.SliderLayout;
+import com.daimajia.slider.library.Transformers.BaseTransformer;
 import com.daimajia.slider.library.Tricks.ViewPagerEx;
 import com.maxxcoffee.mobile.R;
 import com.maxxcoffee.mobile.adapter.WelcomeAdapter;
@@ -74,7 +76,6 @@ public class WelcomeActivity extends FragmentActivity {
             };
             slider.addSlider(adapter);
         }
-
         slider.stopAutoCycle();
     }
 

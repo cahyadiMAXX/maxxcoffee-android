@@ -2,21 +2,29 @@ package com.maxxcoffee.mobile.fragment.dialog;
 
 import android.app.Dialog;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.Image;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
+import android.util.Log;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.maxxcoffee.mobile.R;
 import com.maxxcoffee.mobile.task.DownloadImageTask;
 import com.maxxcoffee.mobile.util.Utils;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -42,6 +50,7 @@ public class QrCodeDialog extends DialogFragment {
         dialog.show();
 
         String url = getArguments().getString("qr");
+        final String filename = "qrcode.png";
 
         if (url != null) {
             DownloadImageTask barcodeTask = new DownloadImageTask(getContext()) {
@@ -60,6 +69,7 @@ public class QrCodeDialog extends DialogFragment {
             barcodeTask.execute(url);
         }
 
+
         ButterKnife.bind(this, dialog);
         ok.setTextColor(Color.RED);
 
@@ -69,5 +79,36 @@ public class QrCodeDialog extends DialogFragment {
     @OnClick(R.id.ok)
     public void onOkClick() {
         dismiss();
+    }
+
+    public boolean fileExistance(String fname){
+        String extStorageDirectory = Environment.getExternalStorageDirectory().toString();
+        File file = new File(extStorageDirectory,fname);
+        Log.d("filepathexist", file.getAbsolutePath());
+        return file.exists();
+    }
+
+    public void saveImageBitmap(Bitmap bmp, String filename){
+        Bitmap bitmap = null;
+        String extStorageDirectory = Environment.getExternalStorageDirectory().toString();
+        FileOutputStream outStream = null;
+        //Log.e("bitmap", bitmap.toString());
+        File file = new File(extStorageDirectory + "/maxx",filename + ".png");
+        if (file.exists()) {
+            file.mkdirs();
+            file.delete();
+            file = new File(extStorageDirectory + "/maxx", filename + ".png");
+            Log.e("file exist", "" + file + ",Bitmap= " + filename);
+        }
+        try {
+            // make a new bitmap from your file
+            outStream = new FileOutputStream(file);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, outStream);
+            outStream.flush();
+            outStream.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        Log.e("file", "" + file);
     }
 }

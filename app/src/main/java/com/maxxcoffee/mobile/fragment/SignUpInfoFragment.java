@@ -136,7 +136,7 @@ public class SignUpInfoFragment extends Fragment {
                 if (selectedGender == MALE) {
                     textGender.setText("Male");
                 } else if (selectedGender == FEMALE) {
-                    textGender.setText("Male");
+                    textGender.setText("Female");
                 }
                 PreferenceManager.putString(activity, Constant.PREFERENCE_REGISTER_GENDER, textGender.getText().toString());
                 dismiss();

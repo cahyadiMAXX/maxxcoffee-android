@@ -33,6 +33,7 @@ public class Constant {
     public final static String PREFERENCE_ROUTE_TO_LOGOUT = "maxx-route-to-logout";
 
     public final static String PREFERENCE_REGISTER_FIRST_NAME = "maxx-register-first-name";
+    public final static String PREFERENCE_REGISTER_IS_VALID_EMAIL = "maxx-register-is-valid-email";
     public final static String PREFERENCE_REGISTER_LAST_NAME = "maxx-register-last-name";
     public final static String PREFERENCE_REGISTER_EMAIL = "maxx-register-email";
     public final static String PREFERENCE_REGISTER_PHONE = "maxx-register-phone";

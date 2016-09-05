@@ -127,6 +127,15 @@ public class Utils {
         return durationText;
     }
 
+    public static long getDurationInMinutes(Date createdDate) {
+        SimpleDateFormat df = new SimpleDateFormat(Constant.DATEFORMAT_META);
+        Date today = new Date();
+        long diff = today.getTime() - createdDate.getTime();
+
+        long diffMinutes = diff / (60 * 1000) % 60;
+        return diff;
+    }
+
     public static Properties getProperties(Context context) {
         Properties properties = new Properties();
         try {

@@ -62,7 +62,7 @@ public class MyCardFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         activity = (MainActivity) getActivity();
-        activity.setHeaderColor(false);
+        activity.setHeaderColor(false, true);
 
         cardController = new CardController(activity);
         data = new ArrayList<>();
@@ -71,7 +71,6 @@ public class MyCardFragment extends Fragment {
             public void onCardSelected(CardEntity model) {
                 Bundle bundle = new Bundle();
                 bundle.putString("card-id", String.valueOf(model.getId()));
-//
 //                activity.switchFragment(MainActivity.DETAIL_CARD, bundle);
                 Intent intent = new Intent(activity, FormActivity.class);
                 intent.putExtra("content", FormActivity.DETAIL_CARD);
@@ -79,6 +78,14 @@ public class MyCardFragment extends Fragment {
                 startActivity(intent);
             }
         };
+        activity.getRefresh().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                swipe.setRefreshing(false);
+                getLocalCard();
+                fetchingData();
+            }
+        });
     }
 
     @Override
@@ -107,7 +114,6 @@ public class MyCardFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(adapter);
 
-//        swipe.setEnabled(false);
         swipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -116,7 +122,8 @@ public class MyCardFragment extends Fragment {
                 fetchingData();
             }
         });
-        swipe.post(new Runnable() {
+
+        /*swipe.post(new Runnable() {
             @Override
             public void run() {
                 synchronized (this) {
@@ -124,7 +131,7 @@ public class MyCardFragment extends Fragment {
                     fetchingData();
                 }
             }
-        });
+        });*/
 
         fabMenu.setOnMenuButtonClickListener(new View.OnClickListener() {
             @Override
@@ -152,8 +159,6 @@ public class MyCardFragment extends Fragment {
     private void fetchingData() {
         final LoadingDialog progress = new LoadingDialog();
         progress.show(getFragmentManager(), null);
-//        final TBaseProgress progress = new TBaseProgress(activity);
-//        progress.show();
 
         CardTask task = new CardTask(activity) {
             @Override
@@ -221,10 +226,6 @@ public class MyCardFragment extends Fragment {
             fabMenu.close(true);
             Intent intent = new Intent(activity, AddCardBarcodeActivity.class);
             startActivity(intent);
-
-//            Intent intent = new Intent(activity, FormActivity.class);
-//            intent.putExtra("content", FormActivity.DELETE_CARD);
-//            startActivity(intent);
         }
     }
 

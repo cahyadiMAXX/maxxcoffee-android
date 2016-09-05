@@ -11,6 +11,8 @@ import android.widget.Toast;
 import com.maxxcoffee.mobile.R;
 import com.maxxcoffee.mobile.activity.MainActivity;
 import com.maxxcoffee.mobile.fragment.dialog.LoadingDialog;
+import com.maxxcoffee.mobile.model.request.CheckValidEmailRequestModel;
+import com.maxxcoffee.mobile.task.CheckValidEmailTask;
 import com.maxxcoffee.mobile.task.CityTask;
 import com.maxxcoffee.mobile.util.Constant;
 import com.maxxcoffee.mobile.util.PreferenceManager;
@@ -54,6 +56,38 @@ public class SignUpFragment extends Fragment {
 
         ButterKnife.bind(this, view);
         activity.setTitle("");
+
+        email.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(!hasFocus){
+                    if(!email.getText().toString().equals("") && isValidEmail(email.getText().toString())){
+                        final LoadingDialog progress = new LoadingDialog();
+                        progress.show(getFragmentManager(), null);
+                        //check ke server
+                        CheckValidEmailRequestModel body = new CheckValidEmailRequestModel();
+                        body.setEmail(email.getText().toString());
+
+                        CheckValidEmailTask cvtask = new CheckValidEmailTask(activity) {
+                            @Override
+                            public void onSuccess(String response) {
+                                progress.dismissAllowingStateLoss();
+                                Toast.makeText(getActivity(), response, Toast.LENGTH_LONG).show();
+                                PreferenceManager.putBool(activity, Constant.PREFERENCE_REGISTER_IS_VALID_EMAIL, true);
+                            }
+
+                            @Override
+                            public void onFailed() {
+                                progress.dismissAllowingStateLoss();
+                                PreferenceManager.putBool(activity, Constant.PREFERENCE_REGISTER_IS_VALID_EMAIL, false);
+                                Toast.makeText(getActivity(), "Email already exists", Toast.LENGTH_LONG).show();
+                            }
+                        };
+                        cvtask.execute(body);
+                    }
+                }
+            }
+        });
 
         return view;
     }
@@ -100,8 +134,6 @@ public class SignUpFragment extends Fragment {
         PreferenceManager.putString(activity, Constant.PREFERENCE_REGISTER_PHONE, mPhone);
         PreferenceManager.putString(activity, Constant.PREFERENCE_REGISTER_PASSWORD, mPassword);
 
-//        String cityData = PreferenceManager.getString(activity, Constant.DATA_KOTA, "");
-
         final LoadingDialog progress = new LoadingDialog();
         progress.show(getFragmentManager(), null);
 
@@ -141,6 +173,16 @@ public class SignUpFragment extends Fragment {
         if (mEmail.equals("")) {
             Toast.makeText(activity, "Please verify your email address", Toast.LENGTH_SHORT).show();
             return false;
+        }else{
+            if(!isValidEmail(mEmail.toString())){
+                Toast.makeText(activity, "Please enter valid email address", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+            boolean isValid = PreferenceManager.getBool(activity, Constant.PREFERENCE_REGISTER_IS_VALID_EMAIL, false);
+            if(!isValid){
+                Toast.makeText(activity, "Please check your email address", Toast.LENGTH_SHORT).show();
+                return false;
+            }
         }
         if (mPhone.equals("")) {
             Toast.makeText(activity, "Please verify your phone number", Toast.LENGTH_SHORT).show();
@@ -159,7 +201,12 @@ public class SignUpFragment extends Fragment {
             Toast.makeText(activity, "Please verify your password confirmation", Toast.LENGTH_SHORT).show();
             return false;
         }
+
         return true;
+    }
+
+    public final static boolean isValidEmail(CharSequence target) {
+        return android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
     }
 
     private void setBackground(int dayPart) {

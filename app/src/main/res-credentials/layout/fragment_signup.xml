@@ -113,7 +113,7 @@
                 android:textColor="@android:color/darker_gray"
                 android:textSize="16sp" />
 
-            <com.maxxcoffee.mobile.widget.edittext.EditTextLatoRegular
+            <com.maxxcoffee.mobile.widget.edittext.EditTextShowPassword
                 android:id="@+id/password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -133,7 +133,8 @@
                 android:textColor="@android:color/darker_gray"
                 android:textSize="16sp" />
 
-            <com.maxxcoffee.mobile.widget.edittext.EditTextLatoRegular
+
+            <com.maxxcoffee.mobile.widget.edittext.EditTextShowPassword
                 android:id="@+id/password_confirm"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -143,7 +144,8 @@
                 android:padding="16dp"
                 android:singleLine="true"
                 android:textColor="@android:color/white"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                />
 
             <com.maxxcoffee.mobile.widget.button.ButtonLatoRegular
                 android:id="@+id/next"
