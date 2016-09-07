@@ -10,14 +10,17 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.maxxcoffee.mobile.R;
 import com.maxxcoffee.mobile.database.entity.CardEntity;
 import com.maxxcoffee.mobile.model.CardModel;
 import com.maxxcoffee.mobile.task.DownloadImageTask;
+import com.maxxcoffee.mobile.util.ImageSaver;
 import com.maxxcoffee.mobile.util.Utils;
 
 import java.util.List;
@@ -67,6 +70,7 @@ public abstract class CardAdapter extends RecyclerView.Adapter<RecyclerView.View
         TextView balance;
         TextView point;
         CardView card;
+        FrameLayout isPrimary;
 
         public BodyViewHolder(View itemView) {
             super(itemView);
@@ -75,30 +79,53 @@ public abstract class CardAdapter extends RecyclerView.Adapter<RecyclerView.View
             balance = (TextView) itemView.findViewById(R.id.balance);
             point = (TextView) itemView.findViewById(R.id.point);
             card = (CardView) itemView.findViewById(R.id.card_view);
+            isPrimary = (FrameLayout) itemView.findViewById(R.id.isPrimary);
         }
 
         public void populate(final CardEntity model) {
             name.setText(model.getName());
             balance.setText("IDR " + model.getBalance());
             point.setText(String.valueOf(model.getPoint()));
+            //Toast.makeText(context, String.valueOf(model.getIsPrimary()), Toast.LENGTH_LONG).show();
+            if(model.getPrimary() == 1){
+                isPrimary.setVisibility(View.VISIBLE);
+            }else{
+                isPrimary.setVisibility(View.GONE);
+            }
 
             DownloadImageTask task = new DownloadImageTask(context) {
                 @Override
                 protected void onDownloadError() {
-                    Glide.with(context).load("").placeholder(R.drawable.ic_no_image).into(image);
+                    try {
+                        Glide.with(context).load(model.getImage()).placeholder(R.drawable.ic_no_image).into(image);
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
                 }
 
                 @Override
                 protected void onImageDownloaded(Bitmap bitmap) {
-                    Bitmap resizeImage = Utils.getResizedBitmap(bitmap, 0.95f);
-                    Drawable drawable = new BitmapDrawable(context.getResources(), resizeImage);
-                    image.setImageDrawable(drawable);
+                    try{
+                        /*Bitmap resizeImage = Utils.getResizedBitmap(bitmap, 0.95f);
+                        Drawable drawable = new BitmapDrawable(context.getResources(), bitmap);
+                        image.setImageDrawable(drawable);*/
+                        ImageSaver imageSaver = new ImageSaver(context);
+                        imageSaver.setFileName(model.getName() + "_on_adapter.png").
+                                setDirectoryName("images").
+                                save(bitmap);
+                        imageSaver.setExternal(false);
+                        loadImageFront(model.getName() + "_on_adapter.png");
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
                 }
             };
-            task.execute(model.getImage());
-//            Glide.with(context).load(model.getImage()).centerCrop().crossFade().into(image);
-//            point.setText(String.valueOf(model.getPoint()));
-//            image.setImageDrawable(context.getResources().getDrawable(model.getImage()));
+
+            if(Utils.isConnected(context)){
+                task.execute(model.getImage());
+            }else{
+                loadImageFront(model.getName() + "_on_adapter.png");
+            }
 
             card.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -106,6 +133,16 @@ public abstract class CardAdapter extends RecyclerView.Adapter<RecyclerView.View
                     onCardSelected(model);
                 }
             });
+        }
+
+        public void loadImageFront(String filename){
+            Bitmap bmt = new ImageSaver(context).
+                    setFileName(filename).
+                    setDirectoryName("images").
+                    load();
+
+            Drawable drawable = new BitmapDrawable(context.getResources(), bmt);
+            image.setImageDrawable(drawable);
         }
     }
 

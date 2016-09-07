@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.maxxcoffee.mobile.R;
 import com.maxxcoffee.mobile.activity.MainActivity;
@@ -16,6 +17,7 @@ import com.maxxcoffee.mobile.adapter.TransactionHistoryAdapter;
 import com.maxxcoffee.mobile.adapter.TransferHistoryAdapter;
 import com.maxxcoffee.mobile.database.controller.HistoryController;
 import com.maxxcoffee.mobile.database.entity.HistoryEntity;
+import com.maxxcoffee.mobile.util.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,7 +60,11 @@ public class TransactionHistoryFragment extends Fragment {
 
         recyclerView.setAdapter(adapter);
 
-        fetchingData();
+        if(Utils.isConnected(activity)){
+            fetchingData();
+        }else{
+            Toast.makeText(activity, activity.getResources().getString(R.string.mobile_data), Toast.LENGTH_LONG).show();
+        }
 
         cityLayout.setVisibility(View.GONE);
         return view;
@@ -69,6 +75,7 @@ public class TransactionHistoryFragment extends Fragment {
         List<HistoryEntity> histories = historyController.getHistoryByType("redemption");
 
         empty.setVisibility(histories.size() == 0 ? View.VISIBLE : View.GONE);
+        empty.setText(histories.size() == 0 ? "Data not found" : "");
         for (HistoryEntity history : histories) {
             data.add(history);
         }

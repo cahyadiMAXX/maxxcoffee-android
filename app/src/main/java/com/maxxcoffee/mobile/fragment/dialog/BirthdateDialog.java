@@ -1,5 +1,6 @@
 package com.maxxcoffee.mobile.fragment.dialog;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.DatePickerDialog.OnDateSetListener;
 import android.app.Dialog;
@@ -40,12 +41,12 @@ public abstract class BirthdateDialog extends DialogFragment implements OnDateSe
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         calendar = Calendar.getInstance();
         thisYear = calendar.get(Calendar.YEAR);
-        year = calendar.get(Calendar.YEAR) - 20;
+        year = calendar.get(Calendar.YEAR) - 17;
         month = calendar.get(Calendar.MONTH);
         day = calendar.get(Calendar.DAY_OF_MONTH);
         dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-
-        return new DatePickerDialog(getActivity(), this, year, month, day);
+        //you saved my day THEME_HOLO_LIGHT
+        return new DatePickerDialog(getActivity(), AlertDialog.THEME_HOLO_LIGHT, this, year, month, day);
     }
 
     @Override

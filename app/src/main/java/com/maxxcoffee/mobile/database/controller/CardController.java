@@ -37,6 +37,23 @@ public class CardController {
         }
     }
 
+    public CardEntity getCardByCardNumber(String id) {
+        List<CardEntity> data = new ArrayList<>();
+        try {
+            Dao<CardEntity, Integer> dao = database.getCardDao();
+            QueryBuilder<CardEntity, Integer> query = dao.queryBuilder();
+            query.where().eq("number", id);
+
+            data = query.query();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        if (data.size() > 0) {
+            return data.get(0);
+        }
+        return null;
+    }
+
     public CardEntity getCardByDist(String id) {
         List<CardEntity> data = new ArrayList<>();
         try {

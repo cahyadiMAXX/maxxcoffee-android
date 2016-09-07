@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.maxxcoffee.mobile.R;
 import com.maxxcoffee.mobile.activity.FormActivity;
 import com.maxxcoffee.mobile.activity.MainActivity;
+import com.maxxcoffee.mobile.activity.MoreDetailActivity;
 import com.maxxcoffee.mobile.adapter.TransactionHistoryAdapter;
 import com.maxxcoffee.mobile.database.controller.HistoryController;
 import com.maxxcoffee.mobile.database.entity.HistoryEntity;
@@ -35,7 +36,7 @@ public class DetailTransactionHistoryFragment extends Fragment {
     @Bind(R.id.empty)
     TextView empty;
 
-    private FormActivity activity;
+    private MoreDetailActivity activity;
     private List<HistoryEntity> data;
     private TransactionHistoryAdapter adapter;
     private HistoryController historyController;
@@ -43,7 +44,7 @@ public class DetailTransactionHistoryFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        activity = (FormActivity) getActivity();
+        activity = (MoreDetailActivity) getActivity();
 
         historyController = new HistoryController(activity);
         data = new ArrayList<>();
@@ -69,6 +70,7 @@ public class DetailTransactionHistoryFragment extends Fragment {
         List<HistoryEntity> histories = historyController.getHistoryByType("redemption");
 
         empty.setVisibility(histories.size() == 0 ? View.VISIBLE : View.GONE);
+        empty.setText(histories.size() == 0 ? "Data not found" : "");
         for (HistoryEntity history : histories) {
             data.add(history);
         }

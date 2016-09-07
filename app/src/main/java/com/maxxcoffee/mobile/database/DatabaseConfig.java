@@ -8,6 +8,7 @@ import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 import com.maxxcoffee.mobile.database.entity.CardEntity;
+import com.maxxcoffee.mobile.database.entity.CardPrimaryEntity;
 import com.maxxcoffee.mobile.database.entity.CityEntity;
 import com.maxxcoffee.mobile.database.entity.ProvinceEntity;
 import com.maxxcoffee.mobile.database.entity.EventEntity;
@@ -26,7 +27,7 @@ import java.sql.SQLException;
  */
 public class DatabaseConfig extends OrmLiteSqliteOpenHelper {
 
-    private static final int DATABASE_VERSION = 14;
+    private static final int DATABASE_VERSION = 24;
     private static final String DATABASE_NAME = "db_maxx";
     private static final String TAG = "MAXX-DATABASE";
 
@@ -35,6 +36,7 @@ public class DatabaseConfig extends OrmLiteSqliteOpenHelper {
     private Dao<MenuCategoryEntity, Integer> menuCategoryDao = null;
     private Dao<MenuEntity, Integer> menuItemDao = null;
     private Dao<CardEntity, Integer> cardDao = null;
+    private Dao<CardPrimaryEntity, Integer> cardPrimaryDao = null;
     private Dao<FaqEntity, Integer> faqDao = null;
     private Dao<ProfileEntity, Integer> profileDao = null;
     private Dao<EventEntity, Integer> eventDao = null;
@@ -64,6 +66,7 @@ public class DatabaseConfig extends OrmLiteSqliteOpenHelper {
             TableUtils.createTableIfNotExists(connectionSource, MenuCategoryEntity.class);
             TableUtils.createTableIfNotExists(connectionSource, MenuEntity.class);
             TableUtils.createTableIfNotExists(connectionSource, CardEntity.class);
+            TableUtils.createTableIfNotExists(connectionSource, CardPrimaryEntity.class);
             TableUtils.createTableIfNotExists(connectionSource, FaqEntity.class);
             TableUtils.createTableIfNotExists(connectionSource, ProfileEntity.class);
             TableUtils.createTableIfNotExists(connectionSource, EventEntity.class);
@@ -82,6 +85,7 @@ public class DatabaseConfig extends OrmLiteSqliteOpenHelper {
             TableUtils.dropTable(connectionSource, MenuCategoryEntity.class, false);
             TableUtils.dropTable(connectionSource, MenuEntity.class, false);
             TableUtils.dropTable(connectionSource, CardEntity.class, false);
+            TableUtils.dropTable(connectionSource, CardPrimaryEntity.class, false);
             TableUtils.dropTable(connectionSource, FaqEntity.class, false);
             TableUtils.dropTable(connectionSource, ProfileEntity.class, false);
             TableUtils.dropTable(connectionSource, EventEntity.class, false);
@@ -100,6 +104,7 @@ public class DatabaseConfig extends OrmLiteSqliteOpenHelper {
             TableUtils.clearTable(connectionSource, MenuCategoryEntity.class);
             TableUtils.clearTable(connectionSource, MenuEntity.class);
             TableUtils.clearTable(connectionSource, CardEntity.class);
+            TableUtils.clearTable(connectionSource, CardPrimaryEntity.class);
             TableUtils.clearTable(connectionSource, FaqEntity.class);
             TableUtils.clearTable(connectionSource, ProfileEntity.class);
             TableUtils.clearTable(connectionSource, EventEntity.class);
@@ -152,6 +157,13 @@ public class DatabaseConfig extends OrmLiteSqliteOpenHelper {
             cardDao = getDao(CardEntity.class);
         }
         return cardDao;
+    }
+
+    public Dao<CardPrimaryEntity, Integer> getCardPrimaryDao() throws SQLException {
+        if (cardPrimaryDao == null) {
+            cardPrimaryDao = getDao(CardPrimaryEntity.class);
+        }
+        return cardPrimaryDao;
     }
 
     public Dao<FaqEntity, Integer> getFaqDao() throws SQLException {

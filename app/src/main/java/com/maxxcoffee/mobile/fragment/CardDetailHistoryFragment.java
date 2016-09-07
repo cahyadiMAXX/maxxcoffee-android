@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.maxxcoffee.mobile.R;
 import com.maxxcoffee.mobile.activity.FormActivity;
+import com.maxxcoffee.mobile.activity.MoreDetailActivity;
 import com.maxxcoffee.mobile.adapter.DetailHistoryPagerAdapter;
 import com.maxxcoffee.mobile.database.controller.CardController;
 import com.maxxcoffee.mobile.database.entity.CardEntity;
@@ -24,6 +25,7 @@ import com.maxxcoffee.mobile.model.request.HistoryRequestModel;
 import com.maxxcoffee.mobile.task.HistoryTask;
 import com.maxxcoffee.mobile.util.Constant;
 import com.maxxcoffee.mobile.util.PreferenceManager;
+import com.maxxcoffee.mobile.util.Utils;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -53,7 +55,7 @@ public class CardDetailHistoryFragment extends Fragment {
     @Bind(R.id.card)
     TextView card;
 
-    private FormActivity activity;
+    private MoreDetailActivity activity;
     private CardController cardController;
     private List<CardModel> data;
     private SimpleDateFormat dateFormat;
@@ -65,7 +67,7 @@ public class CardDetailHistoryFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        activity = (FormActivity) getActivity();
+        activity = (MoreDetailActivity) getActivity();
 
         data = new ArrayList<>();
         dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -78,7 +80,7 @@ public class CardDetailHistoryFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_history, container, false);
 
         ButterKnife.bind(this, view);
-        activity.setTitle("History");
+        activity.setTitle("Card History");
 
         String cardName = getArguments().getString("card-name", "");
         selectedCard = getArguments().getString("card-number", "");
@@ -93,7 +95,12 @@ public class CardDetailHistoryFragment extends Fragment {
                 tabs.setupWithViewPager(viewPager);
             }
         });
-        fetchingData();
+
+        if(Utils.isConnected(activity)){
+            fetchingData();
+        }else{
+            Toast.makeText(activity, activity.getResources().getString(R.string.mobile_data), Toast.LENGTH_LONG).show();
+        }
 
         return view;
     }
@@ -104,8 +111,12 @@ public class CardDetailHistoryFragment extends Fragment {
         int month = calendar.get(Calendar.MONTH);
         int day = calendar.get(Calendar.DAY_OF_MONTH);
 
-        periodeStart.setText(year + "-" + month + "-" + day);
-        periodeEnd.setText(year + "-" + (month + 1) + "-" + day);
+        String startMonth = (month < 10 ? "0" + String.valueOf(month): String.valueOf(month));
+        String endMonth = (month + 1 < 10 ? "0" + String.valueOf(month + 1): String.valueOf(month + 1));
+        String fixDay = (day < 10 ? "0" + String.valueOf(day): String.valueOf(day));
+
+        periodeStart.setText(year + "-" + startMonth + "-" + fixDay);
+        periodeEnd.setText(year + "-" + endMonth + "-" + fixDay);
     }
 
     @OnClick(R.id.start_period_layout)
@@ -146,43 +157,17 @@ public class CardDetailHistoryFragment extends Fragment {
         datePicker.show(getFragmentManager(), null);
     }
 
-//    @OnClick(R.id.card_layout)
-//    public void onCardLayoutClick() {
-//        LostCardDialog lostCardDialog = new LostCardDialog() {
-//            @Override
-//            protected void onOk(Integer index) {
-//                if (index == CARD_1) {
-//                    setCard(data.get(0));
-//                } else if (index == CARD_2) {
-//                    setCard(data.get(1));
-//                } else if (index == CARD_3) {
-//                    setCard(data.get(2));
-//                }
-//                dismiss();
-//            }
-//
-//            @Override
-//            protected void onCancel() {
-//                dismiss();
-//            }
-//        };
-//
-//        String cardString = new Gson().toJson(data);
-//
-//        Bundle bundle = new Bundle();
-//        bundle.putInt("selected-report", LostCardDialog.CARD_1);
-//        bundle.putString("cards", cardString);
-//
-//        lostCardDialog.setArguments(bundle);
-//        lostCardDialog.show(getFragmentManager(), null);
-//    }
 
     @OnClick(R.id.search)
     public void onSearchClick() {
         if (!isValidForm())
             return;
 
-        fetchingData();
+        if(Utils.isConnected(activity)){
+            fetchingData();
+        }else{
+            Toast.makeText(activity, activity.getResources().getString(R.string.mobile_data), Toast.LENGTH_LONG).show();
+        }
     }
 
     private boolean isValidForm() {
@@ -200,42 +185,6 @@ public class CardDetailHistoryFragment extends Fragment {
         }
         return true;
     }
-
-//    private void fetchingCardData() {
-//        final TBaseProgress progress = new TBaseProgress(activity);
-//        progress.show();
-//
-//        CardTask task = new CardTask(activity) {
-//            @Override
-//            public void onSuccess(List<CardItemResponseModel> responseModel) {
-//                for (CardItemResponseModel card : responseModel) {
-//                    CardEntity entity = new CardEntity();
-////                    entity.setId(card.getId_card());
-//                    entity.setName(card.getCard_name());
-//                    entity.setNumber(card.getCard_number());
-//                    entity.setImage(card.getCard_image());
-//                    entity.setDistribution_id(card.getDistribution_id());
-//                    entity.setCard_pin(card.getCard_pin());
-//                    entity.setBalance(card.getBalance());
-//                    entity.setPoint(card.getBeans());
-//                    entity.setExpired_date(card.getExpired_date());
-//
-//                    cardController.insert(entity);
-//                }
-//                getLocalCard();
-//
-//
-//                    progress.dismiss();
-//            }
-//
-//            @Override
-//            public void onFailed() {
-//
-//                    progress.dismiss();
-//            }
-//        };
-//        task.execute();
-//    }
 
     private void getLocalCard() {
         data.clear();
@@ -257,13 +206,14 @@ public class CardDetailHistoryFragment extends Fragment {
     }
 
     private void fetchingData() {
+        //initDate();
         final LoadingDialog progress = new LoadingDialog();
         progress.show(getFragmentManager(), null);
 
         HistoryRequestModel body = new HistoryRequestModel();
         body.setCard_number(selectedCard);
-        body.setPeriode_start(selectedStartDate);
-        body.setPeriode_end(selectedEndDate);
+        body.setPeriode_start(periodeStart.getText().toString());
+        body.setPeriode_end(periodeEnd.getText().toString());
 
         HistoryTask task = new HistoryTask(activity) {
             @Override

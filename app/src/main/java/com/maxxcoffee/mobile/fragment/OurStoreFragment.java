@@ -28,6 +28,7 @@ import com.maxxcoffee.mobile.fragment.dialog.LoadingDialog;
 import com.maxxcoffee.mobile.fragment.dialog.ProvinceListDialog;
 import com.maxxcoffee.mobile.model.response.StoreItemResponseModel;
 import com.maxxcoffee.mobile.task.StoreTask;
+import com.maxxcoffee.mobile.util.Utils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -115,12 +116,30 @@ public class OurStoreFragment extends Fragment {
 
         recyclerView.setAdapter(adapter);
 
-        swipe.setEnabled(false);
-        getLocalProvince();
-        fetchingData();
+        checkBeforeFetchData();
+
+        //swipe.setEnabled(false);
+        swipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                swipe.setRefreshing(false);
+                //fetchingData();
+                checkBeforeFetchData();
+            }
+        });
 
         search.requestFocus();
         return view;
+    }
+
+    private void checkBeforeFetchData(){
+        if(!Utils.isConnected(activity)){
+            Toast.makeText(activity, activity.getResources().getString(R.string.mobile_data), Toast.LENGTH_LONG).show();
+            adapter.notifyDataSetInvalidated();
+        }else{
+            getLocalProvince();
+            fetchingData();
+        }
     }
 
     @OnItemClick(R.id.recycleview)
@@ -151,23 +170,27 @@ public class OurStoreFragment extends Fragment {
 
     @OnClick(R.id.city_layout)
     public void onCityClick() {
-        Collections.sort(dataProvince);
-        dataProvince.set(0, "ALL");
-        String jsonProvince = new Gson().toJson(dataProvince);
+        try{
+            Collections.sort(dataProvince);
+            dataProvince.set(0, "ALL");
+            String jsonProvince = new Gson().toJson(dataProvince);
 
-        Bundle bundle = new Bundle();
-        bundle.putString("provinces", jsonProvince);
+            Bundle bundle = new Bundle();
+            bundle.putString("provinces", jsonProvince);
 
-        ProvinceListDialog provinceDialog = new ProvinceListDialog() {
-            @Override
-            public void onSelectedItem(String item) {
-                search.setText(item);
-                getLocalStore(item);
-                dismiss();
-            }
-        };
-        provinceDialog.setArguments(bundle);
-        provinceDialog.show(getFragmentManager(), null);
+            ProvinceListDialog provinceDialog = new ProvinceListDialog() {
+                @Override
+                public void onSelectedItem(String item) {
+                    search.setText(item);
+                    getLocalStore(item);
+                    dismiss();
+                }
+            };
+            provinceDialog.setArguments(bundle);
+            provinceDialog.show(getFragmentManager(), null);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     private void fetchingData() {
@@ -178,6 +201,7 @@ public class OurStoreFragment extends Fragment {
             @Override
             public void onSuccess(List<StoreItemResponseModel> responseModel) {
 
+                empty.setText(responseModel.size() == 0 ? "Data not found" : "");
                 empty.setVisibility(responseModel.size() == 0 ? View.VISIBLE : View.GONE);
                 for (StoreItemResponseModel storeItem : responseModel) {
                     String jsonFeature = new Gson().toJson(storeItem.getFeature());
@@ -211,33 +235,11 @@ public class OurStoreFragment extends Fragment {
             @Override
             public void onFailed() {
                 progress.dismissAllowingStateLoss();
-                Toast.makeText(activity, "Failed to fetch data.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(activity, "Something went wrong. Please try again.", Toast.LENGTH_SHORT).show();
             }
         };
         task.execute();
     }
-
-//    private void fetchingProvince() {
-//        final TBaseProgress progress = new TBaseProgress(activity);
-//        progress.show();
-//
-//        ProvinceTask task = new ProvinceTask(activity) {
-//            @Override
-//            public void onSuccess(String json) {
-//                getLocalProvince();
-//
-//                    progress.dismiss();
-//            }
-//
-//            @Override
-//            public void onFailed() {
-//
-//                    progress.dismiss();
-//                Toast.makeText(activity, "Failed to fetching province data.", Toast.LENGTH_SHORT).show();
-//            }
-//        };
-//        task.execute();
-//    }
 
     public void getLocalStore(String province) {
         List<StoreEntity> stores = new ArrayList<>();
@@ -257,19 +259,6 @@ public class OurStoreFragment extends Fragment {
         adapter.notifyDataSetInvalidated();
         progress.dismissAllowingStateLoss();
     }
-
-//    public void getLocalProvince() {
-//        List<ProvinceEntity> cities = provinceController.getCities();
-//
-//        String firstProvince = "";
-//        for (ProvinceEntity city : cities) {
-//            if (firstProvince.equals(""))
-//                firstProvince = city.getName();
-//            dataProvince.add(city.getName());
-//        }
-//        search.setText(firstProvince);
-//        getLocalStore(firstProvince);
-//    }
 
     public void getLocalProvince() {
         String firstProvince = "DKI Jakarta";

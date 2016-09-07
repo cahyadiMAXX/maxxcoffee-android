@@ -28,7 +28,9 @@
                     android:text="You only have 1 card"
                     android:textColor="@android:color/darker_gray"
                     android:textSize="16sp"
-                    android:visibility="gone" />
+                    android:visibility="gone"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp" />
 
                 <LinearLayout
                     android:id="@+id/transfer_layout"

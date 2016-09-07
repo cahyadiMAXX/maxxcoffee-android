@@ -32,4 +32,13 @@ public class HistoryRequestModel extends DefaultRequestModel{
     public void setPeriode_end(String periode_end) {
         this.periode_end = periode_end;
     }
+
+    @Override
+    public String toString() {
+        return "HistoryRequestModel{" +
+                "card_number='" + card_number + '\'' +
+                ", periode_start='" + periode_start + '\'' +
+                ", periode_end='" + periode_end + '\'' +
+                '}';
+    }
 }

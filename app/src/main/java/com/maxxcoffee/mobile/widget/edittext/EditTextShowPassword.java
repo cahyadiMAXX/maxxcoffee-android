@@ -2,9 +2,11 @@ package com.maxxcoffee.mobile.widget.edittext;
 
 import android.content.Context;
 import android.graphics.Typeface;
+import android.support.annotation.ColorInt;
 import android.util.AttributeSet;
 import android.widget.EditText;
 
+import com.maxxcoffee.mobile.R;
 import com.scottyab.showhidepasswordedittext.ShowHidePasswordEditText;
 
 /**
@@ -22,4 +24,8 @@ public class EditTextShowPassword extends ShowHidePasswordEditText {
         setTypeface(type);
     }
 
+    @Override
+    public void setTintColor(@ColorInt int tintColor) {
+        super.setTintColor(getResources().getColor(R.color.black_transparent));
+    }
 }

@@ -10,6 +10,8 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+    <uses-permission android:name="android.permission.READ_SMS" />
 
     <application
         android:name=".MaxxApp"
@@ -40,12 +42,22 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
+            android:name=".activity.WelcomeSliderActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
             android:name=".activity.MenuDetailActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activity.FormActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.MoreDetailActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -83,8 +95,17 @@
             android:name="io.fabric.ApiKey"
             android:value="8b43ab3bd701d8904bdb5c279eca96225218518f" />
 
+        <!--meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="7d9a9948c75d62719682561dc99af7b8d6a8d62a"
+            /-->
+
+        <!--meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyC-4YiZ1V7voovcZ8l-y3NTbsYW73UBsZI" /-->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyC-4YiZ1V7voovcZ8l-y3NTbsYW73UBsZI" />
+            android:value="AIzaSyAhZacFpZjd6YZp_W1M-kYH_lWGwgFMO2c" />
+
     </application>
 </manifest>

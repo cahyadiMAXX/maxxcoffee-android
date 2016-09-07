@@ -133,7 +133,7 @@ public class Utils {
         long diff = today.getTime() - createdDate.getTime();
 
         long diffMinutes = diff / (60 * 1000) % 60;
-        return diff;
+        return diffMinutes;
     }
 
     public static Properties getProperties(Context context) {

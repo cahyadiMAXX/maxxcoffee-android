@@ -57,11 +57,16 @@ public class OnSwipeTouchListener implements OnTouchListener {
                     }
                 }
                 result = true;
-
             } catch (Exception exception) {
                 exception.printStackTrace();
             }
             return result;
+        }
+
+        @Override
+        public boolean onSingleTapUp(MotionEvent e) {
+            onClick();
+            return true;
         }
     }
 
@@ -75,5 +80,8 @@ public class OnSwipeTouchListener implements OnTouchListener {
     }
 
     public void onSwipeBottom() {
+    }
+
+    public void onClick(){
     }
 }

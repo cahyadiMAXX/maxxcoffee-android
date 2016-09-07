@@ -2,11 +2,13 @@ package com.maxxcoffee.mobile.fragment;
 
 import android.animation.AnimatorInflater;
 import android.animation.AnimatorSet;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -22,18 +24,26 @@ import com.bumptech.glide.Glide;
 import com.github.clans.fab.FloatingActionMenu;
 import com.maxxcoffee.mobile.R;
 import com.maxxcoffee.mobile.activity.FormActivity;
+import com.maxxcoffee.mobile.activity.MoreDetailActivity;
 import com.maxxcoffee.mobile.database.controller.CardController;
 import com.maxxcoffee.mobile.database.entity.CardEntity;
 import com.maxxcoffee.mobile.fragment.dialog.CardRenameDialog;
 import com.maxxcoffee.mobile.fragment.dialog.LoadingDialog;
 import com.maxxcoffee.mobile.fragment.dialog.QrCodeDialog;
+import com.maxxcoffee.mobile.model.request.PrimaryCardRequestModel;
 import com.maxxcoffee.mobile.model.request.RenameCardRequestModel;
+import com.maxxcoffee.mobile.model.response.CardItemResponseModel;
+import com.maxxcoffee.mobile.task.CardCGITask;
+import com.maxxcoffee.mobile.task.CardDetailTask;
 import com.maxxcoffee.mobile.task.DownloadImageTask;
 import com.maxxcoffee.mobile.task.RenameCardTask;
 import com.maxxcoffee.mobile.util.Constant;
+import com.maxxcoffee.mobile.util.ImageSaver;
 import com.maxxcoffee.mobile.util.OnSwipeTouchListener;
+import com.maxxcoffee.mobile.util.PreferenceManager;
 import com.maxxcoffee.mobile.util.Utils;
 import com.maxxcoffee.mobile.widget.button.ButtonLatoBold;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -42,6 +52,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -101,7 +112,7 @@ public class MyCardDetailFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         activity = (FormActivity) getActivity();
-        activity.showRefreshButton(true);
+
         cardController = new CardController(activity);
     }
 
@@ -111,15 +122,18 @@ public class MyCardDetailFragment extends Fragment {
 
         ButterKnife.bind(this, view);
 
+        activity.showRefreshButton(true);
+
         fetchingCard();
 
-        activity.getRefresh().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Toast.makeText(getActivity(), "Clicke boss", Toast.LENGTH_LONG).show();
-                fetchingCard();
-            }
-        });
+        try{
+            activity.getRefresh().setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    fetchingData();
+                }
+            });
+        }catch (Exception e){e.printStackTrace();}
 
         fabMenu.setOnMenuButtonClickListener(new View.OnClickListener() {
             @Override
@@ -157,6 +171,12 @@ public class MyCardDetailFragment extends Fragment {
                 super.onSwipeRight();
                 flipCard(mCardBackLayout);
             }
+
+            @Override
+            public void onClick() {
+                super.onClick();
+                flipCard(mCardBackLayout);
+            }
         });
 
         mCardFrontLayout.setOnTouchListener(new OnSwipeTouchListener(getActivity()){
@@ -171,15 +191,69 @@ public class MyCardDetailFragment extends Fragment {
                 super.onSwipeRight();
                 flipCard(mCardFrontLayout);
             }
+
+            @Override
+            public void onClick() {
+                super.onClick();
+                flipCard(mCardFrontLayout);
+            }
         });
 
         return view;
     }
 
-    private void fetchingCard() {
-        final String cardId = getArguments().getString("card-id", "-1");
+    private void fetchingData() {
+        //ngambil number
+        if(!Utils.isConnected(activity)){
+            Toast.makeText(activity, activity.getResources().getString(R.string.mobile_data), Toast.LENGTH_LONG).show();
+            return;
+        }
+        final String cardnumber = getArguments().getString("card-number", "-1");
+        PrimaryCardRequestModel body = new PrimaryCardRequestModel();
+        body.setCard_number(cardnumber);
 
-        final CardEntity card = cardController.getCardById(cardId);
+        final LoadingDialog progress = new LoadingDialog();
+        progress.show(getFragmentManager(), null);
+
+        CardDetailTask task = new CardDetailTask(activity) {
+            @Override
+            public void onSuccess(List<CardItemResponseModel> responseModel) {
+                //Log.d("responseModel", responseModel.toString());
+                try{
+                    CardItemResponseModel card  =  responseModel.get(0);
+
+                    DateFormat mDateFormat = new SimpleDateFormat(Constant.DATEFORMAT_STRING);
+                    Date mExpDate = new SimpleDateFormat(Constant.DATEFORMAT_META).parse(card.getExpired_date());
+
+                    int mRewardAchieve = card.getBeans() / 10;
+                    int mRewardToGo = 10 - (card.getBeans() % 10);
+
+                    balance.setText("IDR " + card.getBalance());
+                    point.setText(card.getBeans() + " beans");
+                    expDate.setText(mDateFormat.format(mExpDate));
+                    beansBubble.setText(String.valueOf(mRewardToGo));
+                    rewardAchieved.setText(String.valueOf(mRewardAchieve));
+                    loadImages(card.getCard_image(),card.getBarcode(), card.getCard_name());
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+
+                //fetchingCard();
+                progress.dismissAllowingStateLoss();
+            }
+
+            @Override
+            public void onFailed() {
+                progress.dismissAllowingStateLoss();
+            }
+        };
+        task.execute(body);
+    }
+
+    private void fetchingCard() {
+        final String cardId = getArguments().getString("card-number", "-1");
+
+        final CardEntity card = cardController.getCardByCardNumber(cardId);
         if (card != null) {
             try {
                 cardNumber = card.getNumber();
@@ -201,39 +275,8 @@ public class MyCardDetailFragment extends Fragment {
                 beansBubble.setText(String.valueOf(mRewardToGo));
                 rewardAchieved.setText(String.valueOf(mRewardAchieve));
                 barcodeUrl = card.getBarcode();
-
-                //klo ada file, pake file saja
-                DownloadImageTask task = new DownloadImageTask(activity) {
-                    @Override
-                    protected void onDownloadError() {
-                        //Glide.with(activity).load("").placeholder(R.drawable.ic_no_image).into(cardImage);
-                        Glide.with(activity).load("").placeholder(R.drawable.ic_no_image).into(imageCardFront);
-                    }
-
-                    @Override
-                    protected void onImageDownloaded(Bitmap bitmap) {
-                        Bitmap resizeImage = Utils.getResizedBitmap(bitmap, 0.95f);
-                        Drawable drawable = new BitmapDrawable(getResources(), resizeImage);
-                        //cardImage.setImageDrawable(drawable);
-                        imageCardFront.setImageDrawable(drawable);
-                    }
-                };
-                task.execute(card.getImage());
-
-                DownloadImageTask barcodeTask = new DownloadImageTask(getContext()) {
-                    @Override
-                    protected void onDownloadError() {
-                        Glide.with(getContext()).load("").placeholder(R.drawable.ic_no_image).into(imageCardBack);
-                    }
-
-                    @Override
-                    protected void onImageDownloaded(Bitmap bitmap) {
-                        Bitmap resizeImage = Utils.getResizedBitmap(bitmap, 0.95f);
-                        Drawable drawable = new BitmapDrawable(getResources(), resizeImage);
-                        imageCardBack.setImageDrawable(drawable);
-                    }
-                };
-                barcodeTask.execute(card.getBarcode());
+                loadImages(card.getImage(), card.getBarcode(), card.getName());
+                /**/
 
             } catch (ParseException e) {
                 e.printStackTrace();
@@ -241,29 +284,103 @@ public class MyCardDetailFragment extends Fragment {
         }
     }
 
-    public boolean fileExistance(String fname){
-        File file = getActivity().getBaseContext().getFileStreamPath(fname);
-        return file.exists();
-    }
+    //depan image, belakang barcode
+    private void loadImages(String image, final String barcode, final String name){
+        final LoadingDialog progress = new LoadingDialog();
+        progress.show(getFragmentManager(), null);
 
-    public void saveImageBitmap(Bitmap bmp, String filename){
-        FileOutputStream out = null;
-        try {
-            out = new FileOutputStream(filename);
-            bmp.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
-            // PNG is a lossless format, the compression factor (100) is ignored
-            Toast.makeText(getActivity(), "Saved Image", Toast.LENGTH_LONG).show();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (out != null) {
-                    out.close();
+        final DownloadImageTask barcodeTask = new DownloadImageTask(getContext()) {
+            @Override
+            protected void onDownloadError() {
+                progress.dismissAllowingStateLoss();
+                try{
+                    Glide.with(activity).load("").placeholder(R.drawable.ic_no_image).into(imageCardBack);
+                    loadImageBack(name + "_imageBack.png");
+                }catch (Exception e){e.printStackTrace();}
+            }
+
+            @Override
+            protected void onImageDownloaded(Bitmap bitmap) {
+                progress.dismissAllowingStateLoss();
+                try{
+                            /*Bitmap resizeImage = Utils.getResizedBitmap(bitmap, 0.95f);
+                            Drawable drawable = new BitmapDrawable(getResources(), bitmap);
+                            imageCardBack.setImageDrawable(drawable);*/
+                    ImageSaver imageSaver = new ImageSaver(activity);
+                    imageSaver.setFileName(name + "_imageBack.png").
+                            setDirectoryName("images").
+                            save(bitmap);
+                    imageSaver.setExternal(false);
+                    loadImageBack(name + "_imageBack.png");
+                }catch (Exception e){
+                    e.printStackTrace();
                 }
-            } catch (IOException e) {
+
+            }
+        };
+
+        //klo ada file, pake file saja
+        final DownloadImageTask task = new DownloadImageTask(activity) {
+            @Override
+            protected void onDownloadError() {
+                try{
+                    barcodeTask.execute(barcode);
+                    Glide.with(activity).load("").placeholder(R.drawable.ic_no_image).into(imageCardFront);
+                    loadImageFront(name + "_imageFront.png");
+                }catch (Exception e){e.printStackTrace();}
+            }
+
+            @Override
+            protected void onImageDownloaded(Bitmap bitmap) {
+                try{
+                    barcodeTask.execute(barcode);
+                            /*Bitmap resizeImage = Utils.getResizedBitmap(bitmap, 0.95f);
+                            Drawable drawable = new BitmapDrawable(getResources(), bitmap);
+                            imageCardFront.setImageDrawable(drawable);*/
+                    ImageSaver imageSaver = new ImageSaver(activity);
+                    imageSaver.setFileName(name + "_imageFront.png").
+                            setDirectoryName("images").
+                            save(bitmap);
+                    imageSaver.setExternal(false);
+                    loadImageFront(name + "_imageFront.png");
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+
+            }
+        };
+
+        if(Utils.isConnected(activity)){
+            task.execute(image);
+        }else{
+            try{
+                progress.dismissAllowingStateLoss();
+                loadImageFront(name + "_imageFront.png");
+                loadImageBack(name + "_imageBack.png");
+            }catch (Exception e){
                 e.printStackTrace();
             }
         }
+    }
+
+    public void loadImageFront(String filename){
+        Bitmap bmt = new ImageSaver(activity).
+                setFileName(filename).
+                setDirectoryName("images").
+                load();
+
+        Drawable drawable = new BitmapDrawable(getResources(), bmt);
+        imageCardFront.setImageDrawable(drawable);
+    }
+
+    public void loadImageBack(String filename){
+        Bitmap bmt = new ImageSaver(activity).
+                setFileName(filename).
+                setDirectoryName("images").
+                load();
+
+        Drawable drawable = new BitmapDrawable(getResources(), bmt);
+        imageCardBack.setImageDrawable(drawable);
     }
 
     private void changeCameraDistance() {
@@ -274,8 +391,8 @@ public class MyCardDetailFragment extends Fragment {
     }
 
     private void loadAnimations() {
-        mSetRightOut = (AnimatorSet) AnimatorInflater.loadAnimator(getActivity(), R.anim.out_animation);
-        mSetLeftIn = (AnimatorSet) AnimatorInflater.loadAnimator(getActivity(), R.anim.in_animation);
+        mSetRightOut = (AnimatorSet) AnimatorInflater.loadAnimator(getActivity(), R.animator.out_animation);
+        mSetLeftIn = (AnimatorSet) AnimatorInflater.loadAnimator(getActivity(), R.animator.in_animation);
     }
 
     public void flipCard(View view) {
@@ -346,7 +463,12 @@ public class MyCardDetailFragment extends Fragment {
         bundle.putString("card-number", cardNumber);
         bundle.putString("card-name", cardName);
 
-        activity.switchFragment(FormActivity.HISTORY_DETAIL, bundle);
+        Intent in = new Intent(activity, MoreDetailActivity.class);
+        in.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        in.putExtra("content", MoreDetailActivity.HISTORY_DETAIL);
+        in.putExtras(bundle);
+        startActivity(in);
+        //activity.switchFragment(MoreDetailActivity.HISTORY_DETAIL, bundle);
     }
 
     //button click

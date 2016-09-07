@@ -315,7 +315,16 @@ public class DeleteCardFragment extends Fragment {
                 @Override
                 protected void onOk() {
                     dismiss();
-                    deleteNow();
+                    try {
+                        if(Utils.isConnected(activity)){
+                            deleteNow();
+                        }else {
+                            Toast.makeText(activity, activity.getResources().getString(R.string.mobile_data), Toast.LENGTH_LONG).show();
+                        }
+                    }catch (Exception e){
+                        Toast.makeText(activity, "Something went wrong. Please try again.", Toast.LENGTH_LONG).show();
+                        e.printStackTrace();
+                    }
                 }
 
                 @Override
@@ -338,15 +347,14 @@ public class DeleteCardFragment extends Fragment {
         DeleteCardTask task = new DeleteCardTask(activity) {
             @Override
             public void onSuccess() {
-
-                    progress.dismissAllowingStateLoss();
+                PreferenceManager.putBool(activity, Constant.PREFERENCE_CARD_IS_LOADING, false);
+                progress.dismissAllowingStateLoss();
                 activity.onBackClick();
             }
 
             @Override
             public void onFailed() {
-
-                    progress.dismissAllowingStateLoss();
+                progress.dismissAllowingStateLoss();
                 Toast.makeText(activity, "Failed to delete card", Toast.LENGTH_SHORT).show();
             }
         };

@@ -7,11 +7,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.maxxcoffee.mobile.R;
 import com.maxxcoffee.mobile.activity.MainActivity;
 import com.maxxcoffee.mobile.adapter.HistoryItemAdapter;
 import com.maxxcoffee.mobile.model.HistoryModel;
+import com.maxxcoffee.mobile.util.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,7 +51,11 @@ public class TransactionFragment extends Fragment {
 
         recyclerView.setAdapter(adapter);
 
-        fetchingData();
+        if(Utils.isConnected(activity)){
+            fetchingData();
+        }else{
+            Toast.makeText(activity, activity.getResources().getString(R.string.mobile_data), Toast.LENGTH_LONG).show();
+        }
         return view;
     }
 

@@ -2,8 +2,15 @@ package com.maxxcoffee.mobile.fragment;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentSender;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.telephony.TelephonyManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +18,16 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.LocationSettingsResult;
+import com.google.android.gms.location.LocationSettingsStates;
+import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.maxxcoffee.mobile.R;
 import com.maxxcoffee.mobile.activity.FormActivity;
 import com.maxxcoffee.mobile.activity.MainActivity;
@@ -28,6 +45,7 @@ import com.maxxcoffee.mobile.model.response.ProfileResponseModel;
 import com.maxxcoffee.mobile.task.LoginTestTask;
 import com.maxxcoffee.mobile.task.ProfileTask;
 import com.maxxcoffee.mobile.util.Constant;
+import com.maxxcoffee.mobile.util.GpsTracker;
 import com.maxxcoffee.mobile.util.PreferenceManager;
 import com.maxxcoffee.mobile.util.Utils;
 
@@ -60,6 +78,9 @@ public class LoginFragment extends Fragment {
     private CardController cardController;
     private int mDayPart = Utils.getDayPart();
 
+    private boolean settingRequested;
+    private GoogleApiClient googleApiClient;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,7 +96,7 @@ public class LoginFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_login, container, false);
 
         ButterKnife.bind(this, view);
-        activity.setTitle("");
+        activity.setTitle("Login", true);
 
         return view;
     }
@@ -84,6 +105,7 @@ public class LoginFragment extends Fragment {
     public void onResume() {
         super.onResume();
         setBackground(mDayPart);
+        //requestLocationPermission();
     }
 
     @OnClick(R.id.signup)
@@ -128,6 +150,13 @@ public class LoginFragment extends Fragment {
         loginBody.setEmail(email.getText().toString());
         loginBody.setPassword(password.getText().toString());
 
+        /*TelephonyManager mngr = (TelephonyManager) getActivity().getSystemService(Context.TELEPHONY_SERVICE);
+        String deviceId = Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID);
+        loginBody.setDevice_id(deviceId);
+        loginBody.setGadget_id(mngr.getDeviceId());*/
+
+        //get location here
+
         final OauthRequestModel oauthBody = new OauthRequestModel();
         oauthBody.setUsername(email.getText().toString());
         oauthBody.setPassword(password.getText().toString());
@@ -137,7 +166,7 @@ public class LoginFragment extends Fragment {
 
         final LoginTask task = new LoginTask(activity) {
             @Override
-            public void onSuccess() {
+            public void onSuccess(String status) {
                 progress.dismissAllowingStateLoss();
 
                 PreferenceManager.putBool(activity, Constant.PREFERENCE_LOGGED_IN, true);
@@ -147,10 +176,10 @@ public class LoginFragment extends Fragment {
             }
 
             @Override
-            public void onFailed() {
+            public void onFailed(String status) {
                 progress.dismissAllowingStateLoss();
 
-                Toast.makeText(activity, "The credentials you entered don't match.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(activity, status, Toast.LENGTH_SHORT).show();
             }
         };
 
@@ -203,11 +232,11 @@ public class LoginFragment extends Fragment {
             }
 
             @Override
-            public void onFailed() {
+            public void onFailed(String message) {
 
                 progress.dismissAllowingStateLoss();
 
-                Toast.makeText(activity, "The credentials you entered don't match.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(activity, message, Toast.LENGTH_SHORT).show();
             }
         };
         loginTestTask.execute(loginBody);
@@ -218,10 +247,15 @@ public class LoginFragment extends Fragment {
         String mPassword = password.getText().toString();
         boolean status = true;
 
+        Log.d("lat-long", PreferenceManager.getString(activity, Constant.PREFERENCE_LATITUDE_USER, "") + " " +
+        PreferenceManager.getString(activity, Constant.PREFERENCE_LONGITUDE_USER, ""));
+
         if (mEmail.equals("")) {
             Toast.makeText(activity, "Please verify your email", Toast.LENGTH_SHORT).show();
+            email.setError("Please verify your email");
             status = false;
         } else if (mPassword.equals("")) {
+            password.setError("Please verify your password");
             Toast.makeText(activity, "Please verify your password", Toast.LENGTH_SHORT).show();
             status = false;
         }
@@ -292,7 +326,7 @@ public class LoginFragment extends Fragment {
             public void onFailed() {
 
                 progress.dismiss();
-                Toast.makeText(activity, "Failed to fetch data.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(activity, "Something went wrong. Please try again.", Toast.LENGTH_SHORT).show();
             }
         };
         task.execute();

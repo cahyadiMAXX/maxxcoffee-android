@@ -52,4 +52,15 @@ public class ProfileResponseModel {
     public void setCards(List<CardItemResponseModel> cards) {
         this.cards = cards;
     }
+
+    @Override
+    public String toString() {
+        return "ProfileResponseModel{" +
+                "status='" + status + '\'' +
+                ", total_point='" + total_point + '\'' +
+                ", total_balance='" + total_balance + '\'' +
+                ", user_profile=" + user_profile +
+                ", cards=" + cards +
+                '}';
+    }
 }

@@ -68,6 +68,7 @@ public class TopUpHistoryFragment extends Fragment {
         List<HistoryEntity> histories = historyController.getHistoryByType("topup");
 
         empty.setVisibility(histories.size() == 0 ? View.VISIBLE : View.GONE);
+        empty.setText(histories.size() == 0 ? "Data not found" : "");
         for (HistoryEntity history : histories) {
             data.add(history);
         }

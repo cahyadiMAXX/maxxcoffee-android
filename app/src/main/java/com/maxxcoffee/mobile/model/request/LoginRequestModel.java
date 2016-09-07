@@ -8,6 +8,10 @@ public class LoginRequestModel {
     private String email;
     private String password;
 
+    //tambah
+    private String device_id;
+    private String gadget_id;
+
     public String getEmail() {
         return email;
     }
@@ -22,5 +26,21 @@ public class LoginRequestModel {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getDevice_id() {
+        return device_id;
+    }
+
+    public void setDevice_id(String device_id) {
+        this.device_id = device_id;
+    }
+
+    public String getGadget_id() {
+        return gadget_id;
+    }
+
+    public void setGadget_id(String gadget_id) {
+        this.gadget_id = gadget_id;
     }
 }

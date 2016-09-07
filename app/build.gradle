@@ -22,8 +22,8 @@ android {
         applicationId "com.maxxcoffee.mobile"
         minSdkVersion 15
         targetSdkVersion 23
-        versionCode 7
-        versionName "1.0.5"
+        versionCode 11
+        versionName "1.1.0"
         multiDexEnabled true
     }
 
@@ -78,6 +78,8 @@ dependencies {
     compile 'com.j256.ormlite:ormlite-android:4.48'
     compile 'com.squareup.retrofit:retrofit:1.9.0'
     compile 'com.squareup.picasso:picasso:2.3.2'
+    //compile 'com.squareup.okhttp3:okhttp:3.0.0'
+    //compile 'com.squareup.okhttp3:okhttp-urlconnection:3.0.0'
     compile 'com.nineoldandroids:library:2.4.0'
     compile 'com.daimajia.slider:library:1.1.5@aar'
     compile 'com.github.clans:fab:1.6.4'
@@ -88,4 +90,5 @@ dependencies {
         transitive = true;
     }
     compile 'com.android.support:support-v4:23.2.1'
+    compile 'com.github.jd-alexander:LikeButton:0.2.0'
 }

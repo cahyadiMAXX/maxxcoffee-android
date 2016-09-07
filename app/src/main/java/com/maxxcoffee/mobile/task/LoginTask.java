@@ -38,7 +38,7 @@ public abstract class LoginTask extends AsyncTask<LoginRequestModel, Boolean, Lo
 
             @Override
             public void failure(RetrofitError error) {
-                onFailed();
+                onFailed("Something went wrong. Please try again.");
             }
         });
         return null;
@@ -54,14 +54,15 @@ public abstract class LoginTask extends AsyncTask<LoginRequestModel, Boolean, Lo
                 PreferenceManager.putString(context, Constant.PREFERENCE_USER_NAME, loginResponseModel.getUsername());
                 PreferenceManager.putString(context, Constant.PREFERENCE_BALANCE, loginResponseModel.getBalance_total());
                 PreferenceManager.putString(context, Constant.PREFERENCE_BEAN, loginResponseModel.getBeans());
-                onSuccess();
-            } else {
-                onFailed();
+                onSuccess(status);
+            } else if(status.equalsIgnoreCase("fail")){
+                String message = loginResponseModel.getMessages();
+                onFailed(message);
             }
         }
     }
 
-    public abstract void onSuccess();
+    public abstract void onSuccess(String loginResponseModel);
 
-    public abstract void onFailed();
+    public abstract void onFailed(String loginResponseModel);
 }

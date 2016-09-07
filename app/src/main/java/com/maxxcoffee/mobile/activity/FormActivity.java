@@ -9,6 +9,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.maxxcoffee.mobile.R;
 import com.maxxcoffee.mobile.fragment.CardDetailHistoryFragment;
@@ -26,8 +27,11 @@ import com.maxxcoffee.mobile.fragment.FaqDetailFragment;
 import com.maxxcoffee.mobile.fragment.ForgotPasswordFragment;
 import com.maxxcoffee.mobile.fragment.MenuDetailFragment;
 import com.maxxcoffee.mobile.fragment.MyCardDetailFragment;
+import com.maxxcoffee.mobile.fragment.PrimaryCardFragment;
 import com.maxxcoffee.mobile.fragment.RenameCardFragment;
 import com.maxxcoffee.mobile.fragment.StoreDetailFragment;
+import com.maxxcoffee.mobile.util.Constant;
+import com.maxxcoffee.mobile.util.PreferenceManager;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -55,6 +59,7 @@ public class FormActivity extends FragmentActivity {
     public static final int CHANGE_OLD_PHONE = 1015;
     public static final int FORGOT_PASSWORD = 1016;
     public static final int DETAIL_MENU = 1017;
+    public static final int PRIMARY_CARD = 1018;
 
     @Bind(R.id.title)
     TextView title;
@@ -71,6 +76,7 @@ public class FormActivity extends FragmentActivity {
         setContentView(R.layout.activity_form);
 
         ButterKnife.bind(this);
+        //Toast.makeText(getApplicationContext(), "form coyy", Toast.LENGTH_LONG).show();
 
         refresh.setVisibility(View.GONE);
 
@@ -160,6 +166,9 @@ public class FormActivity extends FragmentActivity {
                 break;
             case DETAIL_MENU:
                 fragment = new MenuDetailFragment();
+                break;
+            case PRIMARY_CARD:
+                fragment = new PrimaryCardFragment();
                 break;
         }
 

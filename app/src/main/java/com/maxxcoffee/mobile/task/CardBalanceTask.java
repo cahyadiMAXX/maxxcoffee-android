@@ -36,7 +36,7 @@ public abstract class CardBalanceTask extends AsyncTask<Void, Boolean, CardRespo
         body.setToken(token);
 
         //lihat lagi mas
-        ApiManager.getApiInterface(context).cardListLocal(accessToken, body, new Callback<CardResponseModel>() {
+        ApiManager.getApiInterface(context).cardList(accessToken, body, new Callback<CardResponseModel>() {
             @Override
             public void success(CardResponseModel storeResponseModel, Response response) {
                 onPostExecute(storeResponseModel);

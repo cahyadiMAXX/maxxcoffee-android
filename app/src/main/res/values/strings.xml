@@ -4,4 +4,25 @@
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="next">NEXT</string>
+    <string name="skip">SKIP</string>
+    <string name="start">Let\'s Go</string>
+
+    <string name="slide_1_title">Find your \nperfect coffee</string>
+    <string name="slide_1_desc">Let us show you our customer\'s favorite</string>
+
+    <string name="slide_2_title">Find your collection</string>
+    <string name="slide_2_desc">Cool card design and full colour tumbler</string>
+
+    <string name="slide_3_title">Find our stores</string>
+    <string name="slide_3_desc">We are around you. We are near you</string>
+
+    <string name="slide_4_title">You are ready!</string>
+    <string name="slide_4_desc">Time to explore MAXX COFFEE.\nSee you</string>
+
+    <string name="play_again_desc">To see the welcome slider again, goto Settings -> apps -> welcome slider -> clear data</string>
+    <string name="play_again">Play Again</string>
+
+    <string name="mobile_data">Please check your internet connection</string>
 </resources>

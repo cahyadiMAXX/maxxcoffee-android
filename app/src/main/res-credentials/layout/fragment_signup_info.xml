@@ -18,18 +18,18 @@
             android:paddingLeft="16dp"
             android:paddingRight="16dp">
 
-            <com.maxxcoffee.mobile.widget.textview.TextViewLatoBold
+            <!--com.maxxcoffee.mobile.widget.textview.TextViewLatoBold
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Sign Up"
                 android:textColor="@android:color/white"
-                android:textSize="20sp" />
+                android:textSize="20sp" /-->
 
             <com.maxxcoffee.mobile.widget.textview.TextViewLatoRegular
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Additional Info"
-                android:textColor="@android:color/darker_gray"
+                android:textColor="@android:color/white"
                 android:textSize="16sp" />
 
             <com.maxxcoffee.mobile.widget.textview.TextViewLatoRegular
@@ -37,7 +37,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="Gender"
-                android:textColor="@android:color/darker_gray"
+                android:textColor="@android:color/white"
                 android:textSize="16sp" />
 
             <RelativeLayout
@@ -72,7 +72,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="Birthday"
-                android:textColor="@android:color/darker_gray"
+                android:textColor="@android:color/white"
                 android:textSize="16sp" />
 
             <RelativeLayout
@@ -107,7 +107,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="Occupation"
-                android:textColor="@android:color/darker_gray"
+                android:textColor="@android:color/white"
                 android:textSize="16sp" />
 
             <RelativeLayout
@@ -140,7 +140,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="City"
-                android:textColor="@android:color/darker_gray"
+                android:textColor="@android:color/white"
                 android:textSize="16sp" />
 
             <RelativeLayout
@@ -175,7 +175,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="Referal Code (Optional)"
-                android:textColor="@android:color/darker_gray"
+                android:textColor="@android:color/white"
                 android:textSize="16sp" />
 
             <RelativeLayout

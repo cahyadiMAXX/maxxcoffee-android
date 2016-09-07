@@ -16,7 +16,12 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.maxxcoffee.mobile.R;
+import com.maxxcoffee.mobile.util.Constant;
+import com.maxxcoffee.mobile.util.PreferenceManager;
 
 public class WelcomeSliderActivity extends AppCompatActivity {
 
@@ -25,16 +30,20 @@ public class WelcomeSliderActivity extends AppCompatActivity {
     private LinearLayout dotsLayout;
     private TextView[] dots;
     private int[] layouts;
-    private Button btnSkip, btnNext;
-    private PrefManager prefManager;
+    private Button btnSkip;
+    //private Button btnNext;
+    private LinearLayout btnNext;
+    private RelativeLayout mainView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         // Checking for first time launch - before calling setContentView()
-        prefManager = new PrefManager(this);
-        if (!prefManager.isFirstTimeLaunch()) {
+        boolean isUsed = PreferenceManager.getBool(this, Constant.PREFERENCE_WELCOME_SKIP, false);
+        if (isUsed) {
             launchHomeScreen();
             finish();
         }
@@ -44,13 +53,13 @@ public class WelcomeSliderActivity extends AppCompatActivity {
             getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
         }
 
-        setContentView(R.layout.activity_welcome);
+        setContentView(R.layout.activity_slider_welcome);
 
         viewPager = (ViewPager) findViewById(R.id.view_pager);
         dotsLayout = (LinearLayout) findViewById(R.id.layoutDots);
         //btnSkip = (Button) findViewById(R.id.btn_skip);
-        btnNext = (Button) findViewById(R.id.btn_next);
-
+        btnNext = (LinearLayout) findViewById(R.id.btn_next);
+        mainView = (RelativeLayout) findViewById(R.id.mainview);
 
         // layouts of all welcome sliders
         // add few more layouts if you want
@@ -69,15 +78,38 @@ public class WelcomeSliderActivity extends AppCompatActivity {
         myViewPagerAdapter = new MyViewPagerAdapter();
         viewPager.setAdapter(myViewPagerAdapter);
         viewPager.addOnPageChangeListener(viewPagerPageChangeListener);
-
-        /*btnSkip.setOnClickListener(new View.OnClickListener() {
+        viewPager.setPageTransformer(false, new ViewPager.PageTransformer() {
             @Override
-            public void onClick(View v) {
-                launchHomeScreen();
+            public void transformPage(View view, float position) {
+                if(position <= -1.0F || position >= 1.0F) {
+                    view.setTranslationX(view.getWidth() * position);
+                    view.setAlpha(0.0F);
+                } else if( position == 0.0F ) {
+                    view.setTranslationX(view.getWidth() * position);
+                    view.setAlpha(1.0F);
+                } else {
+                    // position is between -1.0F & 0.0F OR 0.0F & 1.0F
+                    view.setTranslationX(view.getWidth() * -position);
+                    view.setAlpha(1.0F - Math.abs(position));
+                }
             }
         });
-*/
+
         btnNext.setVisibility(View.GONE);
+        mainView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // checking for last page
+                // if last page home screen will be launched
+                int current = getItem(+1);
+                if (current < layouts.length) {
+                    // move to next screen
+                    viewPager.setCurrentItem(current);
+                } else {
+                    //launchHomeScreen();
+                }
+            }
+        });
         btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -118,8 +150,8 @@ public class WelcomeSliderActivity extends AppCompatActivity {
     }
 
     private void launchHomeScreen() {
-        prefManager.setFirstTimeLaunch(false);
-        startActivity(new Intent(WelcomeActivity.this, MainActivity.class));
+        PreferenceManager.putBool(this, Constant.PREFERENCE_WELCOME_SKIP, true);
+        startActivity(new Intent(getApplicationContext(), MainActivity.class));
         finish();
     }
 
@@ -134,12 +166,12 @@ public class WelcomeSliderActivity extends AppCompatActivity {
             if (position == layouts.length - 1) {
                 // last page. make button text to GOT IT
                 btnNext.setVisibility(View.VISIBLE);
-                btnNext.setText(getString(R.string.start));
+                //btnNext.setText(getString(R.string.start));
           //      btnSkip.setVisibility(View.GONE);
             } else {
                 // still pages are left
                 btnNext.setVisibility(View.GONE);
-                btnNext.setText(getString(R.string.next));
+                //btnNext.setText(getString(R.string.next));
 //                btnSkip.setVisibility(View.VISIBLE);
             }
         }

@@ -12,7 +12,7 @@ import com.maxxcoffee.mobile.fragment.OurStoreFragment;
  */
 public class StorePagerAdapter extends FragmentPagerAdapter {
 
-    private static final String[] STORE_MENU = {"Our Stores", "Near Me"};
+    private static final String[] STORE_MENU = {"Near Me", "Our Stores"};
 
     public StorePagerAdapter(FragmentManager fm) {
         super(fm);
@@ -23,10 +23,10 @@ public class StorePagerAdapter extends FragmentPagerAdapter {
         Fragment fragment = null;
         switch (position) {
             case 0:
-                fragment = new OurStoreFragment();
+                fragment = new NearMeFragment();
                 break;
             case 1:
-                fragment = new NearMeFragment();
+                fragment = new OurStoreFragment();
                 break;
         }
         return fragment;

@@ -32,7 +32,7 @@ public class LauncherActivity extends Activity {
     }
 
     private void goToWelcomePage() {
-        Intent intent = new Intent(this, WelcomeActivity.class);
+        Intent intent = new Intent(this, WelcomeSliderActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
         finish();

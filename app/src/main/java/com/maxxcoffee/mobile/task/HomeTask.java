@@ -2,6 +2,7 @@ package com.maxxcoffee.mobile.task;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.maxxcoffee.mobile.api.ApiManager;
 import com.maxxcoffee.mobile.model.request.DefaultRequestModel;
@@ -42,6 +43,7 @@ public abstract class HomeTask extends AsyncTask<Void, Boolean, HomeResponseMode
 
             @Override
             public void failure(RetrofitError error) {
+                Log.d("errror card", error.toString());
                 onFailed();
             }
         });

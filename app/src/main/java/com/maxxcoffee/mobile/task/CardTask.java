@@ -2,6 +2,7 @@ package com.maxxcoffee.mobile.task;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.maxxcoffee.mobile.api.ApiManager;
 import com.maxxcoffee.mobile.model.request.DefaultRequestModel;
@@ -35,9 +36,11 @@ public abstract class CardTask extends AsyncTask<Void, Boolean, CardResponseMode
         DefaultRequestModel body = new DefaultRequestModel();
         body.setToken(token);
 
-        ApiManager.getApiInterface(context).cardList(accessToken, body, new Callback<CardResponseModel>() {
+        //lihat lagi mas
+        ApiManager.getApiInterface(context).cardListLocal(accessToken, body, new Callback<CardResponseModel>() {
             @Override
             public void success(CardResponseModel storeResponseModel, Response response) {
+                //Log.d("storeResponseModel", storeResponseModel.toString());
                 onPostExecute(storeResponseModel);
             }
 
@@ -46,6 +49,7 @@ public abstract class CardTask extends AsyncTask<Void, Boolean, CardResponseMode
                 onFailed();
             }
         });
+
         return null;
     }
 

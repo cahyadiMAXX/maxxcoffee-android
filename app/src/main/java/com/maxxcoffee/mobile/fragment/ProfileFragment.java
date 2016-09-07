@@ -1,11 +1,15 @@
 package com.maxxcoffee.mobile.fragment;
 
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -60,6 +64,8 @@ public class ProfileFragment extends Fragment {
     TextView beans;
     @Bind(R.id.card)
     TextView card;
+    @Bind(R.id.version)
+    TextView version;
 
     private MainActivity activity;
     private ProfileController profileController;
@@ -118,9 +124,21 @@ public class ProfileFragment extends Fragment {
 
                 PreferenceManager.putString(activity, Constant.PREFERENCE_BALANCE, String.valueOf(profile.getBalance()));
                 PreferenceManager.putString(activity, Constant.PREFERENCE_BEAN, String.valueOf(profile.getPoint()));
+                //
+                PreferenceManager.putString(activity, Constant.PREFERENCE_FIRST_NAME, profile.getFirst_name());
+                PreferenceManager.putString(activity, Constant.PREFERENCE_LAST_NAME, profile.getLast_name());
+                PreferenceManager.putString(activity, Constant.PREFERENCE_PROFILE_OCCUPATION, profile.getOccupation());
+                PreferenceManager.putString(activity, Constant.PREFERENCE_PROFILE_CITY, profile.getCity());
             } catch (ParseException e) {
                 e.printStackTrace();
             }
+        }
+        try{
+            PackageInfo pInfo = activity.getPackageManager().getPackageInfo(activity.getPackageName(), 0);
+            String ver = pInfo.versionName;
+            version.setText(String.valueOf(ver));
+        }catch (Exception e){
+            e.printStackTrace();
         }
     }
 
@@ -131,6 +149,7 @@ public class ProfileFragment extends Fragment {
         ProfileTask task = new ProfileTask(activity) {
             @Override
             public void onSuccess(ProfileResponseModel profile) {
+                //Log.d("ProfileResponseModel", profile.toString());
                 ProfileItemResponseModel profileItem = profile.getUser_profile().get(0);
 
                 if (profileItem != null) {
@@ -148,9 +167,16 @@ public class ProfileFragment extends Fragment {
                     profileEntity.setBalance(Integer.parseInt(profile.getTotal_balance()));
                     profileEntity.setSms_verified(profileItem.getVerifikasi_sms().equalsIgnoreCase("yes"));
                     profileEntity.setEmail_verified(profileItem.getVerifikasi_email().equalsIgnoreCase("yes"));
+                    profileEntity.setFirst_name(profileItem.getFirst_name());
+                    profileEntity.setLast_name(profileItem.getLast_name());
 
                     PreferenceManager.putBool(activity, Constant.PREFERENCE_SMS_VERIFICATION, profileItem.getVerifikasi_sms().equalsIgnoreCase("yes"));
                     PreferenceManager.putBool(activity, Constant.PREFERENCE_EMAIL_VERIFICATION, profileItem.getVerifikasi_email().equalsIgnoreCase("yes"));
+                    //
+                    PreferenceManager.putString(activity, Constant.PREFERENCE_FIRST_NAME, profileItem.getFirst_name());
+                    PreferenceManager.putString(activity, Constant.PREFERENCE_LAST_NAME, profileItem.getLast_name());
+                    PreferenceManager.putString(activity, Constant.PREFERENCE_PROFILE_OCCUPATION, profileItem.getOccupation());
+                    PreferenceManager.putString(activity, Constant.PREFERENCE_PROFILE_CITY, profileItem.getKota_user());
 
                     profileController.insert(profileEntity);
 
@@ -183,7 +209,7 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onFailed() {
                 progress.dismissAllowingStateLoss();
-                Toast.makeText(activity, "Failed to fetch data.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(activity, "Something went wrong. Please try again.", Toast.LENGTH_SHORT).show();
             }
         };
         task.execute();

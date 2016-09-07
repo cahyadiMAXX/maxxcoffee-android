@@ -4,10 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/mainview"
     >
 
 
-    <android.support.v4.view.ViewPager
+    <com.maxxcoffee.mobile.widget.NonSwipeableViewpager
         android:id="@+id/view_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
@@ -21,14 +22,14 @@
         android:gravity="center"
         android:orientation="horizontal"/>
 
-    <View
+    <!--View
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:alpha=".5"
         android:layout_above="@id/layoutDots"
-        android:background="@android:color/white" />
+        android:background="@android:color/white" /-->
 
-    <Button
+    <!--Button
         android:id="@+id/btn_next"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -36,7 +37,35 @@
         android:layout_alignParentRight="true"
         android:background="@null"
         android:text="@string/next"
-        android:textColor="@android:color/white" />
+        android:textColor="@android:color/white" /-->
+
+    <LinearLayout
+        android:id="@+id/btn_next"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/green_selected"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingBottom="12dp"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:paddingTop="12dp"
+        android:layout_marginBottom="50dp">
+
+        <com.maxxcoffee.mobile.widget.textview.TextViewLatoRegular
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Let's Go!"
+            android:textColor="@android:color/white"
+            android:textSize="16sp" />
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_arrow_right_white" />
+    </LinearLayout>
 
     <!--Button
         android:id="@+id/btn_skip"

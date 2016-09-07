@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,7 @@ import com.maxxcoffee.mobile.database.entity.PromoEntity;
 import com.maxxcoffee.mobile.fragment.dialog.LoadingDialog;
 import com.maxxcoffee.mobile.model.response.PromoItemResponseModel;
 import com.maxxcoffee.mobile.task.PromoTask;
+import com.maxxcoffee.mobile.util.Utils;
 import com.maxxcoffee.mobile.widget.CustomLinearLayoutManager;
 
 import java.util.ArrayList;
@@ -85,22 +87,34 @@ public class PromoFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(adapter);
 
-        getLocalPromo();
-        fetchingData();
+        //getLocalPromo();
+        //fetchingData();
+        emptyCard.setVisibility(View.GONE);
+        if(Utils.isConnected(activity)){
+            fetchingData();
+        }else{
+            Toast.makeText(activity, activity.getResources().getString(R.string.mobile_data), Toast.LENGTH_LONG).show();
+            getLocalPromo();
+        }
+
 
         return view;
     }
 
     private void fetchingData() {
+        emptyCard.setVisibility(View.GONE);
         final LoadingDialog progress = new LoadingDialog();
         progress.show(getFragmentManager(), null);
 
         PromoTask task = new PromoTask(activity) {
             @Override
             public void onSuccess(List<PromoItemResponseModel> responseModel) {
-                for (PromoItemResponseModel promo : responseModel) {
+
+                for(int i = 0 ; i < responseModel.size(); i++){
+                    PromoItemResponseModel promo = responseModel.get(i);
                     PromoEntity entity = new PromoEntity();
-                    entity.setId(promo.getId_promo());
+                    //entity.setId(promo.getId_promo());
+                    entity.setId(i+1);
                     entity.setName(promo.getNama_promo());
                     entity.setDescription(promo.getDeskripsi());
                     entity.setImage(promo.getGambar());
@@ -110,9 +124,11 @@ public class PromoFragment extends Fragment {
                     entity.setDate_end(promo.getTanggal_end());
                     entity.setTime_start(promo.getWaktu_start());
                     entity.setTime_end(promo.getWaktu_end());
+                    //data.add(entity);
                     promoController.insert(entity);
                 }
 
+                //adapter.notifyDataSetChanged();
                 getLocalPromo();
                 progress.dismissAllowingStateLoss();
             }
@@ -126,7 +142,7 @@ public class PromoFragment extends Fragment {
             @Override
             public void onFailed() {
                 progress.dismissAllowingStateLoss();
-                Toast.makeText(activity, "Failed to fetch data.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(activity, "Something went wrong. Please try again.", Toast.LENGTH_SHORT).show();
             }
         };
         task.execute();
@@ -134,6 +150,7 @@ public class PromoFragment extends Fragment {
 
     private void getLocalPromo() {
         List<PromoEntity> promos = promoController.getPromos();
+        emptyCard.setText(promos.size() > 0 ? "" : "We don't have any promo");
         emptyCard.setVisibility(promos.size() > 0 ? View.GONE : View.VISIBLE);
 
         if (promos.size() > 0)

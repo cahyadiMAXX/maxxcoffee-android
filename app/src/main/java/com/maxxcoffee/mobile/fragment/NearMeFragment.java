@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +27,7 @@ import com.maxxcoffee.mobile.fragment.dialog.LoadingDialog;
 import com.maxxcoffee.mobile.model.response.StoreItemResponseModel;
 import com.maxxcoffee.mobile.task.NearestStoreTask;
 import com.maxxcoffee.mobile.util.GpsTracker;
+import com.maxxcoffee.mobile.util.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -89,25 +91,38 @@ public class NearMeFragment extends Fragment implements LocationListener {
         searchLayout.setVisibility(View.GONE);
         recyclerView.setAdapter(adapter);
 
-//        getCurrentLocation();
-        fetchingData();
+        //fetchingData();
+        checkBeforeFetchData();
 
         swipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 swipe.setRefreshing(false);
-                fetchingData();
+                //fetchingData();
+                checkBeforeFetchData();
             }
         });
         swipe.post(new Runnable() {
             @Override
             public void run() {
                 synchronized (this) {
-                    fetchingData();
+                    //fetchingData();
+                    checkBeforeFetchData();
                 }
             }
         });
         return view;
+    }
+
+    private void checkBeforeFetchData(){
+        if(!Utils.isConnected(activity)){
+            Toast.makeText(activity, activity.getResources().getString(R.string.mobile_data), Toast.LENGTH_LONG).show();
+            //ambil lokal dulu
+
+            //adapter.notifyDataSetChanged();
+        }else{
+            fetchingData();
+        }
     }
 
     @OnItemClick(R.id.recycleview)
@@ -130,10 +145,6 @@ public class NearMeFragment extends Fragment implements LocationListener {
         intent.putExtra("content", FormActivity.STORE_DETAIL);
         intent.putExtras(bundle);
         startActivity(intent);
-
-//        StoreDialog dialog = new StoreDialog();
-//        dialog.setArguments(bundle);
-//        dialog.show(getFragmentManager(), null);
     }
 
     private void fetchingData() {
@@ -153,6 +164,7 @@ public class NearMeFragment extends Fragment implements LocationListener {
                 if (responseModel.size() > 0)
                     data.clear();
 
+                empty.setText(responseModel.size() == 0 ? "Data not found" : "");
                 empty.setVisibility(responseModel.size() == 0 ? View.VISIBLE : View.GONE);
                 for (StoreItemResponseModel storeItem : responseModel) {
                     String jsonFeature = new Gson().toJson(storeItem.getFeature());
@@ -186,80 +198,12 @@ public class NearMeFragment extends Fragment implements LocationListener {
             @Override
             public void onFailed() {
                 progress.dismissAllowingStateLoss();
-                Toast.makeText(activity, "Failed to fetch data.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(activity, "Something went wrong. Please try again.", Toast.LENGTH_SHORT).show();
             }
         };
         task.execute(lat, ltg);
 
-//        List<StoreItemEntity> stores = storeItemController.getStoreItems();
-//        for (StoreItemEntity store : stores) {
-//            StoreModel child = new StoreModel();
-//            child.setId(store.getId());
-//            child.setStoreId(store.getStoreId());
-//            child.setName(store.getName());
-//            child.setAddress(store.getAddress());
-//            child.setContact(store.getContact());
-//            child.setOpen(store.getOpen());
-//            data.add(child);
-//        }
-//        adapter.notifyDataSetChanged();
     }
-
-//    private void getCurrentLocation() {
-//        boolean isGPSEnabled = false;
-//        boolean isNetworkEnabled = false;
-//
-//        locationManager = (LocationManager) activity.getSystemService(activity.LOCATION_SERVICE);
-//        criteria = new Criteria();
-//        criteria.setAccuracy(Criteria.ACCURACY_FINE);
-//
-//        isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-//        isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-//
-//        if (!isGPSEnabled && !isNetworkEnabled) {
-//            Toast.makeText(activity, "Failed retrieve data. Turn on your GPS First.", Toast.LENGTH_SHORT).show();
-//        } else {
-//
-//            if (myLocationFetched) return;
-//
-//            if (isNetworkEnabled) {
-//                if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-//                        && ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-//                    return;
-//                }
-//                locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 2000, 0, this);
-//                Log.d("Network", "Network Enabled");
-//                if (locationManager != null) {
-//                    myLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-//                    if (myLocation != null) {
-//                        myLocationFetched = true;
-//                        double latitude = myLocation.getLatitude();
-//                        double longitude = myLocation.getLongitude();
-//                        myPosition = new LatLng(latitude, longitude);
-//                    }
-//                }
-//            }
-//
-//            if (isGPSEnabled) {
-//                if (myLocation == null) {
-//                    if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-//                            && ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-//                        return;
-//                    }
-//                    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 0, this);
-//                    if (locationManager != null) {
-//                        myLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-//                        if (myLocation != null) {
-//                            myLocationFetched = true;
-//                            double latitude = myLocation.getLatitude();
-//                            double longitude = myLocation.getLongitude();
-//                            myPosition = new LatLng(latitude, longitude);
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//    }
 
     @Override
     public void onLocationChanged(Location location) {

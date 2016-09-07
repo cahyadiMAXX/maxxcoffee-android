@@ -45,6 +45,8 @@ public class ChangeCityFragment extends Fragment {
         ButterKnife.bind(this, view);
         activity.setTitle("Change City");
 
+        city.setText(PreferenceManager.getString(activity, Constant.PREFERENCE_PROFILE_CITY, ""));
+
         fetchingCity();
         return view;
     }

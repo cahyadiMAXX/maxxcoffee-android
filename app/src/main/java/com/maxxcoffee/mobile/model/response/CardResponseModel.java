@@ -131,4 +131,15 @@ public class CardResponseModel {
         }
     }
 
+    @Override
+    public String toString() {
+        return "CardResponseModel{" +
+                "status='" + status + '\'' +
+                ", access_token='" + access_token + '\'' +
+                ", messages='" + messages + '\'' +
+                ", input=" + input +
+                ", user=" + user +
+                ", result=" + result +
+                '}';
+    }
 }

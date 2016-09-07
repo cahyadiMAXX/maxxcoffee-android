@@ -11,6 +11,7 @@ import com.maxxcoffee.mobile.model.request.HistoryRequestModel;
 import com.maxxcoffee.mobile.model.request.LoginRequestModel;
 import com.maxxcoffee.mobile.model.request.LostCardRequestModel;
 import com.maxxcoffee.mobile.model.request.OauthRequestModel;
+import com.maxxcoffee.mobile.model.request.PrimaryCardRequestModel;
 import com.maxxcoffee.mobile.model.request.RegisterCardRequestModel;
 import com.maxxcoffee.mobile.model.request.RegisterRequestModel;
 import com.maxxcoffee.mobile.model.request.RenameCardRequestModel;
@@ -80,8 +81,17 @@ public interface ApiInterface {
     @GET("/api/event/list")
     void event(Callback<EventResponseModel> response);
 
+    //ngambil semua card
     @POST("/api/gci/cardlist")
     void cardList(@Header("Authorization") String authentication, @Body DefaultRequestModel body, Callback<CardResponseModel> response);
+
+    //ngambil hanya 1 kartu
+    @POST("/api/gci/carddetail")
+    void cardListDetail(@Header("Authorization") String authentication, @Body PrimaryCardRequestModel body, Callback<CardResponseModel> response);
+
+    //ngambil semua cardlocal
+    @POST("/api/gci/card/list/local")
+    void cardListLocal(@Header("Authorization") String authentication, @Body DefaultRequestModel body, Callback<CardResponseModel> response);
 
     @POST("/api/gci/registercard")
     void registerCard(@Header("Authorization") String authentication, @Body RegisterCardRequestModel body, Callback<CardResponseModel> response);
@@ -131,17 +141,22 @@ public interface ApiInterface {
     @POST("/api/verifysmsbyemail")
     void verifySmsCode(@Header("Authorization") String authentication, @Body VerifySmsCodeRequestModel body, Callback<DefaultResponseModel> response);
 
+    //semua history card
     @POST("/api/gci/transaction/all")
     void history(@Header("Authorization") String authentication, @Body HistoryRequestModel body, Callback<HistoryResponseModel> response);
+
+    //semua history card local
+    @POST("/api/gci/card/list/local")
+    void historyLocal(@Header("Authorization") String authentication, @Body HistoryRequestModel body, Callback<HistoryResponseModel> response);
 
     @POST("/api/deletecardbynumber")
     void deleteCard(@Header("Authorization") String authentication, @Body DeleteCardRequestModel body, Callback<DefaultResponseModel> response);
 
-    @POST("/api/changeemail")
-    void changeEmail(@Header("Authorization") String authentication, @Body ChangeEmailRequestModel body, Callback<DefaultResponseModel> response);
-
     @POST("/api/updatecityoccupation")
     void changeCityOccupation(@Header("Authorization") String authentication, @Body ChangeCityOccupationRequestModel body, Callback<DefaultResponseModel> response);
+
+    @POST("/api/changeemail")
+    void changeEmail(@Header("Authorization") String authentication, @Body ChangeEmailRequestModel body, Callback<DefaultResponseModel> response);
 
     @POST("/api/home")
     void home(@Header("Authorization") String authentication, @Body DefaultRequestModel body, Callback<HomeResponseModel> response);
@@ -152,4 +167,7 @@ public interface ApiInterface {
     @POST("/api/cek/email/exists")
     void checkEmailExist(@Body CheckValidEmailRequestModel body, Callback<CheckValidEmailResponseModel> response);
 
+    //set primary card
+    @POST("/api/setprimarycard")
+    void setPrimaryCard(@Header("Authorization") String authentication, @Body PrimaryCardRequestModel body, Callback<DefaultResponseModel> response);
 }

@@ -198,7 +198,6 @@ public class StoreDetailFragment extends Fragment {
                 StoreDetailFragment.this.googleMap.setMyLocationEnabled(false);
 
                 selectedPosition = new LatLng(lat, lng);
-
                 iconFactory.setStyle(IconGenerator.STYLE_BLUE);
                 StoreDetailFragment.this.googleMap.addMarker(new MarkerOptions()
                         .position(selectedPosition)

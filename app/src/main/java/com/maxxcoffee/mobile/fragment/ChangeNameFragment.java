@@ -17,6 +17,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import com.maxxcoffee.mobile.task.ChangeNameTask;
+import com.maxxcoffee.mobile.util.Constant;
+import com.maxxcoffee.mobile.util.PreferenceManager;
 
 /**
  * Created by Rio Swarawan on 5/3/2016.
@@ -42,6 +44,9 @@ public class ChangeNameFragment extends Fragment {
 
         ButterKnife.bind(this, view);
         activity.setTitle("Change Name");
+
+        firstName.setText(PreferenceManager.getString(activity, Constant.PREFERENCE_FIRST_NAME, ""));
+        lastName.setText(PreferenceManager.getString(activity, Constant.PREFERENCE_LAST_NAME, ""));
 
         return view;
     }

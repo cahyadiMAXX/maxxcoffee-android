@@ -32,6 +32,7 @@ public class WelcomeActivity extends FragmentActivity {
             R.drawable.bg_welcome_3,
             R.drawable.bg_welcome_4
     };
+
     private final String[] TITLE = {
             "Find your \nperfect coffee",
             "Find your collection",

@@ -37,7 +37,7 @@ public abstract class LoginTestTask extends AsyncTask<LoginRequestModel, Boolean
 
             @Override
             public void failure(RetrofitError error) {
-                onFailed();
+                onFailed("Something went wrong. Please try again.");
             }
         });
         return null;
@@ -54,7 +54,8 @@ public abstract class LoginTestTask extends AsyncTask<LoginRequestModel, Boolean
             if (status.equalsIgnoreCase("success")) {
                 onSuccess();
             } else if (status.equalsIgnoreCase("fail")) {
-                onFailed();
+                String message = loginResponseModel.getMessages();
+                onFailed(message);
             } else if (ganti_nomer.equalsIgnoreCase("yes")) {
                 onChangePhoneNumber(email);
             }
@@ -65,5 +66,5 @@ public abstract class LoginTestTask extends AsyncTask<LoginRequestModel, Boolean
 
     public abstract void onChangePhoneNumber(String email);
 
-    public abstract void onFailed();
+    public abstract void onFailed(String message);
 }

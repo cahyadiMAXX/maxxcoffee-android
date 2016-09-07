@@ -15,6 +15,7 @@ import com.maxxcoffee.mobile.fragment.dialog.LoadingDialog;
 import com.maxxcoffee.mobile.task.AboutTask;
 import com.maxxcoffee.mobile.util.Constant;
 import com.maxxcoffee.mobile.util.PreferenceManager;
+import com.maxxcoffee.mobile.util.Utils;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -44,7 +45,12 @@ public class AboutFragment extends Fragment {
         activity.setTitle("About");
 
         content.setText(Html.fromHtml(PreferenceManager.getString(activity, Constant.PREFERENCE_ABOUT, "")));
-        fetchingData();
+        if(Utils.isConnected(activity)){
+            fetchingData();
+        }else{
+            Toast.makeText(activity, activity.getResources().getString(R.string.mobile_data), Toast.LENGTH_LONG).show();
+        }
+
         return view;
     }
 
@@ -68,7 +74,7 @@ public class AboutFragment extends Fragment {
             @Override
             public void onFailed() {
                     progress.dismissAllowingStateLoss();
-                Toast.makeText(activity, "Failed to fetch data", Toast.LENGTH_SHORT).show();
+                Toast.makeText(activity, "Something went wrong. Please try again.", Toast.LENGTH_SHORT).show();
             }
         };
         task.execute();

@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/transparent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <ScrollView
@@ -18,19 +19,19 @@
             android:paddingLeft="16dp"
             android:paddingRight="16dp">
 
-            <com.maxxcoffee.mobile.widget.textview.TextViewLatoBold
+            <!--com.maxxcoffee.mobile.widget.textview.TextViewLatoBold
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Sign Up"
                 android:textColor="@android:color/white"
-                android:textSize="20sp" />
+                android:textSize="20sp" /-->
 
             <com.maxxcoffee.mobile.widget.textview.TextViewLatoRegular
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:text="First Name"
-                android:textColor="@android:color/darker_gray"
+                android:textColor="@android:color/white"
                 android:textSize="16sp" />
 
             <com.maxxcoffee.mobile.widget.edittext.EditTextLatoRegular
@@ -50,7 +51,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:text="Last Name"
-                android:textColor="@android:color/darker_gray"
+                android:textColor="@android:color/white"
                 android:textSize="16sp" />
 
             <com.maxxcoffee.mobile.widget.edittext.EditTextLatoRegular
@@ -70,7 +71,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="Email"
-                android:textColor="@android:color/darker_gray"
+                android:textColor="@android:color/white"
                 android:textSize="16sp" />
 
             <com.maxxcoffee.mobile.widget.edittext.EditTextLatoRegular
@@ -90,7 +91,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="Mobile Phone"
-                android:textColor="@android:color/darker_gray"
+                android:textColor="@android:color/white"
                 android:textSize="16sp" />
 
             <com.maxxcoffee.mobile.widget.edittext.EditTextLatoRegular
@@ -110,7 +111,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="Password"
-                android:textColor="@android:color/darker_gray"
+                android:textColor="@android:color/white"
                 android:textSize="16sp" />
 
             <com.maxxcoffee.mobile.widget.edittext.EditTextShowPassword
@@ -122,6 +123,7 @@
                 android:inputType="textPassword"
                 android:padding="16dp"
                 android:singleLine="true"
+                app:tint_color="@color/gray"
                 android:textColor="@android:color/white"
                 android:textSize="16sp" />
 
@@ -130,7 +132,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="Confirm Password"
-                android:textColor="@android:color/darker_gray"
+                android:textColor="@android:color/white"
                 android:textSize="16sp" />
 
 
@@ -143,6 +145,7 @@
                 android:inputType="textPassword"
                 android:padding="16dp"
                 android:singleLine="true"
+                app:tint_color="@color/gray"
                 android:textColor="@android:color/white"
                 android:textSize="16sp"
                 />

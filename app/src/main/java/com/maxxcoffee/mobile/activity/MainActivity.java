@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Process;
@@ -109,6 +110,9 @@ public class MainActivity extends FragmentActivity {
     public static final int EVENT = 1024;
     public static final int ABOUT = 1025;
 
+    public int activeFragmentFlag = -999;
+    public boolean isDrawerExpanded = false;
+
     @Bind(R.id.drawer_layout)
     DrawerLayout drawer;
     @Bind(R.id.nav_view)
@@ -151,6 +155,12 @@ public class MainActivity extends FragmentActivity {
 
         ButterKnife.bind(this);
 
+        //klo tidak ada extra, langsung brarti home
+        //ini akan terjadi ketika balik dari activity lain seperti formactivity dsb
+        //klo tetap di mainactivity, kan cuma switchfragment dengan parameter yg sudah ditentukan user
+        //siapp
+        Integer content = getIntent().getIntExtra("content", HOME);
+
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
@@ -170,6 +180,7 @@ public class MainActivity extends FragmentActivity {
                 lastExpandedPosition = groupPosition;
             }
         });
+
         navigationList.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
             @Override
             public boolean onGroupClick(ExpandableListView expandableListView, View view, int groupPosition, long id) {
@@ -196,7 +207,13 @@ public class MainActivity extends FragmentActivity {
         });
 
         refresh.setVisibility(View.GONE);
-        switchFragment(HOME);
+        boolean routeFromTutorial = PreferenceManager.getBool(this, Constant.PREFERENCE_MAIN_FROM_TUTORIAL, false);
+        if(routeFromTutorial){
+            PreferenceManager.putBool(this, Constant.PREFERENCE_MAIN_FROM_TUTORIAL, false);
+            switchFragment(LOGIN);
+        }else{
+            switchFragment(content);
+        }
     }
 
     @Override
@@ -218,11 +235,6 @@ public class MainActivity extends FragmentActivity {
                 setNavbarBackground(R.drawable.bg_evening_navbar);
             }
         }
-//        else if (fragment instanceof LoginFragment
-//                || fragment instanceof SignUpInfoFragment
-//                || fragment instanceof SignUpFragment) {
-//            rootLayout.setBackgroundResource(R.drawable.bg_navbar);
-//        }
     }
 
     @OnClick(R.id.hamburger)
@@ -312,6 +324,9 @@ public class MainActivity extends FragmentActivity {
     }
 
     private Fragment getContent(int contentId, Bundle bundle) {
+        //lihat fragment yg aktif
+        setActiveFragmentFlag(contentId);
+
         boolean isLoggedIn = PreferenceManager.getBool(this, Constant.PREFERENCE_LOGGED_IN, false);
         boolean isSmsVerified = PreferenceManager.getBool(this, Constant.PREFERENCE_SMS_VERIFICATION, false);
         boolean isEmailVerified = PreferenceManager.getBool(this, Constant.PREFERENCE_EMAIL_VERIFICATION, false);
@@ -323,7 +338,7 @@ public class MainActivity extends FragmentActivity {
                 break;
             case STORE:
                 if (!settingRequested) {
-                    checkSettingApi();
+                    checkSettingApi(STORE);
                 } else {
                     if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                             && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -442,10 +457,43 @@ public class MainActivity extends FragmentActivity {
                 fragment = new CredentialFragment();
                 break;
             case LOGIN:
+                /*if (!settingRequested) {
+                    checkSettingApi(LOGIN);
+                } else {
+                    if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                            && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+                        if (ActivityCompat.shouldShowRequestPermissionRationale(this, android.Manifest.permission.ACCESS_FINE_LOCATION) ||
+                                ActivityCompat.shouldShowRequestPermissionRationale(this, android.Manifest.permission.ACCESS_COARSE_LOCATION)) {
+
+                            ActivityCompat.requestPermissions(this, PERMISSIONS_LOCATION, 3);
+                        } else {
+                            ActivityCompat.requestPermissions(this, PERMISSIONS_LOCATION, 3);
+                        }
+                    } else {
+                        fragment = new LoginFragment();
+                    }
+                }*/
                 fragment = new LoginFragment();
                 break;
             case SIGNUP:
-                fragment = new SignUpFragment();
+                if (!settingRequested) {
+                    checkSettingApi(SIGNUP);
+                } else {
+                    if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                            && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+                        if (ActivityCompat.shouldShowRequestPermissionRationale(this, android.Manifest.permission.ACCESS_FINE_LOCATION) ||
+                                ActivityCompat.shouldShowRequestPermissionRationale(this, android.Manifest.permission.ACCESS_COARSE_LOCATION)) {
+
+                            ActivityCompat.requestPermissions(this, PERMISSIONS_LOCATION, 4);
+                        } else {
+                            ActivityCompat.requestPermissions(this, PERMISSIONS_LOCATION, 4);
+                        }
+                    } else {
+                        fragment = new SignUpFragment();
+                    }
+                }
                 break;
             case SIGNUP_INFO:
                 fragment = new SignUpInfoFragment();
@@ -487,7 +535,7 @@ public class MainActivity extends FragmentActivity {
         return fragment;
     }
 
-    private boolean checkSettingApi() {
+    private boolean checkSettingApi(final int requestCode) {
         if (googleApiClient == null) {
             googleApiClient = new GoogleApiClient.Builder(this)
                     .addApi(LocationServices.API)
@@ -513,11 +561,11 @@ public class MainActivity extends FragmentActivity {
                 switch (status.getStatusCode()) {
                     case LocationSettingsStatusCodes.SUCCESS:
                         settingRequested = true;
-                        switchFragment(STORE);
+                        switchFragment(requestCode);
                         break;
                     case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
                         try {
-                            status.startResolutionForResult(MainActivity.this, 1000);
+                            status.startResolutionForResult(MainActivity.this, requestCode);
                         } catch (IntentSender.SendIntentException e) {
                         }
                         break;
@@ -540,6 +588,13 @@ public class MainActivity extends FragmentActivity {
 
     public void setTitle(String mTitle) {
         title.setText(mTitle == null ? "" : mTitle);
+        title.setTextColor(getResources().getColor(R.color.background_black));
+    }
+
+    //pake ubah color
+    public void setTitle(String mTitle, boolean iswhite) {
+        title.setText(mTitle == null ? "" : mTitle);
+        title.setTextColor(getResources().getColor(R.color.background_white));
     }
 
     //overloading
@@ -607,16 +662,6 @@ public class MainActivity extends FragmentActivity {
         browse.setExpandable(true);
         browse.setIcon(R.drawable.ic_coffee_white);
 
-//        ParentDrawerModel transaction = new ParentDrawerModel();
-//        transaction.setId(3);
-//        transaction.setName("Transaction");
-//        transaction.setExpandable(true);
-
-//        ParentDrawerModel topUp = new ParentDrawerModel();
-//        topUp.setId(4);
-//        topUp.setName("Top Up");
-//        topUp.setExpandable(true);
-
         ParentDrawerModel card = new ParentDrawerModel();
         card.setId(5);
         card.setName("Card");
@@ -643,8 +688,6 @@ public class MainActivity extends FragmentActivity {
 
         listDataHeader.add(home);
         listDataHeader.add(browse);
-//        listDataHeader.add(transaction);
-//        listDataHeader.add(topUp);
         listDataHeader.add(card);
         listDataHeader.add(about);
         listDataHeader.add(profile);
@@ -671,21 +714,9 @@ public class MainActivity extends FragmentActivity {
         childTransaction1.setId(REWARD);
         childTransaction1.setName("Reward");
 
-//        ChildDrawerModel childTopUp1 = new ChildDrawerModel();
-//        childTopUp1.setId(BALANCE_TOPUP);
-//        childTopUp1.setName("Balance Top Up");
-//
-//        ChildDrawerModel childTopUp2 = new ChildDrawerModel();
-//        childTopUp2.setId(TOPUP_HISTORY);
-//        childTopUp2.setName("Top Up History");
-
         ChildDrawerModel childCard1 = new ChildDrawerModel();
         childCard1.setId(MY_CARD);
         childCard1.setName("My Card");
-
-//        ChildDrawerModel childCard2 = new ChildDrawerModel();
-//        childCard2.setId(ADD_NEW_CARD);
-//        childCard2.setName("Add New Card");
 
         ChildDrawerModel childCard3 = new ChildDrawerModel();
         childCard3.setId(BALANCE_TRANSFER);
@@ -715,7 +746,6 @@ public class MainActivity extends FragmentActivity {
         childAbout4.setId(TUTORIAL);
         childAbout4.setName("Tutorial");
 
-
         ChildDrawerModel childAbout5 = new ChildDrawerModel();
         childAbout5.setId(ABOUT);
         childAbout5.setName("About");
@@ -727,16 +757,8 @@ public class MainActivity extends FragmentActivity {
         listBrowse.add(childBrowse3);
         listBrowse.add(childBrowse4);
 
-//        List<ChildDrawerModel> listTransaction = new ArrayList<>();
-//        listTransaction.add(childTransaction1);
-
-//        List<ChildDrawerModel> listTopUp = new ArrayList<>();
-//        listTopUp.add(childTopUp1);
-//        listTopUp.add(childTopUp2);
-
         List<ChildDrawerModel> listCard = new ArrayList<>();
         listCard.add(childCard1);
-//        listCard.add(childCard2);
         listCard.add(childCard3);
         listCard.add(childCard4);
         listCard.add(childCard5);
@@ -746,11 +768,11 @@ public class MainActivity extends FragmentActivity {
         listAbout.add(childAbout1);
         listAbout.add(childAbout2);
         listAbout.add(childAbout3);
-        listAbout.add(childAbout4);
+        if(!isLoggedIn){
+            listAbout.add(childAbout4);
+        }
 
         listDataChild.put(browse, listBrowse);
-//        listDataChild.put(transaction, listTransaction);
-//        listDataChild.put(topUp, listTopUp);
         listDataChild.put(card, listCard);
         listDataChild.put(about, listAbout);
 
@@ -759,26 +781,52 @@ public class MainActivity extends FragmentActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode) {
-            case 1000:
-                switch (resultCode) {
-                    case Activity.RESULT_OK:
-//                        startLocationUpdates();
-                        switchFragment(STORE);
-                        break;
-                    case Activity.RESULT_CANCELED:
-                        break;
-                }
-                break;
+        //Toast.makeText(getApplicationContext(), "Request code: " + String.valueOf(requestCode) + " "+ String.valueOf(resultCode), Toast.LENGTH_LONG).show();
+        if(requestCode == STORE){
+            switch (resultCode) {
+                case Activity.RESULT_OK:
+                    switchFragment(STORE);
+                    break;
+                case Activity.RESULT_CANCELED:
+                    break;
+            }
+        }else if(requestCode == LOGIN){
+            switch (resultCode) {
+                case Activity.RESULT_OK:
+                    switchFragment(LOGIN);
+                    break;
+                case Activity.RESULT_CANCELED:
+                    break;
+            }
+        }else if(requestCode == SIGNUP){
+            switch (resultCode) {
+                case Activity.RESULT_OK:
+                    switchFragment(SIGNUP);
+                    break;
+                case Activity.RESULT_CANCELED:
+                    break;
+            }
         }
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-
+        //Toast.makeText(getApplicationContext(), "Request code permissionresult: " + String.valueOf(requestCode), Toast.LENGTH_LONG).show();
         if (requestCode == 2) {
             if (PermissionUtil.verifyPermissions(grantResults)) {
                 switchFragment(STORE);
+            } else {
+                Toast.makeText(this, "Location permission is NOT granted", Toast.LENGTH_SHORT).show();
+            }
+        } else if(requestCode == 3){
+            if (PermissionUtil.verifyPermissions(grantResults)) {
+                switchFragment(LOGIN);
+            } else {
+                Toast.makeText(this, "Location permission is NOT granted", Toast.LENGTH_SHORT).show();
+            }
+        } else if(requestCode == 4){
+            if (PermissionUtil.verifyPermissions(grantResults)) {
+                switchFragment(SIGNUP);
             } else {
                 Toast.makeText(this, "Location permission is NOT granted", Toast.LENGTH_SHORT).show();
             }
@@ -789,5 +837,22 @@ public class MainActivity extends FragmentActivity {
 
     public ImageView getRefresh() {
         return refresh;
+    }
+
+    public int getActiveFragmentFlag() {
+        return activeFragmentFlag;
+    }
+
+    public void setActiveFragmentFlag(int activeFragmentFlag) {
+        this.activeFragmentFlag = activeFragmentFlag;
+    }
+
+    public boolean isDrawerExpanded() {
+        //cek drawer open atau tidak
+       return drawer.isDrawerOpen(GravityCompat.START);
+    }
+
+    public void setDrawerExpanded(boolean drawerExpanded) {
+        isDrawerExpanded = drawerExpanded;
     }
 }

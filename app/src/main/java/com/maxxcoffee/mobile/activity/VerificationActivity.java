@@ -157,7 +157,7 @@ public class VerificationActivity extends AppCompatActivity {
             @Override
             public void onFailed() {
                     progress.dismissAllowingStateLoss();
-                Toast.makeText(VerificationActivity.this, "Failed to fetch data.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(VerificationActivity.this, "Something went wrong. Please try again.", Toast.LENGTH_SHORT).show();
             }
         };
         task.execute();

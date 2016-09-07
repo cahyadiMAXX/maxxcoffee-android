@@ -43,11 +43,14 @@ public class SignUpFragment extends Fragment {
     private MainActivity activity;
     private int mDayPart = Utils.getDayPart();
 
+    private boolean isEmailChecked = false;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         activity = (MainActivity) getActivity();
         activity.setHeaderColor(true);
+        isEmailChecked = true;
     }
 
     @Override
@@ -55,12 +58,12 @@ public class SignUpFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_signup, container, false);
 
         ButterKnife.bind(this, view);
-        activity.setTitle("");
+        activity.setTitle("Sign Up", true);
 
         email.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if(!hasFocus){
+                if(!hasFocus && !activity.isDrawerExpanded() && (activity.getActiveFragmentFlag() == MainActivity.SIGNUP)){
                     if(!email.getText().toString().equals("") && isValidEmail(email.getText().toString())){
                         final LoadingDialog progress = new LoadingDialog();
                         progress.show(getFragmentManager(), null);
@@ -72,7 +75,7 @@ public class SignUpFragment extends Fragment {
                             @Override
                             public void onSuccess(String response) {
                                 progress.dismissAllowingStateLoss();
-                                Toast.makeText(getActivity(), response, Toast.LENGTH_LONG).show();
+                                //Toast.makeText(getActivity(), response, Toast.LENGTH_LONG).show();
                                 PreferenceManager.putBool(activity, Constant.PREFERENCE_REGISTER_IS_VALID_EMAIL, true);
                             }
 
@@ -80,7 +83,9 @@ public class SignUpFragment extends Fragment {
                             public void onFailed() {
                                 progress.dismissAllowingStateLoss();
                                 PreferenceManager.putBool(activity, Constant.PREFERENCE_REGISTER_IS_VALID_EMAIL, false);
-                                Toast.makeText(getActivity(), "Email already exists", Toast.LENGTH_LONG).show();
+                                email.requestFocus();
+                                email.setError("Email already exists");
+                                //Toast.makeText(getActivity(), "Email already exists", Toast.LENGTH_LONG).show();
                             }
                         };
                         cvtask.execute(body);
@@ -163,41 +168,53 @@ public class SignUpFragment extends Fragment {
         String mPasswordConfirm = passwordConfirm.getText().toString();
 
         if (mFirstName.equals("")) {
+            firstName.setError("Please verify your first name");
             Toast.makeText(activity, "Please verify your first name", Toast.LENGTH_SHORT).show();
             return false;
         }
         if (mLastName.equals("")) {
+            lastName.setError("Please verify your last name");
             Toast.makeText(activity, "Please verify your last name", Toast.LENGTH_SHORT).show();
             return false;
         }
         if (mEmail.equals("")) {
+            email.requestFocus();
+            email.setError("Please verify your email address");
             Toast.makeText(activity, "Please verify your email address", Toast.LENGTH_SHORT).show();
             return false;
         }else{
             if(!isValidEmail(mEmail.toString())){
+                email.requestFocus();
+                email.setError("Please enter valid email address");
                 Toast.makeText(activity, "Please enter valid email address", Toast.LENGTH_SHORT).show();
                 return false;
             }
             boolean isValid = PreferenceManager.getBool(activity, Constant.PREFERENCE_REGISTER_IS_VALID_EMAIL, false);
             if(!isValid){
+                email.requestFocus();
+                email.setError("Please enter valid email address");
                 Toast.makeText(activity, "Please check your email address", Toast.LENGTH_SHORT).show();
                 return false;
             }
         }
         if (mPhone.equals("")) {
+            phone.setError("Please verify your phone number");
             Toast.makeText(activity, "Please verify your phone number", Toast.LENGTH_SHORT).show();
             return false;
         }
         if (mPassword.equals("")) {
+            password.setError("Please verify your password");
             Toast.makeText(activity, "Please verify your password", Toast.LENGTH_SHORT).show();
             return false;
         }
         if (mPasswordConfirm.equals("")) {
+            passwordConfirm.setError("Please verify your password confirmation");
             Toast.makeText(activity, "Please verify your password confirmation", Toast.LENGTH_SHORT).show();
             return false;
         }
 
         if (!mPassword.equals(mPasswordConfirm)) {
+            passwordConfirm.setError("Please verify your password confirmation");
             Toast.makeText(activity, "Please verify your password confirmation", Toast.LENGTH_SHORT).show();
             return false;
         }

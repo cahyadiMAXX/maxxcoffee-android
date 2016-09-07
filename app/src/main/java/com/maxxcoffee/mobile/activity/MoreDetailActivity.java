@@ -9,6 +9,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.maxxcoffee.mobile.R;
 import com.maxxcoffee.mobile.fragment.CardDetailHistoryFragment;
@@ -34,7 +35,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
- * Created by Rio Swarawan on 6/5/2016.
+ * Created by Vourest on 2/9/2016.
  */
 public class MoreDetailActivity extends FragmentActivity {
 
@@ -71,6 +72,8 @@ public class MoreDetailActivity extends FragmentActivity {
         setContentView(R.layout.activity_form);
 
         ButterKnife.bind(this);
+
+        //Toast.makeText(getApplicationContext(), "More detail coyy", Toast.LENGTH_LONG).show();
 
         refresh.setVisibility(View.GONE);
 
@@ -170,18 +173,18 @@ public class MoreDetailActivity extends FragmentActivity {
         return fragment;
     }
 
+    public void setTitle(String mTitle) {
+        title.setText(mTitle);
+    }
+
     @Override
     public void onBackPressed() {
         finish();
     }
 
-    public void setTitle(String mTitle) {
-        title.setText(mTitle);
-    }
-
     @OnClick(R.id.back)
     public void onBackClick() {
-        onBackPressed();
+        this.onBackPressed();
     }
 
     public ImageView getRefresh() {

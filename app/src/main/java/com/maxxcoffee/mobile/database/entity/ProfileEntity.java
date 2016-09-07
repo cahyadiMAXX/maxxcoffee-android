@@ -48,6 +48,12 @@ public class ProfileEntity {
     @DatabaseField
     Boolean email_verified;
 
+    @DatabaseField
+    String first_name;
+
+    @DatabaseField
+    String last_name;
+
     public Integer getId() {
         return id;
     }
@@ -150,5 +156,21 @@ public class ProfileEntity {
 
     public void setEmail_verified(Boolean email_verified) {
         this.email_verified = email_verified;
+    }
+
+    public String getFirst_name() {
+        return first_name;
+    }
+
+    public void setFirst_name(String first_name) {
+        this.first_name = first_name;
+    }
+
+    public String getLast_name() {
+        return last_name;
+    }
+
+    public void setLast_name(String last_name) {
+        this.last_name = last_name;
     }
 }

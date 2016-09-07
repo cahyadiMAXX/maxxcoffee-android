@@ -26,10 +26,12 @@ import com.maxxcoffee.mobile.fragment.dialog.OptionDialog;
 import com.maxxcoffee.mobile.model.CardModel;
 import com.maxxcoffee.mobile.model.request.TransferBalanceRequestModel;
 import com.maxxcoffee.mobile.model.response.CardItemResponseModel;
+import com.maxxcoffee.mobile.task.CardBalanceTask;
 import com.maxxcoffee.mobile.task.CardTask;
 import com.maxxcoffee.mobile.task.DownloadImageTask;
 import com.maxxcoffee.mobile.task.TransferBalanceTask;
 import com.maxxcoffee.mobile.util.Constant;
+import com.maxxcoffee.mobile.util.Utils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -96,8 +98,11 @@ public class TransferBalanceFragment extends Fragment {
 
         ButterKnife.bind(this, view);
         activity.setTitle("Balance Transfer");
-
-        fetchingData(false);
+        if(Utils.isConnected(activity)){
+            fetchingData(false);
+        }else{
+            Toast.makeText(activity, activity.getResources().getString(R.string.mobile_data), Toast.LENGTH_LONG).show();
+        }
 
         return view;
     }
@@ -106,7 +111,7 @@ public class TransferBalanceFragment extends Fragment {
         final LoadingDialog progress = new LoadingDialog();
         progress.show(getFragmentManager(), null);
 
-        CardTask task = new CardTask(activity) {
+        CardBalanceTask task = new CardBalanceTask(activity) {
             @Override
             public void onSuccess(List<CardItemResponseModel> responseModel) {
                 int size = responseModel.size();
@@ -140,7 +145,7 @@ public class TransferBalanceFragment extends Fragment {
                 progress.dismissAllowingStateLoss();
                 transferLayout.setVisibility(View.GONE);
                 empty.setVisibility(View.VISIBLE);
-                empty.setText("You don't have any card connected to your account. Please add card first.");
+                empty.setText("You do not have any connected card. \n\nPlease add card.");
             }
         };
         task.execute();
@@ -201,6 +206,10 @@ public class TransferBalanceFragment extends Fragment {
     public void onSubmitClick() {
         if (!isFormValid())
             return;
+
+        if(!Utils.isConnected(activity)){
+            Toast.makeText(activity, activity.getResources().getString(R.string.mobile_data), Toast.LENGTH_LONG).show();
+        }
 
         String content = "You will transfer all balance from " + selectedSource.getName().toUpperCase() + " to " + selectedTarget.getName().toUpperCase();
 
@@ -271,7 +280,7 @@ public class TransferBalanceFragment extends Fragment {
     @OnClick(R.id.source_layout)
     public void onSourceClick() {
         if (data.size() == 0) {
-            Toast.makeText(activity, "You do not have card", Toast.LENGTH_SHORT).show();
+            Toast.makeText(activity, "You do not have any connected card.\n\nPlease add card.", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -309,7 +318,7 @@ public class TransferBalanceFragment extends Fragment {
     @OnClick(R.id.target_layout)
     public void onTargetClick() {
         if (data.size() == 0) {
-            Toast.makeText(activity, "You do not have card", Toast.LENGTH_SHORT).show();
+            Toast.makeText(activity, "You do not have any connected card. \n\nPlease add card.", Toast.LENGTH_SHORT).show();
             return;
         }
 

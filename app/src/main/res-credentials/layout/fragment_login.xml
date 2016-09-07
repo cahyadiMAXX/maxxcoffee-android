@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/transparent"
@@ -14,18 +15,18 @@
         android:background="@android:color/transparent"
         android:orientation="vertical">
 
-        <com.maxxcoffee.mobile.widget.textview.TextViewLatoBold
+        <!--com.maxxcoffee.mobile.widget.textview.TextViewLatoBold
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Login"
             android:textColor="@android:color/white"
-            android:textSize="20sp" />
+            android:textSize="20sp" /-->
 
         <com.maxxcoffee.mobile.widget.textview.TextViewLatoRegular
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="Use your email address"
+            android:text="Email address"
             android:textColor="@android:color/white"
             android:textSize="16sp" />
 
@@ -58,6 +59,7 @@
             android:inputType="textPassword"
             android:padding="16dp"
             android:singleLine="true"
+            app:tint_color="@color/gray"
             android:textColor="@android:color/white"
             android:textSize="16sp" />
 

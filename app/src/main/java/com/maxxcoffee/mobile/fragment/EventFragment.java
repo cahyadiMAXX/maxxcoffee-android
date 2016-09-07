@@ -20,6 +20,7 @@ import com.maxxcoffee.mobile.database.entity.EventEntity;
 import com.maxxcoffee.mobile.fragment.dialog.LoadingDialog;
 import com.maxxcoffee.mobile.model.response.EventItemResponseModel;
 import com.maxxcoffee.mobile.task.EventTask;
+import com.maxxcoffee.mobile.util.Utils;
 import com.maxxcoffee.mobile.widget.CustomLinearLayoutManager;
 
 import java.util.ArrayList;
@@ -55,16 +56,6 @@ public class EventFragment extends Fragment {
         adapter = new EventAdapter(activity, data) {
             @Override
             public void onCardClick(EventEntity model) {
-//                Bundle bundle = new Bundle();
-//                bundle.putString("title", model.getNama_event());
-//                bundle.putString("date", model.get());
-//                bundle.putString("store", model.getStore_name());
-//                bundle.putString("location", model.getDescription());
-//                bundle.putString("image", model.getImage());
-//
-//                EventDialog dialog = new EventDialog();
-//                dialog.setArguments(bundle);
-//                dialog.show(getFragmentManager(), null);
 
                 Bundle bundle = new Bundle();
                 bundle.putInt("event-id", model.getId_event());
@@ -90,22 +81,32 @@ public class EventFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(adapter);
 
-        getLocalPromo();
-        fetchingData();
+        //getLocalPromo();
+        //fetchingData();
+        emptyCard.setVisibility(View.GONE);
+        if(Utils.isConnected(activity)){
+            fetchingData();
+        }else{
+            Toast.makeText(activity, activity.getResources().getString(R.string.mobile_data), Toast.LENGTH_LONG).show();
+            getLocalPromo();
+        }
 
         return view;
     }
 
     private void fetchingData() {
+        emptyCard.setVisibility(View.GONE);
         final LoadingDialog progress = new LoadingDialog();
         progress.show(getFragmentManager(), null);
 
         EventTask task = new EventTask(activity) {
             @Override
             public void onSuccess(List<EventItemResponseModel> responseModel) {
-                for (EventItemResponseModel event : responseModel) {
+                for (int i = 0 ; i < responseModel.size(); i++) {
+                    EventItemResponseModel event = responseModel.get(i);
                     EventEntity entity = new EventEntity();
-                    entity.setId_event(event.getId_event());
+                    //entity.setId_event(event.getId_event());
+                    entity.setId_event(i+1);
                     entity.setNama_event(event.getNama_event());
                     entity.setNama_lokasi(event.getNama_lokasi());
                     entity.setAlamat_lokasi(event.getAlamat_lokasi());
@@ -135,7 +136,7 @@ public class EventFragment extends Fragment {
             @Override
             public void onFailed() {
                 progress.dismissAllowingStateLoss();
-                Toast.makeText(activity, "Failed to fetch data.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(activity, "Something went wrong. Please try again.", Toast.LENGTH_SHORT).show();
             }
         };
         task.execute();
@@ -143,6 +144,7 @@ public class EventFragment extends Fragment {
 
     private void getLocalPromo() {
         List<EventEntity> events = eventController.getEvents();
+        emptyCard.setText(events.size() > 0 ? "" : "We don't have any event");
         emptyCard.setVisibility(events.size() > 0 ? View.GONE : View.VISIBLE);
 
         if (events.size() > 0)

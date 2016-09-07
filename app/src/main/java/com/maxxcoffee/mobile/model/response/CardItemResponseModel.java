@@ -27,6 +27,9 @@ public class CardItemResponseModel {
     private String created_at;
     private String updated_at;
 
+    private int primary;
+    private int cardAmount;
+
     public int getId_card() {
         return id_card;
     }
@@ -193,5 +196,49 @@ public class CardItemResponseModel {
 
     public void setBarcode(String barcode) {
         this.barcode = barcode;
+    }
+
+    public int getPrimary() {
+        return primary;
+    }
+
+    public void setPrimary(int primary) {
+        this.primary = primary;
+    }
+
+    public int getCardAmount() {
+        return cardAmount;
+    }
+
+    public void setCardAmount(int cardAmount) {
+        this.cardAmount = cardAmount;
+    }
+
+    @Override
+    public String toString() {
+        return "CardItemResponseModel{" +
+                "id_card=" + id_card +
+                ", card_id=" + card_id +
+                ", id_user=" + id_user +
+                ", card_number='" + card_number + '\'' +
+                ", card_name='" + card_name + '\'' +
+                ", card_image='" + card_image + '\'' +
+                ", barcode='" + barcode + '\'' +
+                ", distribution_id='" + distribution_id + '\'' +
+                ", card_pin='" + card_pin + '\'' +
+                ", status='" + status + '\'' +
+                ", beans=" + beans +
+                ", balance=" + balance +
+                ", customer_id=" + customer_id +
+                ", customer_name='" + customer_name + '\'' +
+                ", customer_email='" + customer_email + '\'' +
+                ", customer_phone='" + customer_phone + '\'' +
+                ", activated_date='" + activated_date + '\'' +
+                ", confirmed_date='" + confirmed_date + '\'' +
+                ", expired_date='" + expired_date + '\'' +
+                ", created_at='" + created_at + '\'' +
+                ", updated_at='" + updated_at + '\'' +
+                ", primary=" + primary +
+                '}';
     }
 }

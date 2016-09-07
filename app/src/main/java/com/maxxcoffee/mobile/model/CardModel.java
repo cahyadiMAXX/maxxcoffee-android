@@ -15,6 +15,8 @@ public class CardModel {
     private Integer point;
     private String expired_date;
 
+    private int primary;
+
     public Integer getId() {
         return id;
     }
@@ -85,5 +87,28 @@ public class CardModel {
 
     public void setExpired_date(String expired_date) {
         this.expired_date = expired_date;
+    }
+
+    public int getPrimary() {
+        return primary;
+    }
+
+    public void setPrimary(int primary) {
+        this.primary = primary;
+    }
+
+    @Override
+    public String toString() {
+        return "CardModel{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", number='" + number + '\'' +
+                ", image='" + image + '\'' +
+                ", distribution_id='" + distribution_id + '\'' +
+                ", card_pin='" + card_pin + '\'' +
+                ", balance=" + balance +
+                ", point=" + point +
+                ", expired_date='" + expired_date + '\'' +
+                '}';
     }
 }

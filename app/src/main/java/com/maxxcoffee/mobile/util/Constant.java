@@ -15,13 +15,19 @@ public class Constant {
     public final static String PREFERENCE_MAXX = "maxx-coffee";
     public final static String PREFERENCE_TOKEN = "maxx-token";
     public final static String PREFERENCE_USER_NAME = "maxx-user-name";
+    public final static String PREFERENCE_FIRST_NAME = "maxx-first-name";
+    public final static String PREFERENCE_LAST_NAME = "maxx-last-name";
+    public final static String PREFERENCE_PROFILE_CITY = "maxx-profile-city";
+    public final static String PREFERENCE_PROFILE_OCCUPATION = "maxx-profile-occupation";
     public final static String PREFERENCE_ACCESS_TOKEN = "maxx-access_token";
     public final static String PREFERENCE_BALANCE = "maxx-balance";
     public final static String PREFERENCE_BEAN = "maxx-bean";
+    public final static String PREFERENCE_GREETING = "maxx-greeting";
     public final static String PREFERENCE_EMAIL = "maxx-email";
     public final static String PREFERENCE_PHONE = "maxx-phone";
     public final static String PREFERENCE_WELCOME_SKIP = "maxx-welcome-skip";
     public final static String PREFERENCE_TUTORIAL_SKIP = "maxx-tutorial-skip";
+    public final static String PREFERENCE_MAIN_FROM_TUTORIAL = "maxx-main-from-tutorial";
     public final static String PREFERENCE_LOGGED_IN = "maxx-logged-in";
     public final static String PREFERENCE_TOS = "maxx-tos";
     public final static String PREFERENCE_ABOUT = "maxx-about";
@@ -58,4 +64,14 @@ public class Constant {
                     "Lainnya"
             };
 
+    //card sudah pernah load atau belum, jika belum maka load, jika sudah cek waktu
+    //klo udah 30 menit yg lalu, silahkan loading, klo ga ambil yg lokal aj
+    public final static String PREFERENCE_CARD_IS_LOADING = "maxx-card-is-loaded";
+    public final static String PREFERENCE_CARD_LAST_UPDATE = "maxx-card-last-update";
+    public final static String PREFERENCE_CARD_AMOUNT = "maxx-card-amount";
+    public final static String PREFERENCE_ROUTE_CARD_SUCCESS = "maxx-route-from-card-success";
+
+    //simpen latitude longitude
+    public final static String PREFERENCE_LATITUDE_USER = "maxx-user-latitude";
+    public final static String PREFERENCE_LONGITUDE_USER = "maxx-user-longitude";
 }

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -13,23 +14,23 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <ScrollView
+            <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="8dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
                     android:background="@android:color/transparent"
                     android:orientation="vertical"
-                    android:paddingLeft="16dp">
+                    android:paddingLeft="16dp"
+                    android:layout_gravity="center_horizontal|top">
 
                     <com.maxxcoffee.mobile.widget.textview.TextViewLatoRegular
                         android:id="@+id/greeting"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Good Morning"
                         android:textColor="@android:color/white"
                         android:textSize="16sp" />
 
@@ -37,7 +38,6 @@
                         android:id="@+id/name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Rio Swarawan Putra"
                         android:textColor="@android:color/white"
                         android:textSize="20sp" />
 
@@ -45,7 +45,6 @@
                         android:id="@+id/balance"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="IDR 70.000"
                         android:textColor="@android:color/white"
                         android:textSize="16sp" />
 
@@ -53,12 +52,63 @@
                         android:id="@+id/point"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="250 Points"
                         android:textColor="@android:color/white"
                         android:textSize="16sp" />
                 </LinearLayout>
-            </ScrollView>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|center_horizontal"
+                    android:padding="16dp"
+                    android:orientation="vertical"
+                    android:id="@+id/credential_area">
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/credential_buttons">
+
+                        <com.maxxcoffee.mobile.widget.button.ButtonLatoRegular
+                            style="?android:attr/buttonStyleSmall"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Sign Up"
+                            android:id="@+id/button_c_signup"
+                            android:background="@drawable/button_normal_custom"
+                            android:textColor="@android:color/white" />
+
+                        <com.maxxcoffee.mobile.widget.button.ButtonLatoRegular
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Login"
+                            android:id="@+id/button_c_login"
+                            android:layout_marginBottom="10dp"
+                            android:background="@drawable/button_transparent"
+                            android:layout_marginTop="7dp"
+                            android:textColor="@android:color/white" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </FrameLayout>
 
         </android.support.v4.widget.SwipeRefreshLayout>
+
+        <RelativeLayout
+            android:id="@+id/design_bottom_sheet"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:behavior_hideable="false"
+            app:behavior_peekHeight="180dp"
+            app:elevation="4dp"
+            app:layout_behavior="@string/bottom_sheet_behavior"
+            android:background="@android:color/transparent">
+
+            <include layout="@layout/item_bottom_sheet"/>
+
+        </RelativeLayout>
     </android.support.design.widget.CoordinatorLayout>
 </LinearLayout>

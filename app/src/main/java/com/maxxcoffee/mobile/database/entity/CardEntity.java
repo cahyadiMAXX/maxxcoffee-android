@@ -40,6 +40,9 @@ public class CardEntity {
     @DatabaseField
     private String expired_date;
 
+    @DatabaseField
+    private int primary;
+
     public Integer getId() {
         return id;
     }
@@ -118,5 +121,13 @@ public class CardEntity {
 
     public void setBarcode(String barcode) {
         this.barcode = barcode;
+    }
+
+    public int getPrimary() {
+        return primary;
+    }
+
+    public void setPrimary(int primary) {
+        this.primary = primary;
     }
 }

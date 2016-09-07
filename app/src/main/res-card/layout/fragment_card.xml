@@ -15,10 +15,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <android.support.v4.widget.SwipeRefreshLayout
+        <!--android.support.v4.widget.SwipeRefreshLayout
             android:id="@+id/swipe"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"-->
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/card_list"
@@ -29,7 +29,7 @@
                 android:paddingLeft="8dp"
                 android:paddingRight="8dp"
                 android:paddingTop="16dp" />
-        </android.support.v4.widget.SwipeRefreshLayout>
+        <!--/android.support.v4.widget.SwipeRefreshLayout-->
 
         <FrameLayout
             android:id="@+id/disable_layer"
@@ -45,10 +45,12 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
             android:gravity="center"
-            android:text="You do not have any connected card yet"
+            android:text="You do not have any connected card.\n\nPlease add card."
             android:textColor="@color/divider"
             android:textSize="16sp"
-            android:visibility="gone" />
+            android:visibility="gone"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp" />
 
         <com.github.clans.fab.FloatingActionMenu
             android:id="@+id/fab_menu"
@@ -67,6 +69,19 @@
             app:menu_labels_showAnimation="@anim/jump_from_down"
             app:menu_labels_style="@style/MenuLabelsStyle"
             app:menu_shadowColor="#444">
+
+            <com.github.clans.fab.FloatingActionButton
+                android:id="@+id/fab_primary"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:src="@drawable/ic_star_new"
+                app:fab_colorNormal="@color/green"
+                app:fab_colorPressed="@color/green_selected"
+                app:fab_colorRipple="@color/green_selected"
+                app:fab_label="Set Primary Card"
+                app:fab_size="normal"
+                app:menu_labels_style="@style/MenuLabelsStyle" />
 
             <com.github.clans.fab.FloatingActionButton
                 android:id="@+id/fab_scan"

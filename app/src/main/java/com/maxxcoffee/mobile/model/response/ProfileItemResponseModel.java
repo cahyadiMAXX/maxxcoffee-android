@@ -16,6 +16,9 @@ public class ProfileItemResponseModel {
     private String verifikasi_email;
     private String gambar;
 
+    private String first_name;
+    private String last_name;
+
     public int getId_user() {
         return id_user;
     }
@@ -102,5 +105,40 @@ public class ProfileItemResponseModel {
 
     public void setGambar(String gambar) {
         this.gambar = gambar;
+    }
+
+    public String getFirst_name() {
+        return first_name;
+    }
+
+    public void setFirst_name(String first_name) {
+        this.first_name = first_name;
+    }
+
+    public String getLast_name() {
+        return last_name;
+    }
+
+    public void setLast_name(String last_name) {
+        this.last_name = last_name;
+    }
+
+    @Override
+    public String toString() {
+        return "ProfileItemResponseModel{" +
+                "id_user=" + id_user +
+                ", email='" + email + '\'' +
+                ", nama_user='" + nama_user + '\'' +
+                ", kota_user='" + kota_user + '\'' +
+                ", mobile_phone_user='" + mobile_phone_user + '\'' +
+                ", tanggal_lahir='" + tanggal_lahir + '\'' +
+                ", gender='" + gender + '\'' +
+                ", occupation='" + occupation + '\'' +
+                ", verifikasi_sms='" + verifikasi_sms + '\'' +
+                ", verifikasi_email='" + verifikasi_email + '\'' +
+                ", gambar='" + gambar + '\'' +
+                ", first_name='" + first_name + '\'' +
+                ", last_name='" + last_name + '\'' +
+                '}';
     }
 }

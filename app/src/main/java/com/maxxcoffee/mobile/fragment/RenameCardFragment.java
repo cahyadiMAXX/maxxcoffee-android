@@ -1,6 +1,8 @@
 package com.maxxcoffee.mobile.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -11,10 +13,16 @@ import android.widget.Toast;
 
 import com.maxxcoffee.mobile.R;
 import com.maxxcoffee.mobile.activity.FormActivity;
+import com.maxxcoffee.mobile.activity.MainActivity;
 import com.maxxcoffee.mobile.database.controller.CardController;
 import com.maxxcoffee.mobile.fragment.dialog.LoadingDialog;
 import com.maxxcoffee.mobile.model.request.RegisterCardRequestModel;
 import com.maxxcoffee.mobile.task.RegisterCardTask;
+import com.maxxcoffee.mobile.util.Constant;
+import com.maxxcoffee.mobile.util.PreferenceManager;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -82,34 +90,37 @@ public class RenameCardFragment extends Fragment {
         RegisterCardTask task = new RegisterCardTask(activity) {
             @Override
             public void onSuccess() {
+                //sukses, jika akses dari home, maka akan refresh home (jika akses dari home lho ya)
+                Toast.makeText(activity, "Card successfully added", Toast.LENGTH_LONG).show();
+                PreferenceManager.putBool(getActivity(), Constant.PREFERENCE_ROUTE_CARD_SUCCESS, true);
                 progress.dismissAllowingStateLoss();
-
-                activity.onBackClick();
-
-//                for (CardItemResponseModel card : responseModel) {
-//                    CardEntity entity = new CardEntity();
-//                    entity.setId(card.getId_card());
-//                    entity.setName(card.getCard_name());
-//                    entity.setNumber(card.getCard_number());
-//                    entity.setImage(card.getCard_image());
-//                    entity.setDistribution_id(card.getDistribution_id());
-//                    entity.setCard_pin(card.getCard_pin());
-//                    entity.setBalance(card.getBalance());
-//                    entity.setPoint(card.getBeans());
-//                    entity.setExpired_date(card.getExpired_date());
-//
-//                    cardController.insert(entity);
-//
-//                    activity.onBackClick();
-//                }
+                backToOrigin();
             }
 
             @Override
             public void onFailed() {
+                Toast.makeText(activity, "Something went wrong. Please try again.", Toast.LENGTH_LONG).show();
                 progress.dismissAllowingStateLoss();
+                //failed ga usah back kan ?
+                //backToOrigin();
             }
         };
         task.execute(body);
+    }
+
+    private void backToOrigin(){
+        new Handler().postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                PreferenceManager.putBool(activity, Constant.PREFERENCE_CARD_IS_LOADING, false);
+                SimpleDateFormat df = new SimpleDateFormat(Constant.DATEFORMAT_META);
+                Date today = new Date();
+                String strToday = df.format(today);
+                PreferenceManager.putString(getActivity(), Constant.PREFERENCE_CARD_LAST_UPDATE, strToday);
+                activity.finish();
+            }
+        }, 2000);
     }
 
     private boolean isFormValid() {

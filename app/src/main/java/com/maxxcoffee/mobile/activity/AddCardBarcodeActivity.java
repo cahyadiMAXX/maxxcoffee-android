@@ -59,6 +59,7 @@ public class AddCardBarcodeActivity extends Activity {
                 ActivityCompat.requestPermissions(this, PERMISSIONS_LOCATION, 2);
             }
         } else {
+            finish();
             startActivity(new Intent(this, SimpleScannerActivity.class));
         }
     }
@@ -83,6 +84,7 @@ public class AddCardBarcodeActivity extends Activity {
 
         if (requestCode == 2) {
             if (PermissionUtil.verifyPermissions(grantResults)) {
+                finish();
                 startActivity(new Intent(this, SimpleScannerActivity.class));
             } else {
                 Toast.makeText(this, "Camera permission is NOT granted", Toast.LENGTH_SHORT).show();

@@ -104,4 +104,21 @@ public class PromoItemResponseModel {
     public void setCreated_at(String created_at) {
         this.created_at = created_at;
     }
+
+    @Override
+    public String toString() {
+        return "PromoItemResponseModel{" +
+                "id_promo=" + id_promo +
+                ", nama_promo='" + nama_promo + '\'' +
+                ", deskripsi='" + deskripsi + '\'' +
+                ", gambar='" + gambar + '\'' +
+                ", ls_gambar='" + ls_gambar + '\'' +
+                ", syarat='" + syarat + '\'' +
+                ", tanggal_start='" + tanggal_start + '\'' +
+                ", tanggal_end='" + tanggal_end + '\'' +
+                ", waktu_start='" + waktu_start + '\'' +
+                ", waktu_end='" + waktu_end + '\'' +
+                ", created_at='" + created_at + '\'' +
+                '}';
+    }
 }

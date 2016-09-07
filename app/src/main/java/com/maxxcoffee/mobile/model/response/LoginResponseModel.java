@@ -14,6 +14,8 @@ public class LoginResponseModel {
     private String balance_total;
     private String beans;
 
+    private String messages;
+
     public String getStatus() {
         return status;
     }
@@ -76,5 +78,13 @@ public class LoginResponseModel {
 
     public void setBeans(String beans) {
         this.beans = beans;
+    }
+
+    public String getMessages() {
+        return messages;
+    }
+
+    public void setMessages(String messages) {
+        this.messages = messages;
     }
 }

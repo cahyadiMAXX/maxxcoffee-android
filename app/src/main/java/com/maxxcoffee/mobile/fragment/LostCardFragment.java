@@ -22,6 +22,7 @@ import com.maxxcoffee.mobile.model.request.LostCardRequestModel;
 import com.maxxcoffee.mobile.model.response.CardItemResponseModel;
 import com.maxxcoffee.mobile.task.CardTask;
 import com.maxxcoffee.mobile.task.LostCardTask;
+import com.maxxcoffee.mobile.util.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,7 +68,12 @@ public class LostCardFragment extends Fragment {
         ButterKnife.bind(this, view);
         activity.setTitle("Report Lost Card");
 
-        fetchingData();
+        if(Utils.isConnected(activity)){
+            fetchingData();
+        }else{
+            Toast.makeText(activity, activity.getResources().getString(R.string.mobile_data), Toast.LENGTH_LONG).show();
+        }
+
         selectedSubject = -999;
         selectedCrd = -999;
 
@@ -129,7 +135,7 @@ public class LostCardFragment extends Fragment {
     @OnClick(R.id.layout_card)
     public void onLayoutCardClick() {
         if (data.size() == 0) {
-            Toast.makeText(activity, "You do not have card", Toast.LENGTH_SHORT).show();
+            Toast.makeText(activity, "You do not have any connected card. \n\nPlease add card.", Toast.LENGTH_SHORT).show();
             return;
         }
 

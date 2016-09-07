@@ -22,6 +22,7 @@ import com.maxxcoffee.mobile.model.response.MenuItemResponseModel;
 import com.maxxcoffee.mobile.task.MenuTask;
 import com.maxxcoffee.mobile.util.Constant;
 import com.maxxcoffee.mobile.util.PreferenceManager;
+import com.maxxcoffee.mobile.util.Utils;
 
 import java.util.List;
 import java.util.Map;
@@ -62,7 +63,19 @@ public class MenuFragment extends Fragment {
         ButterKnife.bind(this, view);
         activity.setTitle("Menu");
 
-        fetchingData();
+        if(!Utils.isConnected(activity)){
+            Toast.makeText(activity, activity.getResources().getString(R.string.mobile_data), Toast.LENGTH_LONG).show();
+            tabs.post(new Runnable() {
+                @Override
+                public void run() {
+                    setupViewPager(viewPager);
+                    tabs.setupWithViewPager(viewPager);
+                }
+            });
+        }else{
+            fetchingData();
+        }
+
         return view;
     }
 
@@ -136,7 +149,7 @@ public class MenuFragment extends Fragment {
             public void onFailed() {
 
                 progress.dismissAllowingStateLoss();
-                Toast.makeText(activity, "Failed to fetch data.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(activity, "Something went wrong. Please try again.", Toast.LENGTH_SHORT).show();
             }
         };
         task.execute();

@@ -1,5 +1,6 @@
 package com.maxxcoffee.mobile.adapter;
 
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.os.Build;
 import android.view.LayoutInflater;
@@ -93,6 +94,18 @@ public class DrawerAdapter extends BaseExpandableListAdapter {
         if (convertView == null) {
             LayoutInflater infalInflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = infalInflater.inflate(R.layout.item_drawer_parent, null);
+        }
+
+        if(isExpanded){
+            ImageView containerIndicator = (ImageView) convertView.findViewById(R.id.arrow);
+            ObjectAnimator animator =   ObjectAnimator.ofFloat(containerIndicator,"rotation",0,-180f);
+            animator.setDuration(200);
+            animator.start();
+        } else{
+            ImageView containerIndicator = (ImageView) convertView.findViewById(R.id.arrow);
+            ObjectAnimator animator =   ObjectAnimator.ofFloat(containerIndicator,"rotation",0,0f);
+            animator.setDuration(200);
+            animator.start();
         }
 
         TextView item = (TextView) convertView.findViewById(R.id.item);

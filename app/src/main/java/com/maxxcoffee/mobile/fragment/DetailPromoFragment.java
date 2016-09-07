@@ -82,8 +82,8 @@ public class DetailPromoFragment extends Fragment {
 
             @Override
             protected void onImageDownloaded(Bitmap bitmap) {
-                Bitmap resizeImage = Utils.getResizedBitmap(bitmap, 0.5f);
-                Drawable drawable = new BitmapDrawable(getResources(), resizeImage);
+                Bitmap resizeImage = Utils.getResizedBitmap(bitmap, 0.98f);
+                Drawable drawable = new BitmapDrawable(getResources(), bitmap);
                 imageView.setImageDrawable(drawable);
             }
         };

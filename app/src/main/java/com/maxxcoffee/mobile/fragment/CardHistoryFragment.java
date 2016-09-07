@@ -30,6 +30,7 @@ import com.maxxcoffee.mobile.task.CardTask;
 import com.maxxcoffee.mobile.task.HistoryTask;
 import com.maxxcoffee.mobile.util.Constant;
 import com.maxxcoffee.mobile.util.PreferenceManager;
+import com.maxxcoffee.mobile.util.Utils;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -86,8 +87,12 @@ public class CardHistoryFragment extends Fragment {
 
         ButterKnife.bind(this, view);
         activity.setTitle("History");
+        if(Utils.isConnected(activity)){
+            fetchingCardData();
+        }else{
+            Toast.makeText(activity, activity.getResources().getString(R.string.mobile_data), Toast.LENGTH_LONG).show();
+        }
 
-        fetchingCardData();
         initDate();
 
         tabs.post(new Runnable() {
@@ -107,8 +112,12 @@ public class CardHistoryFragment extends Fragment {
         int month = calendar.get(Calendar.MONTH);
         int day = calendar.get(Calendar.DAY_OF_MONTH);
 
-        periodeStart.setText(year + "-" + month + "-" + day);
-        periodeEnd.setText(year + "-" + (month + 1) + "-" + day);
+        String startMonth = (month < 10 ? "0" + String.valueOf(month): String.valueOf(month));
+        String endMonth = (month + 1 < 10 ? "0" + String.valueOf(month + 1): String.valueOf(month + 1));
+        String fixDay = (day < 10 ? "0" + String.valueOf(day): String.valueOf(day));
+
+        periodeStart.setText(year + "-" + startMonth + "-" + fixDay);
+        periodeEnd.setText(year + "-" + endMonth + "-" + fixDay);
     }
 
     @OnClick(R.id.start_period_layout)
@@ -151,6 +160,9 @@ public class CardHistoryFragment extends Fragment {
 
     @OnClick(R.id.card_layout)
     public void onCardLayoutClick() {
+        if(!Utils.isConnected(activity)){
+            return;
+        }
         LostCardDialog lostCardDialog = new LostCardDialog() {
             @Override
             protected void onOk(Integer index) {
@@ -205,6 +217,7 @@ public class CardHistoryFragment extends Fragment {
     }
 
     private void fetchingCardData() {
+        initDate();
         final LoadingDialog progress = new LoadingDialog();
         progress.show(getFragmentManager(), null);
 
@@ -226,14 +239,15 @@ public class CardHistoryFragment extends Fragment {
                     cardController.insert(entity);
                 }
                 getLocalCard();
-
-                    progress.dismissAllowingStateLoss();
+                progress.dismissAllowingStateLoss();
             }
 
             @Override
             public void onFailed() {
-                    progress.dismissAllowingStateLoss();
-                showDontHaveCardDialog();
+                progress.dismissAllowingStateLoss();
+                Toast.makeText(activity, "Something went wrong. Please try again.", Toast.LENGTH_LONG).show();
+
+                //showDontHaveCardDialog();
             }
         };
         task.execute();
@@ -241,7 +255,7 @@ public class CardHistoryFragment extends Fragment {
 
     private void showDontHaveCardDialog() {
         Bundle bundle = new Bundle();
-        bundle.putString("content", "You dont have any card connected to your account. Please add card first.");
+        bundle.putString("content", "You do not have any connected card.\n\nPlease add card.");
 
         OkDialog optionDialog = new OkDialog() {
             @Override
@@ -279,13 +293,19 @@ public class CardHistoryFragment extends Fragment {
     }
 
     private void fetchingData() {
+        if(!Utils.isConnected(activity)){
+            Toast.makeText(activity, activity.getResources().getString(R.string.mobile_data), Toast.LENGTH_LONG).show();
+            return;
+        }
         final LoadingDialog progress = new LoadingDialog();
         progress.show(getFragmentManager(), null);
 
         HistoryRequestModel body = new HistoryRequestModel();
         body.setCard_number(selectedCard);
-        body.setPeriode_start(selectedStartDate);
-        body.setPeriode_end(selectedEndDate);
+        body.setPeriode_start(periodeStart.getText().toString());
+        body.setPeriode_end(periodeEnd.getText().toString());
+
+        //Toast.makeText(getActivity(), body.toString(), Toast.LENGTH_LONG).show();
 
         HistoryTask task = new HistoryTask(activity) {
             @Override

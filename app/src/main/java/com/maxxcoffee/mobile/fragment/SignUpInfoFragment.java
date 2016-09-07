@@ -1,10 +1,16 @@
 package com.maxxcoffee.mobile.fragment;
 
+import android.app.DatePickerDialog;
+import android.content.Context;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v4.app.Fragment;
+import android.telephony.TelephonyManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,6 +39,7 @@ import com.maxxcoffee.mobile.util.Utils;
 
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
@@ -94,7 +101,7 @@ public class SignUpInfoFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_signup_info, container, false);
 
         ButterKnife.bind(this, view);
-        activity.setTitle("");
+        activity.setTitle("Sign Up", true);
 
         selectedFirstName = getArguments().getString("first-name");
         selectedLastName = getArguments().getString("last-name");
@@ -200,6 +207,7 @@ public class SignUpInfoFragment extends Fragment {
 
     @OnClick(R.id.birthday_layout)
     public void onBirthdayClick() {
+
         BirthdateDialog datePicker = new BirthdateDialog(activity, BirthdateDialog.DATE_VALIDARION_OFF) {
             @Override
             protected void onDateSelected(Date date) {
@@ -241,6 +249,11 @@ public class SignUpInfoFragment extends Fragment {
         body.setTanggal_lahir(textBirthday.getText().toString());
         body.setReferral_code(fieldReferalCode.getText().toString());
 
+        /*TelephonyManager mngr = (TelephonyManager) getActivity().getSystemService(Context.TELEPHONY_SERVICE);
+        String deviceId = Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID);
+        body.setDevice_id(deviceId);
+        body.setGadget_id(mngr.getDeviceId());*/
+
         RegisterTask task = new RegisterTask(activity) {
             @Override
             public void onSuccess() {
@@ -267,6 +280,8 @@ public class SignUpInfoFragment extends Fragment {
         loginBody.setEmail(selectedEmail);
         loginBody.setPassword(selectedPassword);
 
+        //get location here
+
         final OauthRequestModel oauthBody = new OauthRequestModel();
         oauthBody.setUsername(selectedEmail);
         oauthBody.setPassword(selectedPassword);
@@ -276,14 +291,14 @@ public class SignUpInfoFragment extends Fragment {
 
         final LoginTask task = new LoginTask(activity) {
             @Override
-            public void onSuccess() {
+            public void onSuccess(String status) {
                 progress.dismissAllowingStateLoss();
                 PreferenceManager.putBool(activity, Constant.PREFERENCE_LOGGED_IN, true);
                 fetchingProfileData();
             }
 
             @Override
-            public void onFailed() {
+            public void onFailed(String status) {
                 progress.dismissAllowingStateLoss();
                 Toast.makeText(activity, "Login failed. Token not found", Toast.LENGTH_SHORT).show();
             }
@@ -311,18 +326,22 @@ public class SignUpInfoFragment extends Fragment {
         String mCity = textCity.getText().toString();
 
         if (mGender.equals("")) {
+            textGender.setError("Please verify your gender");
             Toast.makeText(activity, "Please verify your gender", Toast.LENGTH_SHORT).show();
             return false;
         }
         if (mBirthday.equals("")) {
+            textBirthday.setError("Please verify your birthday");
             Toast.makeText(activity, "Please verify your birthday", Toast.LENGTH_SHORT).show();
             return false;
         }
         if (mOccupation.equals("")) {
+            textOccupation.setError("Please verify your occupation");
             Toast.makeText(activity, "Please verify your occupation", Toast.LENGTH_SHORT).show();
             return false;
         }
         if (mCity.equals("")) {
+            textCity.setError("Please verify your city");
             Toast.makeText(activity, "Please verify your city", Toast.LENGTH_SHORT).show();
             return false;
         }
@@ -392,7 +411,7 @@ public class SignUpInfoFragment extends Fragment {
             @Override
             public void onFailed() {
                 progress.dismissAllowingStateLoss();
-                Toast.makeText(activity, "Failed to fetch data.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(activity, "Something went wrong. Please try again.", Toast.LENGTH_SHORT).show();
             }
         };
         task.execute();

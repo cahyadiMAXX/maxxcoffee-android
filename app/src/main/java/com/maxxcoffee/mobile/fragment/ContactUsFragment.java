@@ -26,6 +26,7 @@ import com.maxxcoffee.mobile.task.ContactUsTask;
 import com.maxxcoffee.mobile.task.ProfileTask;
 import com.maxxcoffee.mobile.util.Constant;
 import com.maxxcoffee.mobile.util.PreferenceManager;
+import com.maxxcoffee.mobile.util.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,7 +67,7 @@ public class ContactUsFragment extends Fragment {
         cards = new ArrayList<>();
         profileController = new ProfileController(activity);
         cardController = new CardController(activity);
-        fetchingData();
+        //fetchingData();
     }
 
     @Override
@@ -86,13 +87,15 @@ public class ContactUsFragment extends Fragment {
         ReportDialog reportDialog = new ReportDialog() {
             @Override
             protected void onOk(Integer selectedReport) {
-                if (selectedReport == COMPLAINT) {
-                    setReport(data.get(0));
-                } else if (selectedReport == QUESTION) {
-                    setReport(data.get(1));
-                } else if (selectedReport == PARTNERSHIP) {
-                    setReport(data.get(2));
-                }
+                try {
+                    if (selectedReport == COMPLAINT) {
+                        setReport(data.get(0));
+                    } else if (selectedReport == QUESTION) {
+                        setReport(data.get(1));
+                    } else if (selectedReport == PARTNERSHIP) {
+                        setReport(data.get(2));
+                    }
+                }catch (Exception e){e.printStackTrace();}
                 dismiss();
             }
 
@@ -120,8 +123,14 @@ public class ContactUsFragment extends Fragment {
     }
 
     private void reportComplaintNow() {
+        if(!Utils.isConnected(activity)){
+            Toast.makeText(activity, activity.getResources().getString(R.string.mobile_data), Toast.LENGTH_LONG).show();
+            return;
+        }
+
         if (!isFormValid())
             return;
+
 
         final LoadingDialog progress = new LoadingDialog();
         progress.show(getFragmentManager(), null);
@@ -149,7 +158,7 @@ public class ContactUsFragment extends Fragment {
             public void onFailed() {
 
                 progress.dismissAllowingStateLoss();
-                Toast.makeText(activity, "Failed to fetch data.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(activity, "Something went wrong. Please try again.", Toast.LENGTH_SHORT).show();
             }
         };
         task.execute(body);
@@ -237,7 +246,7 @@ public class ContactUsFragment extends Fragment {
             @Override
             public void onFailed() {
                 progress.dismissAllowingStateLoss();
-                Toast.makeText(activity, "Failed to fetch data.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(activity, "Something went wrong. Please try again.", Toast.LENGTH_SHORT).show();
             }
         };
         task.execute();

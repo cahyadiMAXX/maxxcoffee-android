@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.maxxcoffee.mobile.R;
 import com.maxxcoffee.mobile.activity.FormActivity;
@@ -20,6 +21,7 @@ import com.maxxcoffee.mobile.model.response.FaqItemResponseModel;
 import com.maxxcoffee.mobile.task.FaqTask;
 import com.maxxcoffee.mobile.util.Constant;
 import com.maxxcoffee.mobile.util.PreferenceManager;
+import com.maxxcoffee.mobile.util.Utils;
 import com.maxxcoffee.mobile.widget.CustomLinearLayoutManager;
 
 import java.util.ArrayList;
@@ -79,7 +81,11 @@ public class FaqFragment extends Fragment {
         faqList.setHasFixedSize(true);
         faqList.setAdapter(adapter);
 
-        fetchingData();
+        if(Utils.isConnected(activity)){
+            fetchingData();
+        }else{
+            Toast.makeText(activity, activity.getResources().getString(R.string.mobile_data), Toast.LENGTH_LONG).show();
+        }
 
         return view;
     }

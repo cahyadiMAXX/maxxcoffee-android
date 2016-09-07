@@ -15,6 +15,10 @@ public class RegisterRequestModel {
     private String tanggal_lahir;
     private String referral_code;
 
+    //tambahan
+    private String device_id;
+    private String gadget_id;
+
     public String getFirst_name() {
         return first_name;
     }
@@ -93,5 +97,21 @@ public class RegisterRequestModel {
 
     public void setReferral_code(String referral_code) {
         this.referral_code = referral_code;
+    }
+
+    public String getDevice_id() {
+        return device_id;
+    }
+
+    public void setDevice_id(String device_id) {
+        this.device_id = device_id;
+    }
+
+    public String getGadget_id() {
+        return gadget_id;
+    }
+
+    public void setGadget_id(String gadget_id) {
+        this.gadget_id = gadget_id;
     }
 }

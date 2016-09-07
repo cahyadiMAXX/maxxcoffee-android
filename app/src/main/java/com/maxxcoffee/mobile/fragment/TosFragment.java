@@ -15,6 +15,7 @@ import com.maxxcoffee.mobile.fragment.dialog.LoadingDialog;
 import com.maxxcoffee.mobile.task.TosTask;
 import com.maxxcoffee.mobile.util.Constant;
 import com.maxxcoffee.mobile.util.PreferenceManager;
+import com.maxxcoffee.mobile.util.Utils;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -46,7 +47,11 @@ public class TosFragment extends Fragment {
         activity.setTitle("Term of Service");
 
         content.setText(PreferenceManager.getString(activity, Constant.PREFERENCE_TOS, ""));
-        fetchingData();
+        if(Utils.isConnected(activity)){
+            fetchingData();
+        }else{
+            Toast.makeText(activity, activity.getResources().getString(R.string.mobile_data), Toast.LENGTH_LONG).show();
+        }
         return view;
     }
 
@@ -71,7 +76,7 @@ public class TosFragment extends Fragment {
             @Override
             public void onFailed() {
                 progress.dismissAllowingStateLoss();
-                Toast.makeText(activity, "Failed to fetch data", Toast.LENGTH_SHORT).show();
+                Toast.makeText(activity, "Something went wrong. Please try again.", Toast.LENGTH_SHORT).show();
             }
         };
         task.execute();

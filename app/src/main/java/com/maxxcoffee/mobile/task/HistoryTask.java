@@ -42,6 +42,7 @@ public abstract class HistoryTask extends AsyncTask<HistoryRequestModel, Boolean
         HistoryRequestModel body = data[0];
         body.setToken(token);
 
+        //toe di e
         ApiManager.getApiInterface(context).history(accessToken, body, new Callback<HistoryResponseModel>() {
             @Override
             public void success(HistoryResponseModel storeResponseModel, Response response) {
