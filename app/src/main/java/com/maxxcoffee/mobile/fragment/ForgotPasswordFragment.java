@@ -70,7 +70,13 @@ public class ForgotPasswordFragment extends Fragment {
             @Override
             public void onFailed() {
                 progress.dismissAllowingStateLoss();
-                Toast.makeText(activity, "Failed to change email. Contact administrator for more information.", Toast.LENGTH_LONG).show();
+                Toast.makeText(activity, activity.getResources().getString(R.string.something_wrong), Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onFailed(String message) {
+                progress.dismissAllowingStateLoss();
+                Toast.makeText(activity, message, Toast.LENGTH_LONG).show();
             }
         };
         task.execute(body);

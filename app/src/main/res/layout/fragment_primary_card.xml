@@ -17,7 +17,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="16dp"
-                    android:text="Select your primary card"
+                    android:text="Select your Prime Card"
                     android:textColor="@android:color/black"
                     android:textSize="14sp" />
             </LinearLayout>
@@ -41,7 +41,7 @@
                         style="?android:attr/buttonStyleSmall"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Set as Primary Card"
+                        android:text="Set as Prime Card"
                         android:id="@+id/btnSetPrimary"
                         android:background="@drawable/button_normal"
                         android:textColor="#fff"

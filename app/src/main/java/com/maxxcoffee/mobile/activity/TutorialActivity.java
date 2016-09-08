@@ -141,7 +141,7 @@ public class TutorialActivity extends FragmentActivity {
     @OnClick(R.id.layout_finish)
     public void onTutorial4Click() {
         PreferenceManager.putBool(this, Constant.PREFERENCE_TUTORIAL_SKIP, true);
-        PreferenceManager.putBool(this, Constant.PREFERENCE_MAIN_FROM_TUTORIAL, true);
+        PreferenceManager.putBool(this, Constant.PREFERENCE_MAIN_FROM_TUTORIAL, false);
         Intent intent = new Intent(this, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);

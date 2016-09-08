@@ -66,9 +66,10 @@ public class VerificationActivity extends AppCompatActivity {
     LinearLayout layoutChangePhone;
     @Bind(R.id.root_layout)
     LinearLayout rootLayout;
-    @Bind(R.id.verification_code)
-    EditText verificationCode;
+    //@Bind(R.id.verification_code)
+    //public EditText verificationCode;
 
+    public static EditText verificationCode;
     private Integer redirectFragment;
     private ProfileController profileController;
     private CardController cardController;
@@ -83,6 +84,8 @@ public class VerificationActivity extends AppCompatActivity {
         setContentView(R.layout.activity_verification);
 
         ButterKnife.bind(this);
+
+        verificationCode = (EditText) findViewById(R.id.verification_code);
 
         redirectFragment = getIntent().getIntExtra("redirect-fragment", -999);
         profileController = new ProfileController(this);
@@ -99,6 +102,10 @@ public class VerificationActivity extends AppCompatActivity {
     }
 
     private void fetchingData() {
+        if(!Utils.isConnected(getApplicationContext())){
+            Toast.makeText(getApplicationContext(), getApplicationContext().getResources().getString(R.string.mobile_data), Toast.LENGTH_LONG).show();
+            return;
+        }
         final LoadingDialog progress = new LoadingDialog();
         progress.show(getSupportFragmentManager(), null);
 
@@ -150,8 +157,7 @@ public class VerificationActivity extends AppCompatActivity {
                 }
                 PreferenceManager.putString(VerificationActivity.this, Constant.PREFERENCE_BALANCE, String.valueOf(profile.getTotal_balance()));
                 PreferenceManager.putString(VerificationActivity.this, Constant.PREFERENCE_BEAN, String.valueOf(profile.getTotal_point()));
-
-                    progress.dismissAllowingStateLoss();
+                progress.dismissAllowingStateLoss();
             }
 
             @Override
@@ -182,6 +188,9 @@ public class VerificationActivity extends AppCompatActivity {
             phoneVerified.setText(" " + profile.getPhone());
             phoneNotVerified.setText(" " + profile.getPhone());
 
+            String verCode = PreferenceManager.getString(getApplicationContext(), Constant.PREFERENCE_VERIFICATION_CODE, "");
+            verificationCode.setText(verCode);
+
             setSmsLayout(profile.getSms_verified());
             setEmailLayout(profile.getEmail_verified());
 
@@ -191,6 +200,10 @@ public class VerificationActivity extends AppCompatActivity {
 
     @OnClick(R.id.resend_email)
     public void onResendEmailClick() {
+        if(!Utils.isConnected(getApplicationContext())){
+            Toast.makeText(getApplicationContext(), getApplicationContext().getResources().getString(R.string.mobile_data), Toast.LENGTH_LONG).show();
+            return;
+        }
         final LoadingDialog progress = new LoadingDialog();
         progress.show(getSupportFragmentManager(), null);
 
@@ -230,6 +243,10 @@ public class VerificationActivity extends AppCompatActivity {
 
     @OnClick(R.id.resend_sms)
     public void onResendSmsClick() {
+        if(!Utils.isConnected(getApplicationContext())){
+            Toast.makeText(getApplicationContext(), getApplicationContext().getResources().getString(R.string.mobile_data), Toast.LENGTH_LONG).show();
+            return;
+        }
         final LoadingDialog progress = new LoadingDialog();
         progress.show(getSupportFragmentManager(), null);
 
@@ -242,7 +259,7 @@ public class VerificationActivity extends AppCompatActivity {
             ResendEmailTask task = new ResendEmailTask(this) {
                 @Override
                 public void onSuccess() {
-                        progress.dismissAllowingStateLoss();
+                    progress.dismissAllowingStateLoss();
                     showDialog("We have sent the verification code to your mobile phone");
                 }
 
@@ -272,6 +289,10 @@ public class VerificationActivity extends AppCompatActivity {
 
     @OnClick(R.id.check_code)
     public void onCheckCOdeClick() {
+        if(!Utils.isConnected(getApplicationContext())){
+            Toast.makeText(getApplicationContext(), getApplicationContext().getResources().getString(R.string.mobile_data), Toast.LENGTH_LONG).show();
+            return;
+        }
         if (!isFormValid())
             return;
 
@@ -286,7 +307,9 @@ public class VerificationActivity extends AppCompatActivity {
         VerificationCodeTask task = new VerificationCodeTask(this) {
             @Override
             public void onSuccess() {
-                    progress.dismissAllowingStateLoss();
+                progress.dismissAllowingStateLoss();
+                //verification code dihapus aj klo udah berhasil
+                PreferenceManager.putString(getApplicationContext(), Constant.PREFERENCE_VERIFICATION_CODE, "");
                 onSyncClick();
             }
 
@@ -358,4 +381,5 @@ public class VerificationActivity extends AppCompatActivity {
             rootLayout.setBackgroundResource(bg);
         }
     }
+
 }

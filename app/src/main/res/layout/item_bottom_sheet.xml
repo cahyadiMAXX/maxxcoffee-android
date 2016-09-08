@@ -5,12 +5,12 @@
     android:background="@android:color/transparent">
 
     <pl.droidsonroids.gif.GifImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="47dp"
+        android:layout_height="50dp"
         android:id="@+id/bottom_sheet_arrow"
         android:layout_gravity="center_horizontal"
         android:src="@drawable/arrow3up"
-        android:layout_marginBottom="-13dp"
+        android:layout_marginBottom="-18dp"
         android:elevation="10dp" />
 
     <LinearLayout
@@ -40,7 +40,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Primary Card Info"
+                android:text="Prime to Pay"
                 android:id="@+id/textView2"
                 android:textColor="#202020"
                 android:layout_marginBottom="8dp" />
@@ -52,6 +52,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
+
+                <com.maxxcoffee.mobile.widget.textview.TextViewLatoRegular
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="Show below QR Code to the cashier"
+                    android:id="@+id/textView3"
+                    android:layout_marginTop="8dp" />
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -83,7 +91,8 @@
                                 android:text="Card #1"
                                 android:textColor="@android:color/black"
                                 android:textSize="16sp"
-                                android:paddingBottom="5dp" />
+                                android:paddingBottom="5dp"
+                                android:layout_marginTop="5dp" />
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -166,6 +175,7 @@
                     android:layout_marginTop="10dp" />
 
             </LinearLayout>
+
         </LinearLayout>
     </LinearLayout>
 

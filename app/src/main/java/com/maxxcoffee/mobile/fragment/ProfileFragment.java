@@ -66,6 +66,8 @@ public class ProfileFragment extends Fragment {
     TextView card;
     @Bind(R.id.version)
     TextView version;
+    //@Bind(R.id.referral)
+    //TextView referral;
 
     private MainActivity activity;
     private ProfileController profileController;
@@ -129,6 +131,8 @@ public class ProfileFragment extends Fragment {
                 PreferenceManager.putString(activity, Constant.PREFERENCE_LAST_NAME, profile.getLast_name());
                 PreferenceManager.putString(activity, Constant.PREFERENCE_PROFILE_OCCUPATION, profile.getOccupation());
                 PreferenceManager.putString(activity, Constant.PREFERENCE_PROFILE_CITY, profile.getCity());
+                //PreferenceManager.putString(activity, Constant.PREFERENCE_PROFILE_REFERRAL, profile.getUser_code());
+
             } catch (ParseException e) {
                 e.printStackTrace();
             }
@@ -177,7 +181,7 @@ public class ProfileFragment extends Fragment {
                     PreferenceManager.putString(activity, Constant.PREFERENCE_LAST_NAME, profileItem.getLast_name());
                     PreferenceManager.putString(activity, Constant.PREFERENCE_PROFILE_OCCUPATION, profileItem.getOccupation());
                     PreferenceManager.putString(activity, Constant.PREFERENCE_PROFILE_CITY, profileItem.getKota_user());
-
+                    //PreferenceManager.putString(activity, Constant.PREFERENCE_PROFILE_REFERRAL, profileItem.getUser_code());
                     profileController.insert(profileEntity);
 
                     List<CardItemResponseModel> cards = profile.getCards();

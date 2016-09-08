@@ -52,14 +52,14 @@ public abstract class ChangeEmailTask extends AsyncTask<ChangeEmailRequestModel,
         super.onPostExecute(response);
         if (response != null) {
             if (response.getStatus().equals("success")) {
-                onSuccess();
+                onSuccess(response.getMessages());
             } else {
                 onFailed();
             }
         }
     }
 
-    public abstract void onSuccess();
+    public abstract void onSuccess(String message);
 
     public abstract void onFailed();
 }

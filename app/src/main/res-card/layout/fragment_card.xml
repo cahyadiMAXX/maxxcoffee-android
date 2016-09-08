@@ -79,7 +79,7 @@
                 app:fab_colorNormal="@color/green"
                 app:fab_colorPressed="@color/green_selected"
                 app:fab_colorRipple="@color/green_selected"
-                app:fab_label="Set Primary Card"
+                app:fab_label="Set Prime Card"
                 app:fab_size="normal"
                 app:menu_labels_style="@style/MenuLabelsStyle" />
 

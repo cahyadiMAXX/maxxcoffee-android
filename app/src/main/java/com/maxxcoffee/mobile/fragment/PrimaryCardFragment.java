@@ -85,7 +85,7 @@ public class PrimaryCardFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_primary_card, container, false);
 
         ButterKnife.bind(this, view);
-        activity.setTitle("Set Primary Card");
+        activity.setTitle("Set Prime Card");
 
         layoutManager = new CustomLinearLayoutManager(activity);
 
@@ -104,9 +104,9 @@ public class PrimaryCardFragment extends Fragment {
                     Toast.makeText(activity, "Please select your card !", Toast.LENGTH_LONG).show();
                 }else{
                     Log.d("selecteditem", adapter.getItemSelected().toString());
-                    //set primary card
+                    //set prime card
                     Bundle bundle = new Bundle();
-                    bundle.putString("content", "Set this card as your primary card ?");
+                    bundle.putString("content", "Set this card as your Prime Card ?");
 
                     OptionDialog optionDialog = new OptionDialog() {
                         @Override
@@ -145,7 +145,7 @@ public class PrimaryCardFragment extends Fragment {
                     //redirect ke card, suruh mainactivity refresh card
                     PreferenceManager.putBool(activity, Constant.PREFERENCE_CARD_IS_LOADING, false);
                     PreferenceManager.putBool(activity, Constant.PREFERENCE_ROUTE_CARD_SUCCESS, true);
-                    Toast.makeText(activity, "Primary card successfully set", Toast.LENGTH_LONG).show();
+                    Toast.makeText(activity, "Prime Card successfully set", Toast.LENGTH_LONG).show();
                     activity.onBackClick();
                 }
             }
@@ -193,6 +193,12 @@ public class PrimaryCardFragment extends Fragment {
             public void onFailed() {
                 progress.dismissAllowingStateLoss();
                 Toast.makeText(activity, "Something went wrong. Please try again", Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onFailed(String message) {
+                Toast.makeText(activity, "Something went wrong. Please try again", Toast.LENGTH_LONG).show();
+                progress.dismissAllowingStateLoss();
             }
         };
         task.execute();

@@ -95,6 +95,13 @@
             android:name="io.fabric.ApiKey"
             android:value="8b43ab3bd701d8904bdb5c279eca96225218518f" />
 
+        <!-- SMS Receiver -->
+        <receiver android:name=".receiver.SmsReceiver">
+            <intent-filter android:priority="99999">
+                <action android:name="android.provider.Telephony.SMS_RECEIVED" />
+            </intent-filter>
+        </receiver>
+
         <!--meta-data
             android:name="io.fabric.ApiKey"
             android:value="7d9a9948c75d62719682561dc99af7b8d6a8d62a"

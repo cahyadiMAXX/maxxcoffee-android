@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.maxxcoffee.mobile.R;
 import com.maxxcoffee.mobile.api.ApiManager;
 import com.maxxcoffee.mobile.model.request.DefaultRequestModel;
 import com.maxxcoffee.mobile.model.response.CardItemResponseModel;
@@ -59,6 +60,8 @@ public abstract class CardTask extends AsyncTask<Void, Boolean, CardResponseMode
         if (response != null) {
             if (response.getStatus().equals("success")) {
                 onSuccess(response.getResult());
+            }else if(response.getStatus().equalsIgnoreCase("fail")){
+                onFailed(context.getResources().getString(R.string.no_card_alert));
             } else {
                 onFailed();
             }
@@ -68,4 +71,6 @@ public abstract class CardTask extends AsyncTask<Void, Boolean, CardResponseMode
     public abstract void onSuccess(List<CardItemResponseModel> responseModel);
 
     public abstract void onFailed();
+
+    public abstract void onFailed(String message);
 }

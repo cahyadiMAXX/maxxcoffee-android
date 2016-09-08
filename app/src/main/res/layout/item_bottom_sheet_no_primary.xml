@@ -15,7 +15,7 @@
         <com.maxxcoffee.mobile.widget.textview.TextViewLatoRegular
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="You haven't set your Primary Card"
+            android:text="You haven't set your Prime Card"
             android:id="@+id/textView"
             android:textColor="#202020"
             android:textAlignment="center"
@@ -25,7 +25,7 @@
             style="?android:attr/buttonStyleSmall"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Set Primary Card"
+            android:text="Set Prime Card"
             android:id="@+id/buttonSetPrimary"
             android:layout_marginTop="15dp"
             android:layout_marginBottom="10dp"
@@ -93,7 +93,7 @@
                             <com.maxxcoffee.mobile.widget.textview.TextViewLatoRegular
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="You can have the latest update to your Primary Card here"
+                                android:text="You can have the latest update to your Prime Card here"
                                 android:textColor="@android:color/black"
                                 android:textSize="15sp"
                                 android:layout_marginLeft="10dp"

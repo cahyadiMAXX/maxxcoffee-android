@@ -240,7 +240,7 @@ public class HomeFragment extends Fragment {
     public void onResume() {
         super.onResume();
         setBackground(mDayPart);
-        //apakah ini route lagi dari set primary card ?
+        //apakah ini route lagi dari set prime card ?
         //klo iya, refresh, klo ga, gausah
         boolean route_from_card = PreferenceManager.getBool(activity, Constant.PREFERENCE_ROUTE_CARD_SUCCESS, false);
         if (route_from_card){
@@ -255,7 +255,7 @@ public class HomeFragment extends Fragment {
         String mGreeting = PreferenceManager.getString(activity, Constant.PREFERENCE_GREETING, "");
 
         List<CardPrimaryEntity> cardPrimaryEntities = cardController.getCards();
-        //ada primary card
+        //ada prime card
         if(cardPrimaryEntities.size() > 0){
             not_set.setVisibility(View.GONE);
             no_cards.setVisibility(View.GONE);

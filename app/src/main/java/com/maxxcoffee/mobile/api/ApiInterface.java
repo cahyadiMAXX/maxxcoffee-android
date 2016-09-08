@@ -167,7 +167,7 @@ public interface ApiInterface {
     @POST("/api/cek/email/exists")
     void checkEmailExist(@Body CheckValidEmailRequestModel body, Callback<CheckValidEmailResponseModel> response);
 
-    //set primary card
+    //set prime card
     @POST("/api/setprimarycard")
     void setPrimaryCard(@Header("Authorization") String authentication, @Body PrimaryCardRequestModel body, Callback<DefaultResponseModel> response);
 }

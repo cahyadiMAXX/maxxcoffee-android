@@ -86,7 +86,7 @@ public class CardHistoryFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_history, container, false);
 
         ButterKnife.bind(this, view);
-        activity.setTitle("History");
+        activity.setTitle("Card History");
         if(Utils.isConnected(activity)){
             fetchingCardData();
         }else{
@@ -160,7 +160,7 @@ public class CardHistoryFragment extends Fragment {
 
     @OnClick(R.id.card_layout)
     public void onCardLayoutClick() {
-        if(!Utils.isConnected(activity)){
+        if(!Utils.isConnected(activity) || data.size() == 0){
             return;
         }
         LostCardDialog lostCardDialog = new LostCardDialog() {
@@ -243,11 +243,15 @@ public class CardHistoryFragment extends Fragment {
             }
 
             @Override
+            public void onFailed(String message) {
+                progress.dismissAllowingStateLoss();
+                Toast.makeText(activity, message, Toast.LENGTH_LONG).show();
+                //showDontHaveCardDialog();
+            }
+
+            @Override
             public void onFailed() {
                 progress.dismissAllowingStateLoss();
-                Toast.makeText(activity, "Something went wrong. Please try again.", Toast.LENGTH_LONG).show();
-
-                //showDontHaveCardDialog();
             }
         };
         task.execute();

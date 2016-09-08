@@ -18,6 +18,7 @@ public class ProfileItemResponseModel {
 
     private String first_name;
     private String last_name;
+    private String user_code;
 
     public int getId_user() {
         return id_user;
@@ -121,6 +122,14 @@ public class ProfileItemResponseModel {
 
     public void setLast_name(String last_name) {
         this.last_name = last_name;
+    }
+
+    public String getUser_code() {
+        return user_code;
+    }
+
+    public void setUser_code(String user_code) {
+        this.user_code = user_code;
     }
 
     @Override

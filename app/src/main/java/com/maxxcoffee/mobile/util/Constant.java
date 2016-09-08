@@ -18,6 +18,7 @@ public class Constant {
     public final static String PREFERENCE_FIRST_NAME = "maxx-first-name";
     public final static String PREFERENCE_LAST_NAME = "maxx-last-name";
     public final static String PREFERENCE_PROFILE_CITY = "maxx-profile-city";
+    public final static String PREFERENCE_PROFILE_REFERRAL = "maxx-profile-referral-code";
     public final static String PREFERENCE_PROFILE_OCCUPATION = "maxx-profile-occupation";
     public final static String PREFERENCE_ACCESS_TOKEN = "maxx-access_token";
     public final static String PREFERENCE_BALANCE = "maxx-balance";
@@ -74,4 +75,7 @@ public class Constant {
     //simpen latitude longitude
     public final static String PREFERENCE_LATITUDE_USER = "maxx-user-latitude";
     public final static String PREFERENCE_LONGITUDE_USER = "maxx-user-longitude";
+
+    //verification code
+    public final static String PREFERENCE_VERIFICATION_CODE = "maxx-verification-code";
 }

@@ -54,6 +54,8 @@ public abstract class ForgotPasswordTask extends AsyncTask<ChangePhoneRequestMod
         if (response != null) {
             if (response.getStatus().equals("success")) {
                 onSuccess();
+            } else if(response.getStatus().equalsIgnoreCase("fail")){
+                onFailed(response.getMessages());
             } else {
                 onFailed();
             }
@@ -63,4 +65,6 @@ public abstract class ForgotPasswordTask extends AsyncTask<ChangePhoneRequestMod
     public abstract void onSuccess();
 
     public abstract void onFailed();
+
+    public abstract void onFailed(String message);
 }

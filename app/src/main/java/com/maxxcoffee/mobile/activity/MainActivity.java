@@ -1,13 +1,16 @@
 package com.maxxcoffee.mobile.activity;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Process;
 import android.provider.Settings;
@@ -82,6 +85,13 @@ public class MainActivity extends FragmentActivity {
 
     private static String[] PERMISSIONS_LOCATION = {android.Manifest.permission.ACCESS_FINE_LOCATION,
             android.Manifest.permission.ACCESS_COARSE_LOCATION};
+    String[] PERMISSIONS = {Manifest.permission.READ_CONTACTS,
+            Manifest.permission.WRITE_CONTACTS,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.READ_SMS,
+            Manifest.permission.CAMERA,
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION};
 
     public static final int HOME = 1000;
     public static final int MENU = 1001;
@@ -382,9 +392,6 @@ public class MainActivity extends FragmentActivity {
                 }
 //                fragment = isLoggedIn ? new MyCardFragment() : new CredentialFragment();
                 break;
-//            case DETAIL_CARD:
-//                fragment = new MyCardDetailFragment();
-//                break;
             case FAQ:
                 fragment = new FaqFragment();
                 break;
@@ -457,9 +464,14 @@ public class MainActivity extends FragmentActivity {
                 fragment = new CredentialFragment();
                 break;
             case LOGIN:
-                /*if (!settingRequested) {
+                if (!settingRequested) {
                     checkSettingApi(LOGIN);
                 } else {
+                    /*if(!hasPermissions(this, PERMISSIONS)){
+                        ActivityCompat.requestPermissions(this, PERMISSIONS, 3);
+                    }else{
+                        fragment = new LoginFragment();
+                    }*/
                     if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                             && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
@@ -473,13 +485,18 @@ public class MainActivity extends FragmentActivity {
                     } else {
                         fragment = new LoginFragment();
                     }
-                }*/
-                fragment = new LoginFragment();
+                }
+                //fragment = new LoginFragment();
                 break;
             case SIGNUP:
                 if (!settingRequested) {
                     checkSettingApi(SIGNUP);
                 } else {
+                    /*if(!hasPermissions(this, PERMISSIONS)){
+                        ActivityCompat.requestPermissions(this, PERMISSIONS, 4);
+                    }else{
+                        fragment = new SignUpFragment();
+                    }*/
                     if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                             && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
@@ -854,5 +871,16 @@ public class MainActivity extends FragmentActivity {
 
     public void setDrawerExpanded(boolean drawerExpanded) {
         isDrawerExpanded = drawerExpanded;
+    }
+
+    public static boolean hasPermissions(Context context, String... permissions) {
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && context != null && permissions != null) {
+            for (String permission : permissions) {
+                if (ActivityCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 }

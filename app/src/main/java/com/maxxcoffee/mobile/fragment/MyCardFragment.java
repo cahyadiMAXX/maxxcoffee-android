@@ -274,7 +274,7 @@ public class MyCardFragment extends Fragment {
         if(data.size() > 0){
             /*FloatingActionButton fab = new FloatingActionButton(activity);
             fab.setButtonSize(FloatingActionButton.SIZE_MINI);
-            fab.setLabelText("Set Primary Card");
+            fab.setLabelText("Set Prime Card");
             fab.setImageResource(R.drawable.ic_star_new);
             fabMenu.addMenuButton(fab);*/
         }

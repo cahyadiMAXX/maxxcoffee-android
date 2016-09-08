@@ -81,16 +81,16 @@ public class ChangeEmailFragment extends Fragment {
 
         ChangeEmailTask task = new ChangeEmailTask(activity) {
             @Override
-            public void onSuccess() {
-                    progress.dismissAllowingStateLoss();
-
+            public void onSuccess(String message) {
+                progress.dismissAllowingStateLoss();
+                Toast.makeText(activity, message, Toast.LENGTH_LONG).show();
                 PreferenceManager.putBool(activity, Constant.PREFERENCE_ROUTE_TO_LOGOUT, true);
                 activity.onBackClick();
             }
 
             @Override
             public void onFailed() {
-                    progress.dismissAllowingStateLoss();
+                progress.dismissAllowingStateLoss();
                 Toast.makeText(activity, "Failed to change email. Contact administrator for more information.", Toast.LENGTH_SHORT).show();
             }
         };
