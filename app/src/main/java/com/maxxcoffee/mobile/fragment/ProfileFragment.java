@@ -1,15 +1,22 @@
 package com.maxxcoffee.mobile.fragment;
 
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,9 +40,11 @@ import butterknife.OnClick;
 
 import com.maxxcoffee.mobile.task.ProfileTask;
 
+import java.io.File;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -66,8 +75,10 @@ public class ProfileFragment extends Fragment {
     TextView card;
     @Bind(R.id.version)
     TextView version;
-    //@Bind(R.id.referral)
-    //TextView referral;
+    @Bind(R.id.referral)
+    TextView referral;
+    @Bind(R.id.arrow_share)
+    ImageView arrow_share;
 
     private MainActivity activity;
     private ProfileController profileController;
@@ -89,13 +100,62 @@ public class ProfileFragment extends Fragment {
         ButterKnife.bind(this, view);
         activity.setTitle("Profile");
 
+        arrow_share.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String shareBody = "My Maxx referral code: " + referral.getText().toString();
+                //share("facebook", shareBody);
+                Intent shareIntent = new Intent(android.content.Intent.ACTION_SEND);
+                shareIntent.setType("text/plain");
+                shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
+                startActivity(Intent.createChooser(shareIntent, getResources().getString(R.string.share_using)));
+            }
+        });
+
         return view;
     }
+
+    public void share(String nameApp, String message) {
+        try {
+            List<Intent> targetedShareIntents = new ArrayList<Intent>();
+            Intent share = new Intent(android.content.Intent.ACTION_SEND);
+            share.setType("image/jpeg");
+            List<ResolveInfo> resInfo = getActivity().getPackageManager()
+                    .queryIntentActivities(share, 0);
+            if (!resInfo.isEmpty()) {
+                for (ResolveInfo info : resInfo) {
+                    Intent targetedShare = new Intent(
+                            android.content.Intent.ACTION_SEND);
+                    targetedShare.setType("image/jpeg"); // put here your mime
+                    // type
+                    if (info.activityInfo.packageName.toLowerCase().contains(
+                            nameApp)
+                            || info.activityInfo.name.toLowerCase().contains(
+                            nameApp)) {
+                        targetedShare.putExtra(Intent.EXTRA_SUBJECT,
+                                "Sample Photo");
+                        targetedShare.putExtra(Intent.EXTRA_TEXT, message);
+                        targetedShare.setPackage(info.activityInfo.packageName);
+                        targetedShareIntents.add(targetedShare);
+                    }
+                }
+                Intent chooserIntent = Intent.createChooser(
+                        targetedShareIntents.remove(0), "Select app to share");
+                chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS,
+                        targetedShareIntents.toArray(new Parcelable[] {}));
+                startActivity(chooserIntent);
+            }
+        } catch (Exception e) {
+            Log.v("VM",
+                    "Exception while sending image on" + nameApp + " "
+                            + e.getMessage());
+        }
+    }
+
 
     @Override
     public void onResume() {
         super.onResume();
-
         boolean logoutNow = PreferenceManager.getBool(activity, Constant.PREFERENCE_ROUTE_TO_LOGOUT, false);
         if (logoutNow) {
             activity.logoutNow();
@@ -123,6 +183,7 @@ public class ProfileFragment extends Fragment {
                 balance.setText("IDR " + String.valueOf(profile.getBalance()));
                 beans.setText(String.valueOf(profile.getPoint()));
                 card.setText(String.valueOf(cards.size()));
+                referral.setText(profile.getUser_code());
 
                 PreferenceManager.putString(activity, Constant.PREFERENCE_BALANCE, String.valueOf(profile.getBalance()));
                 PreferenceManager.putString(activity, Constant.PREFERENCE_BEAN, String.valueOf(profile.getPoint()));
@@ -131,7 +192,7 @@ public class ProfileFragment extends Fragment {
                 PreferenceManager.putString(activity, Constant.PREFERENCE_LAST_NAME, profile.getLast_name());
                 PreferenceManager.putString(activity, Constant.PREFERENCE_PROFILE_OCCUPATION, profile.getOccupation());
                 PreferenceManager.putString(activity, Constant.PREFERENCE_PROFILE_CITY, profile.getCity());
-                //PreferenceManager.putString(activity, Constant.PREFERENCE_PROFILE_REFERRAL, profile.getUser_code());
+                PreferenceManager.putString(activity, Constant.PREFERENCE_PROFILE_REFERRAL, profile.getUser_code());
 
             } catch (ParseException e) {
                 e.printStackTrace();
@@ -173,6 +234,7 @@ public class ProfileFragment extends Fragment {
                     profileEntity.setEmail_verified(profileItem.getVerifikasi_email().equalsIgnoreCase("yes"));
                     profileEntity.setFirst_name(profileItem.getFirst_name());
                     profileEntity.setLast_name(profileItem.getLast_name());
+                    profileEntity.setUser_code(profileItem.getUser_code());
 
                     PreferenceManager.putBool(activity, Constant.PREFERENCE_SMS_VERIFICATION, profileItem.getVerifikasi_sms().equalsIgnoreCase("yes"));
                     PreferenceManager.putBool(activity, Constant.PREFERENCE_EMAIL_VERIFICATION, profileItem.getVerifikasi_email().equalsIgnoreCase("yes"));
@@ -181,7 +243,7 @@ public class ProfileFragment extends Fragment {
                     PreferenceManager.putString(activity, Constant.PREFERENCE_LAST_NAME, profileItem.getLast_name());
                     PreferenceManager.putString(activity, Constant.PREFERENCE_PROFILE_OCCUPATION, profileItem.getOccupation());
                     PreferenceManager.putString(activity, Constant.PREFERENCE_PROFILE_CITY, profileItem.getKota_user());
-                    //PreferenceManager.putString(activity, Constant.PREFERENCE_PROFILE_REFERRAL, profileItem.getUser_code());
+                    PreferenceManager.putString(activity, Constant.PREFERENCE_PROFILE_REFERRAL, profileItem.getUser_code());
                     profileController.insert(profileEntity);
 
                     List<CardItemResponseModel> cards = profile.getCards();

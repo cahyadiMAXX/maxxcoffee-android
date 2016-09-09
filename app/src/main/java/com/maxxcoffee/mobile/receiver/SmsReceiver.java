@@ -36,12 +36,12 @@ public class SmsReceiver extends BroadcastReceiver {
                             senderAddress.toLowerCase().equalsIgnoreCase(Config.SMS_ORIGIN_2)) {
                         // verification code from sms
                         String verificationCode = getVerificationCode(message);
-                        //Log.e(TAG, "OTP received: "+ String.valueOf(message.length()) + ", msg: " + verificationCode);
+                        Log.e(TAG, "OTP received: "+ String.valueOf(message.length()) + ", msg: " + verificationCode);
                         //set ke preference manager ya geng
                         PreferenceManager.putString(context, Constant.PREFERENCE_VERIFICATION_CODE, verificationCode);
                         VerificationActivity.verificationCode.setText(verificationCode);
                     }else{
-                        //Log.e(TAG, "SMS is not for our app!");
+                        Log.e(TAG, "SMS is not for our app!");
                     }
 
                 }

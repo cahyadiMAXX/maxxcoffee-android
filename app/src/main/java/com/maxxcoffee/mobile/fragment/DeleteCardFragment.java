@@ -322,7 +322,7 @@ public class DeleteCardFragment extends Fragment {
                             Toast.makeText(activity, activity.getResources().getString(R.string.mobile_data), Toast.LENGTH_LONG).show();
                         }
                     }catch (Exception e){
-                        Toast.makeText(activity, "Something went wrong. Please try again.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(activity, activity.getResources().getString(R.string.something_wrong), Toast.LENGTH_SHORT).show();
                         e.printStackTrace();
                     }
                 }
@@ -338,6 +338,11 @@ public class DeleteCardFragment extends Fragment {
     }
 
     private void deleteNow() {
+        if(!Utils.isConnected(activity)){
+            Toast.makeText(activity, activity.getResources().getString(R.string.mobile_data), Toast.LENGTH_LONG).show();
+            return;
+        }
+
         final LoadingDialog progress = new LoadingDialog();
         progress.show(getFragmentManager(), null);
 

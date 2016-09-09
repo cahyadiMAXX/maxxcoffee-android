@@ -158,7 +158,7 @@ public class ContactUsFragment extends Fragment {
             public void onFailed() {
 
                 progress.dismissAllowingStateLoss();
-                Toast.makeText(activity, "Something went wrong. Please try again.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(activity, activity.getResources().getString(R.string.something_wrong), Toast.LENGTH_SHORT).show();
             }
         };
         task.execute(body);
@@ -184,6 +184,8 @@ public class ContactUsFragment extends Fragment {
         subject.setText(model.getName());
     }
 
+    //ga fetch data lagi
+    //soalnya sudah set email dan phone di awal yes (ok)
     private void fetchingData() {
         final LoadingDialog progress = new LoadingDialog();
         progress.show(getFragmentManager(), null);
@@ -246,7 +248,7 @@ public class ContactUsFragment extends Fragment {
             @Override
             public void onFailed() {
                 progress.dismissAllowingStateLoss();
-                Toast.makeText(activity, "Something went wrong. Please try again.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(activity, activity.getResources().getString(R.string.something_wrong), Toast.LENGTH_SHORT).show();
             }
         };
         task.execute();

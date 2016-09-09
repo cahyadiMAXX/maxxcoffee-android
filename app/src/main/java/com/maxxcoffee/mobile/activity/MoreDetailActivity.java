@@ -37,6 +37,7 @@ import butterknife.OnClick;
 /**
  * Created by Vourest on 2/9/2016.
  */
+//ini copas dari formactivity gan
 public class MoreDetailActivity extends FragmentActivity {
 
     public static final int CHANGE_NAME = 1001;

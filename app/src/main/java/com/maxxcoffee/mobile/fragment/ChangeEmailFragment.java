@@ -16,6 +16,7 @@ import com.maxxcoffee.mobile.model.request.ChangeEmailRequestModel;
 import com.maxxcoffee.mobile.task.ChangeEmailTask;
 import com.maxxcoffee.mobile.util.Constant;
 import com.maxxcoffee.mobile.util.PreferenceManager;
+import com.maxxcoffee.mobile.util.Utils;
 
 import java.util.regex.Pattern;
 
@@ -63,7 +64,6 @@ public class ChangeEmailFragment extends Fragment {
 
             @Override
             protected void onChangeEmail() {
-
                 changeEmailNow();
                 dismiss();
             }
@@ -72,6 +72,11 @@ public class ChangeEmailFragment extends Fragment {
     }
 
     private void changeEmailNow() {
+        if(!Utils.isConnected(activity)){
+            Toast.makeText(activity, activity.getResources().getString(R.string.mobile_data), Toast.LENGTH_LONG).show();
+            return;
+        }
+
         final LoadingDialog progress = new LoadingDialog();
         progress.show(getFragmentManager(), null);
 

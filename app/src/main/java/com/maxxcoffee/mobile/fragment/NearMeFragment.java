@@ -198,7 +198,7 @@ public class NearMeFragment extends Fragment implements LocationListener {
             @Override
             public void onFailed() {
                 progress.dismissAllowingStateLoss();
-                Toast.makeText(activity, "Something went wrong. Please try again.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(activity, activity.getResources().getString(R.string.something_wrong), Toast.LENGTH_SHORT).show();
             }
         };
         task.execute(lat, ltg);

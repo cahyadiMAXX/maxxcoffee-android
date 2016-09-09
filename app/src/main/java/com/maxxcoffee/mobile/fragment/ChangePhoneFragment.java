@@ -15,6 +15,7 @@ import com.maxxcoffee.mobile.database.entity.ProfileEntity;
 import com.maxxcoffee.mobile.fragment.dialog.LoadingDialog;
 import com.maxxcoffee.mobile.model.request.ChangePhoneRequestModel;
 import com.maxxcoffee.mobile.task.ChangePhoneTask;
+import com.maxxcoffee.mobile.util.Utils;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -52,6 +53,11 @@ public class ChangePhoneFragment extends Fragment {
     public void onSaveClick() {
         if (!isFormValid())
             return;
+
+        if(!Utils.isConnected(activity)){
+            Toast.makeText(activity, activity.getResources().getString(R.string.mobile_data), Toast.LENGTH_LONG).show();
+            return;
+        }
 
         final ProfileEntity profile = profileController.getProfile();
         if (profile != null) {

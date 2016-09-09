@@ -150,10 +150,10 @@ public class LoginFragment extends Fragment {
         loginBody.setEmail(email.getText().toString());
         loginBody.setPassword(password.getText().toString());
 
-        /*TelephonyManager mngr = (TelephonyManager) getActivity().getSystemService(Context.TELEPHONY_SERVICE);
+        /*TelephonyManager mngr = (TelephonyManager) getActivity().getSystemService(Context.TELEPHONY_SERVICE);*/
         String deviceId = Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID);
         loginBody.setDevice_id(deviceId);
-        loginBody.setGadget_id(mngr.getDeviceId());*/
+        //loginBody.setGadget_id(mngr.getDeviceId());
 
         //get location here
 
@@ -326,7 +326,7 @@ public class LoginFragment extends Fragment {
             public void onFailed() {
 
                 progress.dismiss();
-                Toast.makeText(activity, "Something went wrong. Please try again.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(activity, activity.getResources().getString(R.string.something_wrong), Toast.LENGTH_SHORT).show();
             }
         };
         task.execute();

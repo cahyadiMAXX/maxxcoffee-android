@@ -91,9 +91,14 @@
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden" />
 
+        <!--//punya rio// meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="8b43ab3bd701d8904bdb5c279eca96225218518f" /-->
+
         <meta-data
             android:name="io.fabric.ApiKey"
-            android:value="8b43ab3bd701d8904bdb5c279eca96225218518f" />
+            android:value="14524162bfd118b4453e719fc6f9a788691813d7"
+            />
 
         <!-- SMS Receiver -->
         <receiver android:name=".receiver.SmsReceiver">

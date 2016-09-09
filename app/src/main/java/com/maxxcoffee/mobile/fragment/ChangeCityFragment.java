@@ -17,6 +17,7 @@ import com.maxxcoffee.mobile.task.ChangeCityOccupationTask;
 import com.maxxcoffee.mobile.task.CityTask;
 import com.maxxcoffee.mobile.util.Constant;
 import com.maxxcoffee.mobile.util.PreferenceManager;
+import com.maxxcoffee.mobile.util.Utils;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -46,8 +47,11 @@ public class ChangeCityFragment extends Fragment {
         activity.setTitle("Change City");
 
         city.setText(PreferenceManager.getString(activity, Constant.PREFERENCE_PROFILE_CITY, ""));
-
-        fetchingCity();
+        if(Utils.isConnected(activity)){
+            fetchingCity();
+        }else{
+            Toast.makeText(activity, activity.getResources().getString(R.string.mobile_data), Toast.LENGTH_LONG).show();
+        }
         return view;
     }
 
@@ -78,6 +82,10 @@ public class ChangeCityFragment extends Fragment {
     public void onSaveClick() {
         if (!isFormValid())
             return;
+
+        if(!Utils.isConnected(activity)){
+            Toast.makeText(activity, activity.getResources().getString(R.string.mobile_data), Toast.LENGTH_LONG).show();
+        }
 
         final LoadingDialog progress = new LoadingDialog();
         progress.show(getFragmentManager(), null);

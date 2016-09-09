@@ -163,7 +163,7 @@ public class VerificationActivity extends AppCompatActivity {
             @Override
             public void onFailed() {
                     progress.dismissAllowingStateLoss();
-                Toast.makeText(VerificationActivity.this, "Something went wrong. Please try again.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), getApplicationContext().getResources().getString(R.string.something_wrong), Toast.LENGTH_SHORT).show();
             }
         };
         task.execute();

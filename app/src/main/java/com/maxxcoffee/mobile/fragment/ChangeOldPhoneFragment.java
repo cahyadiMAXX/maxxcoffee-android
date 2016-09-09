@@ -13,6 +13,7 @@ import com.maxxcoffee.mobile.activity.FormActivity;
 import com.maxxcoffee.mobile.fragment.dialog.LoadingDialog;
 import com.maxxcoffee.mobile.model.request.ChangePhoneRequestModel;
 import com.maxxcoffee.mobile.task.ChangeOldPhoneTask;
+import com.maxxcoffee.mobile.util.Utils;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -48,6 +49,11 @@ public class ChangeOldPhoneFragment extends Fragment {
     public void onSaveClick() {
         if (!isFormValid())
             return;
+
+        if(!Utils.isConnected(activity)){
+            Toast.makeText(activity, activity.getResources().getString(R.string.mobile_data), Toast.LENGTH_LONG).show();
+            return;
+        }
 
         String email = getArguments().getString("email");
         String password = getArguments().getString("password");

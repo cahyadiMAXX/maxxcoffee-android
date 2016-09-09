@@ -650,7 +650,7 @@
                 </RelativeLayout>
             </LinearLayout>
 
-            <!--LinearLayout
+            <LinearLayout
                 android:id="@+id/layout_referral"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -675,12 +675,12 @@
 
                     <ImageView
                         android:id="@+id/arrow_share"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
+                        android:layout_width="22dp"
+                        android:layout_height="20dp"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
                         android:src="@drawable/ic_share_black"
-                        android:visibility="invisible" />
+                        />
 
                     <com.maxxcoffee.mobile.widget.textview.TextViewLatoRegular
                         android:id="@+id/referral"
@@ -695,7 +695,7 @@
                         android:textColor="@android:color/black"
                         android:textSize="14sp" />
                 </RelativeLayout>
-            </LinearLayout-->
+            </LinearLayout>
 
         </LinearLayout>
     </ScrollView>

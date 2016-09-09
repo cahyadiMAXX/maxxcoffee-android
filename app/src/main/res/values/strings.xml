@@ -27,4 +27,5 @@
     <string name="mobile_data">Please check your internet connection</string>
     <string name="something_wrong">Something went wrong. Please try again.</string>
     <string name="no_card_alert">You do not have any connected card.\n\nPlease add card.</string>
+    <string name="share_using">Share</string>
 </resources>

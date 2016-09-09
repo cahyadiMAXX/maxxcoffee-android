@@ -153,7 +153,7 @@ public class PrimaryCardFragment extends Fragment {
             @Override
             public void onFailed() {
                 progress.dismissAllowingStateLoss();
-                Toast.makeText(activity, "Something went wrong. Please try again", Toast.LENGTH_LONG).show();
+                Toast.makeText(activity, activity.getResources().getString(R.string.something_wrong), Toast.LENGTH_SHORT).show();
             }
         };
         task.execute(body);
@@ -192,12 +192,12 @@ public class PrimaryCardFragment extends Fragment {
             @Override
             public void onFailed() {
                 progress.dismissAllowingStateLoss();
-                Toast.makeText(activity, "Something went wrong. Please try again", Toast.LENGTH_LONG).show();
+                Toast.makeText(activity, activity.getResources().getString(R.string.something_wrong), Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onFailed(String message) {
-                Toast.makeText(activity, "Something went wrong. Please try again", Toast.LENGTH_LONG).show();
+                Toast.makeText(activity, message, Toast.LENGTH_LONG).show();
                 progress.dismissAllowingStateLoss();
             }
         };

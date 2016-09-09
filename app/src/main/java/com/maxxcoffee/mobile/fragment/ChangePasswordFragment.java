@@ -16,6 +16,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.maxxcoffee.mobile.task.ChangePasswordTask;
+import com.maxxcoffee.mobile.util.Utils;
 
 /**
  * Created by Rio Swarawan on 5/3/2016.
@@ -52,6 +53,11 @@ public class ChangePasswordFragment extends Fragment {
     public void onSaveChangePasswordClick() {
         if (!isFormValid())
             return;
+
+        if(!Utils.isConnected(activity)){
+            Toast.makeText(activity, activity.getResources().getString(R.string.mobile_data), Toast.LENGTH_LONG).show();
+            return;
+        }
 
         final LoadingDialog progress = new LoadingDialog();
         progress.show(getFragmentManager(), null);

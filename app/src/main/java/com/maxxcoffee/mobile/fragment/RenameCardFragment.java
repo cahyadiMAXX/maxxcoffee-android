@@ -20,6 +20,7 @@ import com.maxxcoffee.mobile.model.request.RegisterCardRequestModel;
 import com.maxxcoffee.mobile.task.RegisterCardTask;
 import com.maxxcoffee.mobile.util.Constant;
 import com.maxxcoffee.mobile.util.PreferenceManager;
+import com.maxxcoffee.mobile.util.Utils;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -77,6 +78,11 @@ public class RenameCardFragment extends Fragment {
         if (!isFormValid())
             return;
 
+        if(!Utils.isConnected(activity)){
+            Toast.makeText(activity, activity.getResources().getString(R.string.mobile_data), Toast.LENGTH_LONG).show();
+            return;
+        }
+
         tempNo = cardNo.getText().toString();
         String cardName = name.getText().equals("") ? tempName : name.getText().toString();
 
@@ -99,7 +105,7 @@ public class RenameCardFragment extends Fragment {
 
             @Override
             public void onFailed() {
-                Toast.makeText(activity, "Something went wrong. Please try again.", Toast.LENGTH_LONG).show();
+                Toast.makeText(activity, activity.getResources().getString(R.string.something_wrong), Toast.LENGTH_SHORT).show();
                 progress.dismissAllowingStateLoss();
                 //failed ga usah back kan ?
                 //backToOrigin();

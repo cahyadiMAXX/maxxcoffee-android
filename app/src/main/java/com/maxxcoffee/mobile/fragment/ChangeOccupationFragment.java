@@ -18,6 +18,7 @@ import com.maxxcoffee.mobile.task.ChangeCityOccupationTask;
 import com.maxxcoffee.mobile.task.ProvinceTask;
 import com.maxxcoffee.mobile.util.Constant;
 import com.maxxcoffee.mobile.util.PreferenceManager;
+import com.maxxcoffee.mobile.util.Utils;
 
 import java.util.Arrays;
 import java.util.List;
@@ -84,6 +85,11 @@ public class ChangeOccupationFragment extends Fragment {
     public void onSaveClick() {
         if (!isFormValid())
             return;
+
+        if(!Utils.isConnected(activity)){
+            Toast.makeText(activity, activity.getResources().getString(R.string.mobile_data), Toast.LENGTH_LONG).show();
+            return;
+        }
 
         final LoadingDialog progress = new LoadingDialog();
         progress.show(getFragmentManager(), null);

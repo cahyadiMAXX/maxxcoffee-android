@@ -54,8 +54,8 @@ public class ProfileEntity {
     @DatabaseField
     String last_name;
 
-    //@DatabaseField
-    //String user_code;
+    @DatabaseField
+    String user_code;
 
     public Integer getId() {
         return id;
@@ -177,11 +177,11 @@ public class ProfileEntity {
         this.last_name = last_name;
     }
 
-    /*public String getUser_code() {
+    public String getUser_code() {
         return user_code;
     }
 
     public void setUser_code(String user_code) {
         this.user_code = user_code;
-    }*/
+    }
 }

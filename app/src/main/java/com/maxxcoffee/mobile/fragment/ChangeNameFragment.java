@@ -19,6 +19,7 @@ import butterknife.OnClick;
 import com.maxxcoffee.mobile.task.ChangeNameTask;
 import com.maxxcoffee.mobile.util.Constant;
 import com.maxxcoffee.mobile.util.PreferenceManager;
+import com.maxxcoffee.mobile.util.Utils;
 
 /**
  * Created by Rio Swarawan on 5/3/2016.
@@ -56,6 +57,11 @@ public class ChangeNameFragment extends Fragment {
         if (!isFormValid())
             return;
 
+        if(!Utils.isConnected(activity)){
+            Toast.makeText(activity, activity.getResources().getString(R.string.mobile_data), Toast.LENGTH_LONG).show();
+            return;
+        }
+
         final LoadingDialog progress = new LoadingDialog();
         progress.show(getFragmentManager(), null);
 
@@ -65,15 +71,14 @@ public class ChangeNameFragment extends Fragment {
         ChangeNameTask task = new ChangeNameTask(activity) {
             @Override
             public void onSuccess() {
-                    progress.dismissAllowingStateLoss();
+                progress.dismissAllowingStateLoss();
                 activity.onBackClick();
             }
 
             @Override
             public void onFailed() {
-
-                    progress.dismissAllowingStateLoss();
-                Toast.makeText(activity, "Failed to change user name", Toast.LENGTH_SHORT).show();
+                progress.dismissAllowingStateLoss();
+                Toast.makeText(activity, activity.getResources().getString(R.string.something_wrong), Toast.LENGTH_SHORT).show();
             }
         };
         task.execute(mFirstName, mLastName);
