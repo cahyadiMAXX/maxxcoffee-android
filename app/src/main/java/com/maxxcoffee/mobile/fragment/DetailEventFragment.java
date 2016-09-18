@@ -66,7 +66,7 @@ public class DetailEventFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_detail_event, container, false);
 
         ButterKnife.bind(this, view);
-        activity.setTitle("Detail Event");
+        activity.setTitle("Event Detail");
 
         fetchingData();
         return view;

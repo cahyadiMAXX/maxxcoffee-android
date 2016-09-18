@@ -224,6 +224,17 @@ public class MainActivity extends FragmentActivity {
         }else{
             switchFragment(content);
         }
+
+        /*AppUpdater appUpdater = new AppUpdater(this)
+                .setDisplay(Display.DIALOG)
+                .setUpdateFrom(UpdateFrom.GOOGLE_PLAY)
+                .setTitleOnUpdateAvailable("Update available")
+                .setContentOnUpdateAvailable("Check out the latest version available on Play Store!")
+                .setButtonUpdate("Update Now")
+                .setButtonDismiss(null)
+                .setButtonDoNotShowAgain(null)
+                ;
+        appUpdater.start();*/
     }
 
     @Override

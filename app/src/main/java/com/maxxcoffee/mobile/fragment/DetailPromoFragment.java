@@ -55,7 +55,7 @@ public class DetailPromoFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_detail_promo, container, false);
 
         ButterKnife.bind(this, view);
-        activity.setTitle("Detail Promo");
+        activity.setTitle("Promo Detail");
 
         fetchingData();
         return view;

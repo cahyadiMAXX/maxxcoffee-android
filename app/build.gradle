@@ -91,4 +91,5 @@ dependencies {
     }
     compile 'com.android.support:support-v4:23.2.1'
     compile 'com.github.jd-alexander:LikeButton:0.2.0'
+    compile 'com.github.javiersantos:AppUpdater:2.4'
 }
