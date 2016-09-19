@@ -113,22 +113,7 @@ public class DeleteCardFragment extends Fragment {
         ButterKnife.bind(this, view);
         activity.setTitle("Delete Card");
 
-//        sampleData();
         fetchingCard();
-
-//        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-//            @Override
-//            public void onCheckedChanged(RadioGroup group, int checkedId) {
-//                if (checkedId == R.id.checkbox_card_1) {
-//                    selectedCard = cardNumber1;
-//                } else if (checkedId == R.id.checkbox_card_2) {
-//                    selectedCard = cardNumber2;
-//                } else if (checkedId == R.id.checkbox_card_3) {
-//                    selectedCard = cardNumber3;
-//                }
-//            }
-//
-//        });
 
         layoutCard1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -166,25 +151,6 @@ public class DeleteCardFragment extends Fragment {
                 card3Selected();
             }
         });
-
-//        checkBoxCarad1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//            @Override
-//            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-//                selectedCard = cardNumber1;
-//            }
-//        });
-//        checkBoxCarad2.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//            @Override
-//            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-//                selectedCard = cardNumber2;
-//            }
-//        });
-//        checkBoxCarad3.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//            @Override
-//            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-//                selectedCard = cardNumber3;
-//            }
-//        });
 
         return view;
     }
@@ -226,7 +192,6 @@ public class DeleteCardFragment extends Fragment {
                 name1.setText(card.getName());
                 balance1.setText(String.valueOf(card.getBalance()));
                 point1.setText(String.valueOf(card.getPoint()));
-//                Glide.with(activity).load(card.getImage()).placeholder(getResources().getDrawable(R.drawable.ic_no_image)).centerCrop().crossFade().into(card1);
                 DownloadImageTask task = new DownloadImageTask(activity) {
                     @Override
                     protected void onDownloadError() {
@@ -247,7 +212,6 @@ public class DeleteCardFragment extends Fragment {
                 name2.setText(card.getName());
                 balance2.setText(String.valueOf(card.getBalance()));
                 point2.setText(String.valueOf(card.getPoint()));
-//                Glide.with(activity).load(card.getImage()).placeholder(getResources().getDrawable(R.drawable.ic_no_image)).centerCrop().crossFade().into(card2);
                 DownloadImageTask task = new DownloadImageTask(activity) {
                     @Override
                     protected void onDownloadError() {
@@ -268,7 +232,6 @@ public class DeleteCardFragment extends Fragment {
                 name3.setText(card.getName());
                 balance3.setText(String.valueOf(card.getBalance()));
                 point3.setText(String.valueOf(card.getPoint()));
-//                Glide.with(activity).load(card.getImage()).placeholder(getResources().getDrawable(R.drawable.ic_no_image)).centerCrop().crossFade().into(card3);
                 DownloadImageTask task = new DownloadImageTask(activity) {
                     @Override
                     protected void onDownloadError() {

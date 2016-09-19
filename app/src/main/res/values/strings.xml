@@ -28,4 +28,5 @@
     <string name="something_wrong">Something went wrong. Please try again.</string>
     <string name="no_card_alert">You do not have any connected card.\n\nPlease add card.</string>
     <string name="share_using">Share</string>
+    <string name="please_enable_gps">You have to enable GPS or grant location permission to use this feature</string>
 </resources>

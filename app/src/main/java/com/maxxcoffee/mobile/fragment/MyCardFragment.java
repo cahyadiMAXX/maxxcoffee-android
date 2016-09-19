@@ -158,11 +158,6 @@ public class MyCardFragment extends Fragment {
             }
         });
 
-        //klo belum ada card, jangan tampilin button ini ya guys
-        if(data.size() == 0){
-            //fab_primary.setVisibility(View.GONE);
-        }
-
         fab_primary.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -269,22 +264,13 @@ public class MyCardFragment extends Fragment {
 
         data.clear();
         data.addAll(cards);
-
-        //cek lagi klo ada card, baru nampilin
-        if(data.size() > 0){
-            /*FloatingActionButton fab = new FloatingActionButton(activity);
-            fab.setButtonSize(FloatingActionButton.SIZE_MINI);
-            fab.setLabelText("Set Prime Card");
-            fab.setImageResource(R.drawable.ic_star_new);
-            fabMenu.addMenuButton(fab);*/
-        }
         adapter.notifyDataSetChanged();
     }
 
     @OnClick(R.id.fab_scan)
     public void onAddClick() {
         List<CardEntity> cards = cardController.getCards();
-        if (cards.size() == 3) {
+        if (cards.size() >= 3) {
             CardMaxDialog dialog = new CardMaxDialog() {
 
                 @Override

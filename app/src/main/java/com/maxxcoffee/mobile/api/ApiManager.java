@@ -3,6 +3,7 @@ package com.maxxcoffee.mobile.api;
 import android.content.Context;
 
 import com.google.gson.Gson;
+import com.maxxcoffee.mobile.BuildConfig;
 import com.maxxcoffee.mobile.util.Constant;
 import com.maxxcoffee.mobile.util.Utils;
 
@@ -33,7 +34,7 @@ public class ApiManager {
         if (restAdapter == null) {
             restAdapter = new RestAdapter.Builder()
                     .setRequestInterceptor(getRequestInterceptor())
-                    .setLogLevel(RestAdapter.LogLevel.FULL)
+                    .setLogLevel(BuildConfig.DEBUG ? RestAdapter.LogLevel.FULL : RestAdapter.LogLevel.NONE)
                     .setEndpoint(properties.getProperty("url-stagging"))
                     .setConverter(new GsonConverter(new Gson()))
                     .build();

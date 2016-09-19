@@ -80,6 +80,8 @@ public class GpsTracker extends Service implements LocationListener {
                             }
                         }
                     }
+                }else{
+                    showSettingsAlert();
                 }
             }
         } catch (Exception e) {

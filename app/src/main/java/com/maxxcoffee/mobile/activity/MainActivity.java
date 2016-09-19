@@ -358,6 +358,9 @@ public class MainActivity extends FragmentActivity {
                 fragment = new HomeFragment();
                 break;
             case STORE:
+                if(!isGpsEnabled()){
+                    settingRequested = false;
+                }
                 if (!settingRequested) {
                     checkSettingApi(STORE);
                 } else {
@@ -401,7 +404,6 @@ public class MainActivity extends FragmentActivity {
                 } else {
                     fragment = new CredentialFragment();
                 }
-//                fragment = isLoggedIn ? new MyCardFragment() : new CredentialFragment();
                 break;
             case FAQ:
                 fragment = new FaqFragment();
@@ -422,12 +424,8 @@ public class MainActivity extends FragmentActivity {
                 } else {
                     fragment = new CredentialFragment();
                 }
-//                bundle = new Bundle();
-//                fragment = new ReportFragment();
-//                fragment = isLoggedIn ? new ReportFragment() : new CredentialFragment();
                 break;
             case REPORT_LOST_CARD:
-//                fragment = new LostCardFragment();
                 if (isLoggedIn) {
                     if (isSmsVerified && isEmailVerified) {
                         fragment = new LostCardFragment();
@@ -442,7 +440,6 @@ public class MainActivity extends FragmentActivity {
                 }
                 break;
             case CARD_HISTORY:
-//                fragment = new CardHistoryFragment();
                 if (isLoggedIn) {
                     if (isSmsVerified && isEmailVerified) {
                         fragment = new CardHistoryFragment();
@@ -457,7 +454,6 @@ public class MainActivity extends FragmentActivity {
                 }
                 break;
             case REWARD:
-//                fragment = new RewardFragment();
                 if (isLoggedIn) {
                     if (isSmsVerified && isEmailVerified) {
                         fragment = new RewardFragment();
@@ -475,14 +471,12 @@ public class MainActivity extends FragmentActivity {
                 fragment = new CredentialFragment();
                 break;
             case LOGIN:
+                if(!isGpsEnabled()){
+                    settingRequested = false;
+                }
                 if (!settingRequested) {
                     checkSettingApi(LOGIN);
                 } else {
-                    /*if(!hasPermissions(this, PERMISSIONS)){
-                        ActivityCompat.requestPermissions(this, PERMISSIONS, 3);
-                    }else{
-                        fragment = new LoginFragment();
-                    }*/
                     if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                             && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
@@ -497,17 +491,14 @@ public class MainActivity extends FragmentActivity {
                         fragment = new LoginFragment();
                     }
                 }
-                //fragment = new LoginFragment();
                 break;
             case SIGNUP:
+                if(!isGpsEnabled()){
+                    settingRequested = false;
+                }
                 if (!settingRequested) {
                     checkSettingApi(SIGNUP);
                 } else {
-                    /*if(!hasPermissions(this, PERMISSIONS)){
-                        ActivityCompat.requestPermissions(this, PERMISSIONS, 4);
-                    }else{
-                        fragment = new SignUpFragment();
-                    }*/
                     if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                             && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
@@ -540,7 +531,6 @@ public class MainActivity extends FragmentActivity {
                 Toast.makeText(MainActivity.this, "Feature not available yet", Toast.LENGTH_SHORT).show();
                 break;
             case BALANCE_TRANSFER:
-//                fragment = isLoggedIn ? new TransferBalanceFragment() : new CredentialFragment();
                 if (isLoggedIn) {
                     if (isSmsVerified && isEmailVerified) {
                         fragment = new TransferBalanceFragment();
@@ -607,7 +597,6 @@ public class MainActivity extends FragmentActivity {
 
     public void logoutNow() {
         PreferenceManager.clearPreference(this);
-//        Database.deleteRealm();
         DatabaseConfig db = new DatabaseConfig(this);
         db.clearAllTable();
         prepareDrawerList();
@@ -816,6 +805,7 @@ public class MainActivity extends FragmentActivity {
                     switchFragment(STORE);
                     break;
                 case Activity.RESULT_CANCELED:
+                    Toast.makeText(getApplicationContext(), getResources().getString(R.string.please_enable_gps), Toast.LENGTH_LONG).show();
                     break;
             }
         }else if(requestCode == LOGIN){
@@ -824,6 +814,7 @@ public class MainActivity extends FragmentActivity {
                     switchFragment(LOGIN);
                     break;
                 case Activity.RESULT_CANCELED:
+                    Toast.makeText(getApplicationContext(), getResources().getString(R.string.please_enable_gps), Toast.LENGTH_LONG).show();
                     break;
             }
         }else if(requestCode == SIGNUP){
@@ -832,6 +823,7 @@ public class MainActivity extends FragmentActivity {
                     switchFragment(SIGNUP);
                     break;
                 case Activity.RESULT_CANCELED:
+                    Toast.makeText(getApplicationContext(), getResources().getString(R.string.please_enable_gps), Toast.LENGTH_LONG).show();
                     break;
             }
         }
@@ -844,19 +836,19 @@ public class MainActivity extends FragmentActivity {
             if (PermissionUtil.verifyPermissions(grantResults)) {
                 switchFragment(STORE);
             } else {
-                Toast.makeText(this, "Location permission is NOT granted", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getResources().getString(R.string.please_enable_gps), Toast.LENGTH_SHORT).show();
             }
         } else if(requestCode == 3){
             if (PermissionUtil.verifyPermissions(grantResults)) {
                 switchFragment(LOGIN);
             } else {
-                Toast.makeText(this, "Location permission is NOT granted", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getResources().getString(R.string.please_enable_gps), Toast.LENGTH_SHORT).show();
             }
         } else if(requestCode == 4){
             if (PermissionUtil.verifyPermissions(grantResults)) {
                 switchFragment(SIGNUP);
             } else {
-                Toast.makeText(this, "Location permission is NOT granted", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getResources().getString(R.string.please_enable_gps), Toast.LENGTH_SHORT).show();
             }
         } else {
             super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -893,5 +885,11 @@ public class MainActivity extends FragmentActivity {
             }
         }
         return true;
+    }
+
+    public boolean isGpsEnabled(){
+        LocationManager mlocManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);;
+        boolean enabled = mlocManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        return enabled;
     }
 }
