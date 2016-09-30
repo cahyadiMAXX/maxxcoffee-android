@@ -7,6 +7,7 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -60,6 +61,11 @@ public class CardHistoryFragment extends Fragment {
     @Bind(R.id.card)
     TextView card;
 
+    @Bind(R.id.mainframe)
+    LinearLayout mainframe;
+    @Bind(R.id.empty)
+    TextView empty;
+
     private MainActivity activity;
     private CardController cardController;
     private List<CardModel> data;
@@ -87,6 +93,10 @@ public class CardHistoryFragment extends Fragment {
 
         ButterKnife.bind(this, view);
         activity.setTitle("Card History");
+
+        mainframe.setVisibility(View.GONE);
+        empty.setVisibility(View.GONE);
+
         if(Utils.isConnected(activity)){
             fetchingCardData();
         }else{
@@ -126,8 +136,18 @@ public class CardHistoryFragment extends Fragment {
             @Override
             protected void onDateSelected(Date date) {
                 if (date != null) {
-                    selectedStartDate = dateFormat.format(date);
-                    periodeStart.setText(selectedStartDate);
+                    try {
+                        SimpleDateFormat myFormat = new SimpleDateFormat("yyyy-MM-dd");
+                        Date end = myFormat.parse(periodeEnd.getText().toString());
+                        if(date.before(end)){
+                            selectedStartDate = dateFormat.format(date);
+                            periodeStart.setText(selectedStartDate);
+                        }else{
+                            Toast.makeText(getActivity(), "Start Date must be earlier than End Date", Toast.LENGTH_LONG).show();
+                        }
+                    }catch (Exception e){
+
+                    }
                 }
                 dismiss();
             }
@@ -145,8 +165,18 @@ public class CardHistoryFragment extends Fragment {
             @Override
             protected void onDateSelected(Date date) {
                 if (date != null) {
-                    selectedEndDate = dateFormat.format(date);
-                    periodeEnd.setText(selectedEndDate);
+                    try {
+                        SimpleDateFormat myFormat = new SimpleDateFormat("yyyy-MM-dd");
+                        Date start = myFormat.parse(periodeStart.getText().toString());
+                        if(date.after(start)){
+                            selectedEndDate = dateFormat.format(date);
+                            periodeEnd.setText(selectedEndDate);
+                        }else{
+                            Toast.makeText(getActivity(), "Start Date must be earlier than End Date", Toast.LENGTH_LONG).show();
+                        }
+                    }catch (Exception e){
+
+                    }
                 }
                 dismiss();
             }
@@ -224,6 +254,12 @@ public class CardHistoryFragment extends Fragment {
         CardTask task = new CardTask(activity) {
             @Override
             public void onSuccess(List<CardItemResponseModel> responseModel) {
+                if(responseModel.size()  > 0){
+                    mainframe.setVisibility(View.VISIBLE);
+                }else{
+                    empty.setVisibility(View.VISIBLE);
+                }
+
                 for (CardItemResponseModel card : responseModel) {
                     CardEntity entity = new CardEntity();
                     entity.setId(card.getId_card());
@@ -245,12 +281,16 @@ public class CardHistoryFragment extends Fragment {
             @Override
             public void onFailed(String message) {
                 progress.dismissAllowingStateLoss();
-                Toast.makeText(activity, message, Toast.LENGTH_LONG).show();
+                empty.setText(message);
+                empty.setVisibility(View.VISIBLE);
+                //Toast.makeText(activity, message, Toast.LENGTH_LONG).show();
                 //showDontHaveCardDialog();
             }
 
             @Override
             public void onFailed() {
+                //empty.setVisibility(View.VISIBLE);
+                Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.something_wrong), Toast.LENGTH_LONG).show();
                 progress.dismissAllowingStateLoss();
             }
         };
@@ -314,8 +354,8 @@ public class CardHistoryFragment extends Fragment {
         HistoryTask task = new HistoryTask(activity) {
             @Override
             public void onSuccess() {
-                    progress.dismissAllowingStateLoss();
-
+                progress.dismissAllowingStateLoss();
+                //mainframe.setVisibility(View.VISIBLE);
                 historyLayout.setVisibility(View.VISIBLE);
                 setupViewPager(viewPager);
                 tabs.setupWithViewPager(viewPager);
@@ -323,7 +363,8 @@ public class CardHistoryFragment extends Fragment {
 
             @Override
             public void onFailed() {
-                    progress.dismissAllowingStateLoss();
+                empty.setVisibility(View.VISIBLE);
+                progress.dismissAllowingStateLoss();
             }
         };
         task.execute(body);

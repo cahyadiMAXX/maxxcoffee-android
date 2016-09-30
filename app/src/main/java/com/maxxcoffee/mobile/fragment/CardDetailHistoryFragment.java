@@ -125,8 +125,18 @@ public class CardDetailHistoryFragment extends Fragment {
             @Override
             protected void onDateSelected(Date date) {
                 if (date != null) {
-                    selectedStartDate = dateFormat.format(date);
-                    periodeStart.setText(selectedStartDate);
+                    try {
+                        SimpleDateFormat myFormat = new SimpleDateFormat("yyyy-MM-dd");
+                        Date end = myFormat.parse(periodeEnd.getText().toString());
+                        if(date.before(end)){
+                            selectedStartDate = dateFormat.format(date);
+                            periodeStart.setText(selectedStartDate);
+                        }else{
+                            Toast.makeText(getActivity(), "Start Date must be earlier than End Date", Toast.LENGTH_LONG).show();
+                        }
+                    }catch (Exception e){
+
+                    }
                 }
                 dismiss();
             }
@@ -144,8 +154,18 @@ public class CardDetailHistoryFragment extends Fragment {
             @Override
             protected void onDateSelected(Date date) {
                 if (date != null) {
-                    selectedEndDate = dateFormat.format(date);
-                    periodeEnd.setText(selectedEndDate);
+                    try {
+                        SimpleDateFormat myFormat = new SimpleDateFormat("yyyy-MM-dd");
+                        Date start = myFormat.parse(periodeStart.getText().toString());
+                        if(date.after(start)){
+                            selectedEndDate = dateFormat.format(date);
+                            periodeEnd.setText(selectedEndDate);
+                        }else{
+                            Toast.makeText(getActivity(), "Start Date must be earlier than End Date", Toast.LENGTH_LONG).show();
+                        }
+                    }catch (Exception e){
+
+                    }
                 }
                 dismiss();
             }

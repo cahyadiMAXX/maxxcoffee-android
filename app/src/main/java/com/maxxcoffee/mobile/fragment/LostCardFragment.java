@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,6 +44,11 @@ public class LostCardFragment extends Fragment {
     @Bind(R.id.detail)
     TextView detail;
 
+    @Bind(R.id.mainframe)
+    LinearLayout mainframe;
+    @Bind(R.id.empty)
+    TextView empty;
+
     private MainActivity activity;
     private List<CardModel> data;
     private CardController cardController;
@@ -68,6 +74,8 @@ public class LostCardFragment extends Fragment {
         ButterKnife.bind(this, view);
         activity.setTitle("Report Lost Card");
 
+        mainframe.setVisibility(View.GONE);
+
         if(Utils.isConnected(activity)){
             fetchingData();
         }else{
@@ -87,6 +95,11 @@ public class LostCardFragment extends Fragment {
         CardTask task = new CardTask(activity) {
             @Override
             public void onSuccess(List<CardItemResponseModel> responseModel) {
+                if(responseModel.size() > 0){
+                    mainframe.setVisibility(View.VISIBLE);
+                }else {
+                    empty.setVisibility(View.VISIBLE);
+                }
                 for (CardItemResponseModel card : responseModel) {
                     CardEntity entity = new CardEntity();
                     entity.setId(card.getId_card());
@@ -113,7 +126,9 @@ public class LostCardFragment extends Fragment {
 
             @Override
             public void onFailed(String message) {
-                Toast.makeText(activity, activity.getResources().getString(R.string.something_wrong), Toast.LENGTH_SHORT).show();
+                empty.setText(message);
+                empty.setVisibility(View.VISIBLE);
+                //Toast.makeText(activity, message, Toast.LENGTH_SHORT).show();
                 progress.dismissAllowingStateLoss();
             }
         };

@@ -7,9 +7,11 @@ import com.maxxcoffee.mobile.model.request.CheckValidEmailRequestModel;
 import com.maxxcoffee.mobile.model.request.ContactUsRequestModel;
 import com.maxxcoffee.mobile.model.request.DefaultRequestModel;
 import com.maxxcoffee.mobile.model.request.DeleteCardRequestModel;
+import com.maxxcoffee.mobile.model.request.GCMRequestModel;
 import com.maxxcoffee.mobile.model.request.HistoryRequestModel;
 import com.maxxcoffee.mobile.model.request.LoginRequestModel;
 import com.maxxcoffee.mobile.model.request.LostCardRequestModel;
+import com.maxxcoffee.mobile.model.request.MarkVirtualCardRequestModel;
 import com.maxxcoffee.mobile.model.request.OauthRequestModel;
 import com.maxxcoffee.mobile.model.request.PrimaryCardRequestModel;
 import com.maxxcoffee.mobile.model.request.RegisterCardRequestModel;
@@ -20,6 +22,7 @@ import com.maxxcoffee.mobile.model.request.StoreNearMeRequestModel;
 import com.maxxcoffee.mobile.model.request.TransferBalanceRequestModel;
 import com.maxxcoffee.mobile.model.request.VerifySmsCodeRequestModel;
 import com.maxxcoffee.mobile.model.response.AboutResponseModel;
+import com.maxxcoffee.mobile.model.response.AddVirtualResponseModel;
 import com.maxxcoffee.mobile.model.response.CardResponseModel;
 import com.maxxcoffee.mobile.model.response.ChangeUserDataResponseModel;
 import com.maxxcoffee.mobile.model.response.CheckValidEmailResponseModel;
@@ -170,4 +173,21 @@ public interface ApiInterface {
     //set prime card
     @POST("/api/setprimarycard")
     void setPrimaryCard(@Header("Authorization") String authentication, @Body PrimaryCardRequestModel body, Callback<DefaultResponseModel> response);
+
+    //virtual card
+
+    @POST("/api/gci/card/virtual/generate")
+    void generateVirtualCard(@Header("Authorization") String authentication, @Body DefaultRequestModel body, Callback<AddVirtualResponseModel> response);
+
+    @POST("/api/gci/card/virtual/mark")
+    void markAsVirtualCard(@Header("Authorization") String authentication, @Body MarkVirtualCardRequestModel body, Callback<DefaultResponseModel> response);
+
+    @POST("/api/gci/card/virtual/remove")
+    void removeVirtualFromBank(@Header("Authorization") String authentication, @Body MarkVirtualCardRequestModel body, Callback<DefaultResponseModel> response);
+
+    @POST("/api/updatedevicetoken")
+    void updateDeviceToken(@Header("Authorization") String authentication, @Body GCMRequestModel body, Callback<DefaultResponseModel> response);
+
+    @POST("/api/forcelogoutall")
+    void forceLogoutAll(@Header("Authorization") String authentication, @Body GCMRequestModel body, Callback<DefaultResponseModel> response);
 }

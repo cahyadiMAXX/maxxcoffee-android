@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "955459839264",
+    "firebase_url": "https://maxx-coffee-2749f.firebaseio.com",
+    "project_id": "maxx-coffee-2749f",
+    "storage_bucket": "maxx-coffee-2749f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:955459839264:android:b1c2bd8f85a03e26",
+        "android_client_info": {
+          "package_name": "com.maxxcoffee.mobile"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "955459839264-et01sk09isr93ujuds4c6obj4te36g08.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA1m-N90AdFRflDswGhZsN3QceYNMv3928"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -44,7 +44,7 @@ public class TosFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_tos, container, false);
 
         ButterKnife.bind(this, view);
-        activity.setTitle("Term of Service");
+        activity.setTitle("Terms of Service");
 
         content.setText(PreferenceManager.getString(activity, Constant.PREFERENCE_TOS, ""));
         if(Utils.isConnected(activity)){

@@ -44,7 +44,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
-            android:gravity="center"
+            android:gravity="center_vertical|center"
             android:text="You do not have any connected card.\n\nPlease add card."
             android:textColor="@color/divider"
             android:textSize="16sp"

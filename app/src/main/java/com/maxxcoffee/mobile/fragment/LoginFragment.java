@@ -1,5 +1,6 @@
 package com.maxxcoffee.mobile.fragment;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
@@ -18,6 +19,8 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
@@ -37,6 +40,7 @@ import com.maxxcoffee.mobile.database.entity.CardEntity;
 import com.maxxcoffee.mobile.database.entity.ProfileEntity;
 import com.maxxcoffee.mobile.fragment.dialog.LoadingDialog;
 import com.maxxcoffee.mobile.fragment.dialog.OkDialog;
+import com.maxxcoffee.mobile.gcm.GCMRegistrationIntentService;
 import com.maxxcoffee.mobile.model.request.LoginRequestModel;
 import com.maxxcoffee.mobile.model.request.OauthRequestModel;
 import com.maxxcoffee.mobile.model.response.CardItemResponseModel;
@@ -58,6 +62,7 @@ import butterknife.OnClick;
 
 import com.maxxcoffee.mobile.task.LoginTask;
 import com.maxxcoffee.mobile.task.OauthTask;
+import com.maxxcoffee.mobile.util.WakeLocker;
 
 /**
  * Created by Rio Swarawan on 5/3/2016.
@@ -68,6 +73,7 @@ public class LoginFragment extends Fragment {
             android.Manifest.permission.ACCESS_COARSE_LOCATION};
 
     private MainActivity activity;
+    private BroadcastReceiver mRegistrationBroadcastReceiver;
 
     @Bind(R.id.email)
     EditText email;
@@ -98,7 +104,67 @@ public class LoginFragment extends Fragment {
         ButterKnife.bind(this, view);
         activity.setTitle("Login", true);
 
+        //setupGCM();
+
         return view;
+    }
+
+    void setupGCM(){
+        //gcm bos
+        //initializing our broadcast receiver
+        mRegistrationBroadcastReceiver = new BroadcastReceiver() {
+
+            //When the broadcast received
+            //We are sending the broadcast from GCMRegistrationIntentService
+
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                //If the broadcast has received with success
+                //that means device is registered successfully
+                if(intent.getAction().equals(GCMRegistrationIntentService.REGISTRATION_SUCCESS)){
+                    //Getting the registration token from the intent
+                    WakeLocker.acquire(getActivity());
+                    String token = intent.getStringExtra("token");
+                    //Displaying the token as toast
+                    //Toast.makeText(getApplicationContext(), "Registration token:" + token, Toast.LENGTH_LONG).show();
+                    Log.d("gcmtoken", token);
+
+                    //if the intent is not with success then displaying error messages
+                    WakeLocker.release();
+
+                    // Explicitly specify that GcmIntentService will handle the intent.
+                } else if(intent.getAction().equals(GCMRegistrationIntentService.REGISTRATION_ERROR)){
+                    Toast.makeText(getActivity(), "GCM registration error!", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(getActivity(), "Error occurred", Toast.LENGTH_LONG).show();
+                }
+            }
+        };
+
+        //Checking play service is available or not
+        int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(getActivity());
+
+        //if play service is not available
+        if(ConnectionResult.SUCCESS != resultCode) {
+            //If play service is supported but not installed
+            if(GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
+                //Displaying message that play service is not installed
+                Toast.makeText(getActivity(), "Google Play Service is not install/enabled in this device!", Toast.LENGTH_LONG).show();
+                GooglePlayServicesUtil.showErrorNotification(resultCode, getActivity());
+
+                //If play service is not supported
+                //Displaying an error message
+            } else {
+                Toast.makeText(getActivity(), "This device does not support for Google Play Service!", Toast.LENGTH_LONG).show();
+            }
+
+            //If play service is available
+        } else {
+            //Starting intent to register device
+            //Toast.makeText(getApplicationContext(), "start register", Toast.LENGTH_LONG).show();
+            Intent itent = new Intent(getActivity(), GCMRegistrationIntentService.class);
+            getActivity().startService(itent);
+        }
     }
 
     @Override
@@ -153,6 +219,7 @@ public class LoginFragment extends Fragment {
         /*TelephonyManager mngr = (TelephonyManager) getActivity().getSystemService(Context.TELEPHONY_SERVICE);*/
         String deviceId = Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID);
         loginBody.setDevice_id(deviceId);
+        //loginBody.setDevice_token(PreferenceManager.getString(getActivity(),Constant.PREFERENCE_DEVICE_TOKEN, ""));
         //loginBody.setGadget_id(mngr.getDeviceId());
 
         //get location here

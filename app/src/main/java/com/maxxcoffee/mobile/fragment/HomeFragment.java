@@ -1,6 +1,8 @@
 package com.maxxcoffee.mobile.fragment;
 
 import android.animation.ObjectAnimator;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.media.Image;
 import android.os.Bundle;
@@ -20,6 +22,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.maxxcoffee.mobile.R;
 import com.maxxcoffee.mobile.activity.AddCardBarcodeActivity;
 import com.maxxcoffee.mobile.activity.FormActivity;
@@ -28,6 +32,7 @@ import com.maxxcoffee.mobile.database.controller.CardPrimaryController;
 import com.maxxcoffee.mobile.database.entity.CardEntity;
 import com.maxxcoffee.mobile.database.entity.CardPrimaryEntity;
 import com.maxxcoffee.mobile.fragment.dialog.LoadingDialog;
+import com.maxxcoffee.mobile.gcm.GCMRegistrationIntentService;
 import com.maxxcoffee.mobile.model.response.CardItemResponseModel;
 import com.maxxcoffee.mobile.model.response.HomeResponseModel;
 import com.maxxcoffee.mobile.task.HomeTask;
@@ -35,6 +40,7 @@ import com.maxxcoffee.mobile.util.Constant;
 import com.maxxcoffee.mobile.util.OnSwipeTouchListener;
 import com.maxxcoffee.mobile.util.PreferenceManager;
 import com.maxxcoffee.mobile.util.Utils;
+import com.maxxcoffee.mobile.util.WakeLocker;
 
 import java.util.List;
 
@@ -95,6 +101,7 @@ public class HomeFragment extends Fragment {
     private int mDayPart = Utils.getDayPart();
     private boolean isPrimaryExist = false;
     private CardPrimaryController cardController;
+    private BroadcastReceiver mRegistrationBroadcastReceiver;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -113,6 +120,13 @@ public class HomeFragment extends Fragment {
         activity.setTitle("");
         boolean isLoggedIn = PreferenceManager.getBool(activity, Constant.PREFERENCE_LOGGED_IN, false);
         isPrimaryExist = false;
+
+        boolean isLogoutNow = PreferenceManager.getBool(activity, Constant.PREFERENCE_LOGOUT_NOW, false);
+        if(isLogoutNow){
+            //activity.logoutNow();
+        }
+
+        setupGCM();
 
         //klo udah login
         if(isLoggedIn){
@@ -234,6 +248,64 @@ public class HomeFragment extends Fragment {
         });
 
         return view;
+    }
+
+    void setupGCM(){
+        //gcm bos
+        //initializing our broadcast receiver
+        mRegistrationBroadcastReceiver = new BroadcastReceiver() {
+
+            //When the broadcast received
+            //We are sending the broadcast from GCMRegistrationIntentService
+
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                //If the broadcast has received with success
+                //that means device is registered successfully
+                if(intent.getAction().equals(GCMRegistrationIntentService.REGISTRATION_SUCCESS)){
+                    //Getting the registration token from the intent
+                    WakeLocker.acquire(getActivity());
+                    String token = intent.getStringExtra("token");
+                    //Displaying the token as toast
+                    //Toast.makeText(getApplicationContext(), "Registration token:" + token, Toast.LENGTH_LONG).show();
+                    Log.d("gcmtoken", token);
+
+                    //if the intent is not with success then displaying error messages
+                    WakeLocker.release();
+
+                    // Explicitly specify that GcmIntentService will handle the intent.
+                } else if(intent.getAction().equals(GCMRegistrationIntentService.REGISTRATION_ERROR)){
+                    Toast.makeText(getActivity(), "GCM registration error!", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(getActivity(), "Error occurred", Toast.LENGTH_LONG).show();
+                }
+            }
+        };
+
+        //Checking play service is available or not
+        int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(getActivity());
+
+        //if play service is not available
+        if(ConnectionResult.SUCCESS != resultCode) {
+            //If play service is supported but not installed
+            if(GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
+                //Displaying message that play service is not installed
+                Toast.makeText(getActivity(), "Google Play Service is not install/enabled in this device!", Toast.LENGTH_LONG).show();
+                GooglePlayServicesUtil.showErrorNotification(resultCode, getActivity());
+
+                //If play service is not supported
+                //Displaying an error message
+            } else {
+                Toast.makeText(getActivity(), "This device does not support for Google Play Service!", Toast.LENGTH_LONG).show();
+            }
+
+            //If play service is available
+        } else {
+            //Starting intent to register device
+            //Toast.makeText(getApplicationContext(), "start register", Toast.LENGTH_LONG).show();
+            Intent itent = new Intent(getActivity(), GCMRegistrationIntentService.class);
+            getActivity().startService(itent);
+        }
     }
 
     @Override

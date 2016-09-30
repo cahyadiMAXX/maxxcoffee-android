@@ -59,7 +59,7 @@ public abstract class RegisterCardTask extends AsyncTask<RegisterCardRequestMode
                 onSuccess();
             } else {
                 if (response.getMessages() != null)
-                    Toast.makeText(context, response.getMessages(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, response.getMessages(), Toast.LENGTH_LONG).show();
                 onFailed();
             }
         }

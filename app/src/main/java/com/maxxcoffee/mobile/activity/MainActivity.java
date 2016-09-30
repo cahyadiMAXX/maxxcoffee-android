@@ -23,6 +23,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -65,9 +66,12 @@ import com.maxxcoffee.mobile.fragment.SignUpInfoFragment;
 import com.maxxcoffee.mobile.fragment.StoreFragment;
 import com.maxxcoffee.mobile.fragment.TosFragment;
 import com.maxxcoffee.mobile.fragment.TransferBalanceFragment;
+import com.maxxcoffee.mobile.fragment.dialog.GenderDialog;
 import com.maxxcoffee.mobile.fragment.dialog.OptionDialog;
 import com.maxxcoffee.mobile.model.ChildDrawerModel;
 import com.maxxcoffee.mobile.model.ParentDrawerModel;
+import com.maxxcoffee.mobile.model.request.GCMRequestModel;
+import com.maxxcoffee.mobile.task.LogoutAllMyDevicesTask;
 import com.maxxcoffee.mobile.util.Constant;
 import com.maxxcoffee.mobile.util.PermissionUtil;
 import com.maxxcoffee.mobile.util.PreferenceManager;
@@ -147,6 +151,8 @@ public class MainActivity extends FragmentActivity {
     private int lastExpandedPosition = -1;
     private GoogleApiClient googleApiClient;
     private boolean settingRequested;
+
+    public static MainActivity mainActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -596,11 +602,31 @@ public class MainActivity extends FragmentActivity {
     }
 
     public void logoutNow() {
+        PreferenceManager.putBool(getApplicationContext(), Constant.PREFERENCE_LOGOUT_NOW, false);
         PreferenceManager.clearPreference(this);
         DatabaseConfig db = new DatabaseConfig(this);
         db.clearAllTable();
         prepareDrawerList();
+        logoutAllMyDevices();
         switchFragment(HOME);
+    }
+
+    public void logoutAllMyDevices(){
+        GCMRequestModel body = new GCMRequestModel();
+        body.setEmail(PreferenceManager.getString(getApplicationContext(), Constant.PREFERENCE_EMAIL, ""));
+
+        LogoutAllMyDevicesTask task = new LogoutAllMyDevicesTask(getApplicationContext()) {
+            @Override
+            public void onSuccess(String message) {
+                Log.d("logoutallmydevices", message);
+            }
+
+            @Override
+            public void onFailed() {
+                Log.d("logoutallmydevices", "failed");
+            }
+        };
+        task.execute(body);
     }
 
     public void setTitle(String mTitle) {
@@ -753,7 +779,7 @@ public class MainActivity extends FragmentActivity {
 
         ChildDrawerModel childAbout2 = new ChildDrawerModel();
         childAbout2.setId(TOS);
-        childAbout2.setName("Term of Service");
+        childAbout2.setName("Terms of Service");
 
         ChildDrawerModel childAbout3 = new ChildDrawerModel();
         childAbout3.setId(CONTACT_US);

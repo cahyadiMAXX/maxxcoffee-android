@@ -78,4 +78,8 @@ public class Constant {
 
     //verification code
     public final static String PREFERENCE_VERIFICATION_CODE = "maxx-verification-code";
+    public final static String PRERERENCE_CARD_DISTRIBUTION_ID = "maxx-distribution-id";
+
+    public final static String PREFERENCE_DEVICE_TOKEN = "maxx-device-token";
+    public final static String PREFERENCE_LOGOUT_NOW = "maxx-logout-now";
 }

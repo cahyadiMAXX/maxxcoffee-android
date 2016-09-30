@@ -15,13 +15,6 @@
         android:background="@android:color/transparent"
         android:orientation="vertical">
 
-        <!--com.maxxcoffee.mobile.widget.textview.TextViewLatoBold
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Login"
-            android:textColor="@android:color/white"
-            android:textSize="20sp" /-->
-
         <com.maxxcoffee.mobile.widget.textview.TextViewLatoRegular
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

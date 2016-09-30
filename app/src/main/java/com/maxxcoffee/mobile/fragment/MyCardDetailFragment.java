@@ -228,12 +228,31 @@ public class MyCardDetailFragment extends Fragment {
                     int mRewardAchieve = card.getBeans() / 10;
                     int mRewardToGo = 10 - (card.getBeans() % 10);
 
+                    activity.setTitle(card.getCard_name());
+                    name.setText(card.getCard_name());
                     balance.setText("IDR " + card.getBalance());
                     point.setText(card.getBeans() + " beans");
                     expDate.setText(mDateFormat.format(mExpDate));
                     beansBubble.setText(String.valueOf(mRewardToGo));
                     rewardAchieved.setText(String.valueOf(mRewardAchieve));
+                    barcodeUrl = card.getBarcode();
                     loadImages(card.getCard_image(),card.getBarcode(), card.getCard_name());
+                    //save ?
+
+                    CardEntity entity = new CardEntity();
+                    entity.setId(card.getId_card());
+                    entity.setName(card.getCard_name());
+                    entity.setNumber(card.getCard_number());
+                    entity.setImage(card.getCard_image());
+                    entity.setDistribution_id(card.getDistribution_id());
+                    entity.setCard_pin(card.getCard_pin());
+                    entity.setBalance(card.getBalance());
+                    entity.setPoint(card.getBeans());
+                    entity.setBarcode(card.getBarcode());
+                    entity.setExpired_date(card.getExpired_date());
+                    entity.setPrimary(card.getPrimary());
+
+                    cardController.insert(entity);
                 }catch (Exception e){
                     e.printStackTrace();
                 }
@@ -447,6 +466,7 @@ public class MyCardDetailFragment extends Fragment {
                 progress.dismissAllowingStateLoss();
                 MyCardDetailFragment.this.name.setText(name);
                 activity.setTitle(name);
+                fetchingData();
             }
 
             @Override

@@ -11,6 +11,7 @@ public class LoginRequestModel {
     //tambah
     private String device_id;
     private String gadget_id;
+    private String device_token;
 
     public String getEmail() {
         return email;
@@ -42,5 +43,13 @@ public class LoginRequestModel {
 
     public void setGadget_id(String gadget_id) {
         this.gadget_id = gadget_id;
+    }
+
+    public String getDevice_token() {
+        return device_token;
+    }
+
+    public void setDevice_token(String device_token) {
+        this.device_token = device_token;
     }
 }

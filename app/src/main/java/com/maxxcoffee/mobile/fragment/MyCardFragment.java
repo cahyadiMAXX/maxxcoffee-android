@@ -18,6 +18,7 @@ import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.maxxcoffee.mobile.R;
 import com.maxxcoffee.mobile.activity.AddCardBarcodeActivity;
+import com.maxxcoffee.mobile.activity.AddVirtualCardActivity;
 import com.maxxcoffee.mobile.activity.FormActivity;
 import com.maxxcoffee.mobile.activity.MainActivity;
 import com.maxxcoffee.mobile.adapter.CardAdapter;

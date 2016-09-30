@@ -10,6 +10,7 @@ buildscript {
 apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
 
+
 repositories {
     maven { url 'https://maven.fabric.io/public' }
 }
@@ -75,7 +76,9 @@ dependencies {
 
     compile 'com.google.android.gms:play-services-location:9.4.0'
     compile 'com.google.android.gms:play-services-maps:9.4.0'
+    compile "com.google.android.gms:play-services-gcm:9.4.0"
     compile 'com.google.maps.android:android-maps-utils:0.4+'
+
     compile 'com.jakewharton:butterknife:7.0.1'
     compile 'com.mikhaellopez:circularimageview:3.0.2'
     compile 'com.github.bumptech.glide:glide:3.7.0'
@@ -98,3 +101,5 @@ dependencies {
     compile 'com.github.jd-alexander:LikeButton:0.2.0'
     compile 'com.github.javiersantos:AppUpdater:2.4'
 }
+
+apply plugin: 'com.google.gms.google-services'
