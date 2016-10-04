@@ -129,6 +129,7 @@ public class EventFragment extends Fragment {
 
             @Override
             public void onEmpty() {
+                emptyCard.setText("We don't have any event");
                 emptyCard.setVisibility(View.VISIBLE);
                 progress.dismissAllowingStateLoss();
             }

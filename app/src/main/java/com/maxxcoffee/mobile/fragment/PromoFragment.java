@@ -135,6 +135,7 @@ public class PromoFragment extends Fragment {
 
             @Override
             public void onEmpty() {
+                emptyCard.setText("We don't have any promo");
                 emptyCard.setVisibility(View.VISIBLE);
                 progress.dismissAllowingStateLoss();
             }

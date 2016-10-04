@@ -2,6 +2,7 @@ package com.maxxcoffee.mobile.task;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.maxxcoffee.mobile.api.ApiManager;
 import com.maxxcoffee.mobile.model.request.GCMRequestModel;
@@ -40,6 +41,7 @@ public abstract class LogoutAllMyDevicesTask extends AsyncTask<GCMRequestModel, 
 
             @Override
             public void failure(RetrofitError error) {
+                Log.d("logoutallmydevices", error.toString());
                 onFailed();
             }
         });

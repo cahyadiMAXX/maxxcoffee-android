@@ -82,4 +82,9 @@ public class Constant {
 
     public final static String PREFERENCE_DEVICE_TOKEN = "maxx-device-token";
     public final static String PREFERENCE_LOGOUT_NOW = "maxx-logout-now";
+
+    //rate app
+    public final static String PREFERENCE_FIRST_LAUNCH = "maxx-first-launch";
+    public final static int DAYS_UNTIL_PROMPT = 3;
+    public final static int LAUNCHES_UNTIL_PROMPT = 7;
 }

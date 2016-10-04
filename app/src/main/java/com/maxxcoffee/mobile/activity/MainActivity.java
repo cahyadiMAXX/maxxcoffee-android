@@ -223,6 +223,16 @@ public class MainActivity extends FragmentActivity {
         });
 
         refresh.setVisibility(View.GONE);
+
+        prepareDrawerList();
+        prepareBackground();
+
+        boolean logoutnow = PreferenceManager.getBool(this, Constant.PREFERENCE_LOGOUT_NOW, false);
+        if(logoutnow){
+            //device ini aj yah
+            logoutThisDevice();
+        }
+
         boolean routeFromTutorial = PreferenceManager.getBool(this, Constant.PREFERENCE_MAIN_FROM_TUTORIAL, false);
         if(routeFromTutorial){
             PreferenceManager.putBool(this, Constant.PREFERENCE_MAIN_FROM_TUTORIAL, false);
@@ -261,6 +271,12 @@ public class MainActivity extends FragmentActivity {
                 setRootBackground(R.drawable.bg_evening);
                 setNavbarBackground(R.drawable.bg_evening_navbar);
             }
+        }
+
+        boolean logoutnow = PreferenceManager.getBool(this, Constant.PREFERENCE_LOGOUT_NOW, false);
+        if(logoutnow){
+            //device ini aj yah
+            logoutThisDevice();
         }
     }
 
@@ -602,13 +618,7 @@ public class MainActivity extends FragmentActivity {
     }
 
     public void logoutNow() {
-        PreferenceManager.putBool(getApplicationContext(), Constant.PREFERENCE_LOGOUT_NOW, false);
-        PreferenceManager.clearPreference(this);
-        DatabaseConfig db = new DatabaseConfig(this);
-        db.clearAllTable();
-        prepareDrawerList();
         logoutAllMyDevices();
-        switchFragment(HOME);
     }
 
     public void logoutAllMyDevices(){
@@ -618,15 +628,27 @@ public class MainActivity extends FragmentActivity {
         LogoutAllMyDevicesTask task = new LogoutAllMyDevicesTask(getApplicationContext()) {
             @Override
             public void onSuccess(String message) {
+                logoutThisDevice();
                 Log.d("logoutallmydevices", message);
             }
 
             @Override
             public void onFailed() {
+                logoutThisDevice();
                 Log.d("logoutallmydevices", "failed");
             }
         };
         task.execute(body);
+    }
+
+    void logoutThisDevice(){
+        PreferenceManager.putBool(getApplicationContext(), Constant.PREFERENCE_LOGOUT_NOW, false);
+        PreferenceManager.clearPreference(MainActivity.this);
+        DatabaseConfig db = new DatabaseConfig(MainActivity.this);
+        db.clearAllTable();
+        prepareDrawerList();
+
+        switchFragment(HOME);
     }
 
     public void setTitle(String mTitle) {
@@ -820,6 +842,34 @@ public class MainActivity extends FragmentActivity {
         listDataChild.put(about, listAbout);
 
         adapter.notifyDataSetChanged();
+    }
+
+    void prepareBackground(){
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.content);
+        int mDayPart = Utils.getDayPart();
+        if (fragment instanceof HomeFragment) {
+            if (mDayPart == Utils.MORNING) {
+                setRootBackground(R.drawable.bg_morning);
+                setNavbarBackground(R.drawable.bg_morning_navbar);
+            } else if (mDayPart == Utils.AFTERNOON) {
+                setRootBackground(R.drawable.bg_afternoon);
+                setNavbarBackground(R.drawable.bg_afternoon_navbar);
+            } else if (mDayPart == Utils.EVENING) {
+                setRootBackground(R.drawable.bg_evening);
+                setNavbarBackground(R.drawable.bg_evening_navbar);
+            }
+        }else{
+            if (mDayPart == Utils.MORNING) {
+                //setRootBackground(R.drawable.bg_morning);
+                setNavbarBackground(R.drawable.bg_morning_navbar);
+            } else if (mDayPart == Utils.AFTERNOON) {
+                //setRootBackground(R.drawable.bg_afternoon);
+                setNavbarBackground(R.drawable.bg_afternoon_navbar);
+            } else if (mDayPart == Utils.EVENING) {
+                //setRootBackground(R.drawable.bg_evening);
+                setNavbarBackground(R.drawable.bg_evening_navbar);
+            }
+        }
     }
 
     @Override
