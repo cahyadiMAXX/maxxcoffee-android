@@ -66,7 +66,8 @@ public class DetailEventFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_detail_event, container, false);
 
         ButterKnife.bind(this, view);
-        activity.setTitle("Event Detail");
+        //activity.setTitle("Event Detail");
+        title.setVisibility(View.GONE);
 
         fetchingData();
         return view;
@@ -109,6 +110,7 @@ public class DetailEventFragment extends Fragment {
 
                 Glide.with(activity).load(entity.getGambar()).placeholder(activity.getResources().getDrawable(R.drawable.ic_no_image)).centerCrop().crossFade().into(image);
                 title.setText(entity.getNama_event());
+                activity.setTitle(entity.getNama_event());
                 date.setText(mDate.toString());
                 time.setText(mTime.toString());
                 location.setText(entity.getNama_lokasi());

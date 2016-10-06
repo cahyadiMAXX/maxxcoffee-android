@@ -230,7 +230,7 @@ public class MainActivity extends FragmentActivity {
         boolean logoutnow = PreferenceManager.getBool(this, Constant.PREFERENCE_LOGOUT_NOW, false);
         if(logoutnow){
             //device ini aj yah
-            logoutThisDevice();
+            //logoutThisDevice();
         }
 
         boolean routeFromTutorial = PreferenceManager.getBool(this, Constant.PREFERENCE_MAIN_FROM_TUTORIAL, false);
@@ -276,7 +276,7 @@ public class MainActivity extends FragmentActivity {
         boolean logoutnow = PreferenceManager.getBool(this, Constant.PREFERENCE_LOGOUT_NOW, false);
         if(logoutnow){
             //device ini aj yah
-            logoutThisDevice();
+            //logoutThisDevice();
         }
     }
 
@@ -493,9 +493,9 @@ public class MainActivity extends FragmentActivity {
                 fragment = new CredentialFragment();
                 break;
             case LOGIN:
-                if(!isGpsEnabled()){
+                /*if(!isGpsEnabled()){
                     settingRequested = false;
-                }
+                }*/
                 if (!settingRequested) {
                     checkSettingApi(LOGIN);
                 } else {
@@ -510,6 +510,7 @@ public class MainActivity extends FragmentActivity {
                             ActivityCompat.requestPermissions(this, PERMISSIONS_LOCATION, 3);
                         }
                     } else {
+                        //Toast.makeText(getApplicationContext(), "switc", Toast.LENGTH_LONG).show();
                         fragment = new LoginFragment();
                     }
                 }
@@ -619,6 +620,14 @@ public class MainActivity extends FragmentActivity {
 
     public void logoutNow() {
         logoutAllMyDevices();
+
+        /*PreferenceManager.putBool(getApplicationContext(), Constant.PREFERENCE_LOGOUT_NOW, false);
+        PreferenceManager.clearPreference(MainActivity.this);
+        DatabaseConfig db = new DatabaseConfig(MainActivity.this);
+        db.clearAllTable();
+        prepareDrawerList();
+
+        switchFragment(HOME);*/
     }
 
     public void logoutAllMyDevices(){
@@ -916,6 +925,7 @@ public class MainActivity extends FragmentActivity {
             }
         } else if(requestCode == 3){
             if (PermissionUtil.verifyPermissions(grantResults)) {
+                //Toast.makeText(getApplicationContext(), "granted", Toast.LENGTH_LONG).show();
                 switchFragment(LOGIN);
             } else {
                 Toast.makeText(this, getResources().getString(R.string.please_enable_gps), Toast.LENGTH_SHORT).show();

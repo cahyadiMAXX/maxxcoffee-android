@@ -20,9 +20,8 @@
             <ImageView
                 android:id="@+id/image"
                 android:layout_width="match_parent"
-                android:layout_height="250dp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/bg_coffee_morning" />
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_no_image_wide" />
         </LinearLayout>
     </android.support.v7.widget.CardView>
 </LinearLayout>

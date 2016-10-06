@@ -66,7 +66,11 @@ public abstract class PromoAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         }
 
         public void populate(final PromoEntity model) {
-            Glide.with(context).load(model.getImage()).placeholder(context.getResources().getDrawable(R.drawable.ic_no_image)).centerCrop().crossFade().into(image);
+            Glide.with(context).load(model.getLs_image())
+                    .placeholder(context.getResources().getDrawable(R.drawable.ic_no_image))
+                    //.centerCrop()
+                    //.fitCenter()
+                    .crossFade().into(image);
             layout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

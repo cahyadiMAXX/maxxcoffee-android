@@ -55,7 +55,9 @@ public class DetailPromoFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_detail_promo, container, false);
 
         ButterKnife.bind(this, view);
-        activity.setTitle("Promo Detail");
+        activity.setTitle(getArguments().getString("title", ""));
+
+        title.setVisibility(View.GONE);
 
         fetchingData();
         return view;
@@ -74,7 +76,9 @@ public class DetailPromoFragment extends Fragment {
 
         syaratLayout.setVisibility(mSyarat.equals("") ? View.GONE : View.VISIBLE);
 
-        DownloadImageTask task = new DownloadImageTask(activity) {
+        Glide.with(activity).load(mImage).placeholder(R.drawable.ic_no_image).into(imageView);
+
+        /*DownloadImageTask task = new DownloadImageTask(activity) {
             @Override
             protected void onDownloadError() {
                 Glide.with(activity).load("").placeholder(R.drawable.ic_no_image).into(imageView);
@@ -87,6 +91,6 @@ public class DetailPromoFragment extends Fragment {
                 imageView.setImageDrawable(drawable);
             }
         };
-        task.execute(mImage);
+        task.execute(mImage);*/
     }
 }

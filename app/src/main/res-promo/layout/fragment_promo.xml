@@ -25,9 +25,9 @@
                 android:layout_height="match_parent"
                 android:background="@color/background_white"
                 android:paddingBottom="8dp"
-                android:paddingLeft="8dp"
+                android:paddingTop="16dp"
                 android:paddingRight="8dp"
-                android:paddingTop="16dp" />
+                android:paddingLeft="8dp" />
 
             <com.maxxcoffee.mobile.widget.textview.TextViewLatoRegular
                 android:id="@+id/empty_card"

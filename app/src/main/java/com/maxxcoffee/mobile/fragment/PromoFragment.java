@@ -67,9 +67,6 @@ public class PromoFragment extends Fragment {
                 intent.putExtra("content", FormActivity.PROMO_DETAIL);
                 intent.putExtras(bundle);
                 startActivity(intent);
-//                PromoDialog dialog = new PromoDialog();
-//                dialog.setArguments(bundle);
-//                dialog.show(getFragmentManager(), null);
             }
         };
     }

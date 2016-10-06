@@ -3,6 +3,7 @@ package com.maxxcoffee.mobile.task;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.maxxcoffee.mobile.api.ApiManager;
 import com.maxxcoffee.mobile.model.request.GCMRequestModel;
@@ -36,6 +37,7 @@ public abstract class LogoutAllMyDevicesTask extends AsyncTask<GCMRequestModel, 
         ApiManager.getApiInterface(context).forceLogoutAll(accessToken, body, new Callback<DefaultResponseModel>() {
             @Override
             public void success(DefaultResponseModel storeResponseModel, Response response) {
+                Toast.makeText(context, "Your session is expired. Please log in again.", Toast.LENGTH_LONG).show();
                 onPostExecute(storeResponseModel);
             }
 
