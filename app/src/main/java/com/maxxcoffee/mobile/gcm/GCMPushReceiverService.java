@@ -153,9 +153,11 @@ public class GCMPushReceiverService extends GcmListenerService {
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     private void showLinkNotifWithImage(final Bundle data){
         String url = "http://google.com";
+        String image = "";
 
         try{
-            url = data.getString("image");
+            url = data.getString("link");
+            image = data.getString("image");
         }catch (Exception e){}
 
         //String image = "https://android.jlelse.eu/creating-an-intro-screen-for-your-app-using-viewpager-pagetransformer-9950517ea04f#.5vmrnxylg";
@@ -166,7 +168,7 @@ public class GCMPushReceiverService extends GcmListenerService {
 
         final Bitmap largeIcon = BitmapFactory.decodeResource(getResources(), R.drawable.logo_maxx);
 
-        if(url.length() > 0){
+        if(image.length() > 0){
             //Bitmap bodyIcon = BitmapFactory.decodeResource(getResources(), R.drawable.notif);
 
             DownloadImageTask task = new DownloadImageTask(getApplicationContext()) {
@@ -199,7 +201,7 @@ public class GCMPushReceiverService extends GcmListenerService {
                     notificationManager.notify(1000, notification);
                 }
             };
-            task.execute(url);
+            task.execute(image);
         }else{
             Notification notification = new NotificationCompat.Builder(getApplicationContext())
                     .setSmallIcon(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ? android.R.color.transparent : R.drawable.logo_maxx)
