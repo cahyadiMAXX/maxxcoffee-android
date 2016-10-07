@@ -65,4 +65,8 @@ public class EventController {
             return data.get(0);
         return null;
     }
+
+    public void clearTable(){
+        database.clearTable(EventEntity.class);
+    }
 }

@@ -99,6 +99,8 @@ public class FaqFragment extends Fragment {
             @Override
             public void onSuccess(List<FaqItemResponseModel> response) {
                     progress.dismissAllowingStateLoss();
+                if(response.size() > 0)
+                    faqController.clearTable();
 
                 if (response != null) {
                     for (FaqItemResponseModel faq : response) {

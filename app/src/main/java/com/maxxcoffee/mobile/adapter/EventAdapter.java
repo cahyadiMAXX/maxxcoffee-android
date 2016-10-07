@@ -68,6 +68,7 @@ public abstract class EventAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             Glide.with(context).load(model.getLs_gambar())
                     .placeholder(context.getResources().getDrawable(R.drawable.ic_no_image))
                     //.centerCrop()
+                    .fitCenter()
                     .crossFade().into(image);
             layout.setOnClickListener(new View.OnClickListener() {
                 @Override

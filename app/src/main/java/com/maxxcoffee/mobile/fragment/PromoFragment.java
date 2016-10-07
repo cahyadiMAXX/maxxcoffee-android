@@ -106,6 +106,7 @@ public class PromoFragment extends Fragment {
         PromoTask task = new PromoTask(activity) {
             @Override
             public void onSuccess(List<PromoItemResponseModel> responseModel) {
+                promoController.clearTable();
 
                 for(int i = 0 ; i < responseModel.size(); i++){
                     PromoItemResponseModel promo = responseModel.get(i);

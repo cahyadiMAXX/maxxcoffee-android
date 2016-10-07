@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Maxx Coffee</string>
+    <string name="app_name">MAXX</string>
     <string name="action_settings">Settings</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -36,4 +36,11 @@
         Excepteur sint occaecat cupidatat non proident,
         sunt in culpa qui officia deserunt mollit anim id est laborum.</string>
     <string name="title_activity_splash_screen">SplashScreenActivity</string>
+    <string name="add_virtual_card">
+        \n
+        1. Virtual Card is not a real physical card, but it has all the same functions / capabilities as a regular MAXX COFFEE World Card.
+        \n2. You could only use your Virtual Card using Android / iOS Mobile Application.
+        \n3. You could top-up your Virtual Card Balance
+        \n4. You could collect Beans
+    </string>
 </resources>

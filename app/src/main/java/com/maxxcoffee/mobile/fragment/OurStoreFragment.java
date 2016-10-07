@@ -136,6 +136,7 @@ public class OurStoreFragment extends Fragment {
         if(!Utils.isConnected(activity)){
             Toast.makeText(activity, activity.getResources().getString(R.string.mobile_data), Toast.LENGTH_LONG).show();
             adapter.notifyDataSetInvalidated();
+            getLocalProvince();
         }else{
             getLocalProvince();
             fetchingData();

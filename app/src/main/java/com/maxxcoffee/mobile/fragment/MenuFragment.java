@@ -92,6 +92,8 @@ public class MenuFragment extends Fragment {
             @Override
             public void onSuccess(Map<String, List<MenuItemResponseModel>> responseModel) {
                 if (responseModel != null) {
+                    menuController.clearTable();
+
                     for (Map.Entry<String, List<MenuItemResponseModel>> entry : responseModel.entrySet()) {
                         String key = entry.getKey();
                         List<MenuItemResponseModel> valueList = entry.getValue();

@@ -68,7 +68,7 @@ public class GCMPushReceiverService extends GcmListenerService {
             }else if(data.getString("tipe").equalsIgnoreCase("my card")){ //my card
                 showLargeNotif(MainActivity.MY_CARD, data);
             }else if(data.getString("tipe").equalsIgnoreCase("add card")){ //add card
-                showLargeNotif(MainActivity.ADD_NEW_CARD, data);
+                showLargeNotif(MainActivity.MY_CARD, data);
             }else if(data.getString("tipe").equalsIgnoreCase("balance transfer")){ //balance transfer
                 showLargeNotif(MainActivity.BALANCE_TRANSFER, data);
             }else if(data.getString("tipe").equalsIgnoreCase("card history")){ //card history
@@ -155,10 +155,21 @@ public class GCMPushReceiverService extends GcmListenerService {
         String url = "http://google.com";
         String image = "";
 
+        boolean isImageExists = false;
+
+        for (String key: data.keySet())
+        {
+            if(key.equals("image")){
+                isImageExists = true;
+                image = data.getString("image");
+                break;
+            }
+        }
+
         try{
             url = data.getString("link");
-            image = data.getString("image");
-        }catch (Exception e){}
+        }catch (Exception e){
+        }
 
         //String image = "https://android.jlelse.eu/creating-an-intro-screen-for-your-app-using-viewpager-pagetransformer-9950517ea04f#.5vmrnxylg";
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
@@ -168,7 +179,7 @@ public class GCMPushReceiverService extends GcmListenerService {
 
         final Bitmap largeIcon = BitmapFactory.decodeResource(getResources(), R.drawable.logo_maxx);
 
-        if(image.length() > 0){
+        if(isImageExists){
             //Bitmap bodyIcon = BitmapFactory.decodeResource(getResources(), R.drawable.notif);
 
             DownloadImageTask task = new DownloadImageTask(getApplicationContext()) {
@@ -234,14 +245,20 @@ public class GCMPushReceiverService extends GcmListenerService {
         stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 
         String url = "";
+        boolean isImageExists = false;
 
-        try{
-            url = data.getString("image");
-        }catch (Exception e){}
+        for (String key: data.keySet())
+        {
+            if(key.equals("image")){
+                isImageExists = true;
+                url = data.getString("image");
+                break;
+            }
+        }
 
         final Bitmap largeIcon = BitmapFactory.decodeResource(getResources(), R.drawable.logo_maxx);
 
-        if(url.length() > 0){
+        if(isImageExists){
             //Bitmap bodyIcon = BitmapFactory.decodeResource(getResources(), R.drawable.notif);
 
             DownloadImageTask task = new DownloadImageTask(getApplicationContext()) {
@@ -265,7 +282,7 @@ public class GCMPushReceiverService extends GcmListenerService {
                             .setContentTitle(data.getString("title"))
                             .setContentText(data.getString("subtitle"))
                             .setAutoCancel(true)
-                            .setStyle(new Notification.BigPictureStyle().bigPicture(bodyIcon))
+                            .setStyle(new Notification.BigPictureStyle().bigPicture(bitmap))
                             .setContentIntent(pendingIntent)
                             .setPriority(Notification.PRIORITY_MAX)
                             .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))

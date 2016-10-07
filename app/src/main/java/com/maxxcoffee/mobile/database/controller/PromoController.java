@@ -80,4 +80,8 @@ public class PromoController {
         }
         return data;
     }
+
+    public void clearTable(){
+        database.clearTable(PromoEntity.class);
+    }
 }

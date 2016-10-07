@@ -93,4 +93,8 @@ public class MenuController {
         }
         return data;
     }
+
+    public void clearTable(){
+        database.clearTable(MenuEntity.class);
+    }
 }

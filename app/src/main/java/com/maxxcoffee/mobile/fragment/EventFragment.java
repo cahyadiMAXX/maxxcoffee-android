@@ -56,7 +56,6 @@ public class EventFragment extends Fragment {
         adapter = new EventAdapter(activity, data) {
             @Override
             public void onCardClick(EventEntity model) {
-
                 Bundle bundle = new Bundle();
                 bundle.putInt("event-id", model.getId_event());
 
@@ -102,6 +101,8 @@ public class EventFragment extends Fragment {
         EventTask task = new EventTask(activity) {
             @Override
             public void onSuccess(List<EventItemResponseModel> responseModel) {
+                eventController.clearTable();
+
                 for (int i = 0 ; i < responseModel.size(); i++) {
                     EventItemResponseModel event = responseModel.get(i);
                     EventEntity entity = new EventEntity();

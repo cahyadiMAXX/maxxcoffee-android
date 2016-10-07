@@ -34,7 +34,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:text="Add Virtual Card"
+                android:text="Get Virtual Card"
                 android:textColor="@android:color/black"
                 android:textSize="16sp" />
         </RelativeLayout>
@@ -51,7 +51,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginBottom="16dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
@@ -59,12 +59,131 @@
                 android:orientation="vertical">
 
                 <com.maxxcoffee.mobile.widget.textview.TextViewLatoRegular
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="@string/lorem_ipsum"
-                    android:textColor="@android:color/black"
-                    android:textSize="13sp" />
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Please note the following :"
+                    android:id="@+id/textView4"
+                    android:textColor="@android:color/black" />
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingLeft="15dp"
+                    android:layout_marginTop="7dp">
+
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="10dp">
+
+                        <com.maxxcoffee.mobile.widget.textview.TextViewLatoRegular
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceSmall"
+                            android:text="1. "
+                            android:id="@+id/textView5"
+                            android:textColor="@android:color/primary_text_light"
+                            android:textSize="14sp" />
+
+                        <com.maxxcoffee.mobile.widget.textview.TextViewLatoRegular
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceSmall"
+                            android:text="Virtual Card is not a real physical card, but it has all the same purpose as a regular MAXX COFFEE World Card."
+                            android:id="@+id/textView6"
+                            android:layout_marginLeft="5dp"
+                            android:textColor="@android:color/primary_text_light"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="5dp">
+
+                        <com.maxxcoffee.mobile.widget.textview.TextViewLatoRegular
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceSmall"
+                            android:text="2. "
+                            android:id="@+id/textView7"
+                            android:textSize="14sp"
+                            android:textColor="@android:color/primary_text_light" />
+
+                        <com.maxxcoffee.mobile.widget.textview.TextViewLatoRegular
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceSmall"
+                            android:text="You could use your Virtual Card using Android / iOS Mobile Application only."
+                            android:id="@+id/textView8"
+                            android:layout_marginLeft="5dp"
+                            android:textSize="14sp"
+                            android:textColor="@android:color/primary_text_light" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="5dp">
+
+                        <com.maxxcoffee.mobile.widget.textview.TextViewLatoRegular
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceSmall"
+                            android:text="3. "
+                            android:id="@+id/textView9"
+                            android:textColor="@android:color/primary_text_light"
+                            android:textSize="14sp" />
+
+                        <com.maxxcoffee.mobile.widget.textview.TextViewLatoRegular
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceSmall"
+                            android:text="You could top-up your Virtual Card Balance."
+                            android:id="@+id/textView10"
+                            android:layout_marginLeft="5dp"
+                            android:textColor="@android:color/primary_text_light"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="5dp">
+
+                        <com.maxxcoffee.mobile.widget.textview.TextViewLatoRegular
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceSmall"
+                            android:text="4. "
+                            android:id="@+id/textView11"
+                            android:textSize="14sp"
+                            android:textColor="@android:color/primary_text_light" />
+
+                        <com.maxxcoffee.mobile.widget.textview.TextViewLatoRegular
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceSmall"
+                            android:text="You could collect Beans."
+                            android:id="@+id/textView12"
+                            android:layout_marginLeft="5dp"
+                            android:textColor="@android:color/primary_text_light"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <!--WebView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/virtual_description"
+                    android:background="@android:color/transparent"
+                    android:layout_marginTop="10dp" /-->
 
             </LinearLayout>
 
@@ -77,24 +196,24 @@
                 android:orientation="horizontal">
 
                 <ImageView
-                    android:layout_width="0dp"
-                    android:layout_height="150dp"
-                    android:layout_marginRight="8dp"
-                    android:layout_weight="1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="230dp"
                     android:scaleType="fitCenter"
-                    android:src="@drawable/sample_card_3" />
+                    android:src="@drawable/virtual_card" />
 
             </LinearLayout>
 
             <com.maxxcoffee.mobile.widget.button.ButtonLatoRegular
-                android:id="@+id/start_scan"
+                android:id="@+id/addVirtualCard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="16dp"
                 android:background="@drawable/button_selector"
-                android:text="Add Virtual Card"
+                android:text="GET Virtual Card"
                 android:textColor="@android:color/white"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginBottom="16dp" />
 
             <!--<com.journeyapps.barcodescanner.DecoratedBarcodeView-->
             <!--android:id="@+id/zxing_barcode_scanner"-->

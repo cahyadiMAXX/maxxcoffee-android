@@ -118,8 +118,8 @@ public class NearMeFragment extends Fragment implements LocationListener {
         if(!Utils.isConnected(activity)){
             Toast.makeText(activity, activity.getResources().getString(R.string.mobile_data), Toast.LENGTH_LONG).show();
             //ambil lokal dulu
-
-            //adapter.notifyDataSetChanged();
+            data.clear();
+            adapter.notifyDataSetChanged();
         }else{
             fetchingData();
         }
@@ -156,6 +156,10 @@ public class NearMeFragment extends Fragment implements LocationListener {
 
         String lat = String.valueOf(gpsTracker.getLatitude());
         String ltg = String.valueOf(gpsTracker.getLongitude());
+
+        if(lat.equals("0.0") || ltg.equals("0.0")){
+            Toast.makeText(getActivity(), "You have to enable GPS or Grant Location Permission to use this feature", Toast.LENGTH_LONG).show();
+        }
 
         NearestStoreTask task = new NearestStoreTask(activity) {
             @Override

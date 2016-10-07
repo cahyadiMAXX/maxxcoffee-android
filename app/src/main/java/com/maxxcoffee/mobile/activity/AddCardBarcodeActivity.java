@@ -61,6 +61,8 @@ public class AddCardBarcodeActivity extends FragmentActivity {
     List<CardEntity> cards;
     List<CardPrimaryEntity> cardPrimaryEntities;
 
+    public static int FLAG_VIRTUAL = 1000;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,7 +81,11 @@ public class AddCardBarcodeActivity extends FragmentActivity {
 
         addVirtualCard.setVisibility(View.GONE);
 
-        if(cards.size() == 0 && cardPrimaryEntities.size() == 0){
+        checkVirtualCardVisible();
+    }
+
+    void checkVirtualCardVisible(){
+        if(cards.size() == 0 && cardPrimaryEntities.size() == 0 && FLAG_VIRTUAL == 1000){
             addVirtualCard.setVisibility(View.VISIBLE);
         }
     }
@@ -92,7 +98,7 @@ public class AddCardBarcodeActivity extends FragmentActivity {
         intent.putExtra("content", FormActivity.RENAME_CARD);
         intent.putExtras(bundle);
 
-        finish();
+        //finish();
         startActivity(intent);
     }
 
@@ -113,109 +119,9 @@ public class AddCardBarcodeActivity extends FragmentActivity {
 
     @OnClick(R.id.virtual)
     public void onAddVirtualCardClick(){
-        Bundle bundle = new Bundle();
-        bundle.putString("content", "You only have 1 chance to get Virtual Card");
-        bundle.putString("default", OptionDialog.CANCEL);
-
-        OptionDialog optionDialog = new OptionDialog() {
-            @Override
-            protected void onOk() {
-                dismiss();
-                try {
-                    if(Utils.isConnected(getApplicationContext())){
-                        getVirtualCard();
-                    }else {
-                        Toast.makeText(getApplicationContext(), getResources().getString(R.string.mobile_data), Toast.LENGTH_LONG).show();
-                    }
-                }catch (Exception e){
-                    Toast.makeText(getApplicationContext(), getResources().getString(R.string.something_wrong), Toast.LENGTH_SHORT).show();
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            protected void onCancel() {
-                dismiss();
-            }
-        };
-        optionDialog.setArguments(bundle);
-        optionDialog.show(getSupportFragmentManager(), null);
-    }
-
-    void getVirtualCard(){
-        //4 task
-        final LoadingDialog progress = new LoadingDialog();
-        progress.show(getSupportFragmentManager(), null);
-
-        final RemoveVirtualCardFromBankTask removeVirtualCardFromBankTask = new RemoveVirtualCardFromBankTask(getApplicationContext()) {
-            @Override
-            public void onSuccess() {
-                progress.dismissAllowingStateLoss();
-                Toast.makeText(getApplicationContext(), "Virtual card successfully added", Toast.LENGTH_LONG).show();
-                onBackClick();
-            }
-
-            @Override
-            public void onFailed() {
-                progress.dismissAllowingStateLoss();
-                Toast.makeText(getApplicationContext(), getResources().getString(R.string.something_wrong), Toast.LENGTH_LONG).show();
-            }
-        };
-
-        final MarksAsVirtualCardTask marksAsVirtualCardTask = new MarksAsVirtualCardTask(getApplicationContext()) {
-            @Override
-            public void onSuccess() {
-                String distributionid = PreferenceManager.getString(getApplicationContext(), Constant.PRERERENCE_CARD_DISTRIBUTION_ID, "");
-                if(distributionid.equals("")){
-                    progress.dismissAllowingStateLoss();
-                    Toast.makeText(getApplicationContext(), getResources().getString(R.string.something_wrong), Toast.LENGTH_LONG).show();
-                }else{
-                    removeVirtualCardFromBankTask.execute(distributionid);
-                }
-            }
-
-            @Override
-            public void onFailed() {
-                Toast.makeText(getApplicationContext(), getResources().getString(R.string.something_wrong), Toast.LENGTH_LONG).show();
-            }
-        };
-
-        final RegisterCardTask registerCardTask = new RegisterCardTask(getApplicationContext()) {
-            @Override
-            public void onSuccess() {
-                String distributionid = PreferenceManager.getString(getApplicationContext(), Constant.PRERERENCE_CARD_DISTRIBUTION_ID, "");
-                if(distributionid.equals("")){
-                    progress.dismissAllowingStateLoss();
-                    Toast.makeText(getApplicationContext(), getResources().getString(R.string.something_wrong), Toast.LENGTH_LONG).show();
-                }else{
-                    marksAsVirtualCardTask.execute(distributionid);
-                }
-            }
-
-            @Override
-            public void onFailed() {
-                //backToOrigin();
-                progress.dismissAllowingStateLoss();
-            }
-        };
-
-        GenerateVirtualCardTask generateVirtualCardTask = new GenerateVirtualCardTask(getApplicationContext()) {
-            @Override
-            public void onSuccess(AddVirtualResponseModel response) {
-                PreferenceManager.putString(getApplicationContext(), Constant.PRERERENCE_CARD_DISTRIBUTION_ID, response.getDistribution_id());
-                RegisterCardRequestModel body = new RegisterCardRequestModel();
-                body.setCardNo(response.getDistribution_id());
-                body.setCardName("Virtual Card");
-                registerCardTask.execute(body);
-            }
-
-            @Override
-            public void onFailed() {
-                progress.dismissAllowingStateLoss();
-                Toast.makeText(getApplicationContext(), getResources().getString(R.string.something_wrong), Toast.LENGTH_LONG).show();
-            }
-        };
-        generateVirtualCardTask.execute();
+        //finish();
+        Intent in = new Intent(getApplicationContext(), AddVirtualCardActivity.class);
+        startActivity(in);
     }
 
     private void backToOrigin(){
@@ -254,7 +160,7 @@ public class AddCardBarcodeActivity extends FragmentActivity {
 
         if (requestCode == 2) {
             if (PermissionUtil.verifyPermissions(grantResults)) {
-                finish();
+                //finish();
                 startActivity(new Intent(this, SimpleScannerActivity.class));
             } else {
                 Toast.makeText(this, "Camera permission is NOT granted", Toast.LENGTH_SHORT).show();
@@ -262,5 +168,11 @@ public class AddCardBarcodeActivity extends FragmentActivity {
         } else {
             super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        checkVirtualCardVisible();
     }
 }

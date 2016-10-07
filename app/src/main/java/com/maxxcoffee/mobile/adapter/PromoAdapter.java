@@ -70,6 +70,7 @@ public abstract class PromoAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                     .placeholder(context.getResources().getDrawable(R.drawable.ic_no_image))
                     //.centerCrop()
                     //.fitCenter()
+                    .fitCenter()
                     .crossFade().into(image);
             layout.setOnClickListener(new View.OnClickListener() {
                 @Override

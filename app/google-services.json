@@ -1,27 +1,27 @@
 {
   "project_info": {
-    "project_number": "955459839264",
-    "firebase_url": "https://maxx-coffee-2749f.firebaseio.com",
-    "project_id": "maxx-coffee-2749f",
-    "storage_bucket": "maxx-coffee-2749f.appspot.com"
+    "project_number": "783321546063",
+    "firebase_url": "https://maxx-coffee-da806.firebaseio.com",
+    "project_id": "maxx-coffee-da806",
+    "storage_bucket": "maxx-coffee-da806.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:955459839264:android:b1c2bd8f85a03e26",
+        "mobilesdk_app_id": "1:783321546063:android:b1c2bd8f85a03e26",
         "android_client_info": {
           "package_name": "com.maxxcoffee.mobile"
         }
       },
       "oauth_client": [
         {
-          "client_id": "955459839264-et01sk09isr93ujuds4c6obj4te36g08.apps.googleusercontent.com",
+          "client_id": "783321546063-4kh79tntc89le3kcpn85u09rr93bqfln.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyA1m-N90AdFRflDswGhZsN3QceYNMv3928"
+          "current_key": "AIzaSyDKc3LawTmpQPzDNXsnFB8E5Tn0SOkozrs"
         }
       ],
       "services": {

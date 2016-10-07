@@ -66,4 +66,8 @@ public class FaqController {
         }
         return data;
     }
+
+    public void clearTable(){
+        database.clearTable(FaqEntity.class);
+    }
 }

@@ -190,4 +190,8 @@ public interface ApiInterface {
 
     @POST("/api/forcelogoutall")
     void forceLogoutAll(@Header("Authorization") String authentication, @Body GCMRequestModel body, Callback<DefaultResponseModel> response);
+
+    //this
+    @POST("/api/gci/card/virtual/add")
+    void addVirtualCard(@Header("Authorization") String authentication, @Body DefaultRequestModel body, Callback<AddVirtualResponseModel> response);
 }
