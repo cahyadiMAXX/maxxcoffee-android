@@ -115,7 +115,8 @@ public class AddVirtualCardActivity extends FragmentActivity {
             public void onSuccess(AddVirtualResponseModel tos) {
                 Toast.makeText(getApplicationContext(), "Virtual card successfully added", Toast.LENGTH_LONG).show();
                 progress.dismissAllowingStateLoss();
-                AddCardBarcodeActivity.FLAG_VIRTUAL = 1001;
+                PreferenceManager.putBool(getApplicationContext(), Constant.PREFERENCE_ROUTE_CARD_SUCCESS, true);
+                PreferenceManager.putInt(getApplicationContext(), Constant.PREFERENCE_CARD_AMOUNT, 1);
                 backToOrigin();
             }
 
@@ -219,7 +220,7 @@ public class AddVirtualCardActivity extends FragmentActivity {
             public void run() {
                 onBackClick();
             }
-        }, 2000);
+        }, 1500);
     }
 
     @Override

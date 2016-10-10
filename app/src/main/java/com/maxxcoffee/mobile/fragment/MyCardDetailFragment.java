@@ -108,6 +108,8 @@ public class MyCardDetailFragment extends Fragment {
 
     private int cardState;
 
+    private int virtual_card = 0;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -125,6 +127,8 @@ public class MyCardDetailFragment extends Fragment {
         activity.showRefreshButton(true);
 
         fetchingCard();
+
+        virtual_card = Integer.valueOf(getArguments().getString("card-is-virtual", "-1"));
 
         try{
             activity.getRefresh().setOnClickListener(new View.OnClickListener() {
@@ -251,6 +255,8 @@ public class MyCardDetailFragment extends Fragment {
                     entity.setBarcode(card.getBarcode());
                     entity.setExpired_date(card.getExpired_date());
                     entity.setPrimary(card.getPrimary());
+                    //global
+                    entity.setVirtual_card(virtual_card);
 
                     cardController.insert(entity);
                 }catch (Exception e){

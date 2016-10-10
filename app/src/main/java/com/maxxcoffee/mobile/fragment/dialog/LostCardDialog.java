@@ -75,14 +75,16 @@ public class LostCardDialog extends DialogFragment {
 
         for (int i = 0; i < data.size(); i++) {
             CardModel model = data.get(i);
-            if (i == 0) {
-                card1.setText(model.getName());
-            } else if (i == 1) {
-                layoutCard2.setVisibility(View.VISIBLE);
-                card2.setText(model.getName());
-            } else if (i == 2) {
-                layoutCard3.setVisibility(View.VISIBLE);
-                card3.setText(model.getName());
+            if(model.getVirtual_card() == 0){
+                if (i == 0) {
+                    card1.setText(model.getName());
+                } else if (i == 1) {
+                    layoutCard2.setVisibility(View.VISIBLE);
+                    card2.setText(model.getName());
+                } else if (i == 2) {
+                    layoutCard3.setVisibility(View.VISIBLE);
+                    card3.setText(model.getName());
+                }
             }
         }
 

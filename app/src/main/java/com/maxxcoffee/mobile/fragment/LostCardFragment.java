@@ -111,9 +111,11 @@ public class LostCardFragment extends Fragment {
                     entity.setBalance(card.getBalance());
                     entity.setPoint(card.getBeans());
                     entity.setExpired_date(card.getExpired_date());
+                    entity.setVirtual_card(card.getVirtual_card());
 
                     cardController.insert(entity);
                 }
+
                 getLocalCard();
                 progress.dismissAllowingStateLoss();
             }
@@ -148,6 +150,7 @@ public class LostCardFragment extends Fragment {
             model.setBalance(card.getBalance());
             model.setPoint(card.getPoint());
             model.setExpired_date(card.getExpired_date());
+            model.setVirtual_card(card.getVirtual_card());
 
             data.add(model);
         }
@@ -158,6 +161,9 @@ public class LostCardFragment extends Fragment {
     public void onLayoutCardClick() {
         if (data.size() == 0) {
             Toast.makeText(activity, "You do not have any connected card. \n\nPlease add card.", Toast.LENGTH_SHORT).show();
+            return;
+        }else if(data.size() == 1 && data.get(0).getVirtual_card() == 1){
+            Toast.makeText(activity, "You do not have any physical card to be reported", Toast.LENGTH_SHORT).show();
             return;
         }
 

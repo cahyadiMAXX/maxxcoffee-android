@@ -16,6 +16,7 @@ public class CardModel {
     private String expired_date;
 
     private int primary;
+    private int virtual_card;
 
     public Integer getId() {
         return id;
@@ -95,6 +96,15 @@ public class CardModel {
 
     public void setPrimary(int primary) {
         this.primary = primary;
+    }
+
+
+    public int getVirtual_card() {
+        return virtual_card;
+    }
+
+    public void setVirtual_card(int virtual_card) {
+        this.virtual_card = virtual_card;
     }
 
     @Override

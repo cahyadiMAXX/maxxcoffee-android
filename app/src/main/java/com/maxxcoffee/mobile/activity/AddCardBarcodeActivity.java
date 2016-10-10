@@ -85,8 +85,14 @@ public class AddCardBarcodeActivity extends FragmentActivity {
     }
 
     void checkVirtualCardVisible(){
-        if(cards.size() == 0 && cardPrimaryEntities.size() == 0 && FLAG_VIRTUAL == 1000){
+        /*if(cards.size() == 0 && cardPrimaryEntities.size() == 0 && FLAG_VIRTUAL == 1000){
             addVirtualCard.setVisibility(View.VISIBLE);
+        }*/
+        int cardAmount = PreferenceManager.getInt(getApplicationContext(), Constant.PREFERENCE_CARD_AMOUNT, 0);
+        if(cardAmount == 0){
+            addVirtualCard.setVisibility(View.VISIBLE);
+        }else{
+            addVirtualCard.setVisibility(View.GONE);
         }
     }
 
@@ -112,7 +118,7 @@ public class AddCardBarcodeActivity extends FragmentActivity {
                 ActivityCompat.requestPermissions(this, PERMISSIONS_LOCATION, 2);
             }
         } else {
-            finish();
+            //finish();
             startActivity(new Intent(this, SimpleScannerActivity.class));
         }
     }

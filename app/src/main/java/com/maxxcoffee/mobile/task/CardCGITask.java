@@ -58,7 +58,9 @@ public abstract class CardCGITask extends AsyncTask<Void, Boolean, CardResponseM
         if (response != null) {
             if (response.getStatus().equals("success")) {
                 onSuccess(response.getResult());
-            } else {
+            } else if(response.getStatus().equalsIgnoreCase("fail")){
+                onFailed(response.getStatus());
+            } else{
                 onFailed();
             }
         }
@@ -67,4 +69,6 @@ public abstract class CardCGITask extends AsyncTask<Void, Boolean, CardResponseM
     public abstract void onSuccess(List<CardItemResponseModel> responseModel);
 
     public abstract void onFailed();
+
+    public abstract void onFailed(String message);
 }

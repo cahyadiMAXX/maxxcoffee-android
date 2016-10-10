@@ -43,6 +43,9 @@ public class CardEntity {
     @DatabaseField
     private int primary;
 
+    @DatabaseField
+    private int virtual_card;
+
     public Integer getId() {
         return id;
     }
@@ -129,5 +132,13 @@ public class CardEntity {
 
     public void setPrimary(int primary) {
         this.primary = primary;
+    }
+
+    public int getVirtual_card() {
+        return virtual_card;
+    }
+
+    public void setVirtual_card(int virtual_card) {
+        this.virtual_card = virtual_card;
     }
 }

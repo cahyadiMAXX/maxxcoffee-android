@@ -99,6 +99,7 @@ public class RenameCardFragment extends Fragment {
                 //sukses, jika akses dari home, maka akan refresh home (jika akses dari home lho ya)
                 Toast.makeText(activity, "Card successfully added", Toast.LENGTH_LONG).show();
                 PreferenceManager.putBool(getActivity(), Constant.PREFERENCE_ROUTE_CARD_SUCCESS, true);
+                PreferenceManager.putInt(getActivity(), Constant.PREFERENCE_CARD_AMOUNT, 1);
                 progress.dismissAllowingStateLoss();
                 backToOrigin();
             }
@@ -126,7 +127,7 @@ public class RenameCardFragment extends Fragment {
                 PreferenceManager.putString(getActivity(), Constant.PREFERENCE_CARD_LAST_UPDATE, strToday);
                 activity.finish();
             }
-        }, 2000);
+        }, 1500);
     }
 
     private boolean isFormValid() {

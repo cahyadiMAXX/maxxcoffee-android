@@ -27,6 +27,8 @@ public class CardItemResponseModel {
     private String created_at;
     private String updated_at;
 
+
+    private int virtual_card;
     private int primary;
     private int cardAmount;
 
@@ -212,6 +214,14 @@ public class CardItemResponseModel {
 
     public void setCardAmount(int cardAmount) {
         this.cardAmount = cardAmount;
+    }
+
+    public int getVirtual_card() {
+        return virtual_card;
+    }
+
+    public void setVirtual_card(int virtual_card) {
+        this.virtual_card = virtual_card;
     }
 
     @Override

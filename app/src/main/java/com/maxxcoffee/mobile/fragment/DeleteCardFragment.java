@@ -187,66 +187,68 @@ public class DeleteCardFragment extends Fragment {
 
         for (int position = 0; position < cards.size(); position++) {
             CardEntity card = cards.get(position);
-            if (position == 0) {
-                cardNumber1 = card.getNumber();
-                name1.setText(card.getName());
-                balance1.setText(String.valueOf(card.getBalance()));
-                point1.setText(String.valueOf(card.getPoint()));
-                DownloadImageTask task = new DownloadImageTask(activity) {
-                    @Override
-                    protected void onDownloadError() {
-                        Glide.with(activity).load("").placeholder(R.drawable.ic_no_image).into(card1);
-                    }
+            if(card.getVirtual_card() == 0){
+                if (position == 0) {
+                    cardNumber1 = card.getNumber();
+                    name1.setText(card.getName());
+                    balance1.setText(String.valueOf(card.getBalance()));
+                    point1.setText(String.valueOf(card.getPoint()));
+                    DownloadImageTask task = new DownloadImageTask(activity) {
+                        @Override
+                        protected void onDownloadError() {
+                            Glide.with(activity).load("").placeholder(R.drawable.ic_no_image).into(card1);
+                        }
 
-                    @Override
-                    protected void onImageDownloaded(Bitmap bitmap) {
-                        Bitmap resizeImage = Utils.getResizedBitmap(bitmap, 0.95f);
-                        Drawable drawable = new BitmapDrawable(getResources(), resizeImage);
-                        card1.setImageDrawable(drawable);
-                    }
-                };
-                task.execute(card.getImage());
-                layoutCard1.setVisibility(View.VISIBLE);
-            } else if (position == 1) {
-                cardNumber2 = card.getNumber();
-                name2.setText(card.getName());
-                balance2.setText(String.valueOf(card.getBalance()));
-                point2.setText(String.valueOf(card.getPoint()));
-                DownloadImageTask task = new DownloadImageTask(activity) {
-                    @Override
-                    protected void onDownloadError() {
-                        Glide.with(activity).load("").placeholder(R.drawable.ic_no_image).into(card2);
-                    }
+                        @Override
+                        protected void onImageDownloaded(Bitmap bitmap) {
+                            Bitmap resizeImage = Utils.getResizedBitmap(bitmap, 0.95f);
+                            Drawable drawable = new BitmapDrawable(getResources(), resizeImage);
+                            card1.setImageDrawable(drawable);
+                        }
+                    };
+                    task.execute(card.getImage());
+                    layoutCard1.setVisibility(View.VISIBLE);
+                } else if (position == 1) {
+                    cardNumber2 = card.getNumber();
+                    name2.setText(card.getName());
+                    balance2.setText(String.valueOf(card.getBalance()));
+                    point2.setText(String.valueOf(card.getPoint()));
+                    DownloadImageTask task = new DownloadImageTask(activity) {
+                        @Override
+                        protected void onDownloadError() {
+                            Glide.with(activity).load("").placeholder(R.drawable.ic_no_image).into(card2);
+                        }
 
-                    @Override
-                    protected void onImageDownloaded(Bitmap bitmap) {
-                        Bitmap resizeImage = Utils.getResizedBitmap(bitmap, 0.95f);
-                        Drawable drawable = new BitmapDrawable(getResources(), resizeImage);
-                        card2.setImageDrawable(drawable);
-                    }
-                };
-                task.execute(card.getImage());
-                layoutCard2.setVisibility(View.VISIBLE);
-            } else if (position == 2) {
-                cardNumber3 = card.getNumber();
-                name3.setText(card.getName());
-                balance3.setText(String.valueOf(card.getBalance()));
-                point3.setText(String.valueOf(card.getPoint()));
-                DownloadImageTask task = new DownloadImageTask(activity) {
-                    @Override
-                    protected void onDownloadError() {
-                        Glide.with(activity).load("").placeholder(R.drawable.ic_no_image).into(card3);
-                    }
+                        @Override
+                        protected void onImageDownloaded(Bitmap bitmap) {
+                            Bitmap resizeImage = Utils.getResizedBitmap(bitmap, 0.95f);
+                            Drawable drawable = new BitmapDrawable(getResources(), resizeImage);
+                            card2.setImageDrawable(drawable);
+                        }
+                    };
+                    task.execute(card.getImage());
+                    layoutCard2.setVisibility(View.VISIBLE);
+                } else if (position == 2) {
+                    cardNumber3 = card.getNumber();
+                    name3.setText(card.getName());
+                    balance3.setText(String.valueOf(card.getBalance()));
+                    point3.setText(String.valueOf(card.getPoint()));
+                    DownloadImageTask task = new DownloadImageTask(activity) {
+                        @Override
+                        protected void onDownloadError() {
+                            Glide.with(activity).load("").placeholder(R.drawable.ic_no_image).into(card3);
+                        }
 
-                    @Override
-                    protected void onImageDownloaded(Bitmap bitmap) {
-                        Bitmap resizeImage = Utils.getResizedBitmap(bitmap, 0.95f);
-                        Drawable drawable = new BitmapDrawable(getResources(), resizeImage);
-                        card3.setImageDrawable(drawable);
-                    }
-                };
-                task.execute(card.getImage());
-                layoutCard3.setVisibility(View.VISIBLE);
+                        @Override
+                        protected void onImageDownloaded(Bitmap bitmap) {
+                            Bitmap resizeImage = Utils.getResizedBitmap(bitmap, 0.95f);
+                            Drawable drawable = new BitmapDrawable(getResources(), resizeImage);
+                            card3.setImageDrawable(drawable);
+                        }
+                    };
+                    task.execute(card.getImage());
+                    layoutCard3.setVisibility(View.VISIBLE);
+                }
             }
         }
     }

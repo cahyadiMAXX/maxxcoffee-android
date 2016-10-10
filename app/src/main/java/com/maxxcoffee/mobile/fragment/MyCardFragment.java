@@ -84,6 +84,7 @@ public class MyCardFragment extends Fragment {
                 Bundle bundle = new Bundle();
                 bundle.putString("card-id", String.valueOf(model.getId()));
                 bundle.putString("card-number", String.valueOf(model.getNumber()));
+                bundle.putString("card-is-virtual", String.valueOf(model.getVirtual_card()));
                 Intent intent = new Intent(activity, FormActivity.class);
                 intent.putExtra("content", FormActivity.DETAIL_CARD);
                 intent.putExtras(bundle);
@@ -228,6 +229,8 @@ public class MyCardFragment extends Fragment {
             public void onSuccess(List<CardItemResponseModel> responseModel) {
                 //Log.d("responseModel", responseModel.toString());
 
+                PreferenceManager.putInt(activity, Constant.PREFERENCE_CARD_AMOUNT, responseModel.size());
+
                 if (responseModel.size() > 0)
                     cardController.clear();
 
@@ -244,6 +247,7 @@ public class MyCardFragment extends Fragment {
                     entity.setBarcode(card.getBarcode());
                     entity.setExpired_date(card.getExpired_date());
                     entity.setPrimary(card.getPrimary());
+                    entity.setVirtual_card(card.getVirtual_card());
 
                     cardController.insert(entity);
                 }
@@ -252,7 +256,15 @@ public class MyCardFragment extends Fragment {
             }
 
             @Override
+            public void onFailed(String message) {
+                //Toast.makeText(getActivity(), getResources().getString(R.string.no_card_alert), Toast.LENGTH_LONG).show();
+                PreferenceManager.putInt(activity, Constant.PREFERENCE_CARD_AMOUNT, 0);
+                progress.dismissAllowingStateLoss();
+            }
+
+            @Override
             public void onFailed() {
+                Toast.makeText(getActivity(), getResources().getString(R.string.something_wrong), Toast.LENGTH_LONG).show();
                 progress.dismissAllowingStateLoss();
             }
         };
