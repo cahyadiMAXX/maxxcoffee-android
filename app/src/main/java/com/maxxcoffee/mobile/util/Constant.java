@@ -87,4 +87,7 @@ public class Constant {
     public final static String PREFERENCE_FIRST_LAUNCH = "maxx-first-launch";
     public final static int DAYS_UNTIL_PROMPT = 3;
     public final static int LAUNCHES_UNTIL_PROMPT = 7;
+
+    //virtual card
+    public final static String PREFERENCE_HAS_VIRTUAL_CARD = "maxx-has-virtual-card";
 }

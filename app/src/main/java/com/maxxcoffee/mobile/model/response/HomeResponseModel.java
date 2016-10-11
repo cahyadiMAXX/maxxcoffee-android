@@ -18,6 +18,7 @@ public class HomeResponseModel {
     private int beans;
 
     private int cardAmount;
+    private int virtual_card;
 
     public String getSalam() {
         return salam;
@@ -89,6 +90,14 @@ public class HomeResponseModel {
 
     public void setCardAmount(int cardAmount) {
         this.cardAmount = cardAmount;
+    }
+
+    public int getVirtual_card() {
+        return virtual_card;
+    }
+
+    public void setVirtual_card(int virtual_card) {
+        this.virtual_card = virtual_card;
     }
 
     @Override

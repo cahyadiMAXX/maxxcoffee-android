@@ -11,6 +11,8 @@ public class GCMRequestModel {
     private String device_id;
     private String device_token;
 
+    private String tipe;
+
     public String getToken() {
         return token;
     }
@@ -41,5 +43,13 @@ public class GCMRequestModel {
 
     public void setDevice_id(String device_id) {
         this.device_id = device_id;
+    }
+
+    public String getTipe() {
+        return tipe;
+    }
+
+    public void setTipe(String tipe) {
+        this.tipe = tipe;
     }
 }

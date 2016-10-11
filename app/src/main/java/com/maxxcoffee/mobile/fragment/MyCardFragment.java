@@ -63,6 +63,8 @@ public class MyCardFragment extends Fragment {
     FrameLayout disableLayer;
     @Bind(R.id.fab_primary)
     FloatingActionButton fab_primary;
+    @Bind(R.id.fab_scan)
+    FloatingActionButton fab_scan;
 
     private MainActivity activity;
     private List<CardEntity> data;
@@ -122,7 +124,7 @@ public class MyCardFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_card, container, false);
+        final View view = inflater.inflate(R.layout.fragment_card, container, false);
 
         ButterKnife.bind(this, view);
         activity.setTitle("My Card");
@@ -134,6 +136,13 @@ public class MyCardFragment extends Fragment {
         recyclerView.setAdapter(adapter);
 
         checkToLoadCard();
+
+        int virtual = PreferenceManager.getInt(getActivity(), Constant.PREFERENCE_HAS_VIRTUAL_CARD, 0);
+        if(virtual == 0){
+            fabMenu.setVisibility(View.VISIBLE);
+        }else{
+            fabMenu.setVisibility(View.GONE);
+        }
 
         fabMenu.setOnMenuButtonClickListener(new View.OnClickListener() {
             @Override
@@ -147,6 +156,7 @@ public class MyCardFragment extends Fragment {
                     }else{
                         fabMenu.setVisibility(View.VISIBLE);
                     }
+
                     disableLayer.setVisibility(View.VISIBLE);
                     fabMenu.open(true);
                 }

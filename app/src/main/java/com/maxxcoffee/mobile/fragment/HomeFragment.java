@@ -366,6 +366,7 @@ public class HomeFragment extends Fragment {
         name.setText(mName);
         balance.setText(mBalance.equals("") ? "" : "IDR " + mBalance);
         point.setText(mBeans.equals("") ? "" : mBeans + " Beans");
+        activity.prepareDrawerList();
     }
 
     private void fetchingData() {
@@ -383,6 +384,7 @@ public class HomeFragment extends Fragment {
                 PreferenceManager.putString(activity, Constant.PREFERENCE_EMAIL, response.getEmail());
                 PreferenceManager.putString(activity, Constant.PREFERENCE_PHONE, response.getPhone());
                 PreferenceManager.putInt(activity, Constant.PREFERENCE_CARD_AMOUNT, response.getCardAmount());
+                PreferenceManager.putInt(activity, Constant.PREFERENCE_HAS_VIRTUAL_CARD, response.getVirtual_card());
 
                 CardItemResponseModel card = null;
                 try{

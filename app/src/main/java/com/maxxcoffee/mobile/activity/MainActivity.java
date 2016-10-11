@@ -722,6 +722,7 @@ public class MainActivity extends FragmentActivity {
         listDataHeader.clear();
         listDataChild.clear();
         boolean isLoggedIn = PreferenceManager.getBool(this, Constant.PREFERENCE_LOGGED_IN, false);
+        int virtual = PreferenceManager.getInt(this, Constant.PREFERENCE_HAS_VIRTUAL_CARD, 0);
 
         //      PARENT
         ParentDrawerModel home = new ParentDrawerModel();
@@ -833,9 +834,11 @@ public class MainActivity extends FragmentActivity {
 
         List<ChildDrawerModel> listCard = new ArrayList<>();
         listCard.add(childCard1);
-        listCard.add(childCard3);
         listCard.add(childCard4);
-        listCard.add(childCard5);
+        if(virtual == 0){
+            listCard.add(childCard3);
+            listCard.add(childCard5);
+        }
 
         List<ChildDrawerModel> listAbout = new ArrayList<>();
         listAbout.add(childAbout5);

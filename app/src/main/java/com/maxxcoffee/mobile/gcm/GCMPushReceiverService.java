@@ -150,7 +150,7 @@ public class GCMPushReceiverService extends GcmListenerService {
         notificationManager.notify(1000, notification);
     }
 
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+    //@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     private void showLinkNotifWithImage(final Bundle data){
         String url = "http://google.com";
         String image = "";
@@ -177,7 +177,7 @@ public class GCMPushReceiverService extends GcmListenerService {
         final NotificationManager notificationManager =
                 (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
 
-        final Bitmap largeIcon = BitmapFactory.decodeResource(getResources(), R.drawable.logo_maxx);
+        final Bitmap largeIcon = BitmapFactory.decodeResource(getResources(), R.drawable.logo_maxx_small);
 
         if(isImageExists){
             //Bitmap bodyIcon = BitmapFactory.decodeResource(getResources(), R.drawable.notif);
@@ -198,7 +198,7 @@ public class GCMPushReceiverService extends GcmListenerService {
                     bigPictureStyle.setSummaryText(data.getString("subtitle"));
 
                     Notification notification = new Notification.Builder(getApplicationContext())
-                            .setSmallIcon(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ? android.R.color.transparent : R.drawable.logo_maxx)
+                            .setSmallIcon(R.drawable.logo_maxx_white)
                             .setLargeIcon(largeIcon)
                             .setContentTitle(data.getString("title"))
                             .setContentText(data.getString("subtitle"))
@@ -215,7 +215,7 @@ public class GCMPushReceiverService extends GcmListenerService {
             task.execute(image);
         }else{
             Notification notification = new NotificationCompat.Builder(getApplicationContext())
-                    .setSmallIcon(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ? android.R.color.transparent : R.drawable.logo_maxx)
+                    .setSmallIcon(R.drawable.logo_maxx_white)
                     .setLargeIcon(largeIcon)
                     .setContentTitle(data.getString("title"))
                     .setContentText(data.getString("subtitle"))
@@ -230,7 +230,7 @@ public class GCMPushReceiverService extends GcmListenerService {
         }
     }
 
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+    //@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     private void showLargeNotif(int content, final Bundle data){
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         //intent.putExtra("message", message);
@@ -256,7 +256,7 @@ public class GCMPushReceiverService extends GcmListenerService {
             }
         }
 
-        final Bitmap largeIcon = BitmapFactory.decodeResource(getResources(), R.drawable.logo_maxx);
+        final Bitmap largeIcon = BitmapFactory.decodeResource(getResources(), R.drawable.logo_maxx_small);
 
         if(isImageExists){
             //Bitmap bodyIcon = BitmapFactory.decodeResource(getResources(), R.drawable.notif);
@@ -277,8 +277,9 @@ public class GCMPushReceiverService extends GcmListenerService {
                     bigPictureStyle.setSummaryText(data.getString("subtitle"));
 
                     Notification notification = new Notification.Builder(getApplicationContext())
-                            .setSmallIcon(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ? android.R.color.transparent : R.drawable.logo_maxx)
+                            .setSmallIcon(R.drawable.logo_maxx_white)
                             .setLargeIcon(largeIcon)
+                            //.setColor(getResources().getColor(android.R.color.holo_blue_light))
                             .setContentTitle(data.getString("title"))
                             .setContentText(data.getString("subtitle"))
                             .setAutoCancel(true)
@@ -294,8 +295,9 @@ public class GCMPushReceiverService extends GcmListenerService {
             task.execute(url);
         }else{
             Notification notification = new NotificationCompat.Builder(getApplicationContext())
-                    .setSmallIcon(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ? android.R.color.transparent : R.drawable.logo_maxx)
+                    .setSmallIcon(R.drawable.logo_maxx_white)
                     .setLargeIcon(largeIcon)
+                    //.setColor(getResources().getColor(android.R.color.holo_blue_light))
                     .setContentTitle(data.getString("title"))
                     .setContentText(data.getString("subtitle"))
                     .setAutoCancel(true)
