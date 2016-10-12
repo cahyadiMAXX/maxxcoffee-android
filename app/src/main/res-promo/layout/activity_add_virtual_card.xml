@@ -92,7 +92,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textAppearance="?android:attr/textAppearanceSmall"
-                            android:text="Virtual Card is not a real physical card, but it has all the same purpose as a regular MAXX COFFEE World Card."
+                            android:text="Virtual Card is not a real physical card, but it has the same purpose as a regular MAXX COFFEE World Card."
                             android:id="@+id/textView6"
                             android:layout_marginLeft="5dp"
                             android:textColor="@android:color/primary_text_light"

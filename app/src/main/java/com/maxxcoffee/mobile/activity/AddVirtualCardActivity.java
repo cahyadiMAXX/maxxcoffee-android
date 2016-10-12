@@ -128,7 +128,7 @@ public class AddVirtualCardActivity extends FragmentActivity {
 
             @Override
             public void onFailed(AddVirtualResponseModel tos) {
-                Toast.makeText(getApplicationContext(), tos.getStatus(), Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), tos.getMessages(), Toast.LENGTH_LONG).show();
                 progress.dismissAllowingStateLoss();
             }
         };

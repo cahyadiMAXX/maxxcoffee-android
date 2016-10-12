@@ -9,6 +9,13 @@ public class AddVirtualResponseModel {
     private String distribution_id;
     private String card_number;
 
+    private String message;
+
+    //terserah kau lah bang
+    private String messages;
+
+    private String permission;
+
     public String getStatus() {
         return status;
     }
@@ -31,5 +38,29 @@ public class AddVirtualResponseModel {
 
     public void setCard_number(String card_number) {
         this.card_number = card_number;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public String getPermission() {
+        return permission;
+    }
+
+    public void setPermission(String permission) {
+        this.permission = permission;
+    }
+
+    public String getMessages() {
+        return messages;
+    }
+
+    public void setMessages(String messages) {
+        this.messages = messages;
     }
 }

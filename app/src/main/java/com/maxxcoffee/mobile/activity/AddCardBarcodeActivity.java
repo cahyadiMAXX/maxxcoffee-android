@@ -29,6 +29,8 @@ import com.maxxcoffee.mobile.model.CardModel;
 import com.maxxcoffee.mobile.model.request.MarkVirtualCardRequestModel;
 import com.maxxcoffee.mobile.model.request.RegisterCardRequestModel;
 import com.maxxcoffee.mobile.model.response.AddVirtualResponseModel;
+import com.maxxcoffee.mobile.model.response.DefaultResponseModel;
+import com.maxxcoffee.mobile.task.CheckCardTaskPermission;
 import com.maxxcoffee.mobile.task.GenerateVirtualCardTask;
 import com.maxxcoffee.mobile.task.MarksAsVirtualCardTask;
 import com.maxxcoffee.mobile.task.RegisterCardTask;
@@ -81,7 +83,44 @@ public class AddCardBarcodeActivity extends FragmentActivity {
 
         addVirtualCard.setVisibility(View.GONE);
 
-        checkVirtualCardVisible();
+        //checkVirtualCardVisible();
+    }
+
+    void checkVirtualCardPermission(){
+        final LoadingDialog progress = new LoadingDialog();
+        progress.show(getSupportFragmentManager(), null);
+
+        CheckCardTaskPermission task = new CheckCardTaskPermission(getApplicationContext()) {
+
+            @Override
+            public void onSuccess() {
+                progress.dismissAllowingStateLoss();
+                addVirtualCard.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onSuccess(AddVirtualResponseModel tos) {
+                Toast.makeText(getApplicationContext(), tos.getMessages(), Toast.LENGTH_LONG).show();
+                progress.dismissAllowingStateLoss();
+                addVirtualCard.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onFailed() {
+                Toast.makeText(getApplicationContext(), getResources().getString(R.string.something_wrong), Toast.LENGTH_LONG).show();
+                progress.dismissAllowingStateLoss();
+                addVirtualCard.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onFailed(AddVirtualResponseModel tos) {
+                Toast.makeText(getApplicationContext(), tos.getMessages(), Toast.LENGTH_LONG).show();
+                progress.dismissAllowingStateLoss();
+                addVirtualCard.setVisibility(View.GONE);
+            }
+        };
+
+        task.execute();
     }
 
     void checkVirtualCardVisible(){
@@ -90,7 +129,8 @@ public class AddCardBarcodeActivity extends FragmentActivity {
         }*/
         int cardAmount = PreferenceManager.getInt(getApplicationContext(), Constant.PREFERENCE_CARD_AMOUNT, 0);
         if(cardAmount == 0){
-            addVirtualCard.setVisibility(View.VISIBLE);
+            //addVirtualCard.setVisibility(View.VISIBLE);
+            checkVirtualCardPermission();
         }else{
             addVirtualCard.setVisibility(View.GONE);
         }

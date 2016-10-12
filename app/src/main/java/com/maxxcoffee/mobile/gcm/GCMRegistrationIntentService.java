@@ -78,7 +78,7 @@ public class GCMRegistrationIntentService extends IntentService {
         gcmRequestModel.setDevice_token(token);
         gcmRequestModel.setDevice_id(deviceId);
         gcmRequestModel.setEmail(PreferenceManager.getString(getApplicationContext(), Constant.PREFERENCE_EMAIL, ""));
-        //gcmRequestModel.setTipe("android");
+        gcmRequestModel.setTipe("android");
 
         final UpdateDeviceTokenTask task = new UpdateDeviceTokenTask(getApplicationContext()) {
             @Override

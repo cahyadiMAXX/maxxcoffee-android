@@ -194,4 +194,7 @@ public interface ApiInterface {
     //this
     @POST("/api/gci/card/virtual/add")
     void addVirtualCard(@Header("Authorization") String authentication, @Body DefaultRequestModel body, Callback<AddVirtualResponseModel> response);
+
+    @POST("/api/virtualcardpermission")
+    void virtualCardPermission(@Header("Authorization") String authentication, @Body DefaultRequestModel body, Callback<AddVirtualResponseModel> response);
 }
