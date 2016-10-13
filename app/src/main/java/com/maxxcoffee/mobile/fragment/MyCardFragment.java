@@ -102,8 +102,9 @@ public class MyCardFragment extends Fragment {
                         disableLayer.setVisibility(View.GONE);
                         fabMenu.close(true);
                     }
-                    getLocalCard();
+                    //getLocalCard();
                     fetchingData();
+                    //checkToLoadCard();
                 }
             });
         }catch (Exception e){e.printStackTrace();}

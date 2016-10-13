@@ -90,7 +90,7 @@
                     <com.maxxcoffee.mobile.widget.textview.TextViewLatoRegular
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Thank you for signing up to MAXX-COFFEE"
+                        android:text="Thank you for signing up to MAXX COFFEE"
                         android:textColor="@android:color/white"
                         android:textSize="14sp" />
 

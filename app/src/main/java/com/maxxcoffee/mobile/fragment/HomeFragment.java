@@ -28,6 +28,7 @@ import com.maxxcoffee.mobile.R;
 import com.maxxcoffee.mobile.activity.AddCardBarcodeActivity;
 import com.maxxcoffee.mobile.activity.FormActivity;
 import com.maxxcoffee.mobile.activity.MainActivity;
+import com.maxxcoffee.mobile.activity.VerificationActivity;
 import com.maxxcoffee.mobile.database.controller.CardPrimaryController;
 import com.maxxcoffee.mobile.database.entity.CardEntity;
 import com.maxxcoffee.mobile.database.entity.CardPrimaryEntity;
@@ -223,9 +224,20 @@ public class HomeFragment extends Fragment {
         buttonAddCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PreferenceManager.putBool(activity, Constant.PREFERENCE_ROUTE_CARD_SUCCESS, false);
-                Intent intent = new Intent(activity, AddCardBarcodeActivity.class);
-                startActivity(intent);
+                boolean isSmsVerified = PreferenceManager.getBool(activity, Constant.PREFERENCE_SMS_VERIFICATION, false);
+                boolean isEmailVerified = PreferenceManager.getBool(activity, Constant.PREFERENCE_EMAIL_VERIFICATION, false);
+
+                if (isSmsVerified && isEmailVerified) {
+                    PreferenceManager.putBool(activity, Constant.PREFERENCE_ROUTE_CARD_SUCCESS, false);
+                    Intent intent = new Intent(activity, AddCardBarcodeActivity.class);
+                    startActivity(intent);
+                }else{
+                    Intent intent = new Intent(activity, VerificationActivity.class);
+                    intent.putExtra("redirect-fragment", MainActivity.HOME);
+
+                    startActivity(intent);
+                }
+
             }
         });
 

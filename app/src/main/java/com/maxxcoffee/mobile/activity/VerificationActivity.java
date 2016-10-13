@@ -217,13 +217,13 @@ public class VerificationActivity extends AppCompatActivity {
                 @Override
                 public void onSuccess() {
                         progress.dismissAllowingStateLoss();
-                    showDialog("We have send the verification link to your email.");
+                    showDialog("We have sent the verification link to your email.");
                 }
 
                 @Override
                 public void onWait(String second) {
                         progress.dismissAllowingStateLoss();
-                    showDialog("We have send the verification link to your email. Please wait " + second + " second to retry");
+                    showDialog("We have sent the verification link to your email. Please wait " + second + " second to retry");
                 }
 
                 @Override
