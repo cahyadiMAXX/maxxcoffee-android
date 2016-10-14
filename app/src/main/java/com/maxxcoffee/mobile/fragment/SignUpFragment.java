@@ -2,6 +2,7 @@ package com.maxxcoffee.mobile.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -206,12 +207,26 @@ public class SignUpFragment extends Fragment {
             password.setError("Please verify your password");
             Toast.makeText(activity, "Please verify your password", Toast.LENGTH_SHORT).show();
             return false;
+        } else{
+            Log.d("passwordasu", String.valueOf(mPassword.length()));
+            if(mPassword.length() < 8){
+                password.setError("Password must be at least 8 characters");
+                Toast.makeText(activity, "Password must be at least 8 characters", Toast.LENGTH_SHORT).show();
+                return false;
+            }
         }
         if (mPasswordConfirm.equals("")) {
             passwordConfirm.setError("Please verify your password confirmation");
             Toast.makeText(activity, "Please verify your password confirmation", Toast.LENGTH_SHORT).show();
             return false;
-        }
+        } /*else{
+            Log.d("passwordasu", String.valueOf(mPassword.length()));
+            if(mPasswordConfirm.length() < 8){
+                passwordConfirm.setError("Password must be at least 8 characters");
+                Toast.makeText(activity, "Password must be at least 8 characters", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        }*/
 
         if (!mPassword.equals(mPasswordConfirm)) {
             passwordConfirm.setError("Please verify your password confirmation");

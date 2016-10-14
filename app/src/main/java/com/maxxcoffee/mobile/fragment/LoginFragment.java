@@ -261,7 +261,7 @@ public class LoginFragment extends Fragment {
 
                 progress.dismissAllowingStateLoss();
 
-                Toast.makeText(activity, "The credentials you entered don't match.", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(activity, "The credentials you entered don't match.", Toast.LENGTH_SHORT).show();
             }
         };
 
