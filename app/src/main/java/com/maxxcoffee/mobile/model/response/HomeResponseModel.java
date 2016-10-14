@@ -20,6 +20,9 @@ public class HomeResponseModel {
     private int cardAmount;
     private int virtual_card;
 
+    private String verifikasi_email;
+    private String verifikasi_sms;
+
     public String getSalam() {
         return salam;
     }
@@ -100,6 +103,22 @@ public class HomeResponseModel {
         this.virtual_card = virtual_card;
     }
 
+    public String getVerifikasi_email() {
+        return verifikasi_email;
+    }
+
+    public void setVerifikasi_email(String verifikasi_email) {
+        this.verifikasi_email = verifikasi_email;
+    }
+
+    public String getVerifikasi_sms() {
+        return verifikasi_sms;
+    }
+
+    public void setVerifikasi_sms(String verifikasi_sms) {
+        this.verifikasi_sms = verifikasi_sms;
+    }
+
     @Override
     public String toString() {
         return "HomeResponseModel{" +
@@ -110,6 +129,11 @@ public class HomeResponseModel {
                 ", primaryCard=" + primaryCard +
                 ", email='" + email + '\'' +
                 ", phone='" + phone + '\'' +
+                ", beans=" + beans +
+                ", cardAmount=" + cardAmount +
+                ", virtual_card=" + virtual_card +
+                ", verifikasi_email='" + verifikasi_email + '\'' +
+                ", verifikasi_sms='" + verifikasi_sms + '\'' +
                 '}';
     }
 }

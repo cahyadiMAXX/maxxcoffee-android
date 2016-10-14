@@ -397,6 +397,8 @@ public class HomeFragment extends Fragment {
                 PreferenceManager.putString(activity, Constant.PREFERENCE_PHONE, response.getPhone());
                 PreferenceManager.putInt(activity, Constant.PREFERENCE_CARD_AMOUNT, response.getCardAmount());
                 PreferenceManager.putInt(activity, Constant.PREFERENCE_HAS_VIRTUAL_CARD, response.getVirtual_card());
+                PreferenceManager.putBool(activity, Constant.PREFERENCE_SMS_VERIFICATION, response.getVerifikasi_sms().equalsIgnoreCase("yes"));
+                PreferenceManager.putBool(activity, Constant.PREFERENCE_EMAIL_VERIFICATION, response.getVerifikasi_email().equalsIgnoreCase("yes"));
 
                 CardItemResponseModel card = null;
                 try{

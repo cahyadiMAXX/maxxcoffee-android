@@ -496,7 +496,7 @@ public class MainActivity extends FragmentActivity {
                 /*if(!isGpsEnabled()){
                     settingRequested = false;
                 }*/
-                if (!settingRequested) {
+                /*if (!settingRequested) {
                     checkSettingApi(LOGIN);
                 } else {
                     if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
@@ -513,10 +513,11 @@ public class MainActivity extends FragmentActivity {
                         //Toast.makeText(getApplicationContext(), "switc", Toast.LENGTH_LONG).show();
                         fragment = new LoginFragment();
                     }
-                }
+                }*/
+                fragment = new LoginFragment();
                 break;
             case SIGNUP:
-                if(!isGpsEnabled()){
+                /*if(!isGpsEnabled()){
                     settingRequested = false;
                 }
                 if (!settingRequested) {
@@ -535,7 +536,8 @@ public class MainActivity extends FragmentActivity {
                     } else {
                         fragment = new SignUpFragment();
                     }
-                }
+                }*/
+                fragment = new SignUpFragment();
                 break;
             case SIGNUP_INFO:
                 fragment = new SignUpInfoFragment();
@@ -631,23 +633,27 @@ public class MainActivity extends FragmentActivity {
     }
 
     public void logoutAllMyDevices(){
-        GCMRequestModel body = new GCMRequestModel();
-        body.setEmail(PreferenceManager.getString(getApplicationContext(), Constant.PREFERENCE_EMAIL, ""));
+        if(Utils.isConnected(getApplicationContext())){
+            GCMRequestModel body = new GCMRequestModel();
+            body.setEmail(PreferenceManager.getString(getApplicationContext(), Constant.PREFERENCE_EMAIL, ""));
 
-        LogoutAllMyDevicesTask task = new LogoutAllMyDevicesTask(getApplicationContext()) {
-            @Override
-            public void onSuccess(String message) {
-                logoutThisDevice();
-                Log.d("logoutallmydevices", message);
-            }
+            LogoutAllMyDevicesTask task = new LogoutAllMyDevicesTask(getApplicationContext()) {
+                @Override
+                public void onSuccess(String message) {
+                    logoutThisDevice();
+                    Log.d("logoutallmydevices", message);
+                }
 
-            @Override
-            public void onFailed() {
-                logoutThisDevice();
-                Log.d("logoutallmydevices", "failed");
-            }
-        };
-        task.execute(body);
+                @Override
+                public void onFailed() {
+                    logoutThisDevice();
+                    Log.d("logoutallmydevices", "failed");
+                }
+            };
+            task.execute(body);
+        }else {
+            logoutThisDevice();
+        }
     }
 
     void logoutThisDevice(){

@@ -117,7 +117,8 @@ public class AddVirtualCardActivity extends FragmentActivity {
                 progress.dismissAllowingStateLoss();
                 PreferenceManager.putBool(getApplicationContext(), Constant.PREFERENCE_ROUTE_CARD_SUCCESS, true);
                 PreferenceManager.putInt(getApplicationContext(), Constant.PREFERENCE_CARD_AMOUNT, 1);
-                backToOrigin();
+                //backToOrigin();
+                backToMyCard();
             }
 
             @Override
@@ -192,6 +193,11 @@ public class AddVirtualCardActivity extends FragmentActivity {
                 //backToOrigin();
                 progress.dismissAllowingStateLoss();
             }
+
+            @Override
+            public void onFailed(String message) {
+                progress.dismissAllowingStateLoss();
+            }
         };
 
         GenerateVirtualCardTask generateVirtualCardTask = new GenerateVirtualCardTask(getApplicationContext()) {
@@ -219,6 +225,24 @@ public class AddVirtualCardActivity extends FragmentActivity {
             @Override
             public void run() {
                 onBackClick();
+            }
+        }, 1500);
+    }
+
+    void backToMyCard(){
+        new Handler().postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                PreferenceManager.putBool(getApplicationContext(), Constant.PREFERENCE_CARD_IS_LOADING, false);
+                SimpleDateFormat df = new SimpleDateFormat(Constant.DATEFORMAT_META);
+                Date today = new Date();
+                String strToday = df.format(today);
+                PreferenceManager.putString(getApplicationContext(), Constant.PREFERENCE_CARD_LAST_UPDATE, strToday);
+
+                Intent in = new Intent(getApplicationContext(), MainActivity.class);
+                in.putExtra("content", MainActivity.MY_CARD);
+                startActivity(in);
             }
         }, 1500);
     }

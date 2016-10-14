@@ -101,7 +101,8 @@ public class RenameCardFragment extends Fragment {
                 PreferenceManager.putBool(getActivity(), Constant.PREFERENCE_ROUTE_CARD_SUCCESS, true);
                 PreferenceManager.putInt(getActivity(), Constant.PREFERENCE_CARD_AMOUNT, 1);
                 progress.dismissAllowingStateLoss();
-                backToOrigin();
+                backToMyCard();
+                //backToOrigin();
             }
 
             @Override
@@ -109,7 +110,13 @@ public class RenameCardFragment extends Fragment {
                 Toast.makeText(activity, activity.getResources().getString(R.string.something_wrong), Toast.LENGTH_SHORT).show();
                 progress.dismissAllowingStateLoss();
                 //failed ga usah back kan ?
-                //backToOrigin();
+                //backToMyCard();
+            }
+
+            @Override
+            public void onFailed(String message) {
+                Toast.makeText(activity, message, Toast.LENGTH_SHORT).show();
+                progress.dismissAllowingStateLoss();
             }
         };
         task.execute(body);
@@ -126,6 +133,26 @@ public class RenameCardFragment extends Fragment {
                 String strToday = df.format(today);
                 PreferenceManager.putString(getActivity(), Constant.PREFERENCE_CARD_LAST_UPDATE, strToday);
                 activity.finish();
+            }
+        }, 1500);
+    }
+
+    void backToMyCard(){
+        new Handler().postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                PreferenceManager.putBool(activity, Constant.PREFERENCE_CARD_IS_LOADING, false);
+                SimpleDateFormat df = new SimpleDateFormat(Constant.DATEFORMAT_META);
+                Date today = new Date();
+                String strToday = df.format(today);
+                PreferenceManager.putString(getActivity(), Constant.PREFERENCE_CARD_LAST_UPDATE, strToday);
+                activity.finish();
+
+                Intent in = new Intent(activity, MainActivity.class);
+                in.putExtra("content", MainActivity.MY_CARD);
+                in.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(in);
             }
         }, 1500);
     }

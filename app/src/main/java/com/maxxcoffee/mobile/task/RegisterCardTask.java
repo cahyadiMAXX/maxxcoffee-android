@@ -58,9 +58,12 @@ public abstract class RegisterCardTask extends AsyncTask<RegisterCardRequestMode
             if (response.getStatus().equals("success")) {
                 onSuccess();
             } else {
-                if (response.getMessages() != null)
-                    Toast.makeText(context, response.getMessages(), Toast.LENGTH_LONG).show();
-                onFailed();
+                if (response.getMessages() != null){
+                    //Toast.makeText(context, response.getMessages(), Toast.LENGTH_LONG).show();
+                    onFailed(response.getMessages());
+                }else{
+                    onFailed();
+                }
             }
         }
     }
@@ -68,4 +71,6 @@ public abstract class RegisterCardTask extends AsyncTask<RegisterCardRequestMode
     public abstract void onSuccess();
 
     public abstract void onFailed();
+
+    public abstract void onFailed(String message);
 }

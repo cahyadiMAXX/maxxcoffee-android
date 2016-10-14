@@ -361,6 +361,9 @@ public class VerificationActivity extends AppCompatActivity {
                 @Override
                 public void run() {
                     finish();
+                    Intent in = new Intent(getApplicationContext(), MainActivity.class);
+                    in.putExtra("content", redirectFragment);
+                    startActivity(in);
                 }
             }, 3000);
         }

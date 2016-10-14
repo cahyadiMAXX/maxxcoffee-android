@@ -14,12 +14,13 @@ import com.maxxcoffee.mobile.util.PreferenceManager;
 /**
  * Created by Ravi on 09/07/15.
  */
+
 public class SmsReceiver extends BroadcastReceiver {
     private static final String TAG = SmsReceiver.class.getSimpleName();
 
     @Override
     public void onReceive(Context context, Intent intent) {
-
+        Log.d("sms", "received");
         final Bundle bundle = intent.getExtras();
         try {
             if (bundle != null) {
