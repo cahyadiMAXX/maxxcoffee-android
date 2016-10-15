@@ -130,7 +130,7 @@ public class EventFragment extends Fragment {
 
             @Override
             public void onEmpty() {
-                emptyCard.setText("We don't have any event");
+                emptyCard.setText("We do not have any event");
                 emptyCard.setVisibility(View.VISIBLE);
                 progress.dismissAllowingStateLoss();
             }
@@ -146,7 +146,7 @@ public class EventFragment extends Fragment {
 
     private void getLocalPromo() {
         List<EventEntity> events = eventController.getEvents();
-        emptyCard.setText(events.size() > 0 ? "" : "We don't have any event");
+        emptyCard.setText(events.size() > 0 ? "" : "We do not have any event");
         emptyCard.setVisibility(events.size() > 0 ? View.GONE : View.VISIBLE);
 
         if (events.size() > 0)

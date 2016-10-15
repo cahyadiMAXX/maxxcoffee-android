@@ -23,6 +23,8 @@ import com.maxxcoffee.mobile.model.request.LostCardRequestModel;
 import com.maxxcoffee.mobile.model.response.CardItemResponseModel;
 import com.maxxcoffee.mobile.task.CardTask;
 import com.maxxcoffee.mobile.task.LostCardTask;
+import com.maxxcoffee.mobile.util.Constant;
+import com.maxxcoffee.mobile.util.PreferenceManager;
 import com.maxxcoffee.mobile.util.Utils;
 
 import java.util.ArrayList;
@@ -76,10 +78,16 @@ public class LostCardFragment extends Fragment {
 
         mainframe.setVisibility(View.GONE);
 
-        if(Utils.isConnected(activity)){
-            fetchingData();
+        int virtual = PreferenceManager.getInt(getActivity(), Constant.PREFERENCE_HAS_VIRTUAL_CARD, 0);
+        if(virtual == 0){
+            if(Utils.isConnected(activity)){
+                fetchingData();
+            }else{
+                Toast.makeText(activity, activity.getResources().getString(R.string.mobile_data), Toast.LENGTH_LONG).show();
+            }
         }else{
-            Toast.makeText(activity, activity.getResources().getString(R.string.mobile_data), Toast.LENGTH_LONG).show();
+            empty.setText(getActivity().getResources().getString(R.string.virtual_card));
+            empty.setVisibility(View.VISIBLE);
         }
 
         selectedSubject = -999;

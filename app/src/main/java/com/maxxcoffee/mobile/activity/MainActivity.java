@@ -34,6 +34,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.javiersantos.appupdater.AppUpdater;
+import com.github.javiersantos.appupdater.enums.Display;
+import com.github.javiersantos.appupdater.enums.UpdateFrom;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
@@ -241,16 +244,26 @@ public class MainActivity extends FragmentActivity {
             switchFragment(content);
         }
 
-        /*AppUpdater appUpdater = new AppUpdater(this)
+        AppUpdater appUpdater = new AppUpdater(this)
                 .setDisplay(Display.DIALOG)
                 .setUpdateFrom(UpdateFrom.GOOGLE_PLAY)
                 .setTitleOnUpdateAvailable("Update available")
-                .setContentOnUpdateAvailable("Check out the latest version available on Play Store!")
+                .setContentOnUpdateAvailable("Check out the latest version available on Google Play Store")
                 .setButtonUpdate("Update Now")
                 .setButtonDismiss(null)
                 .setButtonDoNotShowAgain(null)
                 ;
-        appUpdater.start();*/
+        appUpdater.start();
+
+        /*new AlertDialog.Builder(MainActivity.this)
+                .setTitle("Update available")
+                .setMessage("Check out the latest version available on Play Store")
+                .setPositiveButton("Update Now", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // continue with delete
+                    }
+                })
+                .show();*/
     }
 
     @Override
@@ -841,10 +854,10 @@ public class MainActivity extends FragmentActivity {
         List<ChildDrawerModel> listCard = new ArrayList<>();
         listCard.add(childCard1);
         listCard.add(childCard4);
-        if(virtual == 0){
+        //if(virtual == 0){
             listCard.add(childCard3);
             listCard.add(childCard5);
-        }
+        //}
 
         List<ChildDrawerModel> listAbout = new ArrayList<>();
         listAbout.add(childAbout5);

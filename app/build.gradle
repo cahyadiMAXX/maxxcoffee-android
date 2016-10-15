@@ -23,8 +23,8 @@ android {
         applicationId "com.maxxcoffee.mobile"
         minSdkVersion 15
         targetSdkVersion 23
-        versionCode 21
-        versionName "2.0.0"
+        versionCode 22
+        versionName "2.0.1"
         multiDexEnabled true
     }
 

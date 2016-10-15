@@ -133,7 +133,7 @@ public class PromoFragment extends Fragment {
 
             @Override
             public void onEmpty() {
-                emptyCard.setText("We don't have any promo");
+                emptyCard.setText("We do not have any promo");
                 emptyCard.setVisibility(View.VISIBLE);
                 progress.dismissAllowingStateLoss();
             }
@@ -149,7 +149,7 @@ public class PromoFragment extends Fragment {
 
     private void getLocalPromo() {
         List<PromoEntity> promos = promoController.getPromos();
-        emptyCard.setText(promos.size() > 0 ? "" : "We don't have any promo");
+        emptyCard.setText(promos.size() > 0 ? "" : "We do not have any promo");
         emptyCard.setVisibility(promos.size() > 0 ? View.GONE : View.VISIBLE);
 
         if (promos.size() > 0)

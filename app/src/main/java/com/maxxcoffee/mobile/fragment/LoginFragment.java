@@ -260,7 +260,7 @@ public class LoginFragment extends Fragment {
             public void onFailed() {
 
                 progress.dismissAllowingStateLoss();
-
+                Toast.makeText(activity, getActivity().getResources().getString(R.string.something_wrong), Toast.LENGTH_SHORT).show();
                 //Toast.makeText(activity, "The credentials you entered don't match.", Toast.LENGTH_SHORT).show();
             }
         };

@@ -234,6 +234,7 @@ public class AddVirtualCardActivity extends FragmentActivity {
 
             @Override
             public void run() {
+                PreferenceManager.putInt(getApplicationContext(), Constant.PREFERENCE_HAS_VIRTUAL_CARD, 1);
                 PreferenceManager.putBool(getApplicationContext(), Constant.PREFERENCE_CARD_IS_LOADING, false);
                 SimpleDateFormat df = new SimpleDateFormat(Constant.DATEFORMAT_META);
                 Date today = new Date();
