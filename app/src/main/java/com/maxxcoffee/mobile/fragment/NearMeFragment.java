@@ -56,6 +56,8 @@ public class NearMeFragment extends Fragment implements LocationListener {
     private List<StoreEntity> data;
     private StoreAdapter adapter;
 
+    public NearMeFragment(){}
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

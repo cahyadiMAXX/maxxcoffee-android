@@ -30,6 +30,8 @@ public class StoreFragment extends Fragment {
     private MainActivity activity;
     private String token;
 
+    public StoreFragment(){}
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

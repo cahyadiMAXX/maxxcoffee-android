@@ -34,6 +34,8 @@ public class ForgotPasswordFragment extends Fragment {
 
     private FormActivity activity;
 
+    public ForgotPasswordFragment(){}
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

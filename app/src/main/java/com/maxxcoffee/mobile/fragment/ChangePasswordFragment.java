@@ -32,6 +32,8 @@ public class ChangePasswordFragment extends Fragment {
 
     private FormActivity activity;
 
+    public ChangePasswordFragment(){}
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

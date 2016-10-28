@@ -41,6 +41,8 @@ public class TransferHistoryFragment extends Fragment {
     private TransferHistoryAdapter adapter;
     private HistoryController historyController;
 
+    public TransferHistoryFragment(){}
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

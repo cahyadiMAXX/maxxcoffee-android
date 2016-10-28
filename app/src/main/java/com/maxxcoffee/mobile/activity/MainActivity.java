@@ -157,12 +157,15 @@ public class MainActivity extends FragmentActivity {
 
     public static MainActivity mainActivity;
 
+    //empty constructor
+    public MainActivity(){}
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
         boolean showTutorial = PreferenceManager.getBool(this, Constant.PREFERENCE_TUTORIAL_SKIP, false);
         if (!showTutorial) {
@@ -654,13 +657,13 @@ public class MainActivity extends FragmentActivity {
                 @Override
                 public void onSuccess(String message) {
                     logoutThisDevice();
-                    Log.d("logoutallmydevices", message);
+//                    Log.d("logoutallmydevices", message);
                 }
 
                 @Override
                 public void onFailed() {
                     logoutThisDevice();
-                    Log.d("logoutallmydevices", "failed");
+//                    Log.d("logoutallmydevices", "failed");
                 }
             };
             task.execute(body);
@@ -670,12 +673,17 @@ public class MainActivity extends FragmentActivity {
     }
 
     void logoutThisDevice(){
+        boolean show_again = PreferenceManager.getBool(getApplicationContext(), Constant.PREFERENCE_SHOW_AGAIN, true);
+        boolean is_rated = PreferenceManager.getBool(getApplicationContext(), Constant.PREFERENCE_HAS_RATED, false);
         PreferenceManager.putBool(getApplicationContext(), Constant.PREFERENCE_LOGOUT_NOW, false);
         PreferenceManager.clearPreference(MainActivity.this);
         DatabaseConfig db = new DatabaseConfig(MainActivity.this);
         db.clearAllTable();
         prepareDrawerList();
 
+        //rating disimpan
+        PreferenceManager.putBool(getApplicationContext(), Constant.PREFERENCE_SHOW_AGAIN, show_again);
+        PreferenceManager.putBool(getApplicationContext(), Constant.PREFERENCE_HAS_RATED, is_rated);
         switchFragment(HOME);
     }
 

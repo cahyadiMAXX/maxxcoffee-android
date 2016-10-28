@@ -44,4 +44,5 @@
         \n3. You could top-up your Virtual Card Balance
         \n4. You could collect Beans
     </string>
+    <string name="title_activity_change_card_design">ChangeCardDesignActivity</string>
 </resources>

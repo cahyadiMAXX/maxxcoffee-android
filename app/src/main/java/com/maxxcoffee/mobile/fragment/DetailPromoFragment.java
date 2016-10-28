@@ -43,6 +43,8 @@ public class DetailPromoFragment extends Fragment {
     private FormActivity activity;
     private EventController eventController;
 
+    public DetailPromoFragment(){}
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

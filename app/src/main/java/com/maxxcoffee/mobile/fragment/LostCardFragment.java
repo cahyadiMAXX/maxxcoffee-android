@@ -59,6 +59,8 @@ public class LostCardFragment extends Fragment {
     private Integer selectedCrd;
 //    private Integer selectedCard;
 
+    public LostCardFragment(){}
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -138,6 +140,7 @@ public class LostCardFragment extends Fragment {
             public void onFailed(String message) {
                 empty.setText(message);
                 empty.setVisibility(View.VISIBLE);
+                mainframe.setVisibility(View.GONE);
                 //Toast.makeText(activity, message, Toast.LENGTH_SHORT).show();
                 progress.dismissAllowingStateLoss();
             }

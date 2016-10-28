@@ -4,7 +4,7 @@ import android.animation.ObjectAnimator;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.media.Image;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
@@ -12,7 +12,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -30,9 +29,9 @@ import com.maxxcoffee.mobile.activity.FormActivity;
 import com.maxxcoffee.mobile.activity.MainActivity;
 import com.maxxcoffee.mobile.activity.VerificationActivity;
 import com.maxxcoffee.mobile.database.controller.CardPrimaryController;
-import com.maxxcoffee.mobile.database.entity.CardEntity;
 import com.maxxcoffee.mobile.database.entity.CardPrimaryEntity;
 import com.maxxcoffee.mobile.fragment.dialog.LoadingDialog;
+import com.maxxcoffee.mobile.fragment.dialog.RateAppDialog;
 import com.maxxcoffee.mobile.gcm.GCMRegistrationIntentService;
 import com.maxxcoffee.mobile.model.response.CardItemResponseModel;
 import com.maxxcoffee.mobile.model.response.HomeResponseModel;
@@ -43,6 +42,9 @@ import com.maxxcoffee.mobile.util.PreferenceManager;
 import com.maxxcoffee.mobile.util.Utils;
 import com.maxxcoffee.mobile.util.WakeLocker;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.Bind;
@@ -103,6 +105,8 @@ public class HomeFragment extends Fragment {
     private boolean isPrimaryExist = false;
     private CardPrimaryController cardController;
     private BroadcastReceiver mRegistrationBroadcastReceiver;
+
+    public HomeFragment(){}
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -320,6 +324,56 @@ public class HomeFragment extends Fragment {
         }
     }
 
+    void forceUserRating(){
+        SimpleDateFormat df = new SimpleDateFormat(Constant.DATEFORMAT_META);
+        Date today = new Date();
+        final String strToday = df.format(today);
+        String date_firstLaunch = PreferenceManager.getString(getActivity(), Constant.PREFERENCE_DATE_FIRST_LAUNCH, strToday);
+        Log.d("first_launch", date_firstLaunch);
+        Date inputDate = null;
+        try {
+            inputDate = df.parse(date_firstLaunch);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        //jangan lupa ganti ke hari
+        if (Utils.getDurationInMinutes(inputDate) > (5 * 24 * 60)) {
+            final RateAppDialog dialog = new RateAppDialog(){
+                @Override
+                protected void onOk() {
+                    super.onOk();
+                    //buka playstore
+                    dismiss();
+                    PreferenceManager.putBool(getActivity(), Constant.PREFERENCE_HAS_RATED, true);
+                    final String appPackageName = getActivity().getPackageName(); // getPackageName() from Context or Activity object
+                    try {
+                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
+                    } catch (android.content.ActivityNotFoundException anfe) {
+                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
+                    }
+                }
+
+                @Override
+                public void onLaterClick() {
+                    super.onLaterClick();
+                    //update tanggal
+                    PreferenceManager.putString(getActivity(), Constant.PREFERENCE_DATE_FIRST_LAUNCH, strToday);
+                    dismiss();
+                }
+
+                @Override
+                public void onNoClick() {
+                    super.onNoClick();
+                    //jangan muncul lagi
+                    PreferenceManager.putBool(getActivity(), Constant.PREFERENCE_SHOW_AGAIN, false);
+                    dismiss();
+                }
+            };
+
+            dialog.show(getFragmentManager(), null);
+        }
+    }
+
     @Override
     public void onResume() {
         super.onResume();
@@ -427,6 +481,16 @@ public class HomeFragment extends Fragment {
                 if(card == null) isPrimaryExist = false;
 
                 getLocalData();
+
+                //rate aplikasi
+                boolean is_rated = PreferenceManager.getBool(getActivity(), Constant.PREFERENCE_HAS_RATED, false);
+                boolean show_again= PreferenceManager.getBool(getActivity(), Constant.PREFERENCE_SHOW_AGAIN, true);
+
+                Log.d("is_rated", is_rated ? "rated":"not rated");
+                Log.d("show_again", show_again ? "show_again":"not show_again");
+                if(!is_rated && show_again){
+                    forceUserRating();
+                }
 
                 progress.dismissAllowingStateLoss();
             }

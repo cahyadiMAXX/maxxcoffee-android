@@ -33,6 +33,8 @@ public class ChangeNameFragment extends Fragment {
 
     private FormActivity activity;
 
+    public ChangeNameFragment(){}
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

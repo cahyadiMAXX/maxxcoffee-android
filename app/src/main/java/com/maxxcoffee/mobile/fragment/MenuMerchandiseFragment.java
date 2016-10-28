@@ -42,6 +42,8 @@ public class MenuMerchandiseFragment extends Fragment {
     private MenuCategoryController categoryController;
     private int lastExpandedPosition = -1;
 
+    public MenuMerchandiseFragment(){}
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

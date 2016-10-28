@@ -67,6 +67,8 @@ public class MenuDetailFragment extends Fragment {
     private List<MenuPriceModel> iceData;
     private List<MenuPriceModel> hotData;
 
+    public MenuDetailFragment(){}
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -30,6 +30,8 @@ public class AboutFragment extends Fragment {
 
     private MainActivity activity;
 
+    public AboutFragment(){}
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

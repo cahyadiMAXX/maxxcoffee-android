@@ -37,6 +37,8 @@ public class ChangeOccupationFragment extends Fragment {
 
     private FormActivity activity;
 
+    public ChangeOccupationFragment(){}
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

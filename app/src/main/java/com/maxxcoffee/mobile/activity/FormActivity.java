@@ -66,6 +66,7 @@ public class FormActivity extends FragmentActivity {
     @Bind(R.id.refreshform)
     ImageView refresh;
 
+    public FormActivity(){}
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

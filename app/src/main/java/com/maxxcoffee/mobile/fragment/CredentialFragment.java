@@ -19,6 +19,8 @@ public class CredentialFragment extends Fragment {
 
     private MainActivity activity;
 
+    public CredentialFragment(){}
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

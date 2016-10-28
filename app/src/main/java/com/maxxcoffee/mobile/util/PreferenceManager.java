@@ -25,6 +25,13 @@ public class PreferenceManager {
         editor.putInt(preferenceName, object).apply();
     }
 
+    public static void putLong(Context context, String preferenceName, Long object) {
+        preferences = context.getSharedPreferences(Constant.PREFERENCE_MAXX, 0);
+        editor = preferences.edit();
+
+        editor.putLong(preferenceName, object).apply();
+    }
+
     public static void putBool(Context context, String preferenceName, boolean object) {
         preferences = context.getSharedPreferences(Constant.PREFERENCE_MAXX, 0);
         editor = preferences.edit();
@@ -44,6 +51,13 @@ public class PreferenceManager {
         editor = preferences.edit();
 
         return preferences.getInt(preferenceName, defaultValue);
+    }
+
+    public static Long getLong(Context context, String preferenceName, Long defaultValue) {
+        preferences = context.getSharedPreferences(Constant.PREFERENCE_MAXX, 0);
+        editor = preferences.edit();
+
+        return preferences.getLong(preferenceName, defaultValue);
     }
 
     public static boolean getBool(Context context, String preferenceName, boolean defaultValue) {

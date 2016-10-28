@@ -20,6 +20,8 @@ public class RewardFragment extends Fragment {
 
     private MainActivity activity;
 
+    public RewardFragment(){}
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

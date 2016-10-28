@@ -1,5 +1,6 @@
 package com.maxxcoffee.mobile.api;
 
+import com.maxxcoffee.mobile.model.request.CardDesignRequestModel;
 import com.maxxcoffee.mobile.model.request.ChangeCityOccupationRequestModel;
 import com.maxxcoffee.mobile.model.request.ChangeEmailRequestModel;
 import com.maxxcoffee.mobile.model.request.ChangePhoneRequestModel;
@@ -23,6 +24,7 @@ import com.maxxcoffee.mobile.model.request.TransferBalanceRequestModel;
 import com.maxxcoffee.mobile.model.request.VerifySmsCodeRequestModel;
 import com.maxxcoffee.mobile.model.response.AboutResponseModel;
 import com.maxxcoffee.mobile.model.response.AddVirtualResponseModel;
+import com.maxxcoffee.mobile.model.response.CardImageResponseModel;
 import com.maxxcoffee.mobile.model.response.CardResponseModel;
 import com.maxxcoffee.mobile.model.response.ChangeUserDataResponseModel;
 import com.maxxcoffee.mobile.model.response.CheckValidEmailResponseModel;
@@ -197,4 +199,10 @@ public interface ApiInterface {
 
     @POST("/api/virtualcardpermission")
     void virtualCardPermission(@Header("Authorization") String authentication, @Body DefaultRequestModel body, Callback<AddVirtualResponseModel> response);
+
+    @POST("/api/cardimage")
+    void cardImage(@Header("Authorization") String authentication, @Body DefaultRequestModel body, Callback<CardImageResponseModel> response);
+
+    @POST("/api/updatecardimagebynumbers")
+    void changeCardDesign(@Header("Authorization") String authentication, @Body CardDesignRequestModel body, Callback<DefaultResponseModel> response);
 }

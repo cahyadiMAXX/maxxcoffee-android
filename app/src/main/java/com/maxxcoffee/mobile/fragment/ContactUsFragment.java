@@ -57,6 +57,8 @@ public class ContactUsFragment extends Fragment {
     private ProfileController profileController;
     private CardController cardController;
 
+    public ContactUsFragment(){}
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

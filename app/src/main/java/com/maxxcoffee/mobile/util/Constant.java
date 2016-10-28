@@ -83,11 +83,15 @@ public class Constant {
     public final static String PREFERENCE_DEVICE_TOKEN = "maxx-device-token";
     public final static String PREFERENCE_LOGOUT_NOW = "maxx-logout-now";
 
-    //rate app
-    public final static String PREFERENCE_FIRST_LAUNCH = "maxx-first-launch";
+    //virtual card
+    public final static String PREFERENCE_HAS_VIRTUAL_CARD = "maxx-has-virtual-card";
+
+    //force rating
+    public final static String PREFERENCE_DATE_FIRST_LAUNCH = "maxx-first-launch";
+    public final static String PREFERENCE_HAS_LAUNCH = "maxx-has-been-launch";
+    public final static String PREFERENCE_SHOW_AGAIN = "maxx-dont-show-again";
+    public final static String PREFERENCE_HAS_RATED = "maxx-has-rated";
     public final static int DAYS_UNTIL_PROMPT = 3;
     public final static int LAUNCHES_UNTIL_PROMPT = 7;
 
-    //virtual card
-    public final static String PREFERENCE_HAS_VIRTUAL_CARD = "maxx-has-virtual-card";
 }

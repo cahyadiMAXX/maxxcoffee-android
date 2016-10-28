@@ -72,6 +72,8 @@ public class MyCardFragment extends Fragment {
     private CardController cardController;
     private CustomLinearLayoutManager layoutManager;
 
+    public MyCardFragment(){}
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -47,7 +47,9 @@ public abstract class CheckValidEmailTask extends AsyncTask<CheckValidEmailReque
         if (response != null) {
             if (response.getStatus().contains("not registered")) {
                 onSuccess(response.getStatus());
-            } else {
+            } else if (response.getStatus().contains("exists")){
+                onFailed(response.getStatus());
+            }else {
                 onFailed();
             }
         }
@@ -56,4 +58,6 @@ public abstract class CheckValidEmailTask extends AsyncTask<CheckValidEmailReque
     public abstract void onSuccess(String response);
 
     public abstract void onFailed();
+
+    public abstract void onFailed(String response);
 }

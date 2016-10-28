@@ -32,6 +32,8 @@ public class ChangePhoneFragment extends Fragment {
     private FormActivity activity;
     private ProfileController profileController;
 
+    public ChangePhoneFragment(){}
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

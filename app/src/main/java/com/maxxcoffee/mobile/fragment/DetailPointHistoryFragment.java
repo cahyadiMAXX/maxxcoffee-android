@@ -41,6 +41,8 @@ public class DetailPointHistoryFragment extends Fragment {
     private PointHistoryAdapter adapter;
     private HistoryController historyController;
 
+    public DetailPointHistoryFragment(){}
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

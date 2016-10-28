@@ -32,6 +32,8 @@ public class TosFragment extends Fragment {
 
     private MainActivity activity;
 
+    public TosFragment(){}
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

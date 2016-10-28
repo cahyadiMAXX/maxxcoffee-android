@@ -46,6 +46,8 @@ public class PromoFragment extends Fragment {
     private PromoController promoController;
     private CustomLinearLayoutManager layoutManager;
 
+    public PromoFragment(){}
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

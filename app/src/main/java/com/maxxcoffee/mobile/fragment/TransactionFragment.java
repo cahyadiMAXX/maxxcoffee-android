@@ -34,6 +34,8 @@ public class TransactionFragment extends Fragment {
     private List<HistoryModel> data;
     private HistoryItemAdapter adapter;
 
+    public TransactionFragment(){}
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

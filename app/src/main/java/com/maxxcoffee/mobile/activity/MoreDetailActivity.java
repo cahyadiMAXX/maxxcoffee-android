@@ -63,6 +63,7 @@ public class MoreDetailActivity extends FragmentActivity {
     @Bind(R.id.refreshform)
     ImageView refresh;
 
+    public MoreDetailActivity(){}
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

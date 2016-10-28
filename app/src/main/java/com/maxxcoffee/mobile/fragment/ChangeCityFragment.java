@@ -33,6 +33,8 @@ public class ChangeCityFragment extends Fragment {
 
     private FormActivity activity;
 
+    public ChangeCityFragment(){}
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

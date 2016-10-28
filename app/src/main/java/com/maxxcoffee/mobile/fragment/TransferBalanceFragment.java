@@ -82,6 +82,8 @@ public class TransferBalanceFragment extends Fragment {
     private Integer selectedSourceId = -999;
     private Integer selectedTargetId = -999;
 
+    public TransferBalanceFragment(){}
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

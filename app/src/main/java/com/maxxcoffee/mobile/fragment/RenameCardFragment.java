@@ -45,6 +45,8 @@ public class RenameCardFragment extends Fragment {
     String tempName;
     String tempNo;
 
+    public RenameCardFragment() {}
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

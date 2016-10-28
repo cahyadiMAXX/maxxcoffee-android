@@ -87,6 +87,8 @@ public class LoginFragment extends Fragment {
     private boolean settingRequested;
     private GoogleApiClient googleApiClient;
 
+    public LoginFragment(){}
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

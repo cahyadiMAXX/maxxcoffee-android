@@ -63,6 +63,8 @@ public class OurStoreFragment extends Fragment {
     private StoreController controller;
     private ProvinceController provinceController;
 
+    public OurStoreFragment(){}
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

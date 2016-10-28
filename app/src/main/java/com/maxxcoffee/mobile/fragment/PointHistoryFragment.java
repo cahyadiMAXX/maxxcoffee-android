@@ -1,5 +1,6 @@
 package com.maxxcoffee.mobile.fragment;
 
+import android.graphics.Point;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -39,6 +40,8 @@ public class PointHistoryFragment extends Fragment {
     private List<HistoryEntity> data;
     private PointHistoryAdapter adapter;
     private HistoryController historyController;
+
+    public PointHistoryFragment(){}
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {

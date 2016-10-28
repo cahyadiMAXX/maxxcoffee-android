@@ -45,6 +45,8 @@ public class FaqFragment extends Fragment {
     private FaqController faqController;
     private CustomLinearLayoutManager layoutManager;
 
+    public FaqFragment(){}
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

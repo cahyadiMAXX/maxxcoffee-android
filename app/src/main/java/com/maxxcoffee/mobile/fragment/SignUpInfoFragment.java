@@ -84,6 +84,8 @@ public class SignUpInfoFragment extends Fragment {
     private String selectedPassword;
     private int mDayPart = Utils.getDayPart();
 
+    public SignUpInfoFragment(){}
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -108,6 +110,7 @@ public class SignUpInfoFragment extends Fragment {
         selectedEmail = getArguments().getString("email");
         selectedPhoneNumber = getArguments().getString("phone");
         selectedPassword = getArguments().getString("password");
+
 
         return view;
     }

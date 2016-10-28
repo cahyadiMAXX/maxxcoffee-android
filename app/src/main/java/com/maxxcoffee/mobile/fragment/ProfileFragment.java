@@ -84,6 +84,8 @@ public class ProfileFragment extends Fragment {
     private ProfileController profileController;
     private CardController cardController;
 
+    public ProfileFragment(){}
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

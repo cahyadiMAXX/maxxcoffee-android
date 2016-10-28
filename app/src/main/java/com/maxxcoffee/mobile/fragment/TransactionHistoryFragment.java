@@ -42,6 +42,8 @@ public class TransactionHistoryFragment extends Fragment {
     private TransactionHistoryAdapter adapter;
     private HistoryController historyController;
 
+    public TransactionHistoryFragment(){}
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -19,7 +19,7 @@
     <color name="verify_col">#16a085</color>
 
     <!-- dots inactive colors -->
-    <color name="dot_dark_screen1">#B6B6B6</color>
+    <color name="dot_dark_screen1">#b6b6b6</color>
     <color name="dot_dark_screen2">#B6B6B6</color>
     <color name="dot_dark_screen3">#B6B6B6</color>
     <color name="dot_dark_screen4">#B6B6B6</color>

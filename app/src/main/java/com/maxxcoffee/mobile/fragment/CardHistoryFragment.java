@@ -75,6 +75,8 @@ public class CardHistoryFragment extends Fragment {
     private String selectedStartDate;
     private String selectedEndDate;
 
+    public CardHistoryFragment(){}
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -283,6 +285,7 @@ public class CardHistoryFragment extends Fragment {
                 progress.dismissAllowingStateLoss();
                 empty.setText(message);
                 empty.setVisibility(View.VISIBLE);
+                mainframe.setVisibility(View.GONE);
                 //Toast.makeText(activity, message, Toast.LENGTH_LONG).show();
                 //showDontHaveCardDialog();
             }

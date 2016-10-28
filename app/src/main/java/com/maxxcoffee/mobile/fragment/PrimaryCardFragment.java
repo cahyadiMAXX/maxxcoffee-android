@@ -65,6 +65,8 @@ public class PrimaryCardFragment extends Fragment {
     private List<CardModel> data;
     private CustomLinearLayoutManager layoutManager;
 
+    public PrimaryCardFragment(){}
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

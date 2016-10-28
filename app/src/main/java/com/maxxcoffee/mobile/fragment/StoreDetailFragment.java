@@ -93,6 +93,7 @@ public class StoreDetailFragment extends Fragment {
     private Criteria criteria;
     private LatLng selectedPosition;
 
+    public StoreDetailFragment(){}
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {

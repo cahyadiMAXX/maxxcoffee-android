@@ -99,6 +99,8 @@ public class DeleteCardFragment extends Fragment {
     private int iteration = 0;
     private List<String> cardSelectedCollection;
 
+    public DeleteCardFragment(){}
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

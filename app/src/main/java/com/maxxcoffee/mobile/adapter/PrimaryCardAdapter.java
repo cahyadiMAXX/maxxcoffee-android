@@ -112,8 +112,8 @@ public abstract class PrimaryCardAdapter extends RecyclerView.Adapter<RecyclerVi
             try {
                 Glide.with(context)
                         .load(card.getImage())
-                        .fitCenter()
-                        .crossFade()
+                        //.fitCenter()
+                        //.crossFade()
                         .placeholder(R.drawable.ic_no_image)
                         .into(imageView);
             }catch (Exception e){

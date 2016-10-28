@@ -45,6 +45,8 @@ public class MenuFragment extends Fragment {
     private MenuController menuController;
     private MenuCategoryController categoryController;
 
+    public MenuFragment(){}
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

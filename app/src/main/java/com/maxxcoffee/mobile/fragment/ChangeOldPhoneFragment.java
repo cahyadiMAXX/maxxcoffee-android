@@ -29,6 +29,8 @@ public class ChangeOldPhoneFragment extends Fragment {
 
     private FormActivity activity;
 
+    public ChangeOldPhoneFragment(){}
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

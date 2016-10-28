@@ -40,6 +40,8 @@ public class DetailTopupHistoryFragment extends Fragment {
     private TransferHistoryAdapter adapter;
     private HistoryController historyController;
 
+    public DetailTopupHistoryFragment(){}
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

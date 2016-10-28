@@ -2,10 +2,13 @@ package com.maxxcoffee.mobile.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -46,17 +49,21 @@ public class SignUpFragment extends Fragment {
 
     private boolean isEmailChecked = false;
 
+    public SignUpFragment(){}
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         activity = (MainActivity) getActivity();
         activity.setHeaderColor(true);
         isEmailChecked = true;
+        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_signup, container, false);
+        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
         ButterKnife.bind(this, view);
         activity.setTitle("Sign Up", true);
@@ -85,14 +92,74 @@ public class SignUpFragment extends Fragment {
                                 progress.dismissAllowingStateLoss();
                                 PreferenceManager.putBool(activity, Constant.PREFERENCE_REGISTER_IS_VALID_EMAIL, false);
                                 email.requestFocus();
-                                email.setError("Email already exists");
+                                email.setError(getActivity().getResources().getString(R.string.something_wrong));
                                 //Toast.makeText(getActivity(), "Email already exists", Toast.LENGTH_LONG).show();
+                            }
+
+                            @Override
+                            public void onFailed(String response) {
+                                progress.dismissAllowingStateLoss();
+                                PreferenceManager.putBool(activity, Constant.PREFERENCE_REGISTER_IS_VALID_EMAIL, false);
+                                email.requestFocus();
+                                email.setError(response);
                             }
                         };
                         cvtask.execute(body);
                     }
                 }
             }
+        });
+
+        firstName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                PreferenceManager.putString(activity, Constant.PREFERENCE_REGISTER_FIRST_NAME, s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
+
+        lastName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                PreferenceManager.putString(activity, Constant.PREFERENCE_REGISTER_LAST_NAME, s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
+
+        phone.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                PreferenceManager.putString(activity, Constant.PREFERENCE_REGISTER_PHONE, s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
+
+        email.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                PreferenceManager.putString(activity, Constant.PREFERENCE_REGISTER_EMAIL, s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
         });
 
         return view;

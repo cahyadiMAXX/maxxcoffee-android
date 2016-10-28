@@ -39,6 +39,8 @@ public class TopUpHistoryFragment extends Fragment {
     private TransferHistoryAdapter adapter;
     private HistoryController historyController;
 
+    public TopUpHistoryFragment(){}
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

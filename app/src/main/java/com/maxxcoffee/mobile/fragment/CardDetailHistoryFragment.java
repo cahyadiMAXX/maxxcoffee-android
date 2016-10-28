@@ -64,6 +64,8 @@ public class CardDetailHistoryFragment extends Fragment {
     private String selectedStartDate;
     private String selectedEndDate;
 
+    public CardDetailHistoryFragment(){}
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -23,6 +23,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.github.clans.fab.FloatingActionMenu;
 import com.maxxcoffee.mobile.R;
+import com.maxxcoffee.mobile.activity.ChangeCardDesignActivity;
 import com.maxxcoffee.mobile.activity.FormActivity;
 import com.maxxcoffee.mobile.activity.MoreDetailActivity;
 import com.maxxcoffee.mobile.database.controller.CardController;
@@ -109,6 +110,8 @@ public class MyCardDetailFragment extends Fragment {
     private int cardState;
 
     private int virtual_card = 0;
+
+    public MyCardDetailFragment(){}
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -497,20 +500,26 @@ public class MyCardDetailFragment extends Fragment {
         //activity.switchFragment(MoreDetailActivity.HISTORY_DETAIL, bundle);
     }
 
+    @OnClick(R.id.imageEditCard)
+    public void onImageEditCard(){
+        Bundle bundle = new Bundle();
+        bundle.putString("card-number", cardNumber);
+        bundle.putString("card-name", cardName);
+
+        Intent in = new Intent(activity, ChangeCardDesignActivity.class);
+        in.putExtras(bundle);
+        startActivity(in);
+    }
+
     //button click
     @OnClick(R.id.qr)
     public void onShowQrCode() {
         flipCard(mCardBackLayout);
-        /*disableLayer.setVisibility(View.GONE);
-        fabMenu.close(true);
-        // show dialog qr code
-        QrCodeDialog qrDialog = new QrCodeDialog();
+    }
 
-        Bundle bundle = new Bundle();
-        bundle.putString("qr", barcodeUrl);
-
-        qrDialog.setArguments(bundle);
-        qrDialog.show(getFragmentManager(), null);*/
-
+    @Override
+    public void onResume() {
+        super.onResume();
+        fetchingData();
     }
 }

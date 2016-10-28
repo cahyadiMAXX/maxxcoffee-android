@@ -6,6 +6,11 @@ import android.os.Bundle;
 
 import com.maxxcoffee.mobile.util.Constant;
 import com.maxxcoffee.mobile.util.PreferenceManager;
+import com.maxxcoffee.mobile.util.Utils;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Created by rioswarawan on 8/4/16.
@@ -15,6 +20,26 @@ public class LauncherActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        boolean has_launch = PreferenceManager.getBool(this, Constant.PREFERENCE_HAS_LAUNCH, false);
+        if(!has_launch){
+            // Get date of first launch
+            SimpleDateFormat df = new SimpleDateFormat(Constant.DATEFORMAT_META);
+            Date today = new Date();
+            String strToday = df.format(today);
+            String date_firstLaunch = PreferenceManager.getString(getApplicationContext(), Constant.PREFERENCE_DATE_FIRST_LAUNCH, strToday);
+            Date inputDate = null;
+            try {
+                inputDate = df.parse(date_firstLaunch);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            if (Utils.getDurationInMinutes(inputDate) == 0) {
+                date_firstLaunch = strToday;
+                PreferenceManager.putString(getApplicationContext(), Constant.PREFERENCE_DATE_FIRST_LAUNCH, date_firstLaunch);
+                PreferenceManager.putBool(getApplicationContext(), Constant.PREFERENCE_HAS_LAUNCH, true);
+            }
+        }
 
         boolean welcome = PreferenceManager.getBool(this, Constant.PREFERENCE_WELCOME_SKIP, false);
         if (welcome)

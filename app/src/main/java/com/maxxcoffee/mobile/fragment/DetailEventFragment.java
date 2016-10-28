@@ -54,6 +54,8 @@ public class DetailEventFragment extends Fragment {
     private FormActivity activity;
     private EventController eventController;
 
+    public DetailEventFragment(){}
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

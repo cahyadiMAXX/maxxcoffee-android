@@ -39,6 +39,8 @@ public class ChangeEmailFragment extends Fragment {
 
     private FormActivity activity;
 
+    public ChangeEmailFragment(){}
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -31,6 +31,8 @@ public class FaqDetailFragment extends Fragment {
     private String token;
     private FaqController faqController;
 
+    public FaqDetailFragment(){}
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
