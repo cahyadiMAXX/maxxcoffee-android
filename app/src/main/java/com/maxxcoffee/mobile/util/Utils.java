@@ -136,6 +136,15 @@ public class Utils {
         return diffMinutes;
     }
 
+    public static long getDurationInDays(Date createdDate) {
+        SimpleDateFormat df = new SimpleDateFormat(Constant.DATEFORMAT_META);
+        Date today = new Date();
+        long diff = today.getTime() - createdDate.getTime();
+
+        long diffDays = diff / (1000 * 60 * 60 * 24);
+        return diffDays;
+    }
+
     public static Properties getProperties(Context context) {
         Properties properties = new Properties();
         try {

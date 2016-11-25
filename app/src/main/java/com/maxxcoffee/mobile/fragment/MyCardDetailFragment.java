@@ -315,7 +315,7 @@ public class MyCardDetailFragment extends Fragment {
     //depan image, belakang barcode
     private void loadImages(String image, final String barcode, final String name){
         final LoadingDialog progress = new LoadingDialog();
-        progress.show(getFragmentManager(), null);
+        progress.show(getActivity().getSupportFragmentManager(), null);
 
         final DownloadImageTask barcodeTask = new DownloadImageTask(getContext()) {
             @Override

@@ -50,6 +50,7 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import pl.droidsonroids.gif.GifImageView;
+import timber.log.Timber;
 
 /**
  * Created by Rio Swarawan on 5/3/2016.
@@ -284,7 +285,7 @@ public class HomeFragment extends Fragment {
                     String token = intent.getStringExtra("token");
                     //Displaying the token as toast
                     //Toast.makeText(getApplicationContext(), "Registration token:" + token, Toast.LENGTH_LONG).show();
-                    Log.d("gcmtoken", token);
+                    Timber.e("gcmtoken: %s", token);
 
                     //if the intent is not with success then displaying error messages
                     WakeLocker.release();
@@ -337,7 +338,8 @@ public class HomeFragment extends Fragment {
             e.printStackTrace();
         }
         //jangan lupa ganti ke hari
-        if (Utils.getDurationInMinutes(inputDate) > (5 * 24 * 60)) {
+        Log.d("first_launch", String.valueOf(Utils.getDurationInDays(inputDate)));
+        if (Utils.getDurationInDays(inputDate) > 4) {
             final RateAppDialog dialog = new RateAppDialog(){
                 @Override
                 protected void onOk() {

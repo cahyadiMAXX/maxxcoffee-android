@@ -333,7 +333,7 @@ public class CardHistoryFragment extends Fragment {
 
             data.add(model);
         }
-        if (cards.size() == 1) {
+        if (cards.size() > 0) {
             setCard(data.get(0));
             fetchingData();
         }
@@ -344,6 +344,7 @@ public class CardHistoryFragment extends Fragment {
             Toast.makeText(activity, activity.getResources().getString(R.string.mobile_data), Toast.LENGTH_LONG).show();
             return;
         }
+
         final LoadingDialog progress = new LoadingDialog();
         progress.show(getFragmentManager(), null);
 
@@ -360,13 +361,15 @@ public class CardHistoryFragment extends Fragment {
                 progress.dismissAllowingStateLoss();
                 //mainframe.setVisibility(View.VISIBLE);
                 historyLayout.setVisibility(View.VISIBLE);
+                empty.setVisibility(View.GONE);
                 setupViewPager(viewPager);
                 tabs.setupWithViewPager(viewPager);
             }
 
             @Override
             public void onFailed() {
-                empty.setVisibility(View.VISIBLE);
+                //empty.setVisibility(View.VISIBLE);
+                Toast.makeText(getActivity(), getResources().getString(R.string.something_wrong), Toast.LENGTH_LONG).show();
                 progress.dismissAllowingStateLoss();
             }
         };
