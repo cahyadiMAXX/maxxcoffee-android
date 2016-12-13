@@ -10,6 +10,7 @@ import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Process;
@@ -79,6 +80,10 @@ import com.maxxcoffee.mobile.util.Constant;
 import com.maxxcoffee.mobile.util.PermissionUtil;
 import com.maxxcoffee.mobile.util.PreferenceManager;
 import com.maxxcoffee.mobile.util.Utils;
+import com.rampo.updatechecker.UpdateChecker;
+import com.rampo.updatechecker.UpdateCheckerResult;
+import com.rampo.updatechecker.notice.Notice;
+import com.rampo.updatechecker.store.Store;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -87,6 +92,7 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import timber.log.Timber;
 
 public class MainActivity extends FragmentActivity {
 
@@ -167,11 +173,13 @@ public class MainActivity extends FragmentActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
-        boolean showTutorial = PreferenceManager.getBool(this, Constant.PREFERENCE_TUTORIAL_SKIP, false);
-        if (!showTutorial) {
-            Intent intentTutorial = new Intent(this, TutorialActivity.class);
-            startActivity(intentTutorial);
-        }
+        //if (Utils.isAllowed()){
+            boolean showTutorial = PreferenceManager.getBool(this, Constant.PREFERENCE_TUTORIAL_SKIP, false);
+            if (!showTutorial) {
+                Intent intentTutorial = new Intent(this, TutorialActivity.class);
+                startActivity(intentTutorial);
+            }
+        //}
 
         setContentView(R.layout.activity_main);
 
@@ -233,10 +241,8 @@ public class MainActivity extends FragmentActivity {
         prepareDrawerList();
         prepareBackground();
 
-        boolean logoutnow = PreferenceManager.getBool(this, Constant.PREFERENCE_LOGOUT_NOW, false);
-        if(logoutnow){
-            //device ini aj yah
-            //logoutThisDevice();
+        if(!Utils.isAllowed()){
+            //logoutNow();
         }
 
         boolean routeFromTutorial = PreferenceManager.getBool(this, Constant.PREFERENCE_MAIN_FROM_TUTORIAL, false);
@@ -247,7 +253,7 @@ public class MainActivity extends FragmentActivity {
             switchFragment(content);
         }
 
-        AppUpdater appUpdater = new AppUpdater(this)
+        /*AppUpdater appUpdater = new AppUpdater(this)
                 .setDisplay(Display.DIALOG)
                 .setUpdateFrom(UpdateFrom.GOOGLE_PLAY)
                 .setTitleOnUpdateAvailable("Update available")
@@ -256,22 +262,81 @@ public class MainActivity extends FragmentActivity {
                 .setButtonDismiss(null)
                 .setButtonDoNotShowAgain(null)
                 ;
-        appUpdater.start();
+        appUpdater.start();*/
+    }
 
-        /*new AlertDialog.Builder(MainActivity.this)
+    public void checkupdate(){
+        UpdateChecker checker = new UpdateChecker(this, new UpdateCheckerResult() {
+            @Override
+            public void foundUpdateAndShowIt(String versionDonwloadable) {
+                Timber.e("foundUpdateAndShowIt: %s", versionDonwloadable);
+                showForceUpdate();
+            }
+
+            @Override
+            public void foundUpdateAndDontShowIt(String versionDonwloadable) {
+                Timber.e("foundUpdateAndDontShowIt: %s", versionDonwloadable);
+                showForceUpdate();
+            }
+
+            @Override
+            public void returnUpToDate(String versionDonwloadable) {
+                Timber.e("returnUpToDate: %s", versionDonwloadable);
+            }
+
+            @Override
+            public void returnMultipleApksPublished() {
+
+            }
+
+            @Override
+            public void returnNetworkError() {
+
+            }
+
+            @Override
+            public void returnAppUnpublished() {
+
+            }
+
+            @Override
+            public void returnStoreError() {
+
+            }
+        });
+        checker.setStore(Store.GOOGLE_PLAY);
+        checker.start();
+    }
+
+    void showForceUpdate(){
+        new AlertDialog.Builder(MainActivity.this)
                 .setTitle("Update available")
-                .setMessage("Check out the latest version available on Play Store")
-                .setPositiveButton("Update Now", new DialogInterface.OnClickListener() {
+                .setMessage("Check out the latest version available on Google Play Store")
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        // continue with delete
+                        final String appPackageName = getApplicationContext().getPackageName(); // getPackageName() from Context or Activity object
+                        try {
+                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
+                        } catch (android.content.ActivityNotFoundException anfe) {
+                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
+                        }
                     }
                 })
-                .show();*/
+                .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(DialogInterface dialog) {
+                        moveTaskToBack(true);
+                        Process.killProcess(Process.myPid());
+                        System.exit(1);
+                    }
+                })
+                .show();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        checkupdate();
         prepareDrawerList();
 
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.content);
@@ -509,51 +574,18 @@ public class MainActivity extends FragmentActivity {
                 fragment = new CredentialFragment();
                 break;
             case LOGIN:
-                /*if(!isGpsEnabled()){
-                    settingRequested = false;
-                }*/
-                /*if (!settingRequested) {
-                    checkSettingApi(LOGIN);
+                if (Utils.isAllowed()){
+                    fragment = new LoginFragment();
                 } else {
-                    if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                            && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
-                        if (ActivityCompat.shouldShowRequestPermissionRationale(this, android.Manifest.permission.ACCESS_FINE_LOCATION) ||
-                                ActivityCompat.shouldShowRequestPermissionRationale(this, android.Manifest.permission.ACCESS_COARSE_LOCATION)) {
-
-                            ActivityCompat.requestPermissions(this, PERMISSIONS_LOCATION, 3);
-                        } else {
-                            ActivityCompat.requestPermissions(this, PERMISSIONS_LOCATION, 3);
-                        }
-                    } else {
-                        //Toast.makeText(getApplicationContext(), "switc", Toast.LENGTH_LONG).show();
-                        fragment = new LoginFragment();
-                    }
-                }*/
-                fragment = new LoginFragment();
+                    Toast.makeText(getApplicationContext(), "We are sorry, log in has been permanently disabled", Toast.LENGTH_LONG).show();
+                }
                 break;
             case SIGNUP:
-                /*if(!isGpsEnabled()){
-                    settingRequested = false;
-                }
-                if (!settingRequested) {
-                    checkSettingApi(SIGNUP);
+                if (Utils.isAllowed()){
+                    fragment = new SignUpFragment();
                 } else {
-                    if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                            && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
-                        if (ActivityCompat.shouldShowRequestPermissionRationale(this, android.Manifest.permission.ACCESS_FINE_LOCATION) ||
-                                ActivityCompat.shouldShowRequestPermissionRationale(this, android.Manifest.permission.ACCESS_COARSE_LOCATION)) {
-
-                            ActivityCompat.requestPermissions(this, PERMISSIONS_LOCATION, 4);
-                        } else {
-                            ActivityCompat.requestPermissions(this, PERMISSIONS_LOCATION, 4);
-                        }
-                    } else {
-                        fragment = new SignUpFragment();
-                    }
-                }*/
-                fragment = new SignUpFragment();
+                    Toast.makeText(getApplicationContext(), "We are sorry, registration has been permanently disabled", Toast.LENGTH_LONG).show();
+                }
                 break;
             case SIGNUP_INFO:
                 fragment = new SignUpInfoFragment();
@@ -862,10 +894,8 @@ public class MainActivity extends FragmentActivity {
         List<ChildDrawerModel> listCard = new ArrayList<>();
         listCard.add(childCard1);
         listCard.add(childCard4);
-        //if(virtual == 0){
-            listCard.add(childCard3);
-            listCard.add(childCard5);
-        //}
+        listCard.add(childCard3);
+        listCard.add(childCard5);
 
         List<ChildDrawerModel> listAbout = new ArrayList<>();
         listAbout.add(childAbout5);
@@ -873,7 +903,7 @@ public class MainActivity extends FragmentActivity {
         listAbout.add(childAbout2);
         listAbout.add(childAbout3);
         if(!isLoggedIn){
-            listAbout.add(childAbout4);
+            //listAbout.add(childAbout4);
         }
 
         listDataChild.put(browse, listBrowse);

@@ -11,6 +11,7 @@ import com.maxxcoffee.mobile.util.Dummy;
 import com.crashlytics.android.Crashlytics;
 
 import io.fabric.sdk.android.Fabric;
+import timber.log.Timber;
 
 /**
  * Created by Rio Swarawan on 5/24/2016.
@@ -21,6 +22,7 @@ public class MaxxApp extends Application {
     public void onCreate() {
         super.onCreate();
         Fabric.with(this, new Crashlytics());
+        if (BuildConfig.DEBUG) Timber.plant(new Timber.DebugTree());
         /*TelephonyManager mngr = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
         mngr.getDeviceId();
         Log.d("Device IMEI", mngr.getDeviceId().toString());

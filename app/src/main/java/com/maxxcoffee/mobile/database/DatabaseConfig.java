@@ -27,7 +27,7 @@ import java.sql.SQLException;
  */
 public class DatabaseConfig extends OrmLiteSqliteOpenHelper {
 
-    private static final int DATABASE_VERSION = 55;
+    private static final int DATABASE_VERSION = 60;
     private static final String DATABASE_NAME = "db_maxx";
     private static final String TAG = "MAXX-DATABASE";
 

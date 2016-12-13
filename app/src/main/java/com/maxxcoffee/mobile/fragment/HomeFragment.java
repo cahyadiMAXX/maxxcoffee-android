@@ -86,6 +86,8 @@ public class HomeFragment extends Fragment {
     LinearLayout is_set;
     @Bind(R.id.cardName)
     TextView cardName;
+    @Bind(R.id.cardnumber)
+    TextView cardNumber;
     //blm ada kartu
     @Bind(R.id.no_cards)
     LinearLayout no_cards;
@@ -127,9 +129,9 @@ public class HomeFragment extends Fragment {
         boolean isLoggedIn = PreferenceManager.getBool(activity, Constant.PREFERENCE_LOGGED_IN, false);
         isPrimaryExist = false;
 
-        boolean isLogoutNow = PreferenceManager.getBool(activity, Constant.PREFERENCE_LOGOUT_NOW, false);
-        if(isLogoutNow){
-            //activity.logoutNow();
+        if(!Utils.isAllowed()){
+            bottomSheet.setVisibility(View.GONE);
+            //credential_buttons.setVisibility(View.GONE);
         }
 
         setupGCM();
@@ -403,6 +405,7 @@ public class HomeFragment extends Fragment {
             bottom_sheet_arrow.setVisibility(View.VISIBLE);
             CardPrimaryEntity entity = cardPrimaryEntities.get(0);
             cardName.setText(entity.getName());
+            cardNumber.setText(entity.getNumber());
             cardBalance.setText(String.valueOf(entity.getBalance()));
             cardBeans.setText(String.valueOf(entity.getPoint()));
             try{

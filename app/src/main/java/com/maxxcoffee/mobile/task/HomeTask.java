@@ -15,6 +15,7 @@ import com.maxxcoffee.mobile.util.PreferenceManager;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
+import timber.log.Timber;
 
 /**
  * Created by rioswarawan on 7/9/16.
@@ -34,6 +35,8 @@ public abstract class HomeTask extends AsyncTask<Void, Boolean, HomeResponseMode
 
         DefaultRequestModel body = new DefaultRequestModel();
         body.setToken(token);
+
+        Timber.e("DefaultRequestModel %s", body.toString());
 
         ApiManager.getApiInterface(context).home(accessToken, body, new Callback<HomeResponseModel>() {
             @Override

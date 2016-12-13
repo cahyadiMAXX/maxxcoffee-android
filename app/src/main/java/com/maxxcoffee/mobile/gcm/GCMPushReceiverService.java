@@ -40,7 +40,6 @@ public class GCMPushReceiverService extends GcmListenerService {
     public void onMessageReceived(String from, Bundle data) {
         for (String key: data.keySet())
         {
-            //Log.d ("myApplication", key + " is a key in the bundle");
             Log.d ("myApplication_msg", data.getString(key) + " - " +key+ " in the bundle");
         }
 

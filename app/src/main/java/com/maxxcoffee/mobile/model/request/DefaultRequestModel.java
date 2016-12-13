@@ -15,6 +15,8 @@ public class DefaultRequestModel {
     private String old_password;
     private String new_password;
 
+    private String device_id;
+
     public String getToken() {
         return token;
     }
@@ -53,5 +55,25 @@ public class DefaultRequestModel {
 
     public void setNama_user_last(String nama_user_last) {
         this.nama_user_last = nama_user_last;
+    }
+
+    public String getDevice_id() {
+        return device_id;
+    }
+
+    public void setDevice_id(String device_id) {
+        this.device_id = device_id;
+    }
+
+    @Override
+    public String toString() {
+        return "DefaultRequestModel{" +
+                "token='" + token + '\'' +
+                ", nama_user='" + nama_user + '\'' +
+                ", nama_user_last='" + nama_user_last + '\'' +
+                ", old_password='" + old_password + '\'' +
+                ", new_password='" + new_password + '\'' +
+                ", device_id='" + device_id + '\'' +
+                '}';
     }
 }

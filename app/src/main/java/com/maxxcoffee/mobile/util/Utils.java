@@ -11,6 +11,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -173,6 +174,22 @@ public class Utils {
         Bitmap resizedBitmap = Bitmap.createBitmap(bm, 0, 0, width, height, matrix, false);
 
         return resizedBitmap;
+    }
+
+    public static boolean isAllowed(){
+
+        SimpleDateFormat df = new SimpleDateFormat(Constant.DATEFORMAT_POST);
+        Date today = new Date();
+        Date check = null;
+        try {
+            check = df.parse("17/12/2016");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        if (today.after(check)) return false;
+
+        return true;
     }
 
 }

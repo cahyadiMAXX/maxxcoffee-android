@@ -3,7 +3,9 @@ package com.maxxcoffee.mobile.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Toast;
 
+import com.maxxcoffee.mobile.database.DatabaseConfig;
 import com.maxxcoffee.mobile.util.Constant;
 import com.maxxcoffee.mobile.util.PreferenceManager;
 import com.maxxcoffee.mobile.util.Utils;
@@ -21,6 +23,44 @@ public class LauncherActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        /*if (!Utils.isAllowed()){
+            PreferenceManager.clearPreference(LauncherActivity.this);
+            DatabaseConfig db = new DatabaseConfig(LauncherActivity.this);
+            db.clearAllTable();
+            //langsung
+            goToApps();
+        } else {*/
+            boolean welcome = PreferenceManager.getBool(this, Constant.PREFERENCE_WELCOME_SKIP, false);
+            if (welcome)
+                goToApps();
+            else
+                goToWelcomePage();
+        //}
+    }
+
+    private void goToApps() {
+
+        PreferenceManager.putBool(this, Constant.PREFERENCE_WELCOME_SKIP, true);
+
+        checkRating();
+
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        finish();
+    }
+
+    private void goToWelcomePage() {
+        Intent intent = new Intent(this, WelcomeSliderActivity.class);
+
+        checkRating();
+
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        finish();
+    }
+
+    private void checkRating(){
         boolean has_launch = PreferenceManager.getBool(this, Constant.PREFERENCE_HAS_LAUNCH, false);
         if(!has_launch){
             // Get date of first launch
@@ -40,26 +80,5 @@ public class LauncherActivity extends Activity {
                 PreferenceManager.putBool(getApplicationContext(), Constant.PREFERENCE_HAS_LAUNCH, true);
             }
         }
-
-        boolean welcome = PreferenceManager.getBool(this, Constant.PREFERENCE_WELCOME_SKIP, false);
-        if (welcome)
-            goToApps();
-        else
-            goToWelcomePage();
-    }
-
-    private void goToApps() {
-        PreferenceManager.putBool(this, Constant.PREFERENCE_WELCOME_SKIP, true);
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
-        finish();
-    }
-
-    private void goToWelcomePage() {
-        Intent intent = new Intent(this, WelcomeSliderActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
-        finish();
     }
 }

@@ -2,6 +2,7 @@ package com.maxxcoffee.mobile.task;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.provider.Settings;
 
 import com.maxxcoffee.mobile.api.ApiManager;
 import com.maxxcoffee.mobile.model.request.DefaultRequestModel;
@@ -29,9 +30,11 @@ public abstract class AddVirtualCardTask extends AsyncTask<Void, Boolean, AddVir
 
         String token = PreferenceManager.getString(context, Constant.PREFERENCE_TOKEN, "");
         String accessToken = PreferenceManager.getString(context, Constant.PREFERENCE_ACCESS_TOKEN, "");
+        String deviceId = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
 
         DefaultRequestModel body = new DefaultRequestModel();
         body.setToken(token);
+        body.setDevice_id(deviceId);
 
         ApiManager.getApiInterface(context).addVirtualCard(accessToken, body, new Callback<AddVirtualResponseModel>() {
             @Override

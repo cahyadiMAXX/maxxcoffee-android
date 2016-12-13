@@ -23,8 +23,8 @@ android {
         applicationId "com.maxxcoffee.mobile"
         minSdkVersion 15
         targetSdkVersion 23
-        versionCode 23
-        versionName "2.0.2"
+        versionCode 25
+        versionName "2.0.4"
         multiDexEnabled true
     }
 
@@ -101,6 +101,7 @@ dependencies {
     }
 
     compile 'com.github.javiersantos:AppUpdater:2.4'
+    compile 'com.github.rampo.updatechecker:library:2.1.8'
 }
 
 apply plugin: 'com.google.gms.google-services'
