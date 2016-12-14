@@ -13,6 +13,7 @@ import com.maxxcoffee.mobile.util.PreferenceManager;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
+import timber.log.Timber;
 
 /**
  * Created by rioswarawan on 7/8/16.
@@ -37,6 +38,7 @@ public abstract class LoginTestTask extends AsyncTask<LoginRequestModel, Boolean
 
             @Override
             public void failure(RetrofitError error) {
+                Timber.e("failure() %s", error.toString());
                 onFailed("Something went wrong. Please try again.");
             }
         });

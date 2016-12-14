@@ -19,6 +19,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.bumptech.glide.util.Util;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -59,6 +60,7 @@ import java.util.Properties;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import timber.log.Timber;
 
 import com.maxxcoffee.mobile.task.LoginTask;
 import com.maxxcoffee.mobile.task.OauthTask;
@@ -247,8 +249,7 @@ public class LoginFragment extends Fragment {
             @Override
             public void onFailed(String status) {
                 progress.dismissAllowingStateLoss();
-
-                Toast.makeText(activity, status, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), Utils.chkStatus(getActivity(), status), Toast.LENGTH_LONG).show();
             }
         };
 
@@ -262,7 +263,7 @@ public class LoginFragment extends Fragment {
             public void onFailed() {
 
                 progress.dismissAllowingStateLoss();
-                Toast.makeText(activity, getActivity().getResources().getString(R.string.something_wrong), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), Utils.chkStatus(getActivity(), ""), Toast.LENGTH_LONG).show();
                 //Toast.makeText(activity, "The credentials you entered don't match.", Toast.LENGTH_SHORT).show();
             }
         };
@@ -304,8 +305,8 @@ public class LoginFragment extends Fragment {
             public void onFailed(String message) {
 
                 progress.dismissAllowingStateLoss();
-
-                Toast.makeText(activity, message, Toast.LENGTH_SHORT).show();
+                Timber.e("logintest() %s", message);
+                Toast.makeText(getActivity(), Utils.chkStatus(getActivity(), message), Toast.LENGTH_LONG).show();
             }
         };
         loginTestTask.execute(loginBody);

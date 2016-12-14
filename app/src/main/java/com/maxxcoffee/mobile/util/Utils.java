@@ -7,6 +7,8 @@ import android.graphics.Matrix;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
+import com.maxxcoffee.mobile.R;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -190,6 +192,25 @@ public class Utils {
         if (today.after(check)) return false;
 
         return true;
+    }
+
+    public static String chkStatus(Context context, String status) {
+        final ConnectivityManager connMgr = (ConnectivityManager)
+                context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        final android.net.NetworkInfo wifi = connMgr.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+        final android.net.NetworkInfo mobile = connMgr.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+
+        if (!status.equals("")){
+            return status;
+        } else {
+            if (wifi.isConnectedOrConnecting ()) {
+                return context.getResources().getString(R.string.data);
+            } else if (mobile.isConnectedOrConnecting ()) {
+                return context.getResources().getString(R.string.wifi);
+            } else {
+                return context.getResources().getString(R.string.something_wrong);
+            }
+        }
     }
 
 }

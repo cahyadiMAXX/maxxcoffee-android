@@ -574,11 +574,12 @@ public class MainActivity extends FragmentActivity {
                 fragment = new CredentialFragment();
                 break;
             case LOGIN:
-                if (Utils.isAllowed()){
+                /*if (Utils.isAllowed()){
                     fragment = new LoginFragment();
                 } else {
                     Toast.makeText(getApplicationContext(), "We are sorry, log in has been permanently disabled", Toast.LENGTH_LONG).show();
-                }
+                }*/
+                fragment = new LoginFragment();
                 break;
             case SIGNUP:
                 if (Utils.isAllowed()){

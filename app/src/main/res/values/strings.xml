@@ -26,6 +26,8 @@
 
     <string name="mobile_data">Please check your internet connection</string>
     <string name="something_wrong">Something went wrong. Please try again.</string>
+    <string name="wifi">Can\'t connect to server, please try using wifi connection</string>
+    <string name="data">Can\'t connect to server, please try using mobile data connection</string>
     <string name="no_card_alert">You do not have any connected card.\n\nPlease add card.</string>
     <string name="virtual_card">You do not have any physical card \n\nto be reported</string>
     <string name="share_using">Share</string>
