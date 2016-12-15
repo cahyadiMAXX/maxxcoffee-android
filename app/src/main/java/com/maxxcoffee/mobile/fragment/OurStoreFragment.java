@@ -1,8 +1,10 @@
 package com.maxxcoffee.mobile.fragment;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -12,6 +14,8 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -197,8 +201,16 @@ public class OurStoreFragment extends Fragment {
     }
 
     private void fetchingData() {
-        final LoadingDialog progress = new LoadingDialog();
-        progress.show(getFragmentManager(), null);
+        /*final LoadingDialog progress = new LoadingDialog();
+        progress.show(getFragmentManager(), null);*/
+        final Dialog loading;
+        loading = new Dialog(getActivity());
+        loading.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        loading.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        loading.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        loading.setContentView(R.layout.dialog_loading);
+        loading.setCancelable(false);
+        loading.show();
 
         StoreTask task = new StoreTask(activity) {
             @Override
@@ -231,13 +243,15 @@ public class OurStoreFragment extends Fragment {
                     controller.insert(store);
                 }
                 getLocalProvince();
-                progress.dismissAllowingStateLoss();
+                loading.dismiss();
+                //progress.dismissAllowingStateLoss();
 
             }
 
             @Override
             public void onFailed() {
-                progress.dismissAllowingStateLoss();
+                //progress.dismissAllowingStateLoss();
+                loading.dismiss();
                 Toast.makeText(activity, "Something went wrong. Please try again.", Toast.LENGTH_SHORT).show();
             }
         };
@@ -246,8 +260,16 @@ public class OurStoreFragment extends Fragment {
 
     public void getLocalStore(String province) {
         List<StoreEntity> stores = new ArrayList<>();
-        LoadingDialog progress = new LoadingDialog();
-        progress.show(getFragmentManager(), null);
+        /*LoadingDialog progress = new LoadingDialog();
+        progress.show(getFragmentManager(), null);*/
+        final Dialog loading;
+        loading = new Dialog(getActivity());
+        loading.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        loading.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        loading.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        loading.setContentView(R.layout.dialog_loading);
+        loading.setCancelable(false);
+        loading.show();
 
         if (province.equalsIgnoreCase("all")) {
             stores = controller.getStores();
@@ -260,7 +282,8 @@ public class OurStoreFragment extends Fragment {
 
         data.addAll(stores);
         adapter.notifyDataSetInvalidated();
-        progress.dismissAllowingStateLoss();
+        //progress.dismissAllowingStateLoss();
+        loading.dismiss();
     }
 
     public void getLocalProvince() {

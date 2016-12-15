@@ -1,5 +1,7 @@
 package com.maxxcoffee.mobile.fragment;
 
+import android.app.Dialog;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -7,6 +9,8 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -229,8 +233,17 @@ public class CardDetailHistoryFragment extends Fragment {
 
     private void fetchingData() {
         //initDate();
-        final LoadingDialog progress = new LoadingDialog();
-        progress.show(getFragmentManager(), null);
+        /*final LoadingDialog progress = new LoadingDialog();
+        progress.show(getFragmentManager(), null);*/
+
+        final Dialog loading;
+        loading = new Dialog(getActivity());
+        loading.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        loading.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        loading.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        loading.setContentView(R.layout.dialog_loading);
+        loading.setCancelable(false);
+        loading.show();
 
         HistoryRequestModel body = new HistoryRequestModel();
         body.setCard_number(selectedCard);
@@ -240,7 +253,8 @@ public class CardDetailHistoryFragment extends Fragment {
         HistoryTask task = new HistoryTask(activity) {
             @Override
             public void onSuccess() {
-                    progress.dismissAllowingStateLoss();
+                    //progress.dismissAllowingStateLoss();
+                loading.dismiss();
 
                 historyLayout.setVisibility(View.VISIBLE);
                 setupViewPager(viewPager);
@@ -249,7 +263,8 @@ public class CardDetailHistoryFragment extends Fragment {
 
             @Override
             public void onFailed() {
-                    progress.dismiss();
+                //progress.dismiss();
+                loading.dismiss();
             }
         };
         task.execute(body);

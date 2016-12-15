@@ -1,5 +1,7 @@
 package com.maxxcoffee.mobile.fragment;
 
+import android.app.Dialog;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -7,6 +9,8 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -75,6 +79,8 @@ public class CardHistoryFragment extends Fragment {
     private String selectedStartDate;
     private String selectedEndDate;
 
+    Dialog loading;
+
     public CardHistoryFragment(){}
 
     @Override
@@ -95,6 +101,13 @@ public class CardHistoryFragment extends Fragment {
 
         ButterKnife.bind(this, view);
         activity.setTitle("Card History");
+
+        loading = new Dialog(getActivity());
+        loading.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        loading.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        loading.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        loading.setContentView(R.layout.dialog_loading);
+        loading.setCancelable(false);
 
         mainframe.setVisibility(View.GONE);
         empty.setVisibility(View.GONE);
@@ -250,8 +263,9 @@ public class CardHistoryFragment extends Fragment {
 
     private void fetchingCardData() {
         initDate();
-        final LoadingDialog progress = new LoadingDialog();
-        progress.show(getFragmentManager(), null);
+        /*final LoadingDialog progress = new LoadingDialog();
+        progress.show(getFragmentManager(), null);*/
+        loading.show();
 
         CardTask task = new CardTask(activity) {
             @Override
@@ -277,12 +291,14 @@ public class CardHistoryFragment extends Fragment {
                     cardController.insert(entity);
                 }
                 getLocalCard();
-                progress.dismissAllowingStateLoss();
+                //progress.dismissAllowingStateLoss();
+                loading.dismiss();
             }
 
             @Override
             public void onFailed(String message) {
-                progress.dismissAllowingStateLoss();
+                //progress.dismissAllowingStateLoss();
+                loading.dismiss();
                 empty.setText(message);
                 empty.setVisibility(View.VISIBLE);
                 mainframe.setVisibility(View.GONE);
@@ -294,7 +310,8 @@ public class CardHistoryFragment extends Fragment {
             public void onFailed() {
                 //empty.setVisibility(View.VISIBLE);
                 Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.something_wrong), Toast.LENGTH_LONG).show();
-                progress.dismissAllowingStateLoss();
+                //progress.dismissAllowingStateLoss();
+                loading.dismiss();
             }
         };
         task.execute();
@@ -345,8 +362,16 @@ public class CardHistoryFragment extends Fragment {
             return;
         }
 
-        final LoadingDialog progress = new LoadingDialog();
-        progress.show(getFragmentManager(), null);
+        /*final LoadingDialog progress = new LoadingDialog();
+        progress.show(getFragmentManager(), null);*/
+        final Dialog loading;
+        loading = new Dialog(getActivity());
+        loading.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        loading.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        loading.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        loading.setContentView(R.layout.dialog_loading);
+        loading.setCancelable(false);
+        loading.show();
 
         HistoryRequestModel body = new HistoryRequestModel();
         body.setCard_number(selectedCard);
@@ -358,7 +383,8 @@ public class CardHistoryFragment extends Fragment {
         HistoryTask task = new HistoryTask(activity) {
             @Override
             public void onSuccess() {
-                progress.dismissAllowingStateLoss();
+                //progress.dismissAllowingStateLoss();
+                loading.dismiss();
                 //mainframe.setVisibility(View.VISIBLE);
                 historyLayout.setVisibility(View.VISIBLE);
                 empty.setVisibility(View.GONE);
@@ -370,7 +396,8 @@ public class CardHistoryFragment extends Fragment {
             public void onFailed() {
                 //empty.setVisibility(View.VISIBLE);
                 Toast.makeText(getActivity(), getResources().getString(R.string.something_wrong), Toast.LENGTH_LONG).show();
-                progress.dismissAllowingStateLoss();
+                //progress.dismissAllowingStateLoss();
+                loading.dismiss();
             }
         };
         task.execute(body);

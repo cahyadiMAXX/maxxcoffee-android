@@ -1,10 +1,14 @@
 package com.maxxcoffee.mobile.fragment;
 
+import android.app.Dialog;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -60,19 +64,29 @@ public class ChangeCityFragment extends Fragment {
     private void fetchingCity() {
         String cityData = PreferenceManager.getString(activity, Constant.DATA_KOTA, "");
         if (cityData.equals("")) {
-            final LoadingDialog progress = new LoadingDialog();
-            progress.show(getFragmentManager(), null);
+            /*final LoadingDialog progress = new LoadingDialog();
+            progress.show(getFragmentManager(), null);*/
+            final Dialog loading;
+            loading = new Dialog(getActivity());
+            loading.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+            loading.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+            loading.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+            loading.setContentView(R.layout.dialog_loading);
+            loading.setCancelable(false);
+            loading.show();
 
             CityTask task = new CityTask(activity) {
                 @Override
                 public void onSuccess(String json) {
-                        progress.dismissAllowingStateLoss();
+                        //progress.dismissAllowingStateLoss();
+                    loading.dismiss();
                     PreferenceManager.putString(activity, Constant.DATA_KOTA, json);
                 }
 
                 @Override
                 public void onFailed() {
-                        progress.dismissAllowingStateLoss();
+                        //progress.dismissAllowingStateLoss();
+                    loading.dismiss();
                     Toast.makeText(activity, "Failed to retrieve city data", Toast.LENGTH_SHORT).show();
                 }
             };
@@ -89,8 +103,16 @@ public class ChangeCityFragment extends Fragment {
             Toast.makeText(activity, activity.getResources().getString(R.string.mobile_data), Toast.LENGTH_LONG).show();
         }
 
-        final LoadingDialog progress = new LoadingDialog();
-        progress.show(getFragmentManager(), null);
+        /*final LoadingDialog progress = new LoadingDialog();
+        progress.show(getFragmentManager(), null);*/
+        final Dialog loading;
+        loading = new Dialog(getActivity());
+        loading.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        loading.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        loading.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        loading.setContentView(R.layout.dialog_loading);
+        loading.setCancelable(false);
+        loading.show();
 
         ChangeCityOccupationRequestModel body = new ChangeCityOccupationRequestModel();
         body.setKota_user(city.getText().toString());
@@ -98,13 +120,15 @@ public class ChangeCityFragment extends Fragment {
         ChangeCityOccupationTask task = new ChangeCityOccupationTask(activity) {
             @Override
             public void onSuccess() {
-                    progress.dismissAllowingStateLoss();
+                    //progress.dismissAllowingStateLoss();
+                loading.dismiss();
                 activity.onBackClick();
             }
 
             @Override
             public void onFailed() {
-                    progress.dismissAllowingStateLoss();
+                    //progress.dismissAllowingStateLoss();
+                loading.dismiss();
                 Toast.makeText(activity, "Failed to change user name", Toast.LENGTH_SHORT).show();
             }
         };

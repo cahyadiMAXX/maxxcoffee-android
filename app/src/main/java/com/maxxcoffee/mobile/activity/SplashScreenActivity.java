@@ -12,6 +12,12 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import com.maxxcoffee.mobile.R;
+import com.maxxcoffee.mobile.model.response.FeaturedResponseModel;
+import com.maxxcoffee.mobile.task.FeaturedControlTask;
+import com.maxxcoffee.mobile.util.Constant;
+import com.maxxcoffee.mobile.util.PreferenceManager;
+
+import timber.log.Timber;
 
 public class SplashScreenActivity extends AppCompatActivity {
 

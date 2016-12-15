@@ -72,7 +72,7 @@ public class DetailPromoFragment extends Fragment {
         String mImage = getArguments().getString("image", "");
 
         title.setText(mTitle);
-        ;
+
         description.setText(Html.fromHtml(Html.fromHtml(mDescription).toString()));
         syarat.setText(Html.fromHtml(Html.fromHtml(mSyarat).toString()));
 

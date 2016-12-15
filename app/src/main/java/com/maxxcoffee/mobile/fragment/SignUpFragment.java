@@ -1,5 +1,7 @@
 package com.maxxcoffee.mobile.fragment;
 
+import android.app.Dialog;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
@@ -8,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -73,8 +76,17 @@ public class SignUpFragment extends Fragment {
             public void onFocusChange(View v, boolean hasFocus) {
                 if(!hasFocus && !activity.isDrawerExpanded() && (activity.getActiveFragmentFlag() == MainActivity.SIGNUP)){
                     if(!email.getText().toString().equals("") && isValidEmail(email.getText().toString())){
-                        final LoadingDialog progress = new LoadingDialog();
-                        progress.show(getFragmentManager(), null);
+                        /*final LoadingDialog progress = new LoadingDialog();
+                        progress.show(getFragmentManager(), null);*/
+                        final Dialog loading;
+                        loading = new Dialog(getActivity());
+                        loading.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+                        loading.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                        loading.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+                        loading.setContentView(R.layout.dialog_loading);
+                        loading.setCancelable(false);
+                        loading.show();
+
                         //check ke server
                         CheckValidEmailRequestModel body = new CheckValidEmailRequestModel();
                         body.setEmail(email.getText().toString());
@@ -82,14 +94,16 @@ public class SignUpFragment extends Fragment {
                         CheckValidEmailTask cvtask = new CheckValidEmailTask(activity) {
                             @Override
                             public void onSuccess(String response) {
-                                progress.dismissAllowingStateLoss();
+                                //progress.dismissAllowingStateLoss();
+                                loading.dismiss();
                                 //Toast.makeText(getActivity(), response, Toast.LENGTH_LONG).show();
                                 PreferenceManager.putBool(activity, Constant.PREFERENCE_REGISTER_IS_VALID_EMAIL, true);
                             }
 
                             @Override
                             public void onFailed() {
-                                progress.dismissAllowingStateLoss();
+                                //progress.dismissAllowingStateLoss();
+                                loading.dismiss();
                                 PreferenceManager.putBool(activity, Constant.PREFERENCE_REGISTER_IS_VALID_EMAIL, false);
                                 email.requestFocus();
                                 email.setError(getActivity().getResources().getString(R.string.something_wrong));
@@ -98,7 +112,8 @@ public class SignUpFragment extends Fragment {
 
                             @Override
                             public void onFailed(String response) {
-                                progress.dismissAllowingStateLoss();
+                                //progress.dismissAllowingStateLoss();
+                                loading.dismiss();
                                 PreferenceManager.putBool(activity, Constant.PREFERENCE_REGISTER_IS_VALID_EMAIL, false);
                                 email.requestFocus();
                                 email.setError(response);
@@ -207,20 +222,30 @@ public class SignUpFragment extends Fragment {
         PreferenceManager.putString(activity, Constant.PREFERENCE_REGISTER_PHONE, mPhone);
         PreferenceManager.putString(activity, Constant.PREFERENCE_REGISTER_PASSWORD, mPassword);
 
-        final LoadingDialog progress = new LoadingDialog();
-        progress.show(getFragmentManager(), null);
+        /*final LoadingDialog progress = new LoadingDialog();
+        progress.show(getFragmentManager(), null);*/
+        final Dialog loading;
+        loading = new Dialog(getActivity());
+        loading.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        loading.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        loading.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        loading.setContentView(R.layout.dialog_loading);
+        loading.setCancelable(false);
+        loading.show();
 
         CityTask task = new CityTask(activity) {
             @Override
             public void onSuccess(String json) {
-                progress.dismissAllowingStateLoss();
+                //progress.dismissAllowingStateLoss();
+                loading.dismiss();
                 PreferenceManager.putString(activity, Constant.DATA_KOTA, json);
                 activity.switchFragment(MainActivity.SIGNUP_INFO, bundle);
             }
 
             @Override
             public void onFailed() {
-                progress.dismissAllowingStateLoss();
+                //progress.dismissAllowingStateLoss();
+                loading.dismiss();
                 Toast.makeText(activity, "Failed to retrieve city data", Toast.LENGTH_SHORT).show();
             }
         };
@@ -286,14 +311,7 @@ public class SignUpFragment extends Fragment {
             passwordConfirm.setError("Please verify your password confirmation");
             Toast.makeText(activity, "Please verify your password confirmation", Toast.LENGTH_SHORT).show();
             return false;
-        } /*else{
-            Log.d("passwordasu", String.valueOf(mPassword.length()));
-            if(mPasswordConfirm.length() < 8){
-                passwordConfirm.setError("Password must be at least 8 characters");
-                Toast.makeText(activity, "Password must be at least 8 characters", Toast.LENGTH_SHORT).show();
-                return false;
-            }
-        }*/
+        }
 
         if (!mPassword.equals(mPasswordConfirm)) {
             passwordConfirm.setError("Please verify your password confirmation");

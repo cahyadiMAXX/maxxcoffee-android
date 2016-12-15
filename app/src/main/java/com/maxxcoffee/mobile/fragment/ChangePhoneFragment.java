@@ -1,10 +1,14 @@
 package com.maxxcoffee.mobile.fragment;
 
+import android.app.Dialog;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -63,8 +67,16 @@ public class ChangePhoneFragment extends Fragment {
 
         final ProfileEntity profile = profileController.getProfile();
         if (profile != null) {
-            final LoadingDialog progress = new LoadingDialog();
-            progress.show(getFragmentManager(), null);
+            /*final LoadingDialog progress = new LoadingDialog();
+            progress.show(getFragmentManager(), null);*/
+            final Dialog loading;
+            loading = new Dialog(getActivity());
+            loading.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+            loading.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+            loading.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+            loading.setContentView(R.layout.dialog_loading);
+            loading.setCancelable(false);
+            loading.show();
 
             ChangePhoneRequestModel body = new ChangePhoneRequestModel();
             body.setNewhp(phone.getText().toString());
@@ -74,7 +86,8 @@ public class ChangePhoneFragment extends Fragment {
                 @Override
                 public void onSuccess() {
 
-                    progress.dismissAllowingStateLoss();
+                    //progress.dismissAllowingStateLoss();
+                    loading.dismiss();
                     profile.setPhone(phone.getText().toString());
                     profileController.insert(profile);
 
@@ -84,14 +97,16 @@ public class ChangePhoneFragment extends Fragment {
                 @Override
                 public void onWait() {
 
-                    progress.dismissAllowingStateLoss();
+                    //progress.dismissAllowingStateLoss();
+                    loading.dismiss();
                     Toast.makeText(activity, "You've just changed your phone number. Please wait 5 minutes before making another changes.", Toast.LENGTH_SHORT).show();
                 }
 
                 @Override
                 public void onFailed() {
 
-                    progress.dismiss();
+                    //progress.dismiss();
+                    loading.dismiss();
                     Toast.makeText(activity, "Failed to change phone number", Toast.LENGTH_SHORT).show();
                 }
             };

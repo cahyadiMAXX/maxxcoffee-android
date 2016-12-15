@@ -1,10 +1,14 @@
 package com.maxxcoffee.mobile.fragment;
 
+import android.app.Dialog;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -79,8 +83,16 @@ public class ChangeEmailFragment extends Fragment {
             return;
         }
 
-        final LoadingDialog progress = new LoadingDialog();
-        progress.show(getFragmentManager(), null);
+        /*final LoadingDialog progress = new LoadingDialog();
+        progress.show(getFragmentManager(), null);*/
+        final Dialog loading;
+        loading = new Dialog(getActivity());
+        loading.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        loading.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        loading.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        loading.setContentView(R.layout.dialog_loading);
+        loading.setCancelable(false);
+        loading.show();
 
         ChangeEmailRequestModel body = new ChangeEmailRequestModel();
         body.setNew_email(email.getText().toString());
@@ -89,7 +101,8 @@ public class ChangeEmailFragment extends Fragment {
         ChangeEmailTask task = new ChangeEmailTask(activity) {
             @Override
             public void onSuccess(String message) {
-                progress.dismissAllowingStateLoss();
+                //progress.dismissAllowingStateLoss();
+                loading.dismiss();
                 Toast.makeText(activity, message, Toast.LENGTH_LONG).show();
                 PreferenceManager.putBool(activity, Constant.PREFERENCE_ROUTE_TO_LOGOUT, true);
                 activity.onBackClick();
@@ -97,7 +110,8 @@ public class ChangeEmailFragment extends Fragment {
 
             @Override
             public void onFailed() {
-                progress.dismissAllowingStateLoss();
+                //progress.dismissAllowingStateLoss();
+                loading.dismiss();
                 Toast.makeText(activity, "Failed to change email. Contact administrator for more information.", Toast.LENGTH_SHORT).show();
             }
         };

@@ -1,11 +1,15 @@
 package com.maxxcoffee.mobile.fragment;
 
+import android.app.Dialog;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -58,13 +62,22 @@ public class TosFragment extends Fragment {
     }
 
     private void fetchingData() {
-        final LoadingDialog progress = new LoadingDialog();
-        progress.show(getFragmentManager(), null);
+        /*final LoadingDialog progress = new LoadingDialog();
+        progress.show(getFragmentManager(), null);*/
+        final Dialog loading;
+        loading = new Dialog(getActivity());
+        loading.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        loading.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        loading.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        loading.setContentView(R.layout.dialog_loading);
+        loading.setCancelable(false);
+        loading.show();
 
         TosTask task = new TosTask(activity) {
             @Override
             public void onSuccess(String tos) {
-                progress.dismissAllowingStateLoss();
+                //progress.dismissAllowingStateLoss();
+                loading.dismiss();
 
                 if (tos != null) {
                     content.setText(Html.fromHtml(tos));
@@ -77,7 +90,8 @@ public class TosFragment extends Fragment {
 
             @Override
             public void onFailed() {
-                progress.dismissAllowingStateLoss();
+                //progress.dismissAllowingStateLoss();
+                loading.dismiss();
                 Toast.makeText(activity, activity.getResources().getString(R.string.something_wrong), Toast.LENGTH_SHORT).show();
             }
         };

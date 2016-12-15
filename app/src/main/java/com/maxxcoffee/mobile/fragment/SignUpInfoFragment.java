@@ -1,7 +1,9 @@
 package com.maxxcoffee.mobile.fragment;
 
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v4.app.Fragment;
@@ -10,6 +12,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -237,8 +241,17 @@ public class SignUpInfoFragment extends Fragment {
         if (!isFormValid())
             return;
 
-        final LoadingDialog progress = new LoadingDialog();
-        progress.show(getFragmentManager(), null);
+        /*final LoadingDialog progress = new LoadingDialog();
+        progress.show(getFragmentManager(), null);*/
+
+        final Dialog loading;
+        loading = new Dialog(getActivity());
+        loading.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        loading.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        loading.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        loading.setContentView(R.layout.dialog_loading);
+        loading.setCancelable(false);
+        loading.show();
 
         RegisterRequestModel body = new RegisterRequestModel();
         body.setFirst_name(selectedFirstName);
@@ -260,13 +273,15 @@ public class SignUpInfoFragment extends Fragment {
         RegisterTask task = new RegisterTask(activity) {
             @Override
             public void onSuccess() {
-                progress.dismissAllowingStateLoss();
+                //progress.dismissAllowingStateLoss();
+                loading.dismiss();
                 loginNow();
             }
 
             @Override
             public void onFailed(String message) {
-                progress.dismissAllowingStateLoss();
+                //progress.dismissAllowingStateLoss();
+                loading.dismiss();
                 Toast.makeText(activity, message, Toast.LENGTH_SHORT).show();
             }
         };
@@ -274,8 +289,16 @@ public class SignUpInfoFragment extends Fragment {
     }
 
     private void loginNow() {
-        final LoadingDialog progress = new LoadingDialog();
-        progress.show(getFragmentManager(), null);
+        /*final LoadingDialog progress = new LoadingDialog();
+        progress.show(getFragmentManager(), null);*/
+        final Dialog loading;
+        loading = new Dialog(getActivity());
+        loading.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        loading.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        loading.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        loading.setContentView(R.layout.dialog_loading);
+        loading.setCancelable(false);
+        loading.show();
 
         Properties properties = Utils.getProperties(activity);
 
@@ -295,14 +318,16 @@ public class SignUpInfoFragment extends Fragment {
         final LoginTask task = new LoginTask(activity) {
             @Override
             public void onSuccess(String status) {
-                progress.dismissAllowingStateLoss();
+                //progress.dismissAllowingStateLoss();
+                loading.dismiss();
                 PreferenceManager.putBool(activity, Constant.PREFERENCE_LOGGED_IN, true);
                 fetchingProfileData();
             }
 
             @Override
             public void onFailed(String status) {
-                progress.dismissAllowingStateLoss();
+                //progress.dismissAllowingStateLoss();
+                loading.dismiss();
                 Toast.makeText(activity, "Login failed. Token not found", Toast.LENGTH_SHORT).show();
             }
         };
@@ -315,7 +340,8 @@ public class SignUpInfoFragment extends Fragment {
 
             @Override
             public void onFailed() {
-                progress.dismissAllowingStateLoss();
+                //progress.dismissAllowingStateLoss();
+                loading.dismiss();
                 Toast.makeText(activity, "Login failed. Access token not found", Toast.LENGTH_SHORT).show();
             }
         };
@@ -352,8 +378,16 @@ public class SignUpInfoFragment extends Fragment {
     }
 
     private void fetchingProfileData() {
-        final LoadingDialog progress = new LoadingDialog();
-        progress.show(getFragmentManager(), null);
+        /*final LoadingDialog progress = new LoadingDialog();
+        progress.show(getFragmentManager(), null);*/
+        final Dialog loading;
+        loading = new Dialog(getActivity());
+        loading.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        loading.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        loading.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        loading.setContentView(R.layout.dialog_loading);
+        loading.setCancelable(false);
+        loading.show();
 
         ProfileTask task = new ProfileTask(activity) {
             @Override
@@ -404,7 +438,8 @@ public class SignUpInfoFragment extends Fragment {
                 PreferenceManager.putBool(activity, Constant.PREFERENCE_TUTORIAL_SKIP, true);
                 PreferenceManager.putString(activity, Constant.PREFERENCE_BALANCE, String.valueOf(profile.getTotal_balance()));
                 PreferenceManager.putString(activity, Constant.PREFERENCE_BEAN, String.valueOf(profile.getTotal_point()));
-                progress.dismissAllowingStateLoss();
+                //progress.dismissAllowingStateLoss();
+                loading.dismiss();
 
                 activity.prepareDrawerList();
                 activity.switchFragment(MainActivity.HOME);
@@ -413,7 +448,8 @@ public class SignUpInfoFragment extends Fragment {
 
             @Override
             public void onFailed() {
-                progress.dismissAllowingStateLoss();
+                //progress.dismissAllowingStateLoss();
+                loading.dismiss();
                 Toast.makeText(activity, activity.getResources().getString(R.string.something_wrong), Toast.LENGTH_SHORT).show();
             }
         };

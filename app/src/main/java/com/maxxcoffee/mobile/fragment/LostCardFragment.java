@@ -1,10 +1,14 @@
 package com.maxxcoffee.mobile.fragment;
 
+import android.app.Dialog;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -59,6 +63,8 @@ public class LostCardFragment extends Fragment {
     private Integer selectedCrd;
 //    private Integer selectedCard;
 
+    Dialog loading;
+
     public LostCardFragment(){}
 
     @Override
@@ -77,6 +83,13 @@ public class LostCardFragment extends Fragment {
 
         ButterKnife.bind(this, view);
         activity.setTitle("Report Lost Card");
+
+        loading = new Dialog(getActivity());
+        loading.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        loading.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        loading.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        loading.setContentView(R.layout.dialog_loading);
+        loading.setCancelable(false);
 
         mainframe.setVisibility(View.GONE);
 
@@ -99,8 +112,9 @@ public class LostCardFragment extends Fragment {
     }
 
     private void fetchingData() {
-        final LoadingDialog progress = new LoadingDialog();
-        progress.show(getFragmentManager(), null);
+        /*final LoadingDialog progress = new LoadingDialog();
+        progress.show(getFragmentManager(), null);*/
+        loading.show();
 
         CardTask task = new CardTask(activity) {
             @Override
@@ -127,13 +141,15 @@ public class LostCardFragment extends Fragment {
                 }
 
                 getLocalCard();
-                progress.dismissAllowingStateLoss();
+                loading.dismiss();
+                //progress.dismissAllowingStateLoss();
             }
 
             @Override
             public void onFailed() {
                 Toast.makeText(activity, activity.getResources().getString(R.string.something_wrong), Toast.LENGTH_SHORT).show();
-                progress.dismissAllowingStateLoss();
+                //progress.dismissAllowingStateLoss();
+                loading.dismiss();
             }
 
             @Override
@@ -142,7 +158,8 @@ public class LostCardFragment extends Fragment {
                 empty.setVisibility(View.VISIBLE);
                 mainframe.setVisibility(View.GONE);
                 //Toast.makeText(activity, message, Toast.LENGTH_SHORT).show();
-                progress.dismissAllowingStateLoss();
+                //progress.dismissAllowingStateLoss();
+                loading.dismiss();
             }
         };
         task.execute();
@@ -272,8 +289,16 @@ public class LostCardFragment extends Fragment {
     }
 
     private void reportLostCardNow() {
-        final LoadingDialog progress = new LoadingDialog();
-        progress.show(getFragmentManager(), null);
+        /*final LoadingDialog progress = new LoadingDialog();
+        progress.show(getFragmentManager(), null);*/
+        final Dialog progress;
+        progress = new Dialog(getActivity());
+        progress.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        progress.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        progress.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        progress.setContentView(R.layout.dialog_loading);
+        progress.setCancelable(false);
+        progress.show();
 
         String subj = "";
         if (subject.getText().toString().equals("Lost Card")) {
@@ -290,7 +315,8 @@ public class LostCardFragment extends Fragment {
         LostCardTask task = new LostCardTask(activity) {
             @Override
             public void onSuccess() {
-                progress.dismissAllowingStateLoss();
+                //progress.dismissAllowingStateLoss();
+                progress.dismiss();
                 Toast.makeText(activity, "Your report has been submitted successfully", Toast.LENGTH_SHORT).show();
                 detail.setText("");
                 activity.switchFragment(MainActivity.MY_CARD);
@@ -298,7 +324,9 @@ public class LostCardFragment extends Fragment {
 
             @Override
             public void onFailed() {
-                progress.dismissAllowingStateLoss();
+                //progress.dismissAllowingStateLoss();
+                Toast.makeText(getActivity(), getResources().getString(R.string.something_wrong), Toast.LENGTH_LONG).show();
+                progress.dismiss();
             }
         };
         task.execute(body);

@@ -1,10 +1,12 @@
 package com.maxxcoffee.mobile.fragment;
 
+import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
@@ -15,6 +17,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -211,8 +215,16 @@ public class LoginFragment extends Fragment {
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
 
-        final LoadingDialog progress = new LoadingDialog();
-        progress.show(getFragmentManager(), null);
+        /*final LoadingDialog progress = new LoadingDialog();
+        progress.show(getFragmentManager(), null);*/
+        final Dialog loading;
+        loading = new Dialog(getActivity());
+        loading.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        loading.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        loading.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        loading.setContentView(R.layout.dialog_loading);
+        loading.setCancelable(false);
+        loading.show();
 
         Properties properties = Utils.getProperties(activity);
 
@@ -238,7 +250,8 @@ public class LoginFragment extends Fragment {
         final LoginTask task = new LoginTask(activity) {
             @Override
             public void onSuccess(String status) {
-                progress.dismissAllowingStateLoss();
+                //progress.dismissAllowingStateLoss();
+                loading.dismiss();
 
                 PreferenceManager.putBool(activity, Constant.PREFERENCE_LOGGED_IN, true);
                 PreferenceManager.putString(activity, Constant.PREFERENCE_EMAIL, email.getText().toString());
@@ -248,7 +261,8 @@ public class LoginFragment extends Fragment {
 
             @Override
             public void onFailed(String status) {
-                progress.dismissAllowingStateLoss();
+                //progress.dismissAllowingStateLoss();
+                loading.dismiss();
                 Toast.makeText(getActivity(), Utils.chkStatus(getActivity(), status), Toast.LENGTH_LONG).show();
             }
         };
@@ -262,7 +276,8 @@ public class LoginFragment extends Fragment {
             @Override
             public void onFailed() {
 
-                progress.dismissAllowingStateLoss();
+                //progress.dismissAllowingStateLoss();
+                loading.dismiss();
                 Toast.makeText(getActivity(), Utils.chkStatus(getActivity(), ""), Toast.LENGTH_LONG).show();
                 //Toast.makeText(activity, "The credentials you entered don't match.", Toast.LENGTH_SHORT).show();
             }
@@ -277,7 +292,8 @@ public class LoginFragment extends Fragment {
             @Override
             public void onChangePhoneNumber(final String email) {
 
-                progress.dismissAllowingStateLoss();
+                //progress.dismissAllowingStateLoss();
+                loading.dismiss();
 
                 final Bundle bundle = new Bundle();
                 bundle.putString("content", "Phone number already registered. Please change your phone number.");
@@ -303,8 +319,8 @@ public class LoginFragment extends Fragment {
 
             @Override
             public void onFailed(String message) {
-
-                progress.dismissAllowingStateLoss();
+                loading.dismiss();
+                //progress.dismissAllowingStateLoss();
                 Timber.e("logintest() %s", message);
                 Toast.makeText(getActivity(), Utils.chkStatus(getActivity(), message), Toast.LENGTH_LONG).show();
             }
@@ -333,8 +349,16 @@ public class LoginFragment extends Fragment {
     }
 
     private void fetchingProfileData() {
-        final LoadingDialog progress = new LoadingDialog();
-        progress.show(getFragmentManager(), null);
+        /*final LoadingDialog progress = new LoadingDialog();
+        progress.show(getFragmentManager(), null);*/
+        final Dialog loading;
+        loading = new Dialog(getActivity());
+        loading.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        loading.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        loading.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        loading.setContentView(R.layout.dialog_loading);
+        loading.setCancelable(false);
+        loading.show();
 
         ProfileTask task = new ProfileTask(activity) {
             @Override
@@ -386,7 +410,8 @@ public class LoginFragment extends Fragment {
                 PreferenceManager.putString(activity, Constant.PREFERENCE_BALANCE, String.valueOf(profile.getTotal_balance()));
                 PreferenceManager.putString(activity, Constant.PREFERENCE_BEAN, String.valueOf(profile.getTotal_point()));
 
-                progress.dismissAllowingStateLoss();
+                //progress.dismissAllowingStateLoss();
+                loading.dismiss();
 
                 activity.prepareDrawerList();
                 activity.switchFragment(MainActivity.HOME);
@@ -394,8 +419,8 @@ public class LoginFragment extends Fragment {
 
             @Override
             public void onFailed() {
-
-                progress.dismiss();
+                loading.dismiss();
+                //progress.dismiss();
                 Toast.makeText(activity, activity.getResources().getString(R.string.something_wrong), Toast.LENGTH_SHORT).show();
             }
         };

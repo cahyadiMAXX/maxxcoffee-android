@@ -47,4 +47,8 @@
         \n4. You could collect Beans
     </string>
     <string name="title_activity_change_card_design">ChangeCardDesignActivity</string>
+    <string name="rating">Please take a moment to rate and write a review about MAXX COFFEE World App.Your review matters to us.</string>
+    <string name="rating_now">Rate now</string>
+    <string name="rating_later">Later</string>
+    <string name="rating_no">No, thanks</string>
 </resources>

@@ -1,7 +1,9 @@
 package com.maxxcoffee.mobile.activity;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -106,8 +108,16 @@ public class VerificationActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), getApplicationContext().getResources().getString(R.string.mobile_data), Toast.LENGTH_LONG).show();
             return;
         }
-        final LoadingDialog progress = new LoadingDialog();
-        progress.show(getSupportFragmentManager(), null);
+        /*final LoadingDialog progress = new LoadingDialog();
+        progress.show(getSupportFragmentManager(), null);*/
+        final Dialog loading;
+        loading = new Dialog(VerificationActivity.this);
+        loading.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        loading.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        loading.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        loading.setContentView(R.layout.dialog_loading);
+        loading.setCancelable(false);
+        loading.show();
 
         ProfileTask task = new ProfileTask(this) {
             @Override
@@ -157,12 +167,14 @@ public class VerificationActivity extends AppCompatActivity {
                 }
                 PreferenceManager.putString(VerificationActivity.this, Constant.PREFERENCE_BALANCE, String.valueOf(profile.getTotal_balance()));
                 PreferenceManager.putString(VerificationActivity.this, Constant.PREFERENCE_BEAN, String.valueOf(profile.getTotal_point()));
-                progress.dismissAllowingStateLoss();
+                //progress.dismissAllowingStateLoss();
+                loading.dismiss();
             }
 
             @Override
             public void onFailed() {
-                    progress.dismissAllowingStateLoss();
+                //progress.dismissAllowingStateLoss();
+                loading.dismiss();
                 Toast.makeText(getApplicationContext(), getApplicationContext().getResources().getString(R.string.something_wrong), Toast.LENGTH_SHORT).show();
             }
         };

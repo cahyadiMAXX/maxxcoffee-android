@@ -185,10 +185,6 @@ public class MainActivity extends FragmentActivity {
 
         ButterKnife.bind(this);
 
-        //klo tidak ada extra, langsung brarti home
-        //ini akan terjadi ketika balik dari activity lain seperti formactivity dsb
-        //klo tetap di mainactivity, kan cuma switchfragment dengan parameter yg sudah ditentukan user
-        //siapp
         Integer content = getIntent().getIntExtra("content", HOME);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -241,10 +237,6 @@ public class MainActivity extends FragmentActivity {
         prepareDrawerList();
         prepareBackground();
 
-        if(!Utils.isAllowed()){
-            //logoutNow();
-        }
-
         boolean routeFromTutorial = PreferenceManager.getBool(this, Constant.PREFERENCE_MAIN_FROM_TUTORIAL, false);
         if(routeFromTutorial){
             PreferenceManager.putBool(this, Constant.PREFERENCE_MAIN_FROM_TUTORIAL, false);
@@ -252,17 +244,6 @@ public class MainActivity extends FragmentActivity {
         }else{
             switchFragment(content);
         }
-
-        /*AppUpdater appUpdater = new AppUpdater(this)
-                .setDisplay(Display.DIALOG)
-                .setUpdateFrom(UpdateFrom.GOOGLE_PLAY)
-                .setTitleOnUpdateAvailable("Update available")
-                .setContentOnUpdateAvailable("Check out the latest version available on Google Play Store")
-                .setButtonUpdate("Update Now")
-                .setButtonDismiss(null)
-                .setButtonDoNotShowAgain(null)
-                ;
-        appUpdater.start();*/
     }
 
     public void checkupdate(){
@@ -461,51 +442,71 @@ public class MainActivity extends FragmentActivity {
                 fragment = new HomeFragment();
                 break;
             case STORE:
-                if(!isGpsEnabled()){
-                    settingRequested = false;
-                }
-                if (!settingRequested) {
-                    checkSettingApi(STORE);
-                } else {
-                    if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                            && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
-                        if (ActivityCompat.shouldShowRequestPermissionRationale(this, android.Manifest.permission.ACCESS_FINE_LOCATION) ||
-                                ActivityCompat.shouldShowRequestPermissionRationale(this, android.Manifest.permission.ACCESS_COARSE_LOCATION)) {
-
-                            ActivityCompat.requestPermissions(this, PERMISSIONS_LOCATION, 2);
-                        } else {
-                            ActivityCompat.requestPermissions(this, PERMISSIONS_LOCATION, 2);
-                        }
-                    } else {
-                        fragment = new StoreFragment();
+                if (checkFeaturedAvailable(PreferenceManager.getString(getApplicationContext(), Constant.PREFERENCE_STORE_STATUS, ""))) {
+                    if (!isGpsEnabled()) {
+                        settingRequested = false;
                     }
+                    if (!settingRequested) {
+                        checkSettingApi(STORE);
+                    } else {
+                        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                                && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+                            if (ActivityCompat.shouldShowRequestPermissionRationale(this, android.Manifest.permission.ACCESS_FINE_LOCATION) ||
+                                    ActivityCompat.shouldShowRequestPermissionRationale(this, android.Manifest.permission.ACCESS_COARSE_LOCATION)) {
+
+                                ActivityCompat.requestPermissions(this, PERMISSIONS_LOCATION, 2);
+                            } else {
+                                ActivityCompat.requestPermissions(this, PERMISSIONS_LOCATION, 2);
+                            }
+                        } else {
+                            fragment = new StoreFragment();
+                        }
+                    }
+                } else {
+                    showFeaturedStatus(PreferenceManager.getString(getApplicationContext(), Constant.PREFERENCE_STORE_MESSAGE, ""));
                 }
                 break;
             case PROMO:
-                fragment = new PromoFragment();
+                if (checkFeaturedAvailable(PreferenceManager.getString(getApplicationContext(), Constant.PREFERENCE_PROMO_STATUS, ""))){
+                    fragment = new PromoFragment();
+                } else {
+                    showFeaturedStatus(PreferenceManager.getString(getApplicationContext(), Constant.PREFERENCE_PROMO_MESSAGE, ""));
+                }
                 break;
             case EVENT:
-                fragment = new EventFragment();
+                if (checkFeaturedAvailable(PreferenceManager.getString(getApplicationContext(), Constant.PREFERENCE_EVENT_STATUS, ""))){
+                    fragment = new EventFragment();
+                } else {
+                    showFeaturedStatus(PreferenceManager.getString(getApplicationContext(), Constant.PREFERENCE_EVENT_MESSAGE, ""));
+                }
                 break;
             case MENU:
-                fragment = new MenuFragment();
+                if (checkFeaturedAvailable(PreferenceManager.getString(getApplicationContext(), Constant.PREFERENCE_MENU_STATUS, ""))){
+                    fragment = new MenuFragment();
+                } else {
+                    showFeaturedStatus(PreferenceManager.getString(getApplicationContext(), Constant.PREFERENCE_MENU_MESSAGE, ""));
+                }
                 break;
             case ABOUT:
                 fragment = new AboutFragment();
                 break;
             case MY_CARD:
-                if (isLoggedIn) {
-                    if (isSmsVerified && isEmailVerified) {
-                        fragment = new MyCardFragment();
-                    } else {
-                        Intent intent = new Intent(this, VerificationActivity.class);
-                        intent.putExtra("redirect-fragment", MY_CARD);
+                if (checkFeaturedAvailable(PreferenceManager.getString(getApplicationContext(), Constant.PREFERENCE_MY_CARD_STATUS, ""))) {
+                    if (isLoggedIn) {
+                        if (isSmsVerified && isEmailVerified) {
+                            fragment = new MyCardFragment();
+                        } else {
+                            Intent intent = new Intent(this, VerificationActivity.class);
+                            intent.putExtra("redirect-fragment", MY_CARD);
 
-                        startActivity(intent);
+                            startActivity(intent);
+                        }
+                    } else {
+                        fragment = new CredentialFragment();
                     }
                 } else {
-                    fragment = new CredentialFragment();
+                    showFeaturedStatus(PreferenceManager.getString(getApplicationContext(), Constant.PREFERENCE_MY_CARD_MESSAGE, ""));
                 }
                 break;
             case FAQ:
@@ -529,31 +530,39 @@ public class MainActivity extends FragmentActivity {
                 }
                 break;
             case REPORT_LOST_CARD:
-                if (isLoggedIn) {
-                    if (isSmsVerified && isEmailVerified) {
-                        fragment = new LostCardFragment();
-                    } else {
-                        Intent intent = new Intent(this, VerificationActivity.class);
-                        intent.putExtra("redirect-fragment", MY_CARD);
+                if (checkFeaturedAvailable(PreferenceManager.getString(getApplicationContext(), Constant.PREFERENCE_REPORT_STATUS, ""))) {
+                    if (isLoggedIn) {
+                        if (isSmsVerified && isEmailVerified) {
+                            fragment = new LostCardFragment();
+                        } else {
+                            Intent intent = new Intent(this, VerificationActivity.class);
+                            intent.putExtra("redirect-fragment", MY_CARD);
 
-                        startActivity(intent);
+                            startActivity(intent);
+                        }
+                    } else {
+                        fragment = new CredentialFragment();
                     }
                 } else {
-                    fragment = new CredentialFragment();
+                    showFeaturedStatus(PreferenceManager.getString(getApplicationContext(), Constant.PREFERENCE_REPORT_MESSAGE, ""));
                 }
                 break;
             case CARD_HISTORY:
-                if (isLoggedIn) {
-                    if (isSmsVerified && isEmailVerified) {
-                        fragment = new CardHistoryFragment();
-                    } else {
-                        Intent intent = new Intent(this, VerificationActivity.class);
-                        intent.putExtra("redirect-fragment", MY_CARD);
+                if (checkFeaturedAvailable(PreferenceManager.getString(getApplicationContext(), Constant.PREFERENCE_CARD_HISTORY_STATUS, ""))) {
+                    if (isLoggedIn) {
+                        if (isSmsVerified && isEmailVerified) {
+                            fragment = new CardHistoryFragment();
+                        } else {
+                            Intent intent = new Intent(this, VerificationActivity.class);
+                            intent.putExtra("redirect-fragment", MY_CARD);
 
-                        startActivity(intent);
+                            startActivity(intent);
+                        }
+                    } else {
+                        fragment = new CredentialFragment();
                     }
                 } else {
-                    fragment = new CredentialFragment();
+                    showFeaturedStatus(PreferenceManager.getString(getApplicationContext(), Constant.PREFERENCE_CARD_HISTORY_MESSAGE, ""));
                 }
                 break;
             case REWARD:
@@ -574,25 +583,28 @@ public class MainActivity extends FragmentActivity {
                 fragment = new CredentialFragment();
                 break;
             case LOGIN:
-                /*if (Utils.isAllowed()){
+                if (PreferenceManager.getString(getApplicationContext(), Constant.PREFERENCE_LOGIN_STATUS, "").equals("yes")){
                     fragment = new LoginFragment();
                 } else {
-                    Toast.makeText(getApplicationContext(), "We are sorry, log in has been permanently disabled", Toast.LENGTH_LONG).show();
-                }*/
-                fragment = new LoginFragment();
+                    Toast.makeText(getApplicationContext(), PreferenceManager.getString(getApplicationContext(), Constant.PREFERENCE_LOGIN_MESSAGE, ""), Toast.LENGTH_LONG).show();
+                }
                 break;
             case SIGNUP:
-                if (Utils.isAllowed()){
+                if (PreferenceManager.getString(getApplicationContext(), Constant.PREFERENCE_REGISTRATION_STATUS, "").equals("yes")){
                     fragment = new SignUpFragment();
                 } else {
-                    Toast.makeText(getApplicationContext(), "We are sorry, registration has been permanently disabled", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), PreferenceManager.getString(getApplicationContext(), Constant.PREFERENCE_REGISTRATION_MESSAGE, ""), Toast.LENGTH_LONG).show();
                 }
                 break;
             case SIGNUP_INFO:
                 fragment = new SignUpInfoFragment();
                 break;
             case PROFILE:
-                fragment = isLoggedIn ? new ProfileFragment() : new CredentialFragment();
+                if (checkFeaturedAvailable(PreferenceManager.getString(getApplicationContext(), Constant.PREFERENCE_PROFILE_STATUS, ""))) {
+                    fragment = isLoggedIn ? new ProfileFragment() : new CredentialFragment();
+                } else {
+                    showFeaturedStatus(PreferenceManager.getString(getApplicationContext(), Constant.PREFERENCE_PROMO_STATUS, ""));
+                }
                 break;
             case TUTORIAL:
                 Intent intentTutorial = new Intent(this, TutorialActivity.class);
@@ -605,17 +617,21 @@ public class MainActivity extends FragmentActivity {
                 Toast.makeText(MainActivity.this, "Feature not available yet", Toast.LENGTH_SHORT).show();
                 break;
             case BALANCE_TRANSFER:
-                if (isLoggedIn) {
-                    if (isSmsVerified && isEmailVerified) {
-                        fragment = new TransferBalanceFragment();
-                    } else {
-                        Intent intent = new Intent(this, VerificationActivity.class);
-                        intent.putExtra("redirect-fragment", MY_CARD);
+                if (checkFeaturedAvailable(PreferenceManager.getString(getApplicationContext(), Constant.PREFERENCE_BALANCE_TRANSFER_STATUS, ""))) {
+                    if (isLoggedIn) {
+                        if (isSmsVerified && isEmailVerified) {
+                            fragment = new TransferBalanceFragment();
+                        } else {
+                            Intent intent = new Intent(this, VerificationActivity.class);
+                            intent.putExtra("redirect-fragment", MY_CARD);
 
-                        startActivity(intent);
+                            startActivity(intent);
+                        }
+                    } else {
+                        fragment = new CredentialFragment();
                     }
                 } else {
-                    fragment = new CredentialFragment();
+                    showFeaturedStatus(PreferenceManager.getString(getApplicationContext(), Constant.PREFERENCE_BALANCE_TRANSFER_MESSAGE, ""));
                 }
                 break;
         }
@@ -625,6 +641,14 @@ public class MainActivity extends FragmentActivity {
                 fragment.setArguments(bundle);
 
         return fragment;
+    }
+
+    private boolean checkFeaturedAvailable(String status){
+        return status.equals("yes");
+    }
+
+    private void showFeaturedStatus(String message){
+        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
     }
 
     private boolean checkSettingApi(final int requestCode) {
@@ -690,13 +714,11 @@ public class MainActivity extends FragmentActivity {
                 @Override
                 public void onSuccess(String message) {
                     logoutThisDevice();
-//                    Log.d("logoutallmydevices", message);
                 }
 
                 @Override
                 public void onFailed() {
                     logoutThisDevice();
-//                    Log.d("logoutallmydevices", "failed");
                 }
             };
             task.execute(body);

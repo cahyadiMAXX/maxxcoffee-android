@@ -94,4 +94,29 @@ public class Constant {
     public final static int DAYS_UNTIL_PROMPT = 3;
     public final static int LAUNCHES_UNTIL_PROMPT = 7;
 
+
+    //featured contol
+    public final static String PREFERENCE_REGISTRATION_STATUS = "maxx-f-registration-status";
+    public final static String PREFERENCE_REGISTRATION_MESSAGE = "maxx-f-registration-message";
+    public final static String PREFERENCE_LOGIN_STATUS = "maxx-f-login-status";
+    public final static String PREFERENCE_LOGIN_MESSAGE = "maxx-f-login-message";
+    public final static String PREFERENCE_MY_CARD_STATUS = "maxx-f-my-card-status";
+    public final static String PREFERENCE_MY_CARD_MESSAGE = "maxx-f-my-card-message";
+    public final static String PREFERENCE_CARD_HISTORY_STATUS = "maxx-f-card-history-status";
+    public final static String PREFERENCE_CARD_HISTORY_MESSAGE = "maxx-f-card-history-message";
+    public final static String PREFERENCE_BALANCE_TRANSFER_STATUS = "maxx-f-balance-transfer-status";
+    public final static String PREFERENCE_BALANCE_TRANSFER_MESSAGE = "maxx-f-balance-transfer-message";
+    public final static String PREFERENCE_REPORT_STATUS = "maxx-f-report-status";
+    public final static String PREFERENCE_REPORT_MESSAGE = "maxx-f-report-message";
+    public final static String PREFERENCE_PROFILE_STATUS = "maxx-f-profile-status";
+    public final static String PREFERENCE_PROFILE_MESSAGE = "maxx-f-profile-message";
+    public final static String PREFERENCE_STORE_STATUS = "maxx-f-store-status";
+    public final static String PREFERENCE_STORE_MESSAGE = "maxx-f-store-message";
+    public final static String PREFERENCE_PROMO_STATUS = "maxx-f-promo-status";
+    public final static String PREFERENCE_PROMO_MESSAGE = "maxx-f-promo-message";
+    public final static String PREFERENCE_EVENT_STATUS = "maxx-f-event-status";
+    public final static String PREFERENCE_EVENT_MESSAGE = "maxx-f-event-message";
+    public final static String PREFERENCE_MENU_STATUS = "maxx-f-menu-status";
+    public final static String PREFERENCE_MENU_MESSAGE = "maxx-f-menu-message";
+
 }

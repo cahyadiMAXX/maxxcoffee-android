@@ -1,8 +1,10 @@
 package com.maxxcoffee.mobile.fragment;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -12,6 +14,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -133,8 +137,16 @@ public class PrimaryCardFragment extends Fragment {
     }
 
     private void setPrimaryCard(final CardModel card){
-        final LoadingDialog progress = new LoadingDialog();
-        progress.show(getFragmentManager(), null);
+        /*final LoadingDialog progress = new LoadingDialog();
+        progress.show(getFragmentManager(), null);*/
+        final Dialog loading;
+        loading = new Dialog(getActivity());
+        loading.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        loading.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        loading.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        loading.setContentView(R.layout.dialog_loading);
+        loading.setCancelable(false);
+        loading.show();
 
         PrimaryCardRequestModel body = new PrimaryCardRequestModel();
         body.setCard_number(card.getNumber());
@@ -143,7 +155,8 @@ public class PrimaryCardFragment extends Fragment {
             @Override
             public void onSuccess(DefaultResponseModel responseModel) {
                 if(responseModel.getStatus().equals("success")){
-                    progress.dismissAllowingStateLoss();
+                    //progress.dismissAllowingStateLoss();
+                    loading.dismiss();
                     //redirect ke card, suruh mainactivity refresh card
                     PreferenceManager.putBool(activity, Constant.PREFERENCE_CARD_IS_LOADING, false);
                     PreferenceManager.putBool(activity, Constant.PREFERENCE_ROUTE_CARD_SUCCESS, true);
@@ -154,7 +167,8 @@ public class PrimaryCardFragment extends Fragment {
 
             @Override
             public void onFailed() {
-                progress.dismissAllowingStateLoss();
+                //progress.dismissAllowingStateLoss();
+                loading.dismiss();
                 Toast.makeText(activity, activity.getResources().getString(R.string.something_wrong), Toast.LENGTH_SHORT).show();
             }
         };
@@ -162,8 +176,16 @@ public class PrimaryCardFragment extends Fragment {
     }
 
     private void fetchingData() {
-        final LoadingDialog progress = new LoadingDialog();
-        progress.show(getFragmentManager(), null);
+        /*final LoadingDialog progress = new LoadingDialog();
+        progress.show(getFragmentManager(), null);*/
+        final Dialog loading;
+        loading = new Dialog(getActivity());
+        loading.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        loading.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        loading.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        loading.setContentView(R.layout.dialog_loading);
+        loading.setCancelable(false);
+        loading.show();
 
         CardTask task = new CardTask(activity) {
             @Override
@@ -188,19 +210,22 @@ public class PrimaryCardFragment extends Fragment {
                     }
                 }
                 adapter.notifyDataSetChanged();
-                progress.dismissAllowingStateLoss();
+                //progress.dismissAllowingStateLoss();
+                loading.dismiss();
             }
 
             @Override
             public void onFailed() {
-                progress.dismissAllowingStateLoss();
+                //progress.dismissAllowingStateLoss();
+                loading.dismiss();
                 Toast.makeText(activity, activity.getResources().getString(R.string.something_wrong), Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onFailed(String message) {
                 Toast.makeText(activity, message, Toast.LENGTH_LONG).show();
-                progress.dismissAllowingStateLoss();
+                //progress.dismissAllowingStateLoss();
+                loading.dismiss();
             }
         };
         task.execute();

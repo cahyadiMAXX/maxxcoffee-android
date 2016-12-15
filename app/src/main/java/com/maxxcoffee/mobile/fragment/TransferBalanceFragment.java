@@ -1,13 +1,17 @@
 package com.maxxcoffee.mobile.fragment;
 
+import android.app.Dialog;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -82,6 +86,8 @@ public class TransferBalanceFragment extends Fragment {
     private Integer selectedSourceId = -999;
     private Integer selectedTargetId = -999;
 
+    Dialog loading;
+
     public TransferBalanceFragment(){}
 
     @Override
@@ -100,6 +106,14 @@ public class TransferBalanceFragment extends Fragment {
 
         ButterKnife.bind(this, view);
         activity.setTitle("Balance Transfer");
+
+        loading = new Dialog(getActivity());
+        loading.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        loading.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        loading.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        loading.setContentView(R.layout.dialog_loading);
+        loading.setCancelable(false);
+
         if(Utils.isConnected(activity)){
             fetchingData(false);
         }else{
@@ -110,8 +124,9 @@ public class TransferBalanceFragment extends Fragment {
     }
 
     private void fetchingData(final boolean autoSet) {
-        final LoadingDialog progress = new LoadingDialog();
-        progress.show(getFragmentManager(), null);
+        /*final LoadingDialog progress = new LoadingDialog();
+        progress.show(getFragmentManager(), null);*/
+        loading.show();
 
         CardBalanceTask task = new CardBalanceTask(activity) {
             @Override
@@ -139,12 +154,14 @@ public class TransferBalanceFragment extends Fragment {
                     }
                     getLocalCard(autoSet);
                 }
-                progress.dismissAllowingStateLoss();
+                //progress.dismissAllowingStateLoss();
+                loading.dismiss();
             }
 
             @Override
             public void onFailed() {
-                progress.dismissAllowingStateLoss();
+                //progress.dismissAllowingStateLoss();
+                loading.dismiss();
                 transferLayout.setVisibility(View.GONE);
                 empty.setVisibility(View.VISIBLE);
                 empty.setText("You do not have any connected card. \n\nPlease add card.");
@@ -236,8 +253,17 @@ public class TransferBalanceFragment extends Fragment {
     }
 
     private void transferNow() {
-        final LoadingDialog progress = new LoadingDialog();
-        progress.show(getFragmentManager(), null);
+        /*final LoadingDialog progress = new LoadingDialog();
+        progress.show(getFragmentManager(), null);*/
+
+        final Dialog progress;
+        progress = new Dialog(getActivity());
+        progress.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        progress.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        progress.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        progress.setContentView(R.layout.dialog_loading);
+        progress.setCancelable(false);
+        progress.show();
 
         TransferBalanceRequestModel body = new TransferBalanceRequestModel();
         body.setSource_dist_id(selectedSource.getDistribution_id());
@@ -246,13 +272,15 @@ public class TransferBalanceFragment extends Fragment {
         TransferBalanceTask task = new TransferBalanceTask(activity) {
             @Override
             public void onSuccess() {
-                progress.dismissAllowingStateLoss();
+                //progress.dismissAllowingStateLoss();
+                progress.dismiss();
                 showSuccessDialog(true);
             }
 
             @Override
             public void onFailed() {
-                progress.dismissAllowingStateLoss();
+                //progress.dismissAllowingStateLoss();
+                progress.dismiss();
                 showSuccessDialog(false);
             }
         };
@@ -376,13 +404,11 @@ public class TransferBalanceFragment extends Fragment {
 
                 @Override
                 protected void onImageDownloaded(Bitmap bitmap) {
-//                    Bitmap resizeImage = Utils.getResizedBitmap(bitmap, 0.95f);
                     Drawable drawable = new BitmapDrawable(getResources(), bitmap);
                     imageSource.setImageDrawable(drawable);
                 }
             };
             task.execute(cardModel.getImage());
-//            Glide.with(activity).load(cardModel.getImage()).placeholder(getResources().getDrawable(R.drawable.ic_no_image)).fitCenter().crossFade().into(imageSource);
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -408,13 +434,11 @@ public class TransferBalanceFragment extends Fragment {
 
                 @Override
                 protected void onImageDownloaded(Bitmap bitmap) {
-//                    Bitmap resizeImage = Utils.getResizedBitmap(bitmap, 0.95f);
                     Drawable drawable = new BitmapDrawable(getResources(), bitmap);
                     imageTarget.setImageDrawable(drawable);
                 }
             };
             task.execute(cardModel.getImage());
-//            Glide.with(activity).load(cardModel.getImage()).placeholder(getResources().getDrawable(R.drawable.ic_no_image)).fitCenter().crossFade().into(imageTarget);
         } catch (ParseException e) {
             e.printStackTrace();
         }

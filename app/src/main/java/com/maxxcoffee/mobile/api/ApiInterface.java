@@ -31,6 +31,7 @@ import com.maxxcoffee.mobile.model.response.CheckValidEmailResponseModel;
 import com.maxxcoffee.mobile.model.response.DefaultResponseModel;
 import com.maxxcoffee.mobile.model.response.EventResponseModel;
 import com.maxxcoffee.mobile.model.response.FaqResponseModel;
+import com.maxxcoffee.mobile.model.response.FeaturedResponseModel;
 import com.maxxcoffee.mobile.model.response.HistoryResponseModel;
 import com.maxxcoffee.mobile.model.response.HomeResponseModel;
 import com.maxxcoffee.mobile.model.response.KotaResponseModel;
@@ -133,6 +134,10 @@ public interface ApiInterface {
 
     @POST("/api/about")
     void about(Callback<AboutResponseModel> response);
+
+    //kontrol fitur :(
+    @POST("/api/featurecontrol")
+    void featured(Callback<FeaturedResponseModel> response);
 
     @POST("/api/gci/rename")
     void renameCard(@Header("Authorization") String authentication, @Body RenameCardRequestModel body, Callback<DefaultResponseModel> response);

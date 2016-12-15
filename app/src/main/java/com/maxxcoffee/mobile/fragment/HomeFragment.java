@@ -1,19 +1,25 @@
 package com.maxxcoffee.mobile.fragment;
 
 import android.animation.ObjectAnimator;
+import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -26,6 +32,7 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.maxxcoffee.mobile.R;
 import com.maxxcoffee.mobile.activity.AddCardBarcodeActivity;
 import com.maxxcoffee.mobile.activity.FormActivity;
+import com.maxxcoffee.mobile.activity.LauncherActivity;
 import com.maxxcoffee.mobile.activity.MainActivity;
 import com.maxxcoffee.mobile.activity.VerificationActivity;
 import com.maxxcoffee.mobile.database.controller.CardPrimaryController;
@@ -34,7 +41,9 @@ import com.maxxcoffee.mobile.fragment.dialog.LoadingDialog;
 import com.maxxcoffee.mobile.fragment.dialog.RateAppDialog;
 import com.maxxcoffee.mobile.gcm.GCMRegistrationIntentService;
 import com.maxxcoffee.mobile.model.response.CardItemResponseModel;
+import com.maxxcoffee.mobile.model.response.FeaturedResponseModel;
 import com.maxxcoffee.mobile.model.response.HomeResponseModel;
+import com.maxxcoffee.mobile.task.FeaturedControlTask;
 import com.maxxcoffee.mobile.task.HomeTask;
 import com.maxxcoffee.mobile.util.Constant;
 import com.maxxcoffee.mobile.util.OnSwipeTouchListener;
@@ -109,6 +118,8 @@ public class HomeFragment extends Fragment {
     private CardPrimaryController cardController;
     private BroadcastReceiver mRegistrationBroadcastReceiver;
 
+    Dialog loading;
+
     public HomeFragment(){}
 
     @Override
@@ -125,6 +136,14 @@ public class HomeFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
         ButterKnife.bind(this, view);
+
+        loading = new Dialog(getActivity());
+        loading.setCancelable(false);
+        loading.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        loading.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        loading.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        loading.setContentView(R.layout.dialog_loading);
+
         activity.setTitle("");
         boolean isLoggedIn = PreferenceManager.getBool(activity, Constant.PREFERENCE_LOGGED_IN, false);
         isPrimaryExist = false;
@@ -332,7 +351,7 @@ public class HomeFragment extends Fragment {
         Date today = new Date();
         final String strToday = df.format(today);
         String date_firstLaunch = PreferenceManager.getString(getActivity(), Constant.PREFERENCE_DATE_FIRST_LAUNCH, strToday);
-        Log.d("first_launch", date_firstLaunch);
+        Timber.e("first_launch %s", date_firstLaunch);
         Date inputDate = null;
         try {
             inputDate = df.parse(date_firstLaunch);
@@ -340,14 +359,16 @@ public class HomeFragment extends Fragment {
             e.printStackTrace();
         }
         //jangan lupa ganti ke hari
-        Log.d("first_launch", String.valueOf(Utils.getDurationInDays(inputDate)));
+        Timber.e("first_launch: %s", String.valueOf(Utils.getDurationInDays(inputDate)));
         if (Utils.getDurationInDays(inputDate) > 4) {
-            final RateAppDialog dialog = new RateAppDialog(){
-                @Override
-                protected void onOk() {
-                    super.onOk();
-                    //buka playstore
-                    dismiss();
+
+            AlertDialog dialog;
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setMessage(getString(R.string.rating));
+            builder.setCancelable(false);
+            builder.setPositiveButton(getString(R.string.rating_now), new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
                     PreferenceManager.putBool(getActivity(), Constant.PREFERENCE_HAS_RATED, true);
                     final String appPackageName = getActivity().getPackageName(); // getPackageName() from Context or Activity object
                     try {
@@ -356,25 +377,24 @@ public class HomeFragment extends Fragment {
                         startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
                     }
                 }
-
+            });
+            builder.setNeutralButton(getString(R.string.rating_later), new DialogInterface.OnClickListener() {
                 @Override
-                public void onLaterClick() {
-                    super.onLaterClick();
-                    //update tanggal
+                public void onClick(DialogInterface dialog, int which) {
                     PreferenceManager.putString(getActivity(), Constant.PREFERENCE_DATE_FIRST_LAUNCH, strToday);
-                    dismiss();
+                    dialog.dismiss();
                 }
-
+            });
+            builder.setNegativeButton(getString(R.string.rating_no), new DialogInterface.OnClickListener() {
                 @Override
-                public void onNoClick() {
-                    super.onNoClick();
-                    //jangan muncul lagi
+                public void onClick(DialogInterface dialog, int which) {
                     PreferenceManager.putBool(getActivity(), Constant.PREFERENCE_SHOW_AGAIN, false);
-                    dismiss();
+                    dialog.dismiss();
                 }
-            };
+            });
 
-            dialog.show(getFragmentManager(), null);
+            dialog=builder.create();
+            dialog.show();
         }
     }
 
@@ -382,8 +402,6 @@ public class HomeFragment extends Fragment {
     public void onResume() {
         super.onResume();
         setBackground(mDayPart);
-        //apakah ini route lagi dari set prime card ?
-        //klo iya, refresh, klo ga, gausah
         boolean route_from_card = PreferenceManager.getBool(activity, Constant.PREFERENCE_ROUTE_CARD_SUCCESS, false);
         if (route_from_card){
             fetchingData();
@@ -391,6 +409,9 @@ public class HomeFragment extends Fragment {
     }
 
     private void getLocalData() {
+        //panggil ini lagi cuks :(
+        checkControll();
+
         String mName = PreferenceManager.getString(activity, Constant.PREFERENCE_USER_NAME, "");
         String mBalance = PreferenceManager.getString(activity, Constant.PREFERENCE_BALANCE, "");
         String mBeans = PreferenceManager.getString(activity, Constant.PREFERENCE_BEAN, "");
@@ -441,8 +462,10 @@ public class HomeFragment extends Fragment {
     }
 
     private void fetchingData() {
-        final LoadingDialog progress = new LoadingDialog();
-        progress.show(getFragmentManager(), null);
+        /*final LoadingDialog progress = new LoadingDialog();
+        progress.setCancelable(false);
+        progress.show(getFragmentManager(), null);*/
+        loading.show();
 
         HomeTask task = new HomeTask(activity) {
             @Override
@@ -497,7 +520,8 @@ public class HomeFragment extends Fragment {
                     forceUserRating();
                 }
 
-                progress.dismissAllowingStateLoss();
+                //progress.dismissAllowingStateLoss();
+                loading.dismiss();
             }
 
             @Override
@@ -505,10 +529,68 @@ public class HomeFragment extends Fragment {
 //                swipe.setRefreshing(false);
                 //Toast.makeText(getActivity(), "ON failed", Toast.LENGTH_LONG).show();
                 setGreeting(mDayPart);
-                progress.dismissAllowingStateLoss();
+                //progress.dismissAllowingStateLoss();
+                checkControll();
+                loading.dismiss();
             }
         };
         task.execute();
+    }
+
+    void checkControll() {
+
+        FeaturedControlTask task = new FeaturedControlTask(getActivity()) {
+            @Override
+            public void onSuccess(FeaturedResponseModel response) {
+                Timber.e("featured_response %s", response.toString());
+                setPreference(response.getRegistration().getStatus(), Constant.PREFERENCE_REGISTRATION_STATUS);
+                setPreference(response.getRegistration().getMessage(), Constant.PREFERENCE_REGISTRATION_MESSAGE);
+
+                setPreference(response.getLogin().getStatus(), Constant.PREFERENCE_LOGIN_STATUS);
+                setPreference(response.getLogin().getMessage(), Constant.PREFERENCE_LOGIN_MESSAGE);
+
+                setPreference(response.getBrowse_menu().getStatus(), Constant.PREFERENCE_MENU_STATUS);
+                setPreference(response.getBrowse_menu().getMessage(), Constant.PREFERENCE_MENU_MESSAGE);
+
+                setPreference(response.getBrowse_store().getStatus(), Constant.PREFERENCE_STORE_STATUS);
+                setPreference(response.getBrowse_store().getMessage(), Constant.PREFERENCE_STORE_MESSAGE);
+
+                setPreference(response.getBrowse_promo().getStatus(), Constant.PREFERENCE_PROMO_STATUS);
+                setPreference(response.getBrowse_promo().getMessage(), Constant.PREFERENCE_PROMO_MESSAGE);
+
+                setPreference(response.getBrowse_event().getStatus(), Constant.PREFERENCE_EVENT_STATUS);
+                setPreference(response.getBrowse_event().getMessage(), Constant.PREFERENCE_EVENT_MESSAGE);
+
+                setPreference(response.getMy_card().getStatus(), Constant.PREFERENCE_MY_CARD_STATUS);
+                setPreference(response.getMy_card().getMessage(), Constant.PREFERENCE_MY_CARD_MESSAGE);
+
+                setPreference(response.getCard_history().getStatus(), Constant.PREFERENCE_CARD_HISTORY_STATUS);
+                setPreference(response.getCard_history().getMessage(), Constant.PREFERENCE_CARD_HISTORY_MESSAGE);
+
+                setPreference(response.getBalance_transfer().getStatus(), Constant.PREFERENCE_BALANCE_TRANSFER_STATUS);
+                setPreference(response.getBalance_transfer().getMessage(), Constant.PREFERENCE_BALANCE_TRANSFER_MESSAGE);
+
+                setPreference(response.getReport_lost_card().getStatus(), Constant.PREFERENCE_REPORT_STATUS);
+                setPreference(response.getReport_lost_card().getMessage(), Constant.PREFERENCE_REPORT_MESSAGE);
+
+                setPreference(response.getProfile().getStatus(), Constant.PREFERENCE_PROFILE_STATUS);
+                setPreference(response.getProfile().getMessage(), Constant.PREFERENCE_PROFILE_MESSAGE);
+            }
+
+            @Override
+            public void onFailed() {
+
+            }
+        };
+        task.execute();
+    }
+
+    void setPreference(String key, String identifier){
+        try{
+            PreferenceManager.putString(getActivity(), identifier, key.equals(null) ? "" : key);
+        } catch (Exception e){
+            PreferenceManager.putString(getActivity(), identifier, "");
+        }
     }
 
     private void setGreeting(int daypart) {

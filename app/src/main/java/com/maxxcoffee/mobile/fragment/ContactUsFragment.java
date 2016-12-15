@@ -1,10 +1,14 @@
 package com.maxxcoffee.mobile.fragment;
 
+import android.app.Dialog;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -135,8 +139,16 @@ public class ContactUsFragment extends Fragment {
             return;
 
 
-        final LoadingDialog progress = new LoadingDialog();
-        progress.show(getFragmentManager(), null);
+        /*final LoadingDialog progress = new LoadingDialog();
+        progress.show(getFragmentManager(), null);*/
+        final Dialog loading;
+        loading = new Dialog(getActivity());
+        loading.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        loading.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        loading.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        loading.setContentView(R.layout.dialog_loading);
+        loading.setCancelable(false);
+        loading.show();
 
         ContactUsRequestModel body = new ContactUsRequestModel();
         body.setEmail(PreferenceManager.getString(activity, Constant.PREFERENCE_EMAIL, ""));
@@ -148,8 +160,8 @@ public class ContactUsFragment extends Fragment {
         ContactUsTask task = new ContactUsTask(activity) {
             @Override
             public void onSuccess() {
-
-                progress.dismissAllowingStateLoss();
+                loading.dismiss();
+                //progress.dismissAllowingStateLoss();
                 Toast.makeText(activity, "Your message has been submitted successfully", Toast.LENGTH_SHORT).show();
 
                 selectedReport = -1;
@@ -159,8 +171,8 @@ public class ContactUsFragment extends Fragment {
 
             @Override
             public void onFailed() {
-
-                progress.dismissAllowingStateLoss();
+                loading.dismiss();
+                //progress.dismissAllowingStateLoss();
                 Toast.makeText(activity, activity.getResources().getString(R.string.something_wrong), Toast.LENGTH_SHORT).show();
             }
         };

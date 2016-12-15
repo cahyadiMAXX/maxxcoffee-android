@@ -1,6 +1,8 @@
 package com.maxxcoffee.mobile.fragment;
 
+import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -10,6 +12,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -72,6 +76,8 @@ public class MyCardFragment extends Fragment {
     private CardController cardController;
     private CustomLinearLayoutManager layoutManager;
 
+    Dialog loading;
+
     public MyCardFragment(){}
 
     @Override
@@ -131,6 +137,13 @@ public class MyCardFragment extends Fragment {
 
         ButterKnife.bind(this, view);
         activity.setTitle("My Card");
+
+        loading = new Dialog(getActivity());
+        loading.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        loading.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        loading.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        loading.setContentView(R.layout.dialog_loading);
+        loading.setCancelable(false);
 
         layoutManager = new CustomLinearLayoutManager(activity);
 
@@ -228,8 +241,9 @@ public class MyCardFragment extends Fragment {
             return;
         }
 
-        final LoadingDialog progress = new LoadingDialog();
-        progress.show(getFragmentManager(), null);
+        /*final LoadingDialog progress = new LoadingDialog();
+        progress.show(getFragmentManager(), null);*/
+        loading.show();
 
         PreferenceManager.putBool(getActivity(), Constant.PREFERENCE_CARD_IS_LOADING, true);
         SimpleDateFormat df = new SimpleDateFormat(Constant.DATEFORMAT_META);
@@ -265,20 +279,23 @@ public class MyCardFragment extends Fragment {
                     cardController.insert(entity);
                 }
                 getLocalCard();
-                progress.dismissAllowingStateLoss();
+                //progress.dismissAllowingStateLoss();
+                loading.dismiss();
             }
 
             @Override
             public void onFailed(String message) {
                 //Toast.makeText(getActivity(), getResources().getString(R.string.no_card_alert), Toast.LENGTH_LONG).show();
                 PreferenceManager.putInt(activity, Constant.PREFERENCE_CARD_AMOUNT, 0);
-                progress.dismissAllowingStateLoss();
+                //progress.dismissAllowingStateLoss();
+                loading.dismiss();
             }
 
             @Override
             public void onFailed() {
                 Toast.makeText(getActivity(), getResources().getString(R.string.something_wrong), Toast.LENGTH_LONG).show();
-                progress.dismissAllowingStateLoss();
+                //progress.dismissAllowingStateLoss();
+                loading.dismiss();
             }
         };
         task.execute();

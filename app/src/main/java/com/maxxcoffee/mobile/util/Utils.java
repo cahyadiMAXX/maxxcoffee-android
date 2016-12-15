@@ -180,7 +180,7 @@ public class Utils {
 
     public static boolean isAllowed(){
 
-        SimpleDateFormat df = new SimpleDateFormat(Constant.DATEFORMAT_POST);
+        /*SimpleDateFormat df = new SimpleDateFormat(Constant.DATEFORMAT_POST);
         Date today = new Date();
         Date check = null;
         try {
@@ -190,7 +190,7 @@ public class Utils {
         }
 
         if (today.after(check)) return false;
-
+*/
         return true;
     }
 

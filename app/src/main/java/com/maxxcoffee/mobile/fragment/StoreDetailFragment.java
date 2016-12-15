@@ -147,15 +147,6 @@ public class StoreDetailFragment extends Fragment {
             setFeatureMap(mFeature, mFeatureIcon);
         }
 
-//        layoutLocation.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                String uri = "geo:" + mLatitude + "," + mLongitude + "?q=" + mLatitude + "," + mLongitude + "(" + mTitle + ")";
-//                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
-//                getActivity().startActivity(intent);
-//            }
-//        });
-
         mapLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -223,76 +214,6 @@ public class StoreDetailFragment extends Fragment {
             slider.addSlider(adapter);
         }
     }
-
-//    @NonNull
-//    @Override
-//    public Dialog onCreateDialog(Bundle savedInstanceState) {
-//        Dialog dialog = new Dialog(getActivity());
-//        dialog.setCanceledOnTouchOutside(true);
-//        dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-//        dialog.setContentView(R.layout.detail_store);
-//        dialog.show();
-//
-//        ButterKnife.bind(this, dialog);
-//
-//        final String mTitle = getArguments().getString("title", "");
-//        String mAddress = getArguments().getString("address", "");
-//        final String mContact = getArguments().getString("contact", "");
-//        String mOpen = getArguments().getString("open", "");
-//        String mClose = getArguments().getString("close", "");
-//        String mImage = getArguments().getString("image", "");
-//        String mFeature = getArguments().getString("feature", "");
-//        String mFeatureIcon = getArguments().getString("feature-icon", "");
-//        String mJarak = getArguments().getString("jarak", "");
-//        final String mLatitude = getArguments().getString("lat", "");
-//        final String mLongitude = getArguments().getString("lng", "");
-//
-//        String tempOpen = "", tempClose = "";
-//        if (mOpen != null) {
-//            String[] arrayOpen = mOpen.split(":");
-//            tempOpen = arrayOpen[0] + ":" + arrayOpen[1];
-//        }
-//        if (mClose != null) {
-//            String[] arrayClose = mClose.split(":");
-//            tempClose = arrayClose[0] + ":" + arrayClose[1];
-//        }
-//
-//        title.setText(mTitle);
-//        address.setText(mAddress);
-//        contact.setText(mContact);
-//        open.setText(tempOpen + " - " + tempClose);
-//        jarak.setText(mJarak);
-//
-//        layoutJarak.setVisibility(mJarak.equals("-999") ? View.GONE : View.VISIBLE);
-//        Glide.with(getActivity()).load(mImage).placeholder(R.drawable.ic_no_image).crossFade().into(image);
-//
-//        if (!mFeature.equalsIgnoreCase("") || !mFeatureIcon.equalsIgnoreCase("")) {
-//            setFeatureMap(mFeature, mFeatureIcon);
-//        }
-//
-//        layoutLocation.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-////                String uri = String.format(Locale.ENGLISH, "geo:%s,%s", mLatitude, mLongitude);
-//                String uri = "geo:" + mLatitude + "," + mLongitude + "?q=" + mLatitude + "," + mLongitude + "(" + mTitle + ")";
-//                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
-//                getActivity().startActivity(intent);
-//            }
-//        });
-//
-//        layoutPhone.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                if (!mContact.equals("") && !mContact.equals("TBA") && !mContact.equals("N/A")) {
-//                    Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + mContact));
-//                    startActivity(intent);
-//                } else {
-//                    Toast.makeText(getActivity(), "Phone number not valid", Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//        });
-//        return dialog;
-//    }
 
     private void getFeature() {
         for (final String key : featureMap.keySet()) {

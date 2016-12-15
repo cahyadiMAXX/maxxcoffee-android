@@ -1,6 +1,8 @@
 package com.maxxcoffee.mobile.fragment;
 
+import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -8,6 +10,8 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -88,8 +92,16 @@ public class RenameCardFragment extends Fragment {
         tempNo = cardNo.getText().toString();
         String cardName = name.getText().equals("") ? tempName : name.getText().toString();
 
-        final LoadingDialog progress = new LoadingDialog();
-        progress.show(getFragmentManager(), null);
+        /*final LoadingDialog progress = new LoadingDialog();
+        progress.show(getFragmentManager(), null);*/
+        final Dialog loading;
+        loading = new Dialog(getActivity());
+        loading.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        loading.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        loading.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        loading.setContentView(R.layout.dialog_loading);
+        loading.setCancelable(false);
+        loading.show();
 
         RegisterCardRequestModel body = new RegisterCardRequestModel();
         body.setCardNo(tempNo);
@@ -102,7 +114,8 @@ public class RenameCardFragment extends Fragment {
                 Toast.makeText(activity, "Card successfully added", Toast.LENGTH_LONG).show();
                 PreferenceManager.putBool(getActivity(), Constant.PREFERENCE_ROUTE_CARD_SUCCESS, true);
                 PreferenceManager.putInt(getActivity(), Constant.PREFERENCE_CARD_AMOUNT, 1);
-                progress.dismissAllowingStateLoss();
+                //progress.dismissAllowingStateLoss();
+                loading.dismiss();
                 backToMyCard();
                 //backToOrigin();
             }
@@ -110,7 +123,8 @@ public class RenameCardFragment extends Fragment {
             @Override
             public void onFailed() {
                 Toast.makeText(activity, activity.getResources().getString(R.string.something_wrong), Toast.LENGTH_SHORT).show();
-                progress.dismissAllowingStateLoss();
+                //progress.dismissAllowingStateLoss();
+                loading.dismiss();
                 //failed ga usah back kan ?
                 //backToMyCard();
             }
@@ -118,7 +132,8 @@ public class RenameCardFragment extends Fragment {
             @Override
             public void onFailed(String message) {
                 Toast.makeText(activity, message, Toast.LENGTH_SHORT).show();
-                progress.dismissAllowingStateLoss();
+                //progress.dismissAllowingStateLoss();
+                loading.dismiss();
             }
         };
         task.execute(body);

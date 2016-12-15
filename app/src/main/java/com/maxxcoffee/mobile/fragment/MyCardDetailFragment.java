@@ -2,10 +2,12 @@ package com.maxxcoffee.mobile.fragment;
 
 import android.animation.AnimatorInflater;
 import android.animation.AnimatorSet;
+import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Environment;
@@ -14,6 +16,8 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -215,12 +219,21 @@ public class MyCardDetailFragment extends Fragment {
             Toast.makeText(activity, activity.getResources().getString(R.string.mobile_data), Toast.LENGTH_LONG).show();
             return;
         }
+
         final String cardnumber = getArguments().getString("card-number", "-1");
         PrimaryCardRequestModel body = new PrimaryCardRequestModel();
         body.setCard_number(cardnumber);
 
-        final LoadingDialog progress = new LoadingDialog();
-        progress.show(getFragmentManager(), null);
+        /*final LoadingDialog progress = new LoadingDialog();
+        progress.show(getFragmentManager(), null);*/
+        final Dialog progress;
+        progress = new Dialog(getActivity());
+        progress.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        progress.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        progress.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        progress.setContentView(R.layout.dialog_loading);
+        progress.setCancelable(false);
+        progress.show();
 
         CardDetailTask task = new CardDetailTask(activity) {
             @Override
@@ -267,12 +280,14 @@ public class MyCardDetailFragment extends Fragment {
                 }
 
                 //fetchingCard();
-                progress.dismissAllowingStateLoss();
+                //progress.dismissAllowingStateLoss();
+                progress.dismiss();
             }
 
             @Override
             public void onFailed() {
-                progress.dismissAllowingStateLoss();
+                //progress.dismissAllowingStateLoss();
+                progress.dismiss();
             }
         };
         task.execute(body);
@@ -314,13 +329,22 @@ public class MyCardDetailFragment extends Fragment {
 
     //depan image, belakang barcode
     private void loadImages(String image, final String barcode, final String name){
-        final LoadingDialog progress = new LoadingDialog();
-        progress.show(getActivity().getSupportFragmentManager(), null);
+        /*final LoadingDialog progress = new LoadingDialog();
+        progress.show(getActivity().getSupportFragmentManager(), null);*/
+        final Dialog loading;
+        loading = new Dialog(getActivity());
+        loading.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        loading.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        loading.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        loading.setContentView(R.layout.dialog_loading);
+        loading.setCancelable(false);
+        loading.show();
 
         final DownloadImageTask barcodeTask = new DownloadImageTask(getContext()) {
             @Override
             protected void onDownloadError() {
-                progress.dismissAllowingStateLoss();
+                //progress.dismissAllowingStateLoss();
+                loading.dismiss();
                 try{
                     Glide.with(activity).load("").placeholder(R.drawable.ic_no_image).into(imageCardBack);
                     loadImageBack(name + "_imageBack.png");
@@ -329,7 +353,8 @@ public class MyCardDetailFragment extends Fragment {
 
             @Override
             protected void onImageDownloaded(Bitmap bitmap) {
-                progress.dismissAllowingStateLoss();
+                //progress.dismissAllowingStateLoss();
+                loading.dismiss();
                 try{
                             /*Bitmap resizeImage = Utils.getResizedBitmap(bitmap, 0.95f);
                             Drawable drawable = new BitmapDrawable(getResources(), bitmap);
@@ -382,7 +407,8 @@ public class MyCardDetailFragment extends Fragment {
             task.execute(image);
         }else{
             try{
-                progress.dismissAllowingStateLoss();
+                //progress.dismissAllowingStateLoss();
+                loading.dismiss();
                 loadImageFront(name + "_imageFront.png");
                 loadImageBack(name + "_imageBack.png");
             }catch (Exception e){
@@ -466,13 +492,22 @@ public class MyCardDetailFragment extends Fragment {
         body.setId_card(cardId);
         body.setNew_name(name);
 
-        final LoadingDialog progress = new LoadingDialog();
-        progress.show(getFragmentManager(), null);
+        /*final LoadingDialog progress = new LoadingDialog();
+        progress.show(getFragmentManager(), null);*/
+        final Dialog loading;
+        loading = new Dialog(getActivity());
+        loading.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        loading.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        loading.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        loading.setContentView(R.layout.dialog_loading);
+        loading.setCancelable(false);
+        loading.show();
 
         RenameCardTask task = new RenameCardTask(activity) {
             @Override
             public void onSuccess() {
-                progress.dismissAllowingStateLoss();
+                //progress.dismissAllowingStateLoss();
+                loading.dismiss();
                 MyCardDetailFragment.this.name.setText(name);
                 activity.setTitle(name);
                 fetchingData();
@@ -480,7 +515,8 @@ public class MyCardDetailFragment extends Fragment {
 
             @Override
             public void onFailed() {
-                progress.dismissAllowingStateLoss();
+                loading.dismiss();
+                //progress.dismissAllowingStateLoss();
             }
         };
         task.execute(body);
