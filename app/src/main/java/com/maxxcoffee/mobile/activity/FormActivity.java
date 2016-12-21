@@ -30,6 +30,8 @@ import com.maxxcoffee.mobile.fragment.MyCardDetailFragment;
 import com.maxxcoffee.mobile.fragment.PrimaryCardFragment;
 import com.maxxcoffee.mobile.fragment.RenameCardFragment;
 import com.maxxcoffee.mobile.fragment.StoreDetailFragment;
+import com.maxxcoffee.mobile.fragment.TosFragment;
+import com.maxxcoffee.mobile.fragment.TosSignUpFragment;
 import com.maxxcoffee.mobile.util.Constant;
 import com.maxxcoffee.mobile.util.PreferenceManager;
 
@@ -60,6 +62,7 @@ public class FormActivity extends FragmentActivity {
     public static final int FORGOT_PASSWORD = 1016;
     public static final int DETAIL_MENU = 1017;
     public static final int PRIMARY_CARD = 1018;
+    public static final int TOS = 1019;
 
     @Bind(R.id.title)
     TextView title;
@@ -170,6 +173,9 @@ public class FormActivity extends FragmentActivity {
                 break;
             case PRIMARY_CARD:
                 fragment = new PrimaryCardFragment();
+                break;
+            case TOS:
+                fragment = new TosSignUpFragment();
                 break;
         }
 

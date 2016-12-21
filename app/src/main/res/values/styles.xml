@@ -51,4 +51,19 @@
         <item name="fab_colorPressed">@color/green_selected</item>
         <item name="fab_colorRipple">@color/green_selected</item>
     </style>
+
+    <style name="CheckBoxAppTheme">
+        <item name="colorAccent">
+            @color/white
+        </item>
+        <item name="colorControlNormal">
+            @color/white
+        </item>
+        <item name="colorControlHighlight">
+            @color/black
+        </item>
+    </style>
+    <style name="CustomCheckBox">
+        <item name="android:theme">@style/CheckBoxAppTheme</item>
+    </style>
 </resources>

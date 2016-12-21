@@ -3,6 +3,7 @@ package com.maxxcoffee.mobile.fragment;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -14,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -21,7 +23,9 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.maxxcoffee.mobile.R;
+import com.maxxcoffee.mobile.activity.FormActivity;
 import com.maxxcoffee.mobile.activity.MainActivity;
+import com.maxxcoffee.mobile.activity.VerificationActivity;
 import com.maxxcoffee.mobile.database.controller.CardController;
 import com.maxxcoffee.mobile.database.controller.ProfileController;
 import com.maxxcoffee.mobile.database.entity.CardEntity;
@@ -74,6 +78,8 @@ public class SignUpInfoFragment extends Fragment {
     TextView textOccupation;
     @Bind(R.id.referal_code)
     EditText fieldReferalCode;
+    @Bind(R.id.checkBox)
+    CheckBox checkBox;
 
     private MainActivity activity;
     private SimpleDateFormat dateFormat;
@@ -236,6 +242,14 @@ public class SignUpInfoFragment extends Fragment {
         datePicker.show(getFragmentManager(), null);
     }
 
+    @OnClick(R.id.textTermsOfService)
+    void ontextTermsOfServiceClick(){
+        Intent intent = new Intent(getActivity(), FormActivity.class);
+        intent.putExtra("content", FormActivity.TOS);
+
+        startActivity(intent);
+    }
+
     @OnClick(R.id.signup)
     public void onSignUpClick() {
         if (!isFormValid())
@@ -372,6 +386,10 @@ public class SignUpInfoFragment extends Fragment {
         if (mCity.equals("")) {
             textCity.setError("Please verify your city");
             Toast.makeText(activity, "Please verify your city", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if(!checkBox.isChecked()){
+            Toast.makeText(activity, "You must agree to the terms of service in order to continue registration", Toast.LENGTH_LONG).show();
             return false;
         }
         return true;

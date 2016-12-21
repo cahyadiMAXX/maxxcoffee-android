@@ -12,6 +12,8 @@
     <color name="background_cream">#f3f3f3</color>
     <color name="gray">#dddcdc</color>
     <color name="divider">#8c8c8c</color>
+    <color name="white">#ffffff</color>
+    <color name="black">#000000</color>
     <color name="black_transparent">#88000000</color>
     <color name="white_transparent">#22ffffff</color>
     <color name="semi_transparent">#DDFFFFFF</color>
