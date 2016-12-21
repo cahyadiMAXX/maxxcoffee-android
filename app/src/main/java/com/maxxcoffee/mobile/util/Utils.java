@@ -107,7 +107,6 @@ public class Utils {
         SimpleDateFormat df = new SimpleDateFormat(Constant.DATEFORMAT_POST);
         Date today = new Date();
         long diff = today.getTime() - createdDate.getTime();
-//        long diffSeconds = diff / 1000 % 60;
         long diffMinutes = diff / (60 * 1000) % 60;
         long diffHours = diff / (60 * 60 * 1000) % 24;
         long diffDays = diff / (24 * 60 * 60 * 1000) % 30;
@@ -116,7 +115,6 @@ public class Utils {
         String durationText;
 
         if (diffMonth > 0) {
-//            durationText = diffMonth + " MONTH AGO";
             durationText = df.format(createdDate);
         } else if (diffDays > 0) {
             durationText = diffDays + " hari yang lalu";
@@ -189,8 +187,7 @@ public class Utils {
             e.printStackTrace();
         }
 
-        if (today.after(check)) return false;
-*/
+        if (today.after(check)) return false;*/
         return true;
     }
 
