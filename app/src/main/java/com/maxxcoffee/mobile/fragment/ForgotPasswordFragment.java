@@ -84,7 +84,7 @@ public class ForgotPasswordFragment extends Fragment {
             @Override
             public void onSuccess() {
                 //progress.dismissAllowingStateLoss();
-                loading.dismiss();
+                if (loading.isShowing())loading.dismiss();
                 Toast.makeText(activity, "Verification link has been sent to Your email. Please verify your email address.", Toast.LENGTH_LONG).show();
                 activity.onBackClick();
             }
@@ -92,14 +92,14 @@ public class ForgotPasswordFragment extends Fragment {
             @Override
             public void onFailed() {
                 //progress.dismissAllowingStateLoss();
-                loading.dismiss();
+                if (loading.isShowing())loading.dismiss();
                 Toast.makeText(activity, activity.getResources().getString(R.string.something_wrong), Toast.LENGTH_LONG).show();
             }
 
             @Override
             public void onFailed(String message) {
                 //progress.dismissAllowingStateLoss();
-                loading.dismiss();
+                if (loading.isShowing())loading.dismiss();
                 Toast.makeText(activity, message, Toast.LENGTH_LONG).show();
             }
         };

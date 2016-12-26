@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.maxxcoffee.mobile.R;
 import com.maxxcoffee.mobile.activity.FormActivity;
+import com.maxxcoffee.mobile.activity.VerificationActivity;
 import com.maxxcoffee.mobile.fragment.dialog.List2Dialog;
 import com.maxxcoffee.mobile.fragment.dialog.LoadingDialog;
 import com.maxxcoffee.mobile.model.request.ChangeCityOccupationRequestModel;
@@ -65,21 +66,29 @@ public class ChangeOccupationFragment extends Fragment {
     private void fetchingCity() {
         String cityData = PreferenceManager.getString(activity, Constant.DATA_KOTA, "");
         if (cityData.equals("")) {
-            final LoadingDialog progress = new LoadingDialog();
-            progress.show(getFragmentManager(), null);
+            /*final LoadingDialog progress = new LoadingDialog();
+            progress.show(getFragmentManager(), null);*/
+            final Dialog loading;
+            loading = new Dialog(getActivity());
+            loading.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+            loading.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+            loading.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+            loading.setContentView(R.layout.dialog_loading);
+            loading.setCancelable(false);
+            loading.show();
 
             ProvinceTask task = new ProvinceTask(activity) {
                 @Override
                 public void onSuccess(String json) {
-
-                        progress.dismissAllowingStateLoss();
+                    if (loading.isShowing()) loading.dismiss();
+                    //progress.dismissAllowingStateLoss();
                     PreferenceManager.putString(activity, Constant.DATA_KOTA, json);
                 }
 
                 @Override
                 public void onFailed() {
-
-                        progress.dismissAllowingStateLoss();
+                    if (loading.isShowing()) loading.dismiss();
+                    //progress.dismissAllowingStateLoss();
                     Toast.makeText(activity, "Failed to retrieve city data", Toast.LENGTH_SHORT).show();
                 }
             };
@@ -116,13 +125,13 @@ public class ChangeOccupationFragment extends Fragment {
             public void onSuccess() {
 
                 //progress.dismissAllowingStateLoss();
-                loading.dismiss();
+                if (loading.isShowing())loading.dismiss();
                 activity.onBackClick();
             }
 
             @Override
             public void onFailed() {
-                loading.dismiss();
+                if (loading.isShowing())loading.dismiss();
                 //progress.dismissAllowingStateLoss();
                 Toast.makeText(activity, "Failed to change user name", Toast.LENGTH_SHORT).show();
             }

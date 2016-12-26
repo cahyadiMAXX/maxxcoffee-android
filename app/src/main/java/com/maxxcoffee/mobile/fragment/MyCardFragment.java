@@ -280,7 +280,7 @@ public class MyCardFragment extends Fragment {
                 }
                 getLocalCard();
                 //progress.dismissAllowingStateLoss();
-                loading.dismiss();
+                if (loading.isShowing())loading.dismiss();
             }
 
             @Override
@@ -288,14 +288,14 @@ public class MyCardFragment extends Fragment {
                 //Toast.makeText(getActivity(), getResources().getString(R.string.no_card_alert), Toast.LENGTH_LONG).show();
                 PreferenceManager.putInt(activity, Constant.PREFERENCE_CARD_AMOUNT, 0);
                 //progress.dismissAllowingStateLoss();
-                loading.dismiss();
+                if (loading.isShowing())loading.dismiss();
             }
 
             @Override
             public void onFailed() {
                 Toast.makeText(getActivity(), getResources().getString(R.string.something_wrong), Toast.LENGTH_LONG).show();
                 //progress.dismissAllowingStateLoss();
-                loading.dismiss();
+                if (loading.isShowing())loading.dismiss();
             }
         };
         task.execute();

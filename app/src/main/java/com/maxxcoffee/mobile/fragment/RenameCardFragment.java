@@ -115,7 +115,7 @@ public class RenameCardFragment extends Fragment {
                 PreferenceManager.putBool(getActivity(), Constant.PREFERENCE_ROUTE_CARD_SUCCESS, true);
                 PreferenceManager.putInt(getActivity(), Constant.PREFERENCE_CARD_AMOUNT, 1);
                 //progress.dismissAllowingStateLoss();
-                loading.dismiss();
+                if (loading.isShowing())loading.dismiss();
                 backToMyCard();
                 //backToOrigin();
             }
@@ -124,7 +124,7 @@ public class RenameCardFragment extends Fragment {
             public void onFailed() {
                 Toast.makeText(activity, activity.getResources().getString(R.string.something_wrong), Toast.LENGTH_SHORT).show();
                 //progress.dismissAllowingStateLoss();
-                loading.dismiss();
+                if (loading.isShowing())loading.dismiss();
                 //failed ga usah back kan ?
                 //backToMyCard();
             }
@@ -133,7 +133,7 @@ public class RenameCardFragment extends Fragment {
             public void onFailed(String message) {
                 Toast.makeText(activity, message, Toast.LENGTH_SHORT).show();
                 //progress.dismissAllowingStateLoss();
-                loading.dismiss();
+                if (loading.isShowing())loading.dismiss();
             }
         };
         task.execute(body);

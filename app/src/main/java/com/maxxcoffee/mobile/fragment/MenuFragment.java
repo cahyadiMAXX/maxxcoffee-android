@@ -159,13 +159,13 @@ public class MenuFragment extends Fragment {
                     });
                 }
                 //progress.dismissAllowingStateLoss();
-                loading.dismiss();
+                if (loading.isShowing())loading.dismiss();
             }
 
             @Override
             public void onFailed() {
                 //progress.dismissAllowingStateLoss();
-                loading.dismiss();
+                if (loading.isShowing())loading.dismiss();
                 Toast.makeText(activity, activity.getResources().getString(R.string.something_wrong), Toast.LENGTH_SHORT).show();
             }
         };

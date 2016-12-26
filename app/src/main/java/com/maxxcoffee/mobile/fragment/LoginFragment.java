@@ -251,7 +251,7 @@ public class LoginFragment extends Fragment {
             @Override
             public void onSuccess(String status) {
                 //progress.dismissAllowingStateLoss();
-                loading.dismiss();
+                if (loading.isShowing())loading.dismiss();
 
                 PreferenceManager.putBool(activity, Constant.PREFERENCE_LOGGED_IN, true);
                 PreferenceManager.putString(activity, Constant.PREFERENCE_EMAIL, email.getText().toString());
@@ -262,7 +262,7 @@ public class LoginFragment extends Fragment {
             @Override
             public void onFailed(String status) {
                 //progress.dismissAllowingStateLoss();
-                loading.dismiss();
+                if (loading.isShowing())loading.dismiss();
                 Toast.makeText(getActivity(), Utils.chkStatus(getActivity(), status), Toast.LENGTH_LONG).show();
             }
         };
@@ -277,7 +277,7 @@ public class LoginFragment extends Fragment {
             public void onFailed() {
 
                 //progress.dismissAllowingStateLoss();
-                loading.dismiss();
+                if (loading.isShowing())loading.dismiss();
                 Toast.makeText(getActivity(), Utils.chkStatus(getActivity(), ""), Toast.LENGTH_LONG).show();
                 //Toast.makeText(activity, "The credentials you entered don't match.", Toast.LENGTH_SHORT).show();
             }
@@ -293,7 +293,7 @@ public class LoginFragment extends Fragment {
             public void onChangePhoneNumber(final String email) {
 
                 //progress.dismissAllowingStateLoss();
-                loading.dismiss();
+                if (loading.isShowing())loading.dismiss();
 
                 final Bundle bundle = new Bundle();
                 bundle.putString("content", "Phone number already registered. Please change your phone number.");
@@ -319,7 +319,7 @@ public class LoginFragment extends Fragment {
 
             @Override
             public void onFailed(String message) {
-                loading.dismiss();
+                if (loading.isShowing())loading.dismiss();
                 //progress.dismissAllowingStateLoss();
                 Timber.e("logintest() %s", message);
                 Toast.makeText(getActivity(), Utils.chkStatus(getActivity(), message), Toast.LENGTH_LONG).show();
@@ -411,7 +411,7 @@ public class LoginFragment extends Fragment {
                 PreferenceManager.putString(activity, Constant.PREFERENCE_BEAN, String.valueOf(profile.getTotal_point()));
 
                 //progress.dismissAllowingStateLoss();
-                loading.dismiss();
+                if (loading.isShowing())loading.dismiss();
 
                 activity.prepareDrawerList();
                 activity.switchFragment(MainActivity.HOME);
@@ -419,7 +419,7 @@ public class LoginFragment extends Fragment {
 
             @Override
             public void onFailed() {
-                loading.dismiss();
+                if (loading.isShowing())loading.dismiss();
                 //progress.dismiss();
                 Toast.makeText(activity, activity.getResources().getString(R.string.something_wrong), Toast.LENGTH_SHORT).show();
             }

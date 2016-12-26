@@ -156,7 +156,7 @@ public class PrimaryCardFragment extends Fragment {
             public void onSuccess(DefaultResponseModel responseModel) {
                 if(responseModel.getStatus().equals("success")){
                     //progress.dismissAllowingStateLoss();
-                    loading.dismiss();
+                    if (loading.isShowing())loading.dismiss();
                     //redirect ke card, suruh mainactivity refresh card
                     PreferenceManager.putBool(activity, Constant.PREFERENCE_CARD_IS_LOADING, false);
                     PreferenceManager.putBool(activity, Constant.PREFERENCE_ROUTE_CARD_SUCCESS, true);
@@ -168,7 +168,7 @@ public class PrimaryCardFragment extends Fragment {
             @Override
             public void onFailed() {
                 //progress.dismissAllowingStateLoss();
-                loading.dismiss();
+                if (loading.isShowing())loading.dismiss();
                 Toast.makeText(activity, activity.getResources().getString(R.string.something_wrong), Toast.LENGTH_SHORT).show();
             }
         };
@@ -211,13 +211,13 @@ public class PrimaryCardFragment extends Fragment {
                 }
                 adapter.notifyDataSetChanged();
                 //progress.dismissAllowingStateLoss();
-                loading.dismiss();
+                if (loading.isShowing())loading.dismiss();
             }
 
             @Override
             public void onFailed() {
                 //progress.dismissAllowingStateLoss();
-                loading.dismiss();
+                if (loading.isShowing())loading.dismiss();
                 Toast.makeText(activity, activity.getResources().getString(R.string.something_wrong), Toast.LENGTH_SHORT).show();
             }
 
@@ -225,7 +225,7 @@ public class PrimaryCardFragment extends Fragment {
             public void onFailed(String message) {
                 Toast.makeText(activity, message, Toast.LENGTH_LONG).show();
                 //progress.dismissAllowingStateLoss();
-                loading.dismiss();
+                if (loading.isShowing())loading.dismiss();
             }
         };
         task.execute();

@@ -243,7 +243,7 @@ public class OurStoreFragment extends Fragment {
                     controller.insert(store);
                 }
                 getLocalProvince();
-                loading.dismiss();
+                if (loading.isShowing())loading.dismiss();
                 //progress.dismissAllowingStateLoss();
 
             }
@@ -251,7 +251,7 @@ public class OurStoreFragment extends Fragment {
             @Override
             public void onFailed() {
                 //progress.dismissAllowingStateLoss();
-                loading.dismiss();
+                if (loading.isShowing())loading.dismiss();
                 Toast.makeText(activity, "Something went wrong. Please try again.", Toast.LENGTH_SHORT).show();
             }
         };
@@ -283,7 +283,7 @@ public class OurStoreFragment extends Fragment {
         data.addAll(stores);
         adapter.notifyDataSetInvalidated();
         //progress.dismissAllowingStateLoss();
-        loading.dismiss();
+        if (loading.isShowing())loading.dismiss();
     }
 
     public void getLocalProvince() {

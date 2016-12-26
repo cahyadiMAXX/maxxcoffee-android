@@ -1,12 +1,16 @@
 package com.maxxcoffee.mobile.fragment;
 
+import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ExpandableListView;
 
 import com.maxxcoffee.mobile.R;
@@ -109,8 +113,16 @@ public class MenuMerchandiseFragment extends Fragment {
         listDataHeader.clear();
         listDataChild.clear();
 
-        LoadingDialog progress = new LoadingDialog();
-        progress.show(getFragmentManager(), null);
+        /*LoadingDialog progress = new LoadingDialog();
+        progress.show(getFragmentManager(), null);*/
+        final Dialog loading;
+        loading = new Dialog(getActivity());
+        loading.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        loading.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        loading.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        loading.setContentView(R.layout.dialog_loading);
+        loading.setCancelable(false);
+        loading.show();
 
         List<MenuCategoryEntity> groups = categoryController.getMenuCategoryMerchandise();
         for (MenuCategoryEntity group : groups) {
@@ -139,46 +151,8 @@ public class MenuMerchandiseFragment extends Fragment {
             }
             adapter.notifyDataSetChanged();
         }
-        progress.dismissAllowingStateLoss();
+        //progress.dismissAllowingStateLoss();
+        if (loading.isShowing()) loading.dismiss();
 
-
-//        List<MenuCategoryEntity> categories = menuCategoryController.getMenuCategories();
-//        for (MenuCategoryEntity category : categories) {
-//            MenuCategoryModel model = new MenuCategoryModel();
-//            model.setId(category.getId());
-//            model.setName(category.getName());
-//
-//            listDataHeader.add(model);
-//            List<MenuEntity> items = menuItemController.getMenuItemByCategory(model.getId());
-//            List<MenuItemModel> temp = null;
-//            List<List<MenuItemModel>> itemList = new ArrayList<>();
-//            for (int position = 0; position < items.size(); position++) {
-//                MenuEntity item = items.get(position);
-//                MenuItemModel itemModel = new MenuItemModel();
-//                itemModel.setId(item.getId());
-//                itemModel.setCategoryId(item.getCategoryId());
-//                itemModel.setName(item.getName());
-//                itemModel.setDescription(item.getDescription());
-//                itemModel.setImage(item.getImage());
-//                itemModel.setPrice(item.getPrice());
-//                itemModel.setPoint(item.getPoint());
-//
-////                itemList.add(itemModel);
-//                if (position % 2 == 0) {
-//                    temp = new ArrayList<>();
-//                    temp.add(itemModel);
-//
-//                    if (position == items.size() - 1) {
-//                        itemList.add(temp);
-//                    }
-//                } else {
-//                    assert temp != null;
-//                    temp.add(itemModel);
-//                    itemList.add(temp);
-//                }
-//            }
-//            listDataChild.put(model, itemList);
-//        }
-//        adapter.notifyDataSetInvalidated();
     }
 }

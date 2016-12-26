@@ -2,16 +2,21 @@ package com.maxxcoffee.mobile.activity;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TextInputLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -168,13 +173,17 @@ public class VerificationActivity extends AppCompatActivity {
                 PreferenceManager.putString(VerificationActivity.this, Constant.PREFERENCE_BALANCE, String.valueOf(profile.getTotal_balance()));
                 PreferenceManager.putString(VerificationActivity.this, Constant.PREFERENCE_BEAN, String.valueOf(profile.getTotal_point()));
                 //progress.dismissAllowingStateLoss();
-                loading.dismiss();
+                if (loading.isShowing()){
+                    loading.dismiss();
+                }
             }
 
             @Override
             public void onFailed() {
                 //progress.dismissAllowingStateLoss();
-                loading.dismiss();
+                if (loading.isShowing()){
+                    loading.dismiss();
+                }
                 Toast.makeText(getApplicationContext(), getApplicationContext().getResources().getString(R.string.something_wrong), Toast.LENGTH_SHORT).show();
             }
         };
@@ -216,8 +225,16 @@ public class VerificationActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), getApplicationContext().getResources().getString(R.string.mobile_data), Toast.LENGTH_LONG).show();
             return;
         }
-        final LoadingDialog progress = new LoadingDialog();
-        progress.show(getSupportFragmentManager(), null);
+        /*final LoadingDialog progress = new LoadingDialog();
+        progress.show(getSupportFragmentManager(), null);*/
+        final Dialog loading;
+        loading = new Dialog(VerificationActivity.this);
+        loading.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        loading.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        loading.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        loading.setContentView(R.layout.dialog_loading);
+        loading.setCancelable(false);
+        loading.show();
 
         final ProfileEntity profile = profileController.getProfile();
         if (profile != null) {
@@ -228,19 +245,20 @@ public class VerificationActivity extends AppCompatActivity {
             ResendEmailTask task = new ResendEmailTask(this) {
                 @Override
                 public void onSuccess() {
-                        progress.dismissAllowingStateLoss();
+                    //progress.dismissAllowingStateLoss();
+                    if (loading.isShowing()) loading.dismiss();
                     showDialog("We have sent the verification link to your email.");
                 }
 
                 @Override
                 public void onWait(String second) {
-                        progress.dismissAllowingStateLoss();
+                    if (loading.isShowing()) loading.dismiss();
                     showDialog("We have sent the verification link to your email. Please wait " + second + " second to retry");
                 }
 
                 @Override
                 public void onFailed() {
-                        progress.dismiss();
+                    if (loading.isShowing()) loading.dismiss();
                     Toast.makeText(VerificationActivity.this, "Failed to resend email verification", Toast.LENGTH_SHORT).show();
                 }
             };
@@ -259,8 +277,16 @@ public class VerificationActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), getApplicationContext().getResources().getString(R.string.mobile_data), Toast.LENGTH_LONG).show();
             return;
         }
-        final LoadingDialog progress = new LoadingDialog();
-        progress.show(getSupportFragmentManager(), null);
+        /*final LoadingDialog progress = new LoadingDialog();
+        progress.show(getSupportFragmentManager(), null);*/
+        final Dialog loading;
+        loading = new Dialog(VerificationActivity.this);
+        loading.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        loading.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        loading.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        loading.setContentView(R.layout.dialog_loading);
+        loading.setCancelable(false);
+        loading.show();
 
         final ProfileEntity profile = profileController.getProfile();
         if (profile != null) {
@@ -271,19 +297,22 @@ public class VerificationActivity extends AppCompatActivity {
             ResendEmailTask task = new ResendEmailTask(this) {
                 @Override
                 public void onSuccess() {
-                    progress.dismissAllowingStateLoss();
+                    //progress.dismissAllowingStateLoss();
+                    if (loading.isShowing()) loading.dismiss();
                     showDialog("We have sent the verification code to your mobile phone");
                 }
 
                 @Override
                 public void onWait(String second) {
-                        progress.dismissAllowingStateLoss();
+                    //progress.dismissAllowingStateLoss();
+                    if (loading.isShowing()) loading.dismiss();
                     showDialog("We have sent the verification code to your mobile phone. Please wait " + second + " second to retry");
                 }
 
                 @Override
                 public void onFailed() {
-                        progress.dismiss();
+                    //progress.dismiss();
+                    if (loading.isShowing()) loading.dismiss();
                     Toast.makeText(VerificationActivity.this, "Failed to resend verification code", Toast.LENGTH_SHORT).show();
                 }
             };
@@ -309,8 +338,16 @@ public class VerificationActivity extends AppCompatActivity {
             return;
 
         final ProfileEntity profile = profileController.getProfile();
-        final LoadingDialog progress = new LoadingDialog();
-        progress.show(getSupportFragmentManager(), null);
+        /*final LoadingDialog progress = new LoadingDialog();
+        progress.show(getSupportFragmentManager(), null);*/
+        final Dialog loading;
+        loading = new Dialog(VerificationActivity.this);
+        loading.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        loading.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        loading.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        loading.setContentView(R.layout.dialog_loading);
+        loading.setCancelable(false);
+        loading.show();
 
         VerifySmsCodeRequestModel body = new VerifySmsCodeRequestModel();
         body.setEmail(profile.getEmail());
@@ -319,7 +356,8 @@ public class VerificationActivity extends AppCompatActivity {
         VerificationCodeTask task = new VerificationCodeTask(this) {
             @Override
             public void onSuccess() {
-                progress.dismissAllowingStateLoss();
+                //progress.dismissAllowingStateLoss();
+                if (loading.isShowing()) loading.dismiss();
                 //verification code dihapus aj klo udah berhasil
                 PreferenceManager.putString(getApplicationContext(), Constant.PREFERENCE_VERIFICATION_CODE, "");
                 onSyncClick();
@@ -327,7 +365,8 @@ public class VerificationActivity extends AppCompatActivity {
 
             @Override
             public void onFailed() {
-                    progress.dismissAllowingStateLoss();
+                //progress.dismissAllowingStateLoss();
+                if (loading.isShowing()) loading.dismiss();
                 Toast.makeText(VerificationActivity.this, "Failed to verify code", Toast.LENGTH_SHORT).show();
             }
         };
@@ -346,14 +385,30 @@ public class VerificationActivity extends AppCompatActivity {
         Bundle bundle = new Bundle();
         bundle.putString("content", content);
 
-        OkDialog optionDialog = new OkDialog() {
+        /*OkDialog optionDialog = new OkDialog() {
             @Override
             protected void onOk() {
                 dismiss();
             }
         };
         optionDialog.setArguments(bundle);
-        optionDialog.show(getSupportFragmentManager(), null);
+        optionDialog.show(getSupportFragmentManager(), null);*/
+        final LayoutInflater inflater = getLayoutInflater();
+        final View layout = inflater.inflate(R.layout.dialog_ok, null);
+        AlertDialog.Builder builder  = new AlertDialog.Builder(VerificationActivity.this).setView(layout);
+        final AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+
+        TextView cont = (TextView) layout.findViewById(R.id.content);
+        Button buttonSerial = (Button) layout.findViewById(R.id.ok);
+
+        cont.setText(content);
+        buttonSerial.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+            }
+        });
     }
 
     private void checkIfAllVerified() {

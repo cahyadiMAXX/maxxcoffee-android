@@ -281,13 +281,13 @@ public class MyCardDetailFragment extends Fragment {
 
                 //fetchingCard();
                 //progress.dismissAllowingStateLoss();
-                progress.dismiss();
+                if (progress.isShowing())progress.dismiss();
             }
 
             @Override
             public void onFailed() {
                 //progress.dismissAllowingStateLoss();
-                progress.dismiss();
+                if (progress.isShowing())progress.dismiss();
             }
         };
         task.execute(body);
@@ -344,7 +344,7 @@ public class MyCardDetailFragment extends Fragment {
             @Override
             protected void onDownloadError() {
                 //progress.dismissAllowingStateLoss();
-                loading.dismiss();
+                if (loading.isShowing())loading.dismiss();
                 try{
                     Glide.with(activity).load("").placeholder(R.drawable.ic_no_image).into(imageCardBack);
                     loadImageBack(name + "_imageBack.png");
@@ -354,11 +354,8 @@ public class MyCardDetailFragment extends Fragment {
             @Override
             protected void onImageDownloaded(Bitmap bitmap) {
                 //progress.dismissAllowingStateLoss();
-                loading.dismiss();
+                if (loading.isShowing())loading.dismiss();
                 try{
-                            /*Bitmap resizeImage = Utils.getResizedBitmap(bitmap, 0.95f);
-                            Drawable drawable = new BitmapDrawable(getResources(), bitmap);
-                            imageCardBack.setImageDrawable(drawable);*/
                     ImageSaver imageSaver = new ImageSaver(activity);
                     imageSaver.setFileName(name + "_imageBack.png").
                             setDirectoryName("images").
@@ -387,9 +384,6 @@ public class MyCardDetailFragment extends Fragment {
             protected void onImageDownloaded(Bitmap bitmap) {
                 try{
                     barcodeTask.execute(barcode);
-                            /*Bitmap resizeImage = Utils.getResizedBitmap(bitmap, 0.95f);
-                            Drawable drawable = new BitmapDrawable(getResources(), bitmap);
-                            imageCardFront.setImageDrawable(drawable);*/
                     ImageSaver imageSaver = new ImageSaver(activity);
                     imageSaver.setFileName(name + "_imageFront.png").
                             setDirectoryName("images").
@@ -507,7 +501,7 @@ public class MyCardDetailFragment extends Fragment {
             @Override
             public void onSuccess() {
                 //progress.dismissAllowingStateLoss();
-                loading.dismiss();
+                if (loading.isShowing())loading.dismiss();
                 MyCardDetailFragment.this.name.setText(name);
                 activity.setTitle(name);
                 fetchingData();
@@ -515,7 +509,7 @@ public class MyCardDetailFragment extends Fragment {
 
             @Override
             public void onFailed() {
-                loading.dismiss();
+                if (loading.isShowing())loading.dismiss();
                 //progress.dismissAllowingStateLoss();
             }
         };

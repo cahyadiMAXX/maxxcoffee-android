@@ -143,7 +143,7 @@ public class PromoFragment extends Fragment {
                 //adapter.notifyDataSetChanged();
                 getLocalPromo();
                 //progress.dismissAllowingStateLoss();
-                loading.dismiss();
+                if (loading.isShowing())loading.dismiss();
             }
 
             @Override
@@ -151,13 +151,13 @@ public class PromoFragment extends Fragment {
                 emptyCard.setText("We do not have any promo");
                 emptyCard.setVisibility(View.VISIBLE);
                 //progress.dismissAllowingStateLoss();
-                loading.dismiss();
+                if (loading.isShowing())loading.dismiss();
             }
 
             @Override
             public void onFailed() {
                 //progress.dismissAllowingStateLoss();
-                loading.dismiss();
+                if (loading.isShowing())loading.dismiss();
                 Toast.makeText(activity, activity.getResources().getString(R.string.something_wrong), Toast.LENGTH_SHORT).show();
             }
         };

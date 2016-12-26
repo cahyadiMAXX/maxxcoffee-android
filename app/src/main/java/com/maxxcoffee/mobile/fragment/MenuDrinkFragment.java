@@ -150,6 +150,6 @@ public class MenuDrinkFragment extends Fragment {
             adapter.notifyDataSetChanged();
         }
         //progress.dismissAllowingStateLoss();
-        loading.dismiss();
+        if (loading.isShowing())loading.dismiss();
     }
 }

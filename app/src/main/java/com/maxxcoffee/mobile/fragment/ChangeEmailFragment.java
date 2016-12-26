@@ -102,7 +102,7 @@ public class ChangeEmailFragment extends Fragment {
             @Override
             public void onSuccess(String message) {
                 //progress.dismissAllowingStateLoss();
-                loading.dismiss();
+                if (loading.isShowing())loading.dismiss();
                 Toast.makeText(activity, message, Toast.LENGTH_LONG).show();
                 PreferenceManager.putBool(activity, Constant.PREFERENCE_ROUTE_TO_LOGOUT, true);
                 activity.onBackClick();
@@ -111,7 +111,7 @@ public class ChangeEmailFragment extends Fragment {
             @Override
             public void onFailed() {
                 //progress.dismissAllowingStateLoss();
-                loading.dismiss();
+                if (loading.isShowing())loading.dismiss();
                 Toast.makeText(activity, "Failed to change email. Contact administrator for more information.", Toast.LENGTH_SHORT).show();
             }
         };

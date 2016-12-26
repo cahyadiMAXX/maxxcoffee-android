@@ -160,7 +160,7 @@ public class ContactUsFragment extends Fragment {
         ContactUsTask task = new ContactUsTask(activity) {
             @Override
             public void onSuccess() {
-                loading.dismiss();
+                if (loading.isShowing())loading.dismiss();
                 //progress.dismissAllowingStateLoss();
                 Toast.makeText(activity, "Your message has been submitted successfully", Toast.LENGTH_SHORT).show();
 
@@ -171,7 +171,7 @@ public class ContactUsFragment extends Fragment {
 
             @Override
             public void onFailed() {
-                loading.dismiss();
+                if (loading.isShowing())loading.dismiss();
                 //progress.dismissAllowingStateLoss();
                 Toast.makeText(activity, activity.getResources().getString(R.string.something_wrong), Toast.LENGTH_SHORT).show();
             }

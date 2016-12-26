@@ -83,7 +83,7 @@ public class ChangePasswordFragment extends Fragment {
             public void onSuccess() {
 
                 //progress.dismissAllowingStateLoss();
-                loading.dismiss();
+                if (loading.isShowing())loading.dismiss();
                 activity.onBackClick();
             }
 
@@ -91,7 +91,7 @@ public class ChangePasswordFragment extends Fragment {
             public void onFailed() {
 
                 //progress.dismissAllowingStateLoss();
-                loading.dismiss();
+                if (loading.isShowing())loading.dismiss();
                 Toast.makeText(activity, "Failed to change password", Toast.LENGTH_SHORT).show();
             }
         };

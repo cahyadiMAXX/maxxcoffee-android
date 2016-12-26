@@ -87,7 +87,7 @@ public class ChangePhoneFragment extends Fragment {
                 public void onSuccess() {
 
                     //progress.dismissAllowingStateLoss();
-                    loading.dismiss();
+                    if (loading.isShowing())loading.dismiss();
                     profile.setPhone(phone.getText().toString());
                     profileController.insert(profile);
 
@@ -98,7 +98,7 @@ public class ChangePhoneFragment extends Fragment {
                 public void onWait() {
 
                     //progress.dismissAllowingStateLoss();
-                    loading.dismiss();
+                    if (loading.isShowing())loading.dismiss();
                     Toast.makeText(activity, "You've just changed your phone number. Please wait 5 minutes before making another changes.", Toast.LENGTH_SHORT).show();
                 }
 
@@ -106,7 +106,7 @@ public class ChangePhoneFragment extends Fragment {
                 public void onFailed() {
 
                     //progress.dismiss();
-                    loading.dismiss();
+                    if (loading.isShowing())loading.dismiss();
                     Toast.makeText(activity, "Failed to change phone number", Toast.LENGTH_SHORT).show();
                 }
             };

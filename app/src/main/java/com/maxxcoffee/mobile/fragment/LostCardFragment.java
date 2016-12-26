@@ -141,7 +141,7 @@ public class LostCardFragment extends Fragment {
                 }
 
                 getLocalCard();
-                loading.dismiss();
+                if (loading.isShowing())loading.dismiss();
                 //progress.dismissAllowingStateLoss();
             }
 
@@ -149,7 +149,7 @@ public class LostCardFragment extends Fragment {
             public void onFailed() {
                 Toast.makeText(activity, activity.getResources().getString(R.string.something_wrong), Toast.LENGTH_SHORT).show();
                 //progress.dismissAllowingStateLoss();
-                loading.dismiss();
+                if (loading.isShowing())loading.dismiss();
             }
 
             @Override
@@ -159,7 +159,7 @@ public class LostCardFragment extends Fragment {
                 mainframe.setVisibility(View.GONE);
                 //Toast.makeText(activity, message, Toast.LENGTH_SHORT).show();
                 //progress.dismissAllowingStateLoss();
-                loading.dismiss();
+                if (loading.isShowing())loading.dismiss();
             }
         };
         task.execute();
@@ -316,7 +316,7 @@ public class LostCardFragment extends Fragment {
             @Override
             public void onSuccess() {
                 //progress.dismissAllowingStateLoss();
-                progress.dismiss();
+                if (loading.isShowing())progress.dismiss();
                 Toast.makeText(activity, "Your report has been submitted successfully", Toast.LENGTH_SHORT).show();
                 detail.setText("");
                 activity.switchFragment(MainActivity.MY_CARD);
@@ -326,7 +326,7 @@ public class LostCardFragment extends Fragment {
             public void onFailed() {
                 //progress.dismissAllowingStateLoss();
                 Toast.makeText(getActivity(), getResources().getString(R.string.something_wrong), Toast.LENGTH_LONG).show();
-                progress.dismiss();
+                if (loading.isShowing())progress.dismiss();
             }
         };
         task.execute(body);

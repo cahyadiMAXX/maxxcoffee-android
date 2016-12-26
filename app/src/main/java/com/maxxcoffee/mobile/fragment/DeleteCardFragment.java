@@ -333,14 +333,14 @@ public class DeleteCardFragment extends Fragment {
             public void onSuccess() {
                 PreferenceManager.putBool(activity, Constant.PREFERENCE_CARD_IS_LOADING, false);
                 //progress.dismissAllowingStateLoss();
-                loading.dismiss();
+                if (loading.isShowing())loading.dismiss();
                 activity.onBackClick();
             }
 
             @Override
             public void onFailed() {
                 //progress.dismissAllowingStateLoss();
-                loading.dismiss();
+                if (loading.isShowing())loading.dismiss();
                 Toast.makeText(activity, "Failed to delete card", Toast.LENGTH_SHORT).show();
             }
         };

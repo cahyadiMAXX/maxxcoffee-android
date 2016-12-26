@@ -125,7 +125,7 @@ public class AddVirtualCardActivity extends FragmentActivity {
             public void onSuccess(AddVirtualResponseModel tos) {
                 Toast.makeText(getApplicationContext(), "Virtual card successfully added", Toast.LENGTH_LONG).show();
                 //progress.dismissAllowingStateLoss();
-                loading.dismiss();
+                if (loading.isShowing()) loading.dismiss();
                 PreferenceManager.putBool(getApplicationContext(), Constant.PREFERENCE_ROUTE_CARD_SUCCESS, true);
                 PreferenceManager.putInt(getApplicationContext(), Constant.PREFERENCE_CARD_AMOUNT, 1);
                 //backToOrigin();
@@ -136,14 +136,14 @@ public class AddVirtualCardActivity extends FragmentActivity {
             public void onFailed() {
                 Toast.makeText(getApplicationContext(), getResources().getString(R.string.something_wrong), Toast.LENGTH_LONG).show();
                 //progress.dismissAllowingStateLoss();
-                loading.dismiss();
+                if (loading.isShowing()) loading.dismiss();
             }
 
             @Override
             public void onFailed(AddVirtualResponseModel tos) {
                 Toast.makeText(getApplicationContext(), tos.getMessages(), Toast.LENGTH_LONG).show();
                 //progress.dismissAllowingStateLoss();
-                loading.dismiss();
+                if (loading.isShowing()) loading.dismiss();
             }
         };
 

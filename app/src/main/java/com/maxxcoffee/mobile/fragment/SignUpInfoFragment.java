@@ -121,7 +121,6 @@ public class SignUpInfoFragment extends Fragment {
         selectedPhoneNumber = getArguments().getString("phone");
         selectedPassword = getArguments().getString("password");
 
-
         return view;
     }
 
@@ -288,14 +287,14 @@ public class SignUpInfoFragment extends Fragment {
             @Override
             public void onSuccess() {
                 //progress.dismissAllowingStateLoss();
-                loading.dismiss();
+                if (loading.isShowing())loading.dismiss();
                 loginNow();
             }
 
             @Override
             public void onFailed(String message) {
                 //progress.dismissAllowingStateLoss();
-                loading.dismiss();
+                if (loading.isShowing())loading.dismiss();
                 Toast.makeText(activity, message, Toast.LENGTH_SHORT).show();
             }
         };
@@ -321,7 +320,6 @@ public class SignUpInfoFragment extends Fragment {
         loginBody.setPassword(selectedPassword);
 
         //get location here
-
         final OauthRequestModel oauthBody = new OauthRequestModel();
         oauthBody.setUsername(selectedEmail);
         oauthBody.setPassword(selectedPassword);
@@ -333,7 +331,7 @@ public class SignUpInfoFragment extends Fragment {
             @Override
             public void onSuccess(String status) {
                 //progress.dismissAllowingStateLoss();
-                loading.dismiss();
+                if (loading.isShowing())loading.dismiss();
                 PreferenceManager.putBool(activity, Constant.PREFERENCE_LOGGED_IN, true);
                 fetchingProfileData();
             }
@@ -341,7 +339,7 @@ public class SignUpInfoFragment extends Fragment {
             @Override
             public void onFailed(String status) {
                 //progress.dismissAllowingStateLoss();
-                loading.dismiss();
+                if (loading.isShowing())loading.dismiss();
                 Toast.makeText(activity, "Login failed. Token not found", Toast.LENGTH_SHORT).show();
             }
         };
@@ -355,7 +353,7 @@ public class SignUpInfoFragment extends Fragment {
             @Override
             public void onFailed() {
                 //progress.dismissAllowingStateLoss();
-                loading.dismiss();
+                if (loading.isShowing())loading.dismiss();
                 Toast.makeText(activity, "Login failed. Access token not found", Toast.LENGTH_SHORT).show();
             }
         };
@@ -457,7 +455,7 @@ public class SignUpInfoFragment extends Fragment {
                 PreferenceManager.putString(activity, Constant.PREFERENCE_BALANCE, String.valueOf(profile.getTotal_balance()));
                 PreferenceManager.putString(activity, Constant.PREFERENCE_BEAN, String.valueOf(profile.getTotal_point()));
                 //progress.dismissAllowingStateLoss();
-                loading.dismiss();
+                if (loading.isShowing())loading.dismiss();
 
                 activity.prepareDrawerList();
                 activity.switchFragment(MainActivity.HOME);
@@ -467,7 +465,7 @@ public class SignUpInfoFragment extends Fragment {
             @Override
             public void onFailed() {
                 //progress.dismissAllowingStateLoss();
-                loading.dismiss();
+                if (loading.isShowing())loading.dismiss();
                 Toast.makeText(activity, activity.getResources().getString(R.string.something_wrong), Toast.LENGTH_SHORT).show();
             }
         };

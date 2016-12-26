@@ -84,21 +84,21 @@ public class ChangeOldPhoneFragment extends Fragment {
             @Override
             public void onSuccess() {
                 //progress.dismissAllowingStateLoss();
-                loading.dismiss();
+                if (loading.isShowing())loading.dismiss();
                 activity.onBackClick();
             }
 
             @Override
             public void onWait() {
                 //progress.dismissAllowingStateLoss();
-                loading.dismiss();
+                if (loading.isShowing())loading.dismiss();
                 Toast.makeText(activity, "You've just changed your phone number. Please wait 5 minutes before making another changes.", Toast.LENGTH_LONG).show();
             }
 
             @Override
             public void onFailed() {
                 //progress.dismiss();
-                loading.dismiss();
+                if (loading.isShowing())loading.dismiss();
                 Toast.makeText(activity, "Failed to change phone number", Toast.LENGTH_LONG).show();
             }
         };

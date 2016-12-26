@@ -95,7 +95,7 @@ public class SignUpFragment extends Fragment {
                             @Override
                             public void onSuccess(String response) {
                                 //progress.dismissAllowingStateLoss();
-                                loading.dismiss();
+                                if (loading.isShowing())loading.dismiss();
                                 //Toast.makeText(getActivity(), response, Toast.LENGTH_LONG).show();
                                 PreferenceManager.putBool(activity, Constant.PREFERENCE_REGISTER_IS_VALID_EMAIL, true);
                             }
@@ -103,7 +103,7 @@ public class SignUpFragment extends Fragment {
                             @Override
                             public void onFailed() {
                                 //progress.dismissAllowingStateLoss();
-                                loading.dismiss();
+                                if (loading.isShowing())loading.dismiss();
                                 PreferenceManager.putBool(activity, Constant.PREFERENCE_REGISTER_IS_VALID_EMAIL, false);
                                 email.requestFocus();
                                 email.setError(getActivity().getResources().getString(R.string.something_wrong));
@@ -113,7 +113,7 @@ public class SignUpFragment extends Fragment {
                             @Override
                             public void onFailed(String response) {
                                 //progress.dismissAllowingStateLoss();
-                                loading.dismiss();
+                                if (loading.isShowing())loading.dismiss();
                                 PreferenceManager.putBool(activity, Constant.PREFERENCE_REGISTER_IS_VALID_EMAIL, false);
                                 email.requestFocus();
                                 email.setError(response);
@@ -237,7 +237,7 @@ public class SignUpFragment extends Fragment {
             @Override
             public void onSuccess(String json) {
                 //progress.dismissAllowingStateLoss();
-                loading.dismiss();
+                if (loading.isShowing())loading.dismiss();
                 PreferenceManager.putString(activity, Constant.DATA_KOTA, json);
                 activity.switchFragment(MainActivity.SIGNUP_INFO, bundle);
             }
@@ -245,7 +245,7 @@ public class SignUpFragment extends Fragment {
             @Override
             public void onFailed() {
                 //progress.dismissAllowingStateLoss();
-                loading.dismiss();
+                if (loading.isShowing())loading.dismiss();
                 Toast.makeText(activity, "Failed to retrieve city data", Toast.LENGTH_SHORT).show();
             }
         };

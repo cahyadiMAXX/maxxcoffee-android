@@ -113,7 +113,7 @@ public class FaqFragment extends Fragment {
             @Override
             public void onSuccess(List<FaqItemResponseModel> response) {
                     //progress.dismissAllowingStateLoss();
-                loading.dismiss();
+                if (loading.isShowing())loading.dismiss();
                 if(response.size() > 0)
                     faqController.clearTable();
 
@@ -134,7 +134,7 @@ public class FaqFragment extends Fragment {
             @Override
             public void onFailed() {
                     //progress.dismissAllowingStateLoss();
-                loading.dismiss();
+                if (loading.isShowing())loading.dismiss();
             }
         };
         task.execute();

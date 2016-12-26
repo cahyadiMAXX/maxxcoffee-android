@@ -76,7 +76,7 @@ public class AboutFragment extends Fragment {
             @Override
             public void onSuccess(String about) {
                     //progress.dismissAllowingStateLoss();
-                loading.dismiss();
+                if (loading.isShowing()) loading.dismiss();
 
                 if (about != null) {
                     content.setText(Html.fromHtml(about));
@@ -89,7 +89,7 @@ public class AboutFragment extends Fragment {
             @Override
             public void onFailed() {
                 //progress.dismissAllowingStateLoss();
-                loading.dismiss();
+                if (loading.isShowing())loading.dismiss();
                 Toast.makeText(activity, activity.getResources().getString(R.string.something_wrong), Toast.LENGTH_SHORT).show();
             }
         };

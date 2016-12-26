@@ -7,11 +7,13 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -21,6 +23,7 @@ import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.maxxcoffee.mobile.R;
 import com.maxxcoffee.mobile.activity.MainActivity;
+import com.maxxcoffee.mobile.activity.VerificationActivity;
 import com.maxxcoffee.mobile.database.controller.CardController;
 import com.maxxcoffee.mobile.database.entity.CardEntity;
 import com.maxxcoffee.mobile.fragment.dialog.LoadingDialog;
@@ -155,13 +158,13 @@ public class TransferBalanceFragment extends Fragment {
                     getLocalCard(autoSet);
                 }
                 //progress.dismissAllowingStateLoss();
-                loading.dismiss();
+                if (loading.isShowing())loading.dismiss();
             }
 
             @Override
             public void onFailed() {
                 //progress.dismissAllowingStateLoss();
-                loading.dismiss();
+                if (loading.isShowing())loading.dismiss();
                 transferLayout.setVisibility(View.GONE);
                 empty.setVisibility(View.VISIBLE);
                 empty.setText("You do not have any connected card. \n\nPlease add card.");
@@ -273,14 +276,14 @@ public class TransferBalanceFragment extends Fragment {
             @Override
             public void onSuccess() {
                 //progress.dismissAllowingStateLoss();
-                progress.dismiss();
+                if (progress.isShowing())progress.dismiss();
                 showSuccessDialog(true);
             }
 
             @Override
             public void onFailed() {
                 //progress.dismissAllowingStateLoss();
-                progress.dismiss();
+                if (progress.isShowing())progress.dismiss();
                 showSuccessDialog(false);
             }
         };
@@ -295,7 +298,7 @@ public class TransferBalanceFragment extends Fragment {
         Bundle bundle = new Bundle();
         bundle.putString("content", success ? successString : failedString);
 
-        OkDialog optionDialog = new OkDialog() {
+        /*OkDialog optionDialog = new OkDialog() {
             @Override
             protected void onOk() {
                 dismiss();
@@ -304,7 +307,23 @@ public class TransferBalanceFragment extends Fragment {
             }
         };
         optionDialog.setArguments(bundle);
-        optionDialog.show(getFragmentManager(), null);
+        optionDialog.show(getFragmentManager(), null);*/
+        final LayoutInflater inflater = getActivity().getLayoutInflater();
+        final View layout = inflater.inflate(R.layout.dialog_ok, null);
+        AlertDialog.Builder builder  = new AlertDialog.Builder(getActivity()).setView(layout);
+        final AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+
+        TextView cont = (TextView) layout.findViewById(R.id.content);
+        Button buttonSerial = (Button) layout.findViewById(R.id.ok);
+
+        cont.setText(success ? successString : failedString);
+        buttonSerial.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+            }
+        });
     }
 
     @OnClick(R.id.source_layout)

@@ -2,8 +2,10 @@ package com.maxxcoffee.mobile.activity;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -91,14 +93,23 @@ public class AddCardBarcodeActivity extends FragmentActivity {
     }
 
     void checkVirtualCardPermission(){
-        final LoadingDialog progress = new LoadingDialog();
-        progress.show(getSupportFragmentManager(), null);
+        /*final LoadingDialog progress = new LoadingDialog();
+        progress.show(getSupportFragmentManager(), null);*/
+        final Dialog loading;
+        loading = new Dialog(AddCardBarcodeActivity.this);
+        loading.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        loading.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        loading.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        loading.setContentView(R.layout.dialog_loading);
+        loading.setCancelable(false);
+        loading.show();
 
         CheckCardTaskPermission task = new CheckCardTaskPermission(getApplicationContext()) {
 
             @Override
             public void onSuccess() {
-                progress.dismissAllowingStateLoss();
+                //progress.dismissAllowingStateLoss();
+                if (loading.isShowing()) loading.dismiss();
                 //addVirtualCard.setVisibility(View.VISIBLE);
                 virtualarea.setVisibility(View.VISIBLE);
             }
@@ -106,7 +117,8 @@ public class AddCardBarcodeActivity extends FragmentActivity {
             @Override
             public void onSuccess(AddVirtualResponseModel tos) {
                 Toast.makeText(getApplicationContext(), tos.getMessages(), Toast.LENGTH_LONG).show();
-                progress.dismissAllowingStateLoss();
+                //progress.dismissAllowingStateLoss();
+                if (loading.isShowing()) loading.dismiss();
                 //addVirtualCard.setVisibility(View.GONE);
                 virtualarea.setVisibility(View.GONE);
             }
@@ -114,7 +126,8 @@ public class AddCardBarcodeActivity extends FragmentActivity {
             @Override
             public void onFailed() {
                 Toast.makeText(getApplicationContext(), getResources().getString(R.string.something_wrong), Toast.LENGTH_LONG).show();
-                progress.dismissAllowingStateLoss();
+                //progress.dismissAllowingStateLoss();
+                if (loading.isShowing()) loading.dismiss();
                 //addVirtualCard.setVisibility(View.GONE);
                 virtualarea.setVisibility(View.GONE);
             }
@@ -122,7 +135,8 @@ public class AddCardBarcodeActivity extends FragmentActivity {
             @Override
             public void onFailed(AddVirtualResponseModel tos) {
                 Toast.makeText(getApplicationContext(), tos.getMessages(), Toast.LENGTH_LONG).show();
-                progress.dismissAllowingStateLoss();
+                //progress.dismissAllowingStateLoss();
+                if (loading.isShowing()) loading.dismiss();
                 //addVirtualCard.setVisibility(View.GONE);
                 virtualarea.setVisibility(View.GONE);
             }

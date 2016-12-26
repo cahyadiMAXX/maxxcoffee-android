@@ -254,7 +254,7 @@ public class CardDetailHistoryFragment extends Fragment {
             @Override
             public void onSuccess() {
                     //progress.dismissAllowingStateLoss();
-                loading.dismiss();
+                if (loading.isShowing())loading.dismiss();
 
                 historyLayout.setVisibility(View.VISIBLE);
                 setupViewPager(viewPager);
@@ -264,7 +264,7 @@ public class CardDetailHistoryFragment extends Fragment {
             @Override
             public void onFailed() {
                 //progress.dismiss();
-                loading.dismiss();
+                if (loading.isShowing())loading.dismiss();
             }
         };
         task.execute(body);

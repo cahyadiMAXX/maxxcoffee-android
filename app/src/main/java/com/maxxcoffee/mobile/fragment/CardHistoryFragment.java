@@ -292,13 +292,13 @@ public class CardHistoryFragment extends Fragment {
                 }
                 getLocalCard();
                 //progress.dismissAllowingStateLoss();
-                loading.dismiss();
+                if (loading.isShowing())loading.dismiss();
             }
 
             @Override
             public void onFailed(String message) {
                 //progress.dismissAllowingStateLoss();
-                loading.dismiss();
+                if (loading.isShowing())loading.dismiss();
                 empty.setText(message);
                 empty.setVisibility(View.VISIBLE);
                 mainframe.setVisibility(View.GONE);
@@ -311,7 +311,7 @@ public class CardHistoryFragment extends Fragment {
                 //empty.setVisibility(View.VISIBLE);
                 Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.something_wrong), Toast.LENGTH_LONG).show();
                 //progress.dismissAllowingStateLoss();
-                loading.dismiss();
+                if (loading.isShowing())loading.dismiss();
             }
         };
         task.execute();
@@ -384,7 +384,7 @@ public class CardHistoryFragment extends Fragment {
             @Override
             public void onSuccess() {
                 //progress.dismissAllowingStateLoss();
-                loading.dismiss();
+                if (loading.isShowing())loading.dismiss();
                 //mainframe.setVisibility(View.VISIBLE);
                 historyLayout.setVisibility(View.VISIBLE);
                 empty.setVisibility(View.GONE);
@@ -397,7 +397,7 @@ public class CardHistoryFragment extends Fragment {
                 //empty.setVisibility(View.VISIBLE);
                 Toast.makeText(getActivity(), getResources().getString(R.string.something_wrong), Toast.LENGTH_LONG).show();
                 //progress.dismissAllowingStateLoss();
-                loading.dismiss();
+                if (loading.isShowing())loading.dismiss();
             }
         };
         task.execute(body);

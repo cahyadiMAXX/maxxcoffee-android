@@ -470,7 +470,7 @@ public class HomeFragment extends Fragment {
         HomeTask task = new HomeTask(activity) {
             @Override
             public void onSuccess(HomeResponseModel response) {
-                //Log.d("HomeResponseModel", response.toString());
+                Timber.e("HomeResponseModel: %s", response.toString());
                 PreferenceManager.putString(activity, Constant.PREFERENCE_USER_NAME, response.getUsername());
                 PreferenceManager.putString(activity, Constant.PREFERENCE_BALANCE, String.valueOf(response.getBalance()));
                 PreferenceManager.putString(activity, Constant.PREFERENCE_BEAN, String.valueOf(response.getBeans()));
@@ -521,17 +521,17 @@ public class HomeFragment extends Fragment {
                 }
 
                 //progress.dismissAllowingStateLoss();
-                loading.dismiss();
+                if (loading.isShowing())loading.dismiss();
             }
 
             @Override
             public void onFailed() {
-//                swipe.setRefreshing(false);
+                //swipe.setRefreshing(false);
                 //Toast.makeText(getActivity(), "ON failed", Toast.LENGTH_LONG).show();
                 setGreeting(mDayPart);
                 //progress.dismissAllowingStateLoss();
                 checkControll();
-                loading.dismiss();
+                if (loading.isShowing())loading.dismiss();
             }
         };
         task.execute();
