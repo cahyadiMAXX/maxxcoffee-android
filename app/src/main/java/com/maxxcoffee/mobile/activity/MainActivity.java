@@ -973,6 +973,11 @@ public class MainActivity extends FragmentActivity {
                     switchFragment(STORE);
                     break;
                 case Activity.RESULT_CANCELED:
+                    //switchFragment(HOME);
+                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                    intent.putExtra("content", HOME);
+                    finish();
+                    startActivity(intent);
                     Toast.makeText(getApplicationContext(), getResources().getString(R.string.please_enable_gps), Toast.LENGTH_LONG).show();
                     break;
             }
@@ -1002,8 +1007,16 @@ public class MainActivity extends FragmentActivity {
         //Toast.makeText(getApplicationContext(), "Request code permissionresult: " + String.valueOf(requestCode), Toast.LENGTH_LONG).show();
         if (requestCode == 2) {
             if (PermissionUtil.verifyPermissions(grantResults)) {
-                switchFragment(STORE);
+                //switchFragment(STORE);
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                intent.putExtra("content", STORE);
+                finish();
+                startActivity(intent);
             } else {
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                intent.putExtra("content", HOME);
+                finish();
+                startActivity(intent);
                 Toast.makeText(this, getResources().getString(R.string.please_enable_gps), Toast.LENGTH_SHORT).show();
             }
         } else if(requestCode == 3){
