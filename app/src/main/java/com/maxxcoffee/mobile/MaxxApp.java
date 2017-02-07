@@ -23,11 +23,6 @@ public class MaxxApp extends Application {
         super.onCreate();
         Fabric.with(this, new Crashlytics());
         if (BuildConfig.DEBUG) Timber.plant(new Timber.DebugTree());
-        /*TelephonyManager mngr = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
-        mngr.getDeviceId();
-        Log.d("Device IMEI", mngr.getDeviceId().toString());
-        String deviceId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
-        Log.i("Device Id", deviceId);*/
     }
 
     @Override

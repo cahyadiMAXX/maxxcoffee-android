@@ -39,6 +39,7 @@ import com.maxxcoffee.mobile.model.response.LoginResponseModel;
 import com.maxxcoffee.mobile.model.response.LoginTestResponseModel;
 import com.maxxcoffee.mobile.model.response.MenuResponseModel;
 import com.maxxcoffee.mobile.model.response.OauthResponseModel;
+import com.maxxcoffee.mobile.model.response.PrivacyResponseModel;
 import com.maxxcoffee.mobile.model.response.ProfileResponseModel;
 import com.maxxcoffee.mobile.model.response.PromoResponseModel;
 import com.maxxcoffee.mobile.model.response.RegisterResponseModel;
@@ -125,6 +126,9 @@ public interface ApiInterface {
 
     @POST("/api/tos")
     void termOfService(Callback<TosResponseModel> response);
+
+    @POST("/api/privacypolicy")
+    void privacyPolicy(Callback<PrivacyResponseModel> response);
 
     @POST("/api/kota")
     void kota(Callback<KotaResponseModel> response);

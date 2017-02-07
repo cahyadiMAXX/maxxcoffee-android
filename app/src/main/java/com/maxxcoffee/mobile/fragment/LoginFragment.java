@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -85,6 +86,8 @@ public class LoginFragment extends Fragment {
     EditText email;
     @Bind(R.id.password)
     EditText password;
+    @Bind(R.id.checkBox)
+    CheckBox checkBox;
 
     private ProfileController profileController;
     private CardController cardController;
@@ -111,6 +114,7 @@ public class LoginFragment extends Fragment {
 
         ButterKnife.bind(this, view);
         activity.setTitle("Login", true);
+        checkBox.setChecked(true);
 
         //setupGCM();
 
@@ -199,6 +203,23 @@ public class LoginFragment extends Fragment {
     public void onSignInClick() {
         loginNow();
     }
+
+    @OnClick(R.id.textTermsOfService)
+    void ontextTermsOfServiceClick(){
+        Intent intent = new Intent(getActivity(), FormActivity.class);
+        intent.putExtra("content", FormActivity.TOS);
+
+        startActivity(intent);
+    }
+
+    @OnClick(R.id.textprivacy)
+    void ontextPrivacyClick(){
+        Intent intent = new Intent(getActivity(), FormActivity.class);
+        intent.putExtra("content", FormActivity.PRIVACY);
+
+        startActivity(intent);
+    }
+
 
     private void signUpNow() {
         PreferenceManager.putBool(activity, Constant.PREFERENCE_ROUTE_FROM_LOGIN, true);
@@ -345,6 +366,12 @@ public class LoginFragment extends Fragment {
             Toast.makeText(activity, "Please verify your password", Toast.LENGTH_SHORT).show();
             status = false;
         }
+
+        if(!checkBox.isChecked()){
+            Toast.makeText(activity, "You must agree to the terms of service in order to continue login", Toast.LENGTH_LONG).show();
+            return false;
+        }
+
         return status;
     }
 

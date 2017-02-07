@@ -31,6 +31,7 @@ public class Constant {
     public final static String PREFERENCE_MAIN_FROM_TUTORIAL = "maxx-main-from-tutorial";
     public final static String PREFERENCE_LOGGED_IN = "maxx-logged-in";
     public final static String PREFERENCE_TOS = "maxx-tos";
+    public final static String PREFERENCE_PRIVACY = "maxx-privacy";
     public final static String PREFERENCE_ABOUT = "maxx-about";
     public final static String PREFERENCE_SMS_VERIFICATION = "maxx-sms-verification";
     public final static String PREFERENCE_EMAIL_VERIFICATION = "maxx-email-verification";

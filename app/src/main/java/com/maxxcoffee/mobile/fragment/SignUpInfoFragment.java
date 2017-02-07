@@ -249,6 +249,14 @@ public class SignUpInfoFragment extends Fragment {
         startActivity(intent);
     }
 
+    @OnClick(R.id.textprivacy)
+    void ontextPrivacyClick(){
+        Intent intent = new Intent(getActivity(), FormActivity.class);
+        intent.putExtra("content", FormActivity.PRIVACY);
+
+        startActivity(intent);
+    }
+
     @OnClick(R.id.signup)
     public void onSignUpClick() {
         if (!isFormValid())

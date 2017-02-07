@@ -61,6 +61,7 @@ import com.maxxcoffee.mobile.fragment.LostCardFragment;
 import com.maxxcoffee.mobile.fragment.MyCardFragment;
 import com.maxxcoffee.mobile.fragment.HomeFragment;
 import com.maxxcoffee.mobile.fragment.MenuFragment;
+import com.maxxcoffee.mobile.fragment.PrivacyFragment;
 import com.maxxcoffee.mobile.fragment.ProfileFragment;
 import com.maxxcoffee.mobile.fragment.PromoFragment;
 import com.maxxcoffee.mobile.fragment.ContactUsFragment;
@@ -132,6 +133,7 @@ public class MainActivity extends FragmentActivity {
     public static final int SIGNUP_INFO = 1023;
     public static final int EVENT = 1024;
     public static final int ABOUT = 1025;
+    public static final int PRIVACY = 1026;
 
     public int activeFragmentFlag = -999;
     public boolean isDrawerExpanded = false;
@@ -374,7 +376,8 @@ public class MainActivity extends FragmentActivity {
                 || fragment instanceof RewardFragment
                 || fragment instanceof CredentialFragment
                 || fragment instanceof SignUpFragment
-                || fragment instanceof LoginFragment) {
+                || fragment instanceof LoginFragment
+                || fragment instanceof PrivacyFragment) {
             switchFragment(HOME);
         }
 //        else if (fragment instanceof SignUpFragment
@@ -514,6 +517,9 @@ public class MainActivity extends FragmentActivity {
                 break;
             case TOS:
                 fragment = new TosFragment();
+                break;
+            case PRIVACY:
+                fragment = new PrivacyFragment();
                 break;
             case CONTACT_US:
                 if (isLoggedIn) {
@@ -907,6 +913,10 @@ public class MainActivity extends FragmentActivity {
         childAbout5.setId(ABOUT);
         childAbout5.setName("About");
 
+        ChildDrawerModel childAbout6 = new ChildDrawerModel();
+        childAbout6.setId(PRIVACY);
+        childAbout6.setName("Privacy Policy");
+
         //      LIST
         List<ChildDrawerModel> listBrowse = new ArrayList<>();
         listBrowse.add(childBrowse1);
@@ -925,6 +935,7 @@ public class MainActivity extends FragmentActivity {
         listAbout.add(childAbout1);
         listAbout.add(childAbout2);
         listAbout.add(childAbout3);
+        listAbout.add(childAbout6);
         if(!isLoggedIn){
             //listAbout.add(childAbout4);
         }

@@ -56,6 +56,73 @@
             android:textColor="@android:color/white"
             android:textSize="16sp" />
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="20dp"
+            android:gravity="top">
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/CustomCheckBox"
+                android:id="@+id/checkBox"
+                android:gravity="top|start"
+                android:layout_gravity="top" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="top"
+                android:layout_marginLeft="10dp"
+                android:layout_gravity="top">
+
+                <com.maxxcoffee.mobile.widget.textview.TextViewLatoRegular
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="By clicking Login, I agree to the "
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    android:layout_weight="1" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="5dp">
+
+                    <com.maxxcoffee.mobile.widget.textview.TextViewLatoRegular
+                        android:textSize="16sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Terms of Service "
+                        android:id="@+id/textTermsOfService"
+                        android:textColor="@color/divider"
+                        android:layout_weight="1" />
+
+                    <com.maxxcoffee.mobile.widget.textview.TextViewLatoRegular
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text=" &amp; "
+                        android:textColor="@color/white"
+                        android:textSize="16sp"
+                        android:layout_weight="1" />
+
+                    <com.maxxcoffee.mobile.widget.textview.TextViewLatoRegular
+                        android:textSize="16sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text=" Privacy Policy"
+                        android:id="@+id/textprivacy"
+                        android:textColor="@color/divider"
+                        android:layout_weight="1" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
         <com.maxxcoffee.mobile.widget.button.ButtonLatoRegular
             android:id="@+id/signin"
             android:layout_width="match_parent"

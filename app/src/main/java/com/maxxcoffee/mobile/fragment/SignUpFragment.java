@@ -189,13 +189,13 @@ public class SignUpFragment extends Fragment {
         String mLastName = PreferenceManager.getString(activity, Constant.PREFERENCE_REGISTER_LAST_NAME, "");
         String mEmail = PreferenceManager.getString(activity, Constant.PREFERENCE_REGISTER_EMAIL, "");
         String mPhone = PreferenceManager.getString(activity, Constant.PREFERENCE_REGISTER_PHONE, "");
-        String mPassword = PreferenceManager.getString(activity, Constant.PREFERENCE_REGISTER_PASSWORD, "");
+        //String mPassword = PreferenceManager.getString(activity, Constant.PREFERENCE_REGISTER_PASSWORD, "");
 
         firstName.setText(mFirstName);
         lastName.setText(mLastName);
         email.setText(mEmail);
         phone.setText(mPhone);
-        password.setText(mPassword);
+        //password.setText(mPassword);
     }
 
     @OnClick(R.id.next)
@@ -220,7 +220,7 @@ public class SignUpFragment extends Fragment {
         PreferenceManager.putString(activity, Constant.PREFERENCE_REGISTER_LAST_NAME, mLastName);
         PreferenceManager.putString(activity, Constant.PREFERENCE_REGISTER_EMAIL, mEmail);
         PreferenceManager.putString(activity, Constant.PREFERENCE_REGISTER_PHONE, mPhone);
-        PreferenceManager.putString(activity, Constant.PREFERENCE_REGISTER_PASSWORD, mPassword);
+        //PreferenceManager.putString(activity, Constant.PREFERENCE_REGISTER_PASSWORD, mPassword);
 
         /*final LoadingDialog progress = new LoadingDialog();
         progress.show(getFragmentManager(), null);*/
