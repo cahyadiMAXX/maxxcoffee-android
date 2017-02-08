@@ -1,21 +1,13 @@
 package com.maxxcoffee.mobile.adapter;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.maxxcoffee.mobile.R;
-import com.maxxcoffee.mobile.task.DownloadImageTask;
-import com.maxxcoffee.mobile.util.Utils;
 
 /**
  * Created by Rio Swarawan on 5/31/2016.

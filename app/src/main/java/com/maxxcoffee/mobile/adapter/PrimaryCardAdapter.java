@@ -1,29 +1,19 @@
 package com.maxxcoffee.mobile.adapter;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.maxxcoffee.mobile.R;
-import com.maxxcoffee.mobile.database.entity.CardEntity;
 import com.maxxcoffee.mobile.model.CardModel;
-import com.maxxcoffee.mobile.model.FaqModel;
-import com.maxxcoffee.mobile.task.DownloadImageTask;
-import com.maxxcoffee.mobile.util.Utils;
 
 import java.util.List;
 

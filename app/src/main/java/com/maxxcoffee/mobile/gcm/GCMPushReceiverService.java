@@ -1,6 +1,5 @@
 package com.maxxcoffee.mobile.gcm;
 
-import android.annotation.TargetApi;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -17,13 +16,10 @@ import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 
 import com.google.android.gms.gcm.GcmListenerService;
-import com.j256.ormlite.stmt.query.In;
 import com.maxxcoffee.mobile.R;
-import com.maxxcoffee.mobile.activity.MainActivity;
+import com.maxxcoffee.mobile.ui.activity.MainActivity;
 import com.maxxcoffee.mobile.database.DatabaseConfig;
-import com.maxxcoffee.mobile.model.request.GCMRequestModel;
-import com.maxxcoffee.mobile.task.DownloadImageTask;
-import com.maxxcoffee.mobile.task.LogoutAllMyDevicesTask;
+import com.maxxcoffee.mobile.task.card.DownloadImageTask;
 import com.maxxcoffee.mobile.util.Constant;
 import com.maxxcoffee.mobile.util.PreferenceManager;
 import com.maxxcoffee.mobile.util.Utils;

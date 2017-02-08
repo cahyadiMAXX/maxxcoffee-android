@@ -4,12 +4,10 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.maxxcoffee.mobile.fragment.NearMeFragment;
-import com.maxxcoffee.mobile.fragment.OurStoreFragment;
-import com.maxxcoffee.mobile.fragment.PointHistoryFragment;
-import com.maxxcoffee.mobile.fragment.TopUpHistoryFragment;
-import com.maxxcoffee.mobile.fragment.TransactionHistoryFragment;
-import com.maxxcoffee.mobile.fragment.TransferHistoryFragment;
+import com.maxxcoffee.mobile.ui.cardhistory.PointHistoryFragment;
+import com.maxxcoffee.mobile.ui.cardhistory.TopUpHistoryFragment;
+import com.maxxcoffee.mobile.ui.cardhistory.TransactionHistoryFragment;
+import com.maxxcoffee.mobile.ui.cardhistory.TransferHistoryFragment;
 
 /**
  * Created by Rio Swarawan on 5/22/2016.

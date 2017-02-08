@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.telephony.SmsMessage;
 import android.util.Log;
 
-import com.maxxcoffee.mobile.activity.VerificationActivity;
+import com.maxxcoffee.mobile.ui.activity.VerificationActivity;
 import com.maxxcoffee.mobile.util.Constant;
 import com.maxxcoffee.mobile.util.PreferenceManager;
 
