@@ -45,7 +45,13 @@ public abstract class CardCGITask extends AsyncTask<Void, Boolean, CardResponseM
 
             @Override
             public void failure(RetrofitError error) {
-                onFailed();
+                switch (error.getResponse().getStatus()){
+                    case 401:
+                        onFailed("401 request", error.getResponse().getStatus());
+                        break;
+                    default:
+                        onFailed();
+                }
             }
         });
 
@@ -71,4 +77,6 @@ public abstract class CardCGITask extends AsyncTask<Void, Boolean, CardResponseM
     public abstract void onFailed();
 
     public abstract void onFailed(String message);
+
+    public abstract void onFailed(String message, int request);
 }

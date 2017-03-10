@@ -19,12 +19,14 @@ import android.widget.Toast;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.maxxcoffee.mobile.R;
+import com.maxxcoffee.mobile.database.DatabaseConfig;
 import com.maxxcoffee.mobile.ui.activity.AddCardBarcodeActivity;
 import com.maxxcoffee.mobile.ui.activity.FormActivity;
 import com.maxxcoffee.mobile.ui.activity.MainActivity;
 import com.maxxcoffee.mobile.adapter.CardAdapter;
 import com.maxxcoffee.mobile.database.controller.CardController;
 import com.maxxcoffee.mobile.database.entity.CardEntity;
+import com.maxxcoffee.mobile.ui.activity.SplashScreenActivity;
 import com.maxxcoffee.mobile.ui.fragment.dialog.CardMaxDialog;
 import com.maxxcoffee.mobile.model.response.CardItemResponseModel;
 import com.maxxcoffee.mobile.task.card.CardCGITask;
@@ -289,6 +291,26 @@ public class MyCardFragment extends Fragment {
                 Toast.makeText(getActivity(), getResources().getString(R.string.something_wrong), Toast.LENGTH_LONG).show();
                 //progress.dismissAllowingStateLoss();
                 if (loading.isShowing())loading.dismiss();
+            }
+
+            @Override
+            public void onFailed(String message, int error) {
+                if (loading.isShowing())loading.dismiss();
+
+                boolean show_again = PreferenceManager.getBool(getActivity(), Constant.PREFERENCE_SHOW_AGAIN, true);
+                boolean is_rated = PreferenceManager.getBool(getActivity(), Constant.PREFERENCE_HAS_RATED, false);
+                PreferenceManager.putBool(getActivity(), Constant.PREFERENCE_LOGOUT_NOW, false);
+                PreferenceManager.clearPreference(getActivity());
+                DatabaseConfig db = new DatabaseConfig(getActivity());
+                db.clearAllTable();
+
+                //rating disimpan
+                PreferenceManager.putBool(getActivity(), Constant.PREFERENCE_SHOW_AGAIN, show_again);
+                PreferenceManager.putBool(getActivity(), Constant.PREFERENCE_HAS_RATED, is_rated);
+                activity.finish();
+
+                Intent intent = new Intent(getActivity(), SplashScreenActivity.class);
+                startActivity(intent);
             }
         };
         task.execute();

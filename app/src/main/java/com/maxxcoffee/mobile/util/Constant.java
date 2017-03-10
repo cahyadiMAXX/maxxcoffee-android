@@ -120,4 +120,7 @@ public class Constant {
     public final static String PREFERENCE_MENU_STATUS = "maxx-f-menu-status";
     public final static String PREFERENCE_MENU_MESSAGE = "maxx-f-menu-message";
 
+    public final static String PREFERENCE_MAXX_CONTENT = "maxx-content";
+    public final static String PREFERENCE_MAXX_CONCAT = "maxx-contact";
+
 }

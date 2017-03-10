@@ -29,6 +29,7 @@ import com.maxxcoffee.mobile.util.Utils;
 
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -104,59 +105,64 @@ public class MenuFragment extends Fragment {
         MenuTask task = new MenuTask(activity) {
             @Override
             public void onSuccess(Map<String, List<MenuItemResponseModel>> responseModel) {
-                if (responseModel != null) {
-                    menuController.clearTable();
+                try {
+                    if (responseModel != null) {
+                        menuController.clearTable();
 
-                    for (Map.Entry<String, List<MenuItemResponseModel>> entry : responseModel.entrySet()) {
-                        String key = entry.getKey();
-                        List<MenuItemResponseModel> valueList = entry.getValue();
+                        for (Map.Entry<String, List<MenuItemResponseModel>> entry : responseModel.entrySet()) {
+                            String key = entry.getKey();
+                            List<MenuItemResponseModel> valueList = entry.getValue();
 
-                        for (MenuItemResponseModel menu : valueList) {
-                            String jsonPriceHot = "";
-                            String jsonPriceIced = "";
-                            String jsonPriceNone = "";
+                            for (MenuItemResponseModel menu : valueList) {
+                                String jsonPriceHot = "";
+                                String jsonPriceIced = "";
+                                String jsonPriceNone = "";
 
-                            if (menu.getVarian().getHot().size() > 0)
-                                jsonPriceHot = new Gson().toJson(menu.getVarian().getHot());
-                            if (menu.getVarian().getIced().size() > 0)
-                                jsonPriceIced = new Gson().toJson(menu.getVarian().getIced());
-                            if (menu.getVarian().getNone().size() > 0)
-                                jsonPriceNone = new Gson().toJson(menu.getVarian().getNone());
+                                if (menu.getVarian().getHot().size() > 0)
+                                    jsonPriceHot = new Gson().toJson(menu.getVarian().getHot());
+                                if (menu.getVarian().getIced().size() > 0)
+                                    jsonPriceIced = new Gson().toJson(menu.getVarian().getIced());
+                                if (menu.getVarian().getNone().size() > 0)
+                                    jsonPriceNone = new Gson().toJson(menu.getVarian().getNone());
 
-                            MenuEntity entity = new MenuEntity();
-                            entity.setId(menu.getId_Menu());
-                            entity.setName(menu.getNama_menu());
-                            entity.setAvailable_size(menu.getAvailable_size());
-                            entity.setAvailable_type(menu.getAvailable_type());
-                            entity.setDescription(menu.getDeskripsi());
-                            entity.setImage(menu.getGambar());
-                            entity.setRedeem_point(menu.getRedeem_point());
-                            entity.setStatus(menu.getStatus());
-                            entity.setGroup(menu.getGroup());
-                            entity.setCategory_id(menu.getId_kategori());
-                            entity.setCategory(menu.getKategori());
-                            entity.setTags(menu.getTags());
-                            entity.setPrice_hot(jsonPriceHot);
-                            entity.setPrice_iced(jsonPriceIced);
-                            entity.setPrice_none(jsonPriceNone);
-                            menuController.insert(entity);
+                                MenuEntity entity = new MenuEntity();
+                                entity.setId(menu.getId_Menu());
+                                entity.setName(menu.getNama_menu());
+                                entity.setAvailable_size(menu.getAvailable_size());
+                                entity.setAvailable_type(menu.getAvailable_type());
+                                entity.setDescription(menu.getDeskripsi());
+                                entity.setImage(menu.getGambar());
+                                entity.setRedeem_point(menu.getRedeem_point());
+                                entity.setStatus(menu.getStatus());
+                                entity.setGroup(menu.getGroup());
+                                entity.setCategory_id(menu.getId_kategori());
+                                entity.setCategory(menu.getKategori());
+                                entity.setTags(menu.getTags());
+                                entity.setPrice_hot(jsonPriceHot);
+                                entity.setPrice_iced(jsonPriceIced);
+                                entity.setPrice_none(jsonPriceNone);
+                                menuController.insert(entity);
 
-                            MenuCategoryEntity category = new MenuCategoryEntity();
-                            category.setId(menu.getId_kategori());
-                            category.setCategory(menu.getKategori());
-                            category.setGroup(menu.getGroup());
-                            categoryController.insert(category);
+                                MenuCategoryEntity category = new MenuCategoryEntity();
+                                category.setId(menu.getId_kategori());
+                                category.setCategory(menu.getKategori());
+                                category.setGroup(menu.getGroup());
+                                categoryController.insert(category);
+                            }
                         }
+
+                        tabs.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                setupViewPager(viewPager);
+                                tabs.setupWithViewPager(viewPager);
+                            }
+                        });
                     }
-
-                    tabs.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            setupViewPager(viewPager);
-                            tabs.setupWithViewPager(viewPager);
-                        }
-                    });
+                } catch (Exception e){
+                    e.printStackTrace();
                 }
+
                 //progress.dismissAllowingStateLoss();
                 if (loading.isShowing())loading.dismiss();
             }

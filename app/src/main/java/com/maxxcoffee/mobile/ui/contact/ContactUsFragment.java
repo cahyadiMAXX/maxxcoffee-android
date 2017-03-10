@@ -83,6 +83,9 @@ public class ContactUsFragment extends Fragment {
         ButterKnife.bind(this, view);
         activity.setTitle("Contact Us");
 
+        /*Bundle bundle = getArguments();
+        detail.setText(bundle.getString("contact"));*/
+
         fetchingSubject();
         selectedReport = COMPLAINT;
 

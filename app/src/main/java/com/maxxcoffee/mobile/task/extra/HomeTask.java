@@ -47,7 +47,13 @@ public abstract class HomeTask extends AsyncTask<Void, Boolean, HomeResponseMode
             @Override
             public void failure(RetrofitError error) {
                 Log.d("errror card", error.toString());
-                onFailed();
+                switch (error.getResponse().getStatus()){
+                    case 401:
+                        onFailed("401 request");
+                        break;
+                    default:
+                        onFailed();
+                }
             }
         });
         return null;
@@ -64,4 +70,6 @@ public abstract class HomeTask extends AsyncTask<Void, Boolean, HomeResponseMode
     public abstract void onSuccess(HomeResponseModel response);
 
     public abstract void onFailed();
+
+    public abstract void onFailed(String message);
 }

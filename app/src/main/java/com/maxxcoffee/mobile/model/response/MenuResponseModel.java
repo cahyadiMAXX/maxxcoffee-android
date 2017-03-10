@@ -1,5 +1,6 @@
 package com.maxxcoffee.mobile.model.response;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -9,7 +10,7 @@ import java.util.Map;
 public class MenuResponseModel {
 
     private String status;
-    private Map<String, List<MenuItemResponseModel>> menu;
+    private Map<String, List<MenuItemResponseModel>> menu = new HashMap<>();
 
     public String getStatus() {
         return status;

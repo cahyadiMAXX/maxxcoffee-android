@@ -8,6 +8,8 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import com.maxxcoffee.mobile.R;
+import com.maxxcoffee.mobile.util.Constant;
+import com.maxxcoffee.mobile.util.PreferenceManager;
 
 public class SplashScreenActivity extends AppCompatActivity {
 
@@ -20,6 +22,12 @@ public class SplashScreenActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splash_screen);
         //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         //setSupportActionBar(toolbar);
+
+        /*int content = getIntent().getIntExtra("content", 0);
+        String contact = getIntent().getStringExtra("contact");
+
+        PreferenceManager.putInt(getApplicationContext(), Constant.PREFERENCE_MAXX_CONTENT, content);
+        PreferenceManager.putString(getApplicationContext(), Constant.PREFERENCE_MAXX_CONCAT, contact);*/
 
         new Handler().postDelayed(new Runnable() {
 

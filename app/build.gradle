@@ -23,8 +23,8 @@ android {
         applicationId "com.maxxcoffee.mobile"
         minSdkVersion 15
         targetSdkVersion 23
-        versionCode 29
-        versionName "2.0.8"
+        versionCode 30
+        versionName "2.0.9"
         multiDexEnabled true
     }
 
@@ -36,6 +36,8 @@ android {
         }
 
         debug {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             buildConfigField 'retrofit.RestAdapter.LogLevel', 'RETROFIT_LOG_LEVEL', 'retrofit.RestAdapter.LogLevel.FULL'
         }
     }

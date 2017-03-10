@@ -180,6 +180,14 @@ public class MainActivity extends FragmentActivity {
 
         Integer content = getIntent().getIntExtra("content", HOME);
 
+        /*Bundle bundle = new Bundle();
+        String cc = getIntent().getStringExtra("contact");//PreferenceManager.getString(getApplicationContext(), Constant.PREFERENCE_MAXX_CONCAT, "");
+        bundle.putString("contact", cc);
+        int cnt = PreferenceManager.getInt(getApplicationContext(), Constant.PREFERENCE_MAXX_CONTENT, 0);
+        if (cnt != 0){
+            content = cnt;
+        }*/
+
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
