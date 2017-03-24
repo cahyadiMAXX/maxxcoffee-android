@@ -51,12 +51,16 @@ public abstract class ChangePhoneTask extends AsyncTask<ChangePhoneRequestModel,
     @Override
     protected void onPostExecute(DefaultResponseModel changeUserDataResponseModel) {
         super.onPostExecute(changeUserDataResponseModel);
-        if (changeUserDataResponseModel != null) {
-            if (changeUserDataResponseModel.getStatus().equals("success")) {
-                onSuccess();
-            } else {
-                onWait();
+        try {
+            if (changeUserDataResponseModel != null) {
+                if (changeUserDataResponseModel.getStatus().equals("success")) {
+                    onSuccess();
+                } else {
+                    onWait();
+                }
             }
+        }catch (Exception e){
+            onFailed();
         }
     }
 

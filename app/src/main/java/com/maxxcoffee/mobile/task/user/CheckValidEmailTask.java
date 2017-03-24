@@ -44,14 +44,18 @@ public abstract class CheckValidEmailTask extends AsyncTask<CheckValidEmailReque
     @Override
     protected void onPostExecute(CheckValidEmailResponseModel response) {
         super.onPostExecute(response);
-        if (response != null) {
-            if (response.getStatus().contains("not registered")) {
-                onSuccess(response.getStatus());
-            } else if (response.getStatus().contains("exists")){
-                onFailed(response.getStatus());
-            }else {
-                onFailed();
+        try {
+            if (response != null) {
+                if (response.getStatus().contains("not registered")) {
+                    onSuccess(response.getStatus());
+                } else if (response.getStatus().contains("exists")){
+                    onFailed(response.getStatus());
+                }else {
+                    onFailed();
+                }
             }
+        }catch (Exception e){
+            onFailed();
         }
     }
 

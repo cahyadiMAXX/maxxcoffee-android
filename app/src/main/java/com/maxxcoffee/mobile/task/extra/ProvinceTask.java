@@ -50,20 +50,24 @@ public abstract class ProvinceTask extends AsyncTask<Void, Boolean, KotaResponse
     @Override
     protected void onPostExecute(KotaResponseModel response) {
         super.onPostExecute(response);
-        if (response != null) {
-            for (KotaItemResponseModel kota : response.getListprovinsi()) {
-                ProvinceEntity entity = new ProvinceEntity();
-                entity.setName(kota.getNama_provinsi());
+        try {
+            if (response != null) {
+                for (KotaItemResponseModel kota : response.getListprovinsi()) {
+                    ProvinceEntity entity = new ProvinceEntity();
+                    entity.setName(kota.getNama_provinsi());
 
-                provinceController.insert(entity);
-            }
+                    provinceController.insert(entity);
+                }
 
-            List<String> jsonKota = new ArrayList<>();
-            List<ProvinceEntity> cities = provinceController.getCity();
-            for (ProvinceEntity kota : cities) {
-                jsonKota.add(kota.getName());
+                List<String> jsonKota = new ArrayList<>();
+                List<ProvinceEntity> cities = provinceController.getCity();
+                for (ProvinceEntity kota : cities) {
+                    jsonKota.add(kota.getName());
+                }
+                onSuccess(new Gson().toJson(jsonKota));
             }
-            onSuccess(new Gson().toJson(jsonKota));
+        } catch (Exception e){
+            onFailed();
         }
     }
 

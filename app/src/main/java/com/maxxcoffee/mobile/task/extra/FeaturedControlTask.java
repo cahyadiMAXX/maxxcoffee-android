@@ -42,9 +42,13 @@ public abstract class FeaturedControlTask extends AsyncTask<Void, Boolean, Featu
     @Override
     protected void onPostExecute(FeaturedResponseModel response) {
         super.onPostExecute(response);
-        if (response != null) {
-            onSuccess(response);
-        } else {
+        try{
+            if (response != null) {
+                onSuccess(response);
+            } else {
+                onFailed();
+            }
+        }catch (Exception e){
             onFailed();
         }
     }

@@ -53,14 +53,18 @@ public abstract class AddVirtualCardTask extends AsyncTask<Void, Boolean, AddVir
     @Override
     protected void onPostExecute(AddVirtualResponseModel response) {
         super.onPostExecute(response);
-        if (response != null) {
-            if (response.getStatus().equals("success")) {
-                onSuccess(response);
-            } else if(response.getStatus().equals("fail")){
-                onFailed(response);
-            } else {
-                onFailed();
+        try {
+            if (response != null) {
+                if (response.getStatus().equals("success")) {
+                    onSuccess(response);
+                } else if(response.getStatus().equals("fail")){
+                    onFailed(response);
+                } else {
+                    onFailed();
+                }
             }
+        }catch (Exception e){
+            onFailed();
         }
     }
 

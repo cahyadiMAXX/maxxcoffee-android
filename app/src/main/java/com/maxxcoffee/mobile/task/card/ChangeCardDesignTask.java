@@ -53,8 +53,12 @@ public abstract class ChangeCardDesignTask extends AsyncTask<CardDesignRequestMo
     @Override
     protected void onPostExecute(DefaultResponseModel response) {
         super.onPostExecute(response);
-        if (response != null) {
-            onSuccess(response);
+        try {
+            if (response != null) {
+                onSuccess(response);
+            }
+        }catch (Exception e){
+            onFailed();
         }
     }
 

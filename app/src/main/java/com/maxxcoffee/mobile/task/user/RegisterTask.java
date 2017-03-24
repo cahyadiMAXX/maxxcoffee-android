@@ -34,7 +34,7 @@ public abstract class RegisterTask extends AsyncTask<RegisterRequestModel, Boole
 
             @Override
             public void failure(RetrofitError error) {
-                onFailed("");
+                onFailed(error.toString());
             }
         });
         return null;
@@ -43,13 +43,17 @@ public abstract class RegisterTask extends AsyncTask<RegisterRequestModel, Boole
     @Override
     protected void onPostExecute(RegisterResponseModel registerResponseModel) {
         super.onPostExecute(registerResponseModel);
-        if (registerResponseModel != null) {
-            String status = registerResponseModel.getStatus();
-            if (status.equalsIgnoreCase("success")) {
-                onSuccess();
-            } else if (status.equalsIgnoreCase("fail")) {
-                onFailed(registerResponseModel.getMessages());
+        try {
+            if (registerResponseModel != null) {
+                String status = registerResponseModel.getStatus();
+                if (status.equalsIgnoreCase("success")) {
+                    onSuccess();
+                } else if (status.equalsIgnoreCase("fail")) {
+                    onFailed(registerResponseModel.getMessages());
+                }
             }
+        } catch (Exception e){
+            onFailed(e.toString());
         }
     }
 

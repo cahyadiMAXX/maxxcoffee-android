@@ -48,19 +48,23 @@ public abstract class LoginTestTask extends AsyncTask<LoginRequestModel, Boolean
     @Override
     protected void onPostExecute(LoginTestResponseModel loginResponseModel) {
         super.onPostExecute(loginResponseModel);
-        if (loginResponseModel != null) {
-            String status = loginResponseModel.getStatus();
-            String ganti_nomer = loginResponseModel.getGanti_nomer();
-            String email = loginResponseModel.getEmail();
+        try {
+            if (loginResponseModel != null) {
+                String status = loginResponseModel.getStatus();
+                String ganti_nomer = loginResponseModel.getGanti_nomer();
+                String email = loginResponseModel.getEmail();
 
-            if (status.equalsIgnoreCase("success")) {
-                onSuccess();
-            } else if (status.equalsIgnoreCase("fail")) {
-                String message = loginResponseModel.getMessages();
-                onFailed(message);
-            } else if (ganti_nomer.equalsIgnoreCase("yes")) {
-                onChangePhoneNumber(email);
+                if (status.equalsIgnoreCase("success")) {
+                    onSuccess();
+                } else if (status.equalsIgnoreCase("fail")) {
+                    String message = loginResponseModel.getMessages();
+                    onFailed(message);
+                } else if (ganti_nomer.equalsIgnoreCase("yes")) {
+                    onChangePhoneNumber(email);
+                }
             }
+        } catch (Exception e){
+            onFailed(e.toString());
         }
     }
 

@@ -49,13 +49,17 @@ public abstract class ProfileTask extends AsyncTask<Void, Boolean, ProfileRespon
     @Override
     protected void onPostExecute(ProfileResponseModel profileResponseModel) {
         super.onPostExecute(profileResponseModel);
-        if(profileResponseModel != null){
-            String status = profileResponseModel.getStatus();
-            if (status.equalsIgnoreCase("success")) {
-                onSuccess(profileResponseModel);
-            } else {
-                onFailed();
+        try {
+            if(profileResponseModel != null){
+                String status = profileResponseModel.getStatus();
+                if (status.equalsIgnoreCase("success")) {
+                    onSuccess(profileResponseModel);
+                } else {
+                    onFailed();
+                }
             }
+        } catch (Exception e){
+            onFailed();
         }
     }
 

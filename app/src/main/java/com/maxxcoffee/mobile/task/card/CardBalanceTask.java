@@ -54,12 +54,16 @@ public abstract class CardBalanceTask extends AsyncTask<Void, Boolean, CardRespo
     @Override
     protected void onPostExecute(CardResponseModel response) {
         super.onPostExecute(response);
-        if (response != null) {
-            if (response.getStatus().equals("success")) {
-                onSuccess(response.getResult());
-            } else {
-                onFailed();
+        try {
+            if (response != null) {
+                if (response.getStatus().equals("success")) {
+                    onSuccess(response.getResult());
+                } else {
+                    onFailed();
+                }
             }
+        }catch (Exception e){
+            onFailed();
         }
     }
 

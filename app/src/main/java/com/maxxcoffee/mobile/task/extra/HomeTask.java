@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.maxxcoffee.mobile.R;
 import com.maxxcoffee.mobile.api.ApiManager;
 import com.maxxcoffee.mobile.model.request.DefaultRequestModel;
 import com.maxxcoffee.mobile.model.response.DefaultResponseModel;
@@ -47,12 +48,16 @@ public abstract class HomeTask extends AsyncTask<Void, Boolean, HomeResponseMode
             @Override
             public void failure(RetrofitError error) {
                 Log.d("errror card", error.toString());
-                switch (error.getResponse().getStatus()){
-                    case 401:
-                        onFailed("401 request");
-                        break;
-                    default:
-                        onFailed();
+                try{
+                    switch (error.getResponse().getStatus()){
+                        case 401:
+                            onFailed(error.toString(), error.getResponse().getStatus());
+                            break;
+                        default:
+                            onFailed();
+                    }
+                } catch (Exception e){
+                    onFailed();
                 }
             }
         });
@@ -72,4 +77,6 @@ public abstract class HomeTask extends AsyncTask<Void, Boolean, HomeResponseMode
     public abstract void onFailed();
 
     public abstract void onFailed(String message);
+
+    public abstract void onFailed(String message, int status);
 }

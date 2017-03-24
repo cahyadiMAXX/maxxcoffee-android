@@ -48,12 +48,16 @@ public abstract class TosTask extends AsyncTask<Void, Boolean, TosResponseModel>
     @Override
     protected void onPostExecute(TosResponseModel response) {
         super.onPostExecute(response);
-        if (response != null) {
-            if (response.getStatus().equals("success")) {
-                onSuccess(response.getTos());
-            } else {
-                onFailed();
+        try {
+            if (response != null) {
+                if (response.getStatus().equals("success")) {
+                    onSuccess(response.getTos());
+                } else {
+                    onFailed();
+                }
             }
+        } catch (Exception e){
+            onFailed();
         }
     }
 

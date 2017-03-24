@@ -52,20 +52,24 @@ public abstract class CityTask extends AsyncTask<Void, Boolean, KotaResponseMode
     @Override
     protected void onPostExecute(KotaResponseModel response) {
         super.onPostExecute(response);
-        if (response != null) {
-            for (KotaItemResponseModel kota : response.getResult()) {
-                CityEntity entity = new CityEntity();
-                entity.setName(kota.getNama_kota());
+        try {
+            if (response != null) {
+                for (KotaItemResponseModel kota : response.getResult()) {
+                    CityEntity entity = new CityEntity();
+                    entity.setName(kota.getNama_kota());
 
-                cityController.insert(entity);
-            }
+                    cityController.insert(entity);
+                }
 
-            List<String> jsonKota = new ArrayList<>();
-            List<CityEntity> cities = cityController.getAllCity();
-            for (CityEntity kota : cities) {
-                jsonKota.add(kota.getName());
+                List<String> jsonKota = new ArrayList<>();
+                List<CityEntity> cities = cityController.getAllCity();
+                for (CityEntity kota : cities) {
+                    jsonKota.add(kota.getName());
+                }
+                onSuccess(new Gson().toJson(jsonKota));
             }
-            onSuccess(new Gson().toJson(jsonKota));
+        } catch (Exception e){
+            onFailed();
         }
     }
 

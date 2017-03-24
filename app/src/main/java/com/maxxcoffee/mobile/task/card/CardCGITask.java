@@ -3,6 +3,7 @@ package com.maxxcoffee.mobile.task.card;
 import android.content.Context;
 import android.os.AsyncTask;
 
+import com.maxxcoffee.mobile.R;
 import com.maxxcoffee.mobile.api.ApiManager;
 import com.maxxcoffee.mobile.model.request.DefaultRequestModel;
 import com.maxxcoffee.mobile.model.response.CardItemResponseModel;
@@ -45,12 +46,16 @@ public abstract class CardCGITask extends AsyncTask<Void, Boolean, CardResponseM
 
             @Override
             public void failure(RetrofitError error) {
-                switch (error.getResponse().getStatus()){
-                    case 401:
-                        onFailed("401 request", error.getResponse().getStatus());
-                        break;
-                    default:
-                        onFailed();
+                try {
+                    switch (error.getResponse().getStatus()){
+                        case 401:
+                            onFailed("401 request", error.getResponse().getStatus());
+                            break;
+                        default:
+                            onFailed();
+                    }
+                } catch (Exception e){
+                    onFailed(context.getResources().getString(R.string.something_wrong));
                 }
             }
         });
@@ -61,14 +66,18 @@ public abstract class CardCGITask extends AsyncTask<Void, Boolean, CardResponseM
     @Override
     protected void onPostExecute(CardResponseModel response) {
         super.onPostExecute(response);
-        if (response != null) {
-            if (response.getStatus().equals("success")) {
-                onSuccess(response.getResult());
-            } else if(response.getStatus().equalsIgnoreCase("fail")){
-                onFailed(response.getStatus());
-            } else{
-                onFailed();
+        try {
+            if (response != null) {
+                if (response.getStatus().equals("success")) {
+                    onSuccess(response.getResult());
+                } else if(response.getStatus().equalsIgnoreCase("fail")){
+                    onFailed(response.getStatus());
+                } else{
+                    onFailed();
+                }
             }
+        }catch (Exception e){
+            onFailed(e.toString());
         }
     }
 

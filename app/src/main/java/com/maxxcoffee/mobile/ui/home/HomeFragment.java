@@ -533,6 +533,15 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void onFailed(String message) {
+                setGreeting(mDayPart);
+                Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
+                //progress.dismissAllowingStateLoss();
+                checkControll();
+                if (loading.isShowing())loading.dismiss();
+            }
+
+            @Override
+            public void onFailed(String message, int request) {
                 if (loading.isShowing())loading.dismiss();
                 //logout
                 boolean show_again = PreferenceManager.getBool(getActivity(), Constant.PREFERENCE_SHOW_AGAIN, true);
@@ -596,7 +605,7 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void onFailed() {
-
+                //Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.something_wrong),Toast.LENGTH_LONG).show();
             }
         };
         task.execute();

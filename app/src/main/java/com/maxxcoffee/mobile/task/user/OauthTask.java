@@ -45,15 +45,19 @@ public abstract class OauthTask extends AsyncTask<OauthRequestModel, Boolean, Oa
     @Override
     protected void onPostExecute(OauthResponseModel oauthResponseModel) {
         super.onPostExecute(oauthResponseModel);
-        if (oauthResponseModel != null) {
-            String accessToken = oauthResponseModel.getAccess_token();
+        try {
+            if (oauthResponseModel != null) {
+                String accessToken = oauthResponseModel.getAccess_token();
 
-            if (accessToken != null) {
-                PreferenceManager.putString(context, Constant.PREFERENCE_ACCESS_TOKEN, "Bearer " + accessToken);
-                onSuccess();
-            } else {
-                onFailed();
+                if (accessToken != null) {
+                    PreferenceManager.putString(context, Constant.PREFERENCE_ACCESS_TOKEN, "Bearer " + accessToken);
+                    onSuccess();
+                } else {
+                    onFailed();
+                }
             }
+        } catch (Exception e){
+            onFailed();
         }
     }
 

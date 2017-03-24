@@ -50,12 +50,16 @@ public abstract class MenuTask extends AsyncTask<Void, Boolean, MenuResponseMode
     @Override
     protected void onPostExecute(MenuResponseModel response) {
         super.onPostExecute(response);
-        if (response != null) {
-            if (response.getStatus().equals("success")) {
-                onSuccess(response.getMenu());
-            } else {
-                onFailed();
+        try{
+            if (response != null) {
+                if (response.getStatus().equals("success")) {
+                    onSuccess(response.getMenu());
+                } else {
+                    onFailed();
+                }
             }
+        }catch (Exception e){
+            onFailed();
         }
     }
 

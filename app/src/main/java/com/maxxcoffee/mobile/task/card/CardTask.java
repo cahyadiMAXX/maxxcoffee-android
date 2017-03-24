@@ -57,14 +57,18 @@ public abstract class CardTask extends AsyncTask<Void, Boolean, CardResponseMode
     @Override
     protected void onPostExecute(CardResponseModel response) {
         super.onPostExecute(response);
-        if (response != null) {
-            if (response.getStatus().equals("success")) {
-                onSuccess(response.getResult());
-            }else if(response.getStatus().equalsIgnoreCase("fail")){
-                onFailed(context.getResources().getString(R.string.no_card_alert));
-            } else {
-                onFailed();
+        try {
+            if (response != null) {
+                if (response.getStatus().equals("success")) {
+                    onSuccess(response.getResult());
+                }else if(response.getStatus().equalsIgnoreCase("fail")){
+                    onFailed(context.getResources().getString(R.string.no_card_alert));
+                } else {
+                    onFailed();
+                }
             }
+        }catch (Exception e){
+            onFailed(e.toString());
         }
     }
 

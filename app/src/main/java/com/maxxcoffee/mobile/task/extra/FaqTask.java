@@ -45,12 +45,16 @@ public abstract class FaqTask extends AsyncTask<Void, Boolean, FaqResponseModel>
     @Override
     protected void onPostExecute(FaqResponseModel response) {
         super.onPostExecute(response);
-        if (response != null) {
-            if (response.getStatus().equals("success")) {
-                onSuccess(response.getResult());
-            } else {
-                onFailed();
+        try {
+            if (response != null) {
+                if (response.getStatus().equals("success")) {
+                    onSuccess(response.getResult());
+                } else {
+                    onFailed();
+                }
             }
+        } catch (Exception e){
+            onFailed();
         }
     }
 

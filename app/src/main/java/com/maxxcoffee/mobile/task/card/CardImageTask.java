@@ -52,8 +52,12 @@ public abstract class CardImageTask extends AsyncTask<Void, Boolean, CardImageRe
     @Override
     protected void onPostExecute(CardImageResponseModel response) {
         super.onPostExecute(response);
-        if (response != null) {
-            onSuccess(response);
+        try{
+            if (response != null) {
+                onSuccess(response);
+            }
+        }catch (Exception e){
+            onFailed();
         }
     }
 

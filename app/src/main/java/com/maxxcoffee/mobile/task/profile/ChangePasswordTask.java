@@ -53,12 +53,16 @@ public abstract class ChangePasswordTask extends AsyncTask<String, Boolean, Chan
     @Override
     protected void onPostExecute(ChangeUserDataResponseModel changeUserDataResponseModel) {
         super.onPostExecute(changeUserDataResponseModel);
-        if (changeUserDataResponseModel != null) {
-            if (changeUserDataResponseModel.getStatus().equals("success")) {
-                onSuccess();
-            } else {
-                onFailed();
+        try {
+            if (changeUserDataResponseModel != null) {
+                if (changeUserDataResponseModel.getStatus().equals("success")) {
+                    onSuccess();
+                } else {
+                    onFailed();
+                }
             }
+        }catch (Exception e){
+            onFailed();
         }
     }
 

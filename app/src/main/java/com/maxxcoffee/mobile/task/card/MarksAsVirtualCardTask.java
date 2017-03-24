@@ -51,12 +51,16 @@ public abstract class MarksAsVirtualCardTask extends AsyncTask<String, Boolean, 
     @Override
     protected void onPostExecute(DefaultResponseModel changeUserDataResponseModel) {
         super.onPostExecute(changeUserDataResponseModel);
-        if (changeUserDataResponseModel != null) {
-            if (changeUserDataResponseModel.getStatus().equals("success")) {
-                onSuccess();
-            } else {
-                onFailed();
+        try {
+            if (changeUserDataResponseModel != null) {
+                if (changeUserDataResponseModel.getStatus().equals("success")) {
+                    onSuccess();
+                } else {
+                    onFailed();
+                }
             }
+        }catch (Exception e){
+            onFailed();
         }
     }
 

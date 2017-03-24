@@ -50,12 +50,16 @@ public abstract class RemoveVirtualCardFromBankTask extends AsyncTask<String, Bo
     @Override
     protected void onPostExecute(DefaultResponseModel changeUserDataResponseModel) {
         super.onPostExecute(changeUserDataResponseModel);
-        if (changeUserDataResponseModel != null) {
-            if (changeUserDataResponseModel.getStatus().equals("success")) {
-                onSuccess();
-            } else {
-                onFailed();
+        try {
+            if (changeUserDataResponseModel != null) {
+                if (changeUserDataResponseModel.getStatus().equals("success")) {
+                    onSuccess();
+                } else {
+                    onFailed();
+                }
             }
+        }catch (Exception e){
+            onFailed();
         }
     }
 

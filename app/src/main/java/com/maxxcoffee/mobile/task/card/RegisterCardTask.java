@@ -54,17 +54,21 @@ public abstract class RegisterCardTask extends AsyncTask<RegisterCardRequestMode
     @Override
     protected void onPostExecute(CardResponseModel response) {
         super.onPostExecute(response);
-        if (response != null) {
-            if (response.getStatus().equals("success")) {
-                onSuccess();
-            } else {
-                if (response.getMessages() != null){
-                    //Toast.makeText(context, response.getMessages(), Toast.LENGTH_LONG).show();
-                    onFailed(response.getMessages());
-                }else{
-                    onFailed();
+        try {
+            if (response != null) {
+                if (response.getStatus().equals("success")) {
+                    onSuccess();
+                } else {
+                    if (response.getMessages() != null){
+                        //Toast.makeText(context, response.getMessages(), Toast.LENGTH_LONG).show();
+                        onFailed(response.getMessages());
+                    }else{
+                        onFailed();
+                    }
                 }
             }
+        }catch (Exception e){
+            onFailed();
         }
     }
 

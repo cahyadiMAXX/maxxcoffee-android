@@ -45,12 +45,16 @@ public abstract class AboutTask extends AsyncTask<Void, Boolean, AboutResponseMo
     @Override
     protected void onPostExecute(AboutResponseModel response) {
         super.onPostExecute(response);
-        if (response != null) {
-            if (response.getStatus().equals("success")) {
-                onSuccess(response.getAbout());
-            } else {
-                onFailed();
+        try {
+            if (response != null) {
+                if (response.getStatus().equals("success")) {
+                    onSuccess(response.getAbout());
+                } else {
+                    onFailed();
+                }
             }
+        } catch (Exception e){
+            onFailed();
         }
     }
 

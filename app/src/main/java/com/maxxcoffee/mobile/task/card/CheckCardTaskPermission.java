@@ -51,16 +51,20 @@ public abstract class CheckCardTaskPermission extends AsyncTask<Void, Boolean, A
     @Override
     protected void onPostExecute(AddVirtualResponseModel response) {
         super.onPostExecute(response);
-        if (response != null) {
-            if (response.getStatus().equals("success") && response.getPermission().equalsIgnoreCase("not allowed")) {
-                onSuccess(response);
-            } else if(response.getStatus().equals("success") && response.getPermission().equalsIgnoreCase("allowed")){
-                onSuccess();
-            } else if(response.getStatus().equals("fail")){
-                onFailed(response);
-            } else {
-                onFailed();
+        try {
+            if (response != null) {
+                if (response.getStatus().equals("success") && response.getPermission().equalsIgnoreCase("not allowed")) {
+                    onSuccess(response);
+                } else if(response.getStatus().equals("success") && response.getPermission().equalsIgnoreCase("allowed")){
+                    onSuccess();
+                } else if(response.getStatus().equals("fail")){
+                    onFailed(response);
+                } else {
+                    onFailed();
+                }
             }
+        }catch (Exception e){
+            onFailed();
         }
     }
 

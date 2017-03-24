@@ -42,12 +42,16 @@ public abstract class PrivacyTask extends AsyncTask<Void, Boolean, PrivacyRespon
     @Override
     protected void onPostExecute(PrivacyResponseModel response) {
         super.onPostExecute(response);
-        if (response != null) {
-            if (response.getStatus().equals("success")) {
-                onSuccess(response.getResult());
-            } else {
-                onFailed();
+        try {
+            if (response != null) {
+                if (response.getStatus().equals("success")) {
+                    onSuccess(response.getResult());
+                } else {
+                    onFailed();
+                }
             }
+        } catch (Exception e){
+            onFailed();
         }
     }
 

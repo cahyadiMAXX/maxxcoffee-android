@@ -45,14 +45,18 @@ public abstract class EventTask extends AsyncTask<Void, Boolean, EventResponseMo
     @Override
     protected void onPostExecute(EventResponseModel response) {
         super.onPostExecute(response);
-        if (response != null) {
-            if (response.getStatus().equals("success")) {
-                onSuccess(response.getResult());
-            } else if (response.getStatus().equals("fail")) {
-                onEmpty();
-            } else {
-                onFailed();
+        try {
+            if (response != null) {
+                if (response.getStatus().equals("success")) {
+                    onSuccess(response.getResult());
+                } else if (response.getStatus().equals("fail")) {
+                    onEmpty();
+                } else {
+                    onFailed();
+                }
             }
+        } catch (Exception e){
+            onFailed();
         }
     }
 

@@ -51,12 +51,16 @@ public abstract class ResendEmailTask extends AsyncTask<ResendEmailRequestModel,
     @Override
     protected void onPostExecute(ResendEmailSmsResponseModel response) {
         super.onPostExecute(response);
-        if (response != null) {
-            if (response.getStatus().equals("success")) {
-                onSuccess();
-            } else {
-                onWait(response.getWait_second());
+        try {
+            if (response != null) {
+                if (response.getStatus().equals("success")) {
+                    onSuccess();
+                } else {
+                    onWait(response.getWait_second());
+                }
             }
+        } catch (Exception e){
+            onFailed();
         }
     }
 

@@ -51,14 +51,18 @@ public abstract class ForgotPasswordTask extends AsyncTask<ChangePhoneRequestMod
     @Override
     protected void onPostExecute(DefaultResponseModel response) {
         super.onPostExecute(response);
-        if (response != null) {
-            if (response.getStatus().equals("success")) {
-                onSuccess();
-            } else if(response.getStatus().equalsIgnoreCase("fail")){
-                onFailed(response.getMessages());
-            } else {
-                onFailed();
+        try {
+            if (response != null) {
+                if (response.getStatus().equals("success")) {
+                    onSuccess();
+                } else if(response.getStatus().equalsIgnoreCase("fail")){
+                    onFailed(response.getMessages());
+                } else {
+                    onFailed();
+                }
             }
+        }catch (Exception e){
+            onFailed();
         }
     }
 

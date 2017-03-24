@@ -12,6 +12,7 @@ import com.maxxcoffee.mobile.util.PreferenceManager;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
+import timber.log.Timber;
 
 /**
  * Created by rioswarawan on 7/8/16.
@@ -47,18 +48,23 @@ public abstract class LoginTask extends AsyncTask<LoginRequestModel, Boolean, Lo
     @Override
     protected void onPostExecute(LoginResponseModel loginResponseModel) {
         super.onPostExecute(loginResponseModel);
-        if (loginResponseModel != null) {
-            String status = loginResponseModel.getStatus();
-            if (status.equalsIgnoreCase("success")) {
-                PreferenceManager.putString(context, Constant.PREFERENCE_TOKEN, loginResponseModel.getToken());
-                PreferenceManager.putString(context, Constant.PREFERENCE_USER_NAME, loginResponseModel.getUsername());
-                PreferenceManager.putString(context, Constant.PREFERENCE_BALANCE, loginResponseModel.getBalance_total());
-                PreferenceManager.putString(context, Constant.PREFERENCE_BEAN, loginResponseModel.getBeans());
-                onSuccess(status);
-            } else if(status.equalsIgnoreCase("fail")){
-                String message = loginResponseModel.getMessages();
-                onFailed(message);
+        try {
+            if (loginResponseModel != null) {
+                Timber.e("loginResponseModel %s", loginResponseModel.toString());
+                String status = loginResponseModel.getStatus();
+                if (status.equalsIgnoreCase("success")) {
+                    PreferenceManager.putString(context, Constant.PREFERENCE_TOKEN, loginResponseModel.getToken());
+                    PreferenceManager.putString(context, Constant.PREFERENCE_USER_NAME, loginResponseModel.getUsername());
+                    PreferenceManager.putString(context, Constant.PREFERENCE_BALANCE, loginResponseModel.getBalance_total());
+                    PreferenceManager.putString(context, Constant.PREFERENCE_BEAN, loginResponseModel.getBeans());
+                    onSuccess(status);
+                } else if(status.equalsIgnoreCase("fail")){
+                    String message = loginResponseModel.getMessages();
+                    onFailed(message);
+                }
             }
+        }catch (Exception e){
+            onFailed(e.toString());
         }
     }
 

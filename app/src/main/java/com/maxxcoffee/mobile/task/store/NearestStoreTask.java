@@ -54,12 +54,16 @@ public abstract class NearestStoreTask extends AsyncTask<String, Boolean, StoreR
     @Override
     protected void onPostExecute(StoreResponseModel response) {
         super.onPostExecute(response);
-        if (response != null) {
-            if (response.getStatus().equals("success")) {
-                onSuccess(response.getData());
-            } else {
-                onFailed();
+        try{
+            if (response != null) {
+                if (response.getStatus().equals("success")) {
+                    onSuccess(response.getData());
+                } else {
+                    onFailed();
+                }
             }
+        } catch (Exception e){
+            onFailed();
         }
     }
 

@@ -53,12 +53,16 @@ public abstract class LogoutAllMyDevicesTask extends AsyncTask<GCMRequestModel, 
     @Override
     protected void onPostExecute(DefaultResponseModel response) {
         super.onPostExecute(response);
-        if (response != null) {
-            if (response.getStatus().equals("success")) {
-                onSuccess(response.getMessages());
-            } else {
-                onFailed();
+        try {
+            if (response != null) {
+                if (response.getStatus().equals("success")) {
+                    onSuccess(response.getMessages());
+                } else {
+                    onFailed();
+                }
             }
+        } catch (Exception e){
+            onFailed();
         }
     }
 

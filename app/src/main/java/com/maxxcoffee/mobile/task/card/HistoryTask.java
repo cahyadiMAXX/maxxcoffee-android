@@ -60,32 +60,36 @@ public abstract class HistoryTask extends AsyncTask<HistoryRequestModel, Boolean
     @Override
     protected void onPostExecute(HistoryResponseModel response) {
         super.onPostExecute(response);
-        if (response != null) {
-            if (response.getStatus().equals("success")) {
+        try {
+            if (response != null) {
+                if (response.getStatus().equals("success")) {
 
-                int transferBalanceSize = response.getTransferBalance().size();
-                int transactionSize = response.getTransaksi().size();
-                int pointSize = response.getPenukaran_point().size();
-                int topupSize = response.getTopup().size();
+                    int transferBalanceSize = response.getTransferBalance().size();
+                    int transactionSize = response.getTransaksi().size();
+                    int pointSize = response.getPenukaran_point().size();
+                    int topupSize = response.getTopup().size();
 
-                historyController.clear();
+                    historyController.clear();
 
-                if (transactionSize > 0) {
-                    saveData(response.getTransaksi());
+                    if (transactionSize > 0) {
+                        saveData(response.getTransaksi());
+                    }
+                    if (transferBalanceSize > 0) {
+                        saveData(response.getTransferBalance());
+                    }
+                    if (pointSize > 0) {
+                        saveData(response.getPenukaran_point());
+                    }
+                    if (topupSize > 0) {
+                        saveData(response.getTopup());
+                    }
+                    onSuccess();
+                } else {
+                    onFailed();
                 }
-                if (transferBalanceSize > 0) {
-                    saveData(response.getTransferBalance());
-                }
-                if (pointSize > 0) {
-                    saveData(response.getPenukaran_point());
-                }
-                if (topupSize > 0) {
-                    saveData(response.getTopup());
-                }
-                onSuccess();
-            } else {
-                onFailed();
             }
+        }catch (Exception e){
+            onFailed();
         }
     }
 
