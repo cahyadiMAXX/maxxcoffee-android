@@ -39,6 +39,7 @@ public abstract class LoginTask extends AsyncTask<LoginRequestModel, Boolean, Lo
 
             @Override
             public void failure(RetrofitError error) {
+                Timber.e("LoginTask %s", error.toString());
                 onFailed("Something went wrong. Please try again.");
             }
         });

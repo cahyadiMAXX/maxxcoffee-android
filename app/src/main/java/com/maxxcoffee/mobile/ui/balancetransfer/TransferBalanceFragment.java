@@ -36,6 +36,8 @@ import com.maxxcoffee.mobile.task.card.TransferBalanceTask;
 import com.maxxcoffee.mobile.util.Constant;
 import com.maxxcoffee.mobile.util.Utils;
 
+import org.w3c.dom.Text;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -311,7 +313,7 @@ public class TransferBalanceFragment extends Fragment {
         alertDialog.show();
 
         TextView cont = (TextView) layout.findViewById(R.id.content);
-        Button buttonSerial = (Button) layout.findViewById(R.id.ok);
+        TextView buttonSerial = (TextView) layout.findViewById(R.id.ok);
 
         cont.setText(success ? successString : failedString);
         buttonSerial.setOnClickListener(new View.OnClickListener() {

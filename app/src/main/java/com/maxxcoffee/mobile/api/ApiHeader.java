@@ -10,5 +10,6 @@ public class ApiHeader implements RequestInterceptor {
     @Override
     public void intercept(RequestInterceptor.RequestFacade request) {
         request.addHeader("Accept", "application/json");
+        request.addHeader("Connection", "close");
     }
 }

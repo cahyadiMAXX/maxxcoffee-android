@@ -16,6 +16,7 @@ import java.util.List;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
+import timber.log.Timber;
 
 /**
  * Created by rioswarawan on 7/9/16.
@@ -45,6 +46,7 @@ public abstract class NearestStoreTask extends AsyncTask<String, Boolean, StoreR
 
             @Override
             public void failure(RetrofitError error) {
+                Timber.e(" NearestStoreTask %s", error.toString());
                 onFailed();
             }
         });

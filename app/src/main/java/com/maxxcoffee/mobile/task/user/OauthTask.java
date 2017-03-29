@@ -12,6 +12,7 @@ import com.maxxcoffee.mobile.util.PreferenceManager;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
+import timber.log.Timber;
 
 /**
  * Created by rioswarawan on 7/8/16.
@@ -36,6 +37,7 @@ public abstract class OauthTask extends AsyncTask<OauthRequestModel, Boolean, Oa
 
             @Override
             public void failure(RetrofitError error) {
+                Timber.e("OauthTask %s", error.toString());
                 onFailed();
             }
         });

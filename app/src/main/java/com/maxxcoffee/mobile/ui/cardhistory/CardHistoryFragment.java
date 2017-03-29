@@ -307,7 +307,7 @@ public class CardHistoryFragment extends Fragment {
             @Override
             public void onFailed() {
                 //empty.setVisibility(View.VISIBLE);
-                Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.something_wrong), Toast.LENGTH_LONG).show();
+                //Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.something_wrong), Toast.LENGTH_LONG).show();
                 //progress.dismissAllowingStateLoss();
                 if (loading.isShowing())loading.dismiss();
             }

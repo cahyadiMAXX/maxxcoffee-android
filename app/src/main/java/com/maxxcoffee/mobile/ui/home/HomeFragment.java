@@ -54,6 +54,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -477,9 +478,21 @@ public class HomeFragment extends Fragment {
                 PreferenceManager.putString(activity, Constant.PREFERENCE_EMAIL, response.getEmail());
                 PreferenceManager.putString(activity, Constant.PREFERENCE_PHONE, response.getPhone());
                 PreferenceManager.putInt(activity, Constant.PREFERENCE_CARD_AMOUNT, response.getCardAmount());
-                PreferenceManager.putInt(activity, Constant.PREFERENCE_HAS_VIRTUAL_CARD, response.getVirtual_card());
-                PreferenceManager.putBool(activity, Constant.PREFERENCE_SMS_VERIFICATION, response.getVerifikasi_sms().equalsIgnoreCase("yes"));
-                PreferenceManager.putBool(activity, Constant.PREFERENCE_EMAIL_VERIFICATION, response.getVerifikasi_email().equalsIgnoreCase("yes"));
+                try {
+                    PreferenceManager.putInt(activity, Constant.PREFERENCE_HAS_VIRTUAL_CARD, response.getVirtual_card());
+                } catch (Exception e){
+                    PreferenceManager.putInt(activity, Constant.PREFERENCE_HAS_VIRTUAL_CARD, 1);
+                }
+                try{
+                    PreferenceManager.putBool(activity, Constant.PREFERENCE_SMS_VERIFICATION, response.getVerifikasi_sms().equalsIgnoreCase("yes"));
+                } catch (Exception e){
+                    PreferenceManager.putBool(activity, Constant.PREFERENCE_SMS_VERIFICATION, false);
+                }
+                try {
+                    PreferenceManager.putBool(activity, Constant.PREFERENCE_EMAIL_VERIFICATION, response.getVerifikasi_email().equalsIgnoreCase("yes"));
+                } catch (Exception e){
+                    PreferenceManager.putBool(activity, Constant.PREFERENCE_EMAIL_VERIFICATION, false);
+                }
 
                 CardItemResponseModel card = null;
                 try{
